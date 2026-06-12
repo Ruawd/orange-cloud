@@ -1,0 +1,32 @@
+# Node / pnpm
+node_modules/
+.turbo/
+.next/
+.open-next/
+
+# iOS / Xcode
+DerivedData/
+xcuserdata/
+
+# Wrangler
+.wrangler/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# OS
+.DS_Store
+
+# Design handoff extraction (zip 为准)
+_extracted/
+orange-cloud/
+
+# Docs
+docs
+CLAUDE.md
+
+apps/ios/fastlane
+
+*.storekit

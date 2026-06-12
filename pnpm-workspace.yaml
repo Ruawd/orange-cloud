@@ -1,0 +1,10 @@
+packages:
+  - 'apps/web'
+  - 'packages/*'
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
