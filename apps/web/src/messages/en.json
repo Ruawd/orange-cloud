@@ -5,7 +5,7 @@
 	},
 	"meta": {
 		"title": "Orange Cloud — Your Cloudflare, at a glance",
-		"description": "A native iOS client for Cloudflare: official OAuth sign-in, domains, DNS, traffic analytics, live Workers logs and R2 · D1 · KV storage on iPhone and iPad.",
+		"description": "A native client for Cloudflare: official OAuth sign-in, domains, DNS, traffic analytics, live Workers logs and R2 · D1 · KV storage on iPhone, iPad and Android.",
 		"keywords": "cloudflare,dns,domain,workers,cdn,waf,r2,serverless,analytics,ssl,tunnel,website,devops,kv,d1"
 	},
 	"header": {
@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — the open-source Cloudflare companion for power users | Product Hunt"
 	},
 	"hero": {
-		"kicker": "Native for iPhone & iPad",
+		"kicker": "Native for iPhone, iPad & Android",
 		"title1": "Your Cloudflare,",
 		"title2": "at a glance",
 		"sub": "Domains, DNS, analytics, Workers logs and storage, set in a sky that follows the time of day. Official OAuth sign-in — no API token pasting.",
-		"note": "iOS 17.0+ · Free download, optional Pro"
+		"note": "iOS 17.0+ / Android 9+ · Free download, optional Pro"
 	},
 	"phone": {
 		"greetMorning": "Good morning, Jiamin",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "Put Cloudflare in your pocket",
 		"sub": "Tonight's sky is already waiting in the app.",
-		"requirement": "Requires iOS 17.0 or later · iPhone and iPad"
+		"requirement": "Requires iOS 17.0+ or Android 9+ · iPhone, iPad & Android"
 	},
 	"changelog": {
 		"title": "Release history",

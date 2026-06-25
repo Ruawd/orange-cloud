@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -17,6 +18,7 @@ import {
 	RanksSkeleton,
 	TableCardSkeleton,
 } from "@/components/dashboard/panels/skeletons";
+import { CodesSection } from "@/components/dashboard/panels/CodesSection";
 import { TimezoneToggle, UpdatedAt } from "@/components/dashboard/prefs";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/admin/auth";
 import { parseFilters, parsePage } from "@/lib/dashboard/types";
@@ -62,7 +64,13 @@ export default async function AdminDashboardPage({
 			<header className="mb-6">
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<div className="flex items-center gap-2.5">
-						<span className="inline-block h-5 w-5 rounded-full bg-accent shadow-sm" />
+						<Image
+							src="/icons/icon-64.png"
+							alt=""
+							width={20}
+							height={20}
+							className="h-5 w-5 rounded-[5px] shadow-sm"
+						/>
 						<h1 className="text-lg font-semibold tracking-tight">Orange Cloud · IAP 数据看板</h1>
 					</div>
 					<div className="flex items-center gap-3">
@@ -86,6 +94,11 @@ export default async function AdminDashboardPage({
 			<div className="flex flex-col gap-4">
 				<Suspense key={`kpi-${filterKey}`} fallback={<KpiSkeleton />}>
 					<OverviewSection filters={filters} />
+				</Suspense>
+
+				{/* 激活码（安卓渠道）—— 与 Apple IAP 看板并列；与产品/天数筛选无关，静态 key。 */}
+				<Suspense key="codes" fallback={<div className="h-40 rounded-xl border border-border bg-surface" />}>
+					<CodesSection />
 				</Suspense>
 
 				<Suspense key={`charts-${filterKey}`} fallback={<ChartsSkeleton />}>

@@ -29,7 +29,9 @@ export default function AdminLayout({
 	return (
 		<html lang="zh-CN">
 			<head>
-				<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+				<link rel="icon" href="/icons/icon-32.png" type="image/png" sizes="32x32" />
+				<link rel="icon" href="/icons/icon-64.png" type="image/png" sizes="64x64" />
+				<link rel="apple-touch-icon" href="/icons/icon-180.png" />
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<PreferencesProvider>{children}</PreferencesProvider>

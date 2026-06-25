@@ -5,6 +5,8 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import AppStoreBadge, { TESTFLIGHT_URL, APP_STORE_COMING } from "@/components/AppStoreBadge";
 import HomeRankBadge from "@/components/HomeRankBadge";
+import AndroidBadge from "@/components/AndroidBadge";
+import { getBuyContent } from "@/lib/buy/content";
 import ProductHuntBadge from "@/components/ProductHuntBadge";
 import PhoneDemo, { type PhoneStrings } from "@/components/PhoneDemo";
 import HorizonArc from "@/components/HorizonArc";
@@ -37,6 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 	setRequestLocale(locale);
 	const t = await getTranslations();
 	const shots = shotLocale(locale);
+	const buy = getBuyContent(locale);
 
 	const phoneStrings = t.raw("phone") as PhoneStrings;
 	const trustCards = t.raw("trust.cards") as Array<{ t: string; b: string }>;
@@ -94,15 +97,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 								<p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed t-secondary">{t("hero.sub")}</p>
 							</Reveal>
 							<Reveal index={3}>
-								<div className="mt-8 flex flex-wrap items-center gap-5">
+								<div className="mt-8 flex flex-wrap items-start gap-4">
 									<AppStoreBadge
 										locale={locale}
 										alt={t("badge.alt")}
 										comingLabel={t("badge.comingLabel")}
 										coming={APP_STORE_COMING}
 									/>
-									<span className="text-[13px] t-tertiary">{t("hero.note")}</span>
+									{/* Android：大陆 → 官网下载 APK；其余 → Google Play（暂置灰即将上线）。客户端按 /api/geo 判定。 */}
+									<AndroidBadge locale={locale} strings={buy.download} />
 								</div>
+								<p className="mt-3 text-[13px] t-tertiary">{t("hero.note")}</p>
 							</Reveal>
 							{/* 按访客 IP 所在地区展示当前 App Store 排名（未上榜/非追踪地区不渲染）。 */}
 							<HomeRankBadge
@@ -371,6 +376,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 										comingLabel={t("badge.comingLabel")}
 										coming={APP_STORE_COMING}
 									/>
+								<AndroidBadge locale={locale} strings={buy.download} />
 								<ProductHuntBadge alt={t("productHunt.alt")} />
 							</div>
 							<p className="mt-5 text-[13px] t-tertiary">{t("cta.requirement")}</p>

@@ -14,6 +14,10 @@ const LOCALE_NAMES: Record<AppLocale, string> = {
 	ko: "한국어",
 	"pt-BR": "Português (Brasil)",
 	"pt-PT": "Português (Portugal)",
+	de: "Deutsch",
+	fr: "Français",
+	ar: "العربية",
+	tr: "Türkçe",
 };
 
 export default function LocaleSwitcher({ label }: { label: string }) {

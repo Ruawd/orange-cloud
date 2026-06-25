@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — 為進階用戶打造的開源 Cloudflare 助手 | Product Hunt"
 	},
 	"hero": {
-		"kicker": "為 iPhone 與 iPad 原生打造",
+		"kicker": "為 iPhone、iPad 與 Android 原生打造",
 		"title1": "一眼看清你的",
 		"title2": "Cloudflare",
 		"sub": "域名、DNS、流量分析、Workers 日誌與儲存，裝進一片隨晨昏變化的天。官方 OAuth 登入，無需貼上 API Token。",
-		"note": "iOS 17.0+ · 免費下載，Pro 進階可選"
+		"note": "iOS 17.0+ / Android 9+ · 免費下載，Pro 進階可選"
 	},
 	"phone": {
 		"greetMorning": "早晨，Jiamin",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "把 Cloudflare 裝入口袋",
 		"sub": "今晚的天，已經在 App 裡等你。",
-		"requirement": "需要 iOS 17.0 或以上版本 · 支援 iPhone 與 iPad"
+		"requirement": "需要 iOS 17.0+ 或 Android 9+ · 支援 iPhone、iPad 與 Android"
 	},
 	"changelog": {
 		"title": "更新歷史",

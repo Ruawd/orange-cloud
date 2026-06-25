@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — パワーユーザーのためのオープンソース Cloudflare コンパニオン | Product Hunt"
 	},
 	"hero": {
-		"kicker": "iPhone と iPad のためのネイティブアプリ",
+		"kicker": "iPhone・iPad・Android のためのネイティブアプリ",
 		"title1": "Cloudflare を、",
 		"title2": "ひと目で",
 		"sub": "ドメイン、DNS、分析、Workers ログ、ストレージ。空の色とともに移ろう UI に、すべてが収まる。公式 OAuth ログインで API トークンの貼り付けは不要。",
-		"note": "iOS 17.0+ · 無料ダウンロード、Pro はお好みで"
+		"note": "iOS 17.0+ / Android 9+ · 無料ダウンロード、Pro はお好みで"
 	},
 	"phone": {
 		"greetMorning": "おはようございます",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "Cloudflare をポケットに",
 		"sub": "今夜の空は、もうアプリの中で待っています。",
-		"requirement": "iOS 17.0 以降が必要 · iPhone / iPad 対応"
+		"requirement": "iOS 17.0+ または Android 9+ が必要 · iPhone / iPad / Android 対応"
 	},
 	"changelog": {
 		"title": "リリース履歴",

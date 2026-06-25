@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — 파워 유저를 위한 오픈소스 Cloudflare 도우미 | Product Hunt"
 	},
 	"hero": {
-		"kicker": "iPhone과 iPad를 위한 네이티브 앱",
+		"kicker": "iPhone, iPad, Android를 위한 네이티브 앱",
 		"title1": "Cloudflare를,",
 		"title2": "한눈에",
 		"sub": "도메인, DNS, 분석, Workers 로그와 스토리지를 하루의 시간에 따라 물드는 하늘에 담았습니다. 공식 OAuth 로그인으로 API 토큰을 붙여 넣을 필요가 없습니다.",
-		"note": "iOS 17.0+ · 무료 다운로드, Pro는 선택"
+		"note": "iOS 17.0+ / Android 9+ · 무료 다운로드, Pro는 선택"
 	},
 	"phone": {
 		"greetMorning": "좋은 아침이에요, Jiamin",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "Cloudflare를 주머니 속에",
 		"sub": "오늘 밤의 하늘이 이미 앱에서 기다리고 있습니다.",
-		"requirement": "iOS 17.0 이상 필요 · iPhone과 iPad 지원"
+		"requirement": "iOS 17.0+ 또는 Android 9+ 필요 · iPhone, iPad, Android 지원"
 	},
 	"changelog": {
 		"title": "업데이트 기록",

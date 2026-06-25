@@ -5,7 +5,7 @@
 	},
 	"meta": {
 		"title": "Orange Cloud — 一眼看清你的 Cloudflare",
-		"description": "iOS 原生 Cloudflare 管理客户端：官方 OAuth 安全登录，域名、DNS、流量分析、Workers 实时日志与 R2 · D1 · KV 存储，尽在 iPhone 与 iPad。",
+		"description": "原生 Cloudflare 管理客户端：官方 OAuth 安全登录，域名、DNS、流量分析、Workers 实时日志与 R2 · D1 · KV 存储，iPhone、iPad 与 Android 皆可。",
 		"keywords": "cloudflare,dns,域名,解析,cdn,workers,加速,防火墙,建站,服务器,waf,r2,d1,kv,隧道,分析,ssl,证书,运维"
 	},
 	"header": {
@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — 为高级用户打造的开源 Cloudflare 助手 | Product Hunt"
 	},
 	"hero": {
-		"kicker": "为 iPhone 与 iPad 原生打造",
+		"kicker": "为 iPhone、iPad 与 Android 原生打造",
 		"title1": "一眼看清你的",
 		"title2": "Cloudflare",
 		"sub": "域名、DNS、流量分析、Workers 日志与存储，装进一片随晨昏变化的天。官方 OAuth 登录，无需粘贴 API Token。",
-		"note": "iOS 17.0+ · 免费下载，Pro 进阶可选"
+		"note": "iOS 17.0+ / Android 9+ · 免费下载，Pro 进阶可选"
 	},
 	"phone": {
 		"greetMorning": "早上好，Jiamin",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "把 Cloudflare 装进口袋",
 		"sub": "今晚的天，已经在 App 里等你。",
-		"requirement": "需要 iOS 17.0 或更高版本 · 支持 iPhone 与 iPad"
+		"requirement": "需要 iOS 17.0+ 或 Android 9+ · 支持 iPhone、iPad 与 Android"
 	},
 	"changelog": {
 		"title": "更新历史",

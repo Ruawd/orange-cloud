@@ -25,11 +25,11 @@
 		"alt": "Orange Cloud — el complemento de Cloudflare de código abierto para usuarios avanzados | Product Hunt"
 	},
 	"hero": {
-		"kicker": "Nativa para iPhone y iPad",
+		"kicker": "Nativa para iPhone, iPad y Android",
 		"title1": "Tu Cloudflare,",
 		"title2": "de un vistazo",
 		"sub": "Dominios, DNS, análisis, registros de Workers y almacenamiento, en un cielo que sigue la hora del día. Inicio de sesión con OAuth oficial, sin pegar tokens de API.",
-		"note": "iOS 17.0+ · Descarga gratis, Pro opcional"
+		"note": "iOS 17.0+ / Android 9+ · Descarga gratis, Pro opcional"
 	},
 	"phone": {
 		"greetMorning": "Buenos días, Jiamin",
@@ -120,7 +120,7 @@
 	"cta": {
 		"title": "Lleva Cloudflare en el bolsillo",
 		"sub": "El cielo de esta noche ya te espera en la app.",
-		"requirement": "Requiere iOS 17.0 o posterior · iPhone y iPad"
+		"requirement": "Requiere iOS 17.0+ o Android 9+ · iPhone, iPad y Android"
 	},
 	"changelog": {
 		"title": "Historial de versiones",

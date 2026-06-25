@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { NotificationVerifyError, verifyNotification } from "@/lib/appstore/verify";
 import { processNotification } from "@/lib/appstore/store";
+import { notifyAppleEvent } from "@/lib/appstore/notify";
 import type { DecodedNotification } from "@/lib/appstore/types";
 
 // App Store Server Notifications V2 入口 —— Apple 服务器在购买 / 续订 / 退款 / 流失时
@@ -51,8 +52,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
 	// 4) 入库。存储失败返回 5xx —— Apple 会在数日的重试窗口内重发（幂等安全）。
 	try {
-		const { env } = getCloudflareContext();
+		const { env, ctx } = getCloudflareContext();
 		const result = await processNotification(env.IAP_DB, decoded);
+
+		// 5) 入库成功后推一条 Bark 到作者 iPhone（fire-and-forget，不阻塞对 Apple 的 200）。
+		//    跳过重复通知（Apple 会重发）以免刷屏；未配置 BARK_KEY 则静默跳过。
+		//    BARK_KEY / 可选 BARK_SERVER 经 wrangler secret / .dev.vars 注入（不在生成的 env 类型里，故 cast）。
+		if (!result.duplicate) {
+			const cfg = env as { BARK_KEY?: string; BARK_SERVER?: string };
+			ctx.waitUntil(notifyAppleEvent(cfg.BARK_KEY, decoded, cfg.BARK_SERVER));
+		}
+
 		return NextResponse.json(
 			{ ok: true, duplicate: result.duplicate, type: result.notificationType },
 			{ status: 200 },

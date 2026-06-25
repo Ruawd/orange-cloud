@@ -2,27 +2,16 @@ export const APP_STORE_URL = "https://apps.apple.com/app/id6779323783";
 export const TESTFLIGHT_URL = "https://testflight.apple.com/join/ZGhbsphj";
 export const APP_STORE_COMING = false;
 
-const APPLE_LOCALE: Record<string, string> = {
-	en: "en-us",
-	"zh-Hans": "zh-cn",
-	"zh-Hant": "zh-tw",
-	"zh-HK": "zh-hk",
-	ja: "ja-jp",
-	"es-MX": "es-mx",
-	ko: "ko-kr",
-	"pt-BR": "pt-br",
-	"pt-PT": "pt-pt",
-};
+const APPSTORE_LOCALES = ["en", "zh-Hans", "zh-Hant", "zh-HK", "ja", "es-MX", "ko", "pt-BR", "pt-PT", "de", "fr", "ar", "tr"];
 
 function badgeSrc(locale: string): string {
-	const l = APPLE_LOCALE[locale] ?? "en-us";
-	return `https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/${l}?size=250x83`;
+	return `/appstore/${APPSTORE_LOCALES.includes(locale) ? locale : "en"}.svg`;
 }
 
 /**
  * App Store 官方本地化徽章。
  * coming=true 时渲染为不可点击的"审核中"状态——官方图片降透明度，下方显示状态标签。
- * 徽章图片来自 Apple 官方 CDN，遵循《营销资源和识别标志指南》。
+ * 徽章为 Apple 官方本地化黑色徽章 SVG（存 public/appstore/），遵循《营销资源和识别标志指南》。
  */
 export default function AppStoreBadge({
 	locale = "en",
@@ -41,13 +30,7 @@ export default function AppStoreBadge({
 
 	const img = (
 		// eslint-disable-next-line @next/next/no-img-element
-		<img
-			src={src}
-			alt={alt}
-			width={250}
-			height={83}
-			style={{ height: "44px", width: "auto", display: "block" }}
-		/>
+		<img src={src} alt={alt} style={{ height: "44px", width: "auto", display: "block" }} />
 	);
 
 	if (coming) {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -27,7 +28,13 @@ export default async function LoginPage({
 		<div className="flex min-h-screen items-center justify-center px-4">
 			<div className="w-full max-w-sm">
 				<div className="mb-6 flex items-center gap-2.5">
-					<span className="inline-block h-5 w-5 rounded-full bg-accent shadow-sm" />
+					<Image
+						src="/icons/icon-64.png"
+						alt=""
+						width={20}
+						height={20}
+						className="h-5 w-5 rounded-[5px] shadow-sm"
+					/>
 					<div className="leading-tight">
 						<p className="text-sm font-semibold tracking-tight">Orange Cloud</p>
 						<p className="text-xs text-muted">收入账本</p>

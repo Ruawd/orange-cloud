@@ -35,6 +35,9 @@
 			"remote": true
 		}
 	],
+	// Cloudflare Email Service（Email Sending）—— 发激活码邮件，绑定式、无需 API key。
+	// 发件域名须先 onboard：`wrangler email sending enable hz.do`。
+	"send_email": [{ "name": "EMAIL" }],
 	"services": [
 		{
 			// Self-reference service binding, the service name must match the worker name
