@@ -7,12 +7,10 @@
 **A native Cloudflare client for iPhone, iPad & Apple Watch — sign in with OAuth, no API tokens to paste.**
 
 <a href="https://apps.apple.com/app/id6779323783"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download Orange Cloud on the App Store" height="54" /></a>
-&nbsp;
-<a href="https://www.producthunt.com/products/orange-cloud?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-orange-cloud" target="_blank" rel="noopener noreferrer"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1173673&amp;theme=dark&amp;t=1781641886373" alt="Orange Cloud - The open-source Cloudflare companion for power users | Product Hunt" height="54" /></a>
 
-<a href="https://apps.apple.com/app/id6779323783"><img src="https://orange-cloud.chatiro.app/api/ranks/badge" alt="Orange Cloud App Store rank" height="20" /></a>
+<a href="https://apps.apple.com/app/id6779323783"><img src="https://o-c.do/api/ranks/badge" alt="Orange Cloud App Store rank" height="20" /></a>
 
-[Website](https://orange-cloud.chatiro.app) · [Privacy](https://orange-cloud.chatiro.app/privacy) · [Terms](https://orange-cloud.chatiro.app/terms) · [TestFlight (beta)](https://testflight.apple.com/join/ZGhbsphj) · [Telegram](https://t.me/orange_cloud_channel)
+[Website](https://o-c.do) · [Privacy](https://o-c.do/privacy) · [Terms](https://o-c.do/terms) · [TestFlight (beta)](https://testflight.apple.com/join/ZGhbsphj) · [Telegram](https://t.me/orange_cloud_channel)
 
 [English](#english) | [中文](#中文)
 
@@ -32,16 +30,15 @@ Orange Cloud is a third-party Cloudflare management app for iPhone, iPad, and Ap
 
 ### Features
 
-- **OAuth 2.0 + PKCE sign-in** with per-scope permission selection; tokens live in the Keychain only, and multiple Cloudflare accounts can stay signed in side by side.
-- **Domains & DNS** — zone list, full DNS record CRUD, one-tap proxy toggle, and zone settings.
+- **OAuth 2.0 + PKCE sign-in** with per-scope permission selection, one-tap re-authorization; tokens live in the Keychain only, and multiple Cloudflare accounts can stay signed in side by side.
+- **Domains & Network** — zone list, full DNS record CRUD, Cache Rules, Load Balancing, Bulk Redirects, Purge Cache by URL, Global Traffic Map, one-tap proxy toggle, and zone settings.
+- **Developer Platform** — aggregated tab for Workers & Pages. View script details, **create & deploy** resources directly. Real-time log streaming (`wrangler tail`-style WebSocket trace) with a Live Activity on the Lock Screen and in the Dynamic Island. Snippets support (view, edit, and create zone-level edge code).
+- **Storage & AI** — R2 object storage (natively integrated into the iOS **Files app**), D1 SQL console, KV key-value management, and **On-device AI** capabilities.
+- **Security & Zero Trust** — WAF custom rules (full editor), Domain Security (SSL / Transform Rules / IP Access Rules), Zero Trust settings, and Cloudflare Tunnel status.
 - **Analytics** — zone traffic via the GraphQL Analytics API, rendered with Swift Charts (24-hour for free, 7-day / 30-day with Pro).
-- **Workers** — script list and details, plus real-time log streaming (`wrangler tail`-style WebSocket trace) with a Live Activity on the Lock Screen and in the Dynamic Island.
-- **Snippets** — view, edit, and create zone-level Cloudflare edge code and its trigger rules.
-- **Storage** — R2 bucket and object browsing, D1 SQL console, and KV key-value management.
-- **Security & network** — WAF custom rules (view / toggle) and Cloudflare Tunnel status.
 - **Apple Watch app** — your domains and 24-hour requests on your wrist, with watch-face complications.
 - **Deep system integration** — Home Screen and Lock Screen widgets, Control Center controls, Siri / App Intents, Spotlight indexing, background token refresh, and an iPad split-view layout.
-- **Localized** in 9 languages: English, 简体中文, 繁體中文（台灣）, 繁體中文（香港）, 日本語, Español (México), 한국어, Português (Brasil), and Português (Portugal).
+- **Localized** in 13 languages: English, 简体中文, 繁體中文（台灣）, 繁體中文（香港）, 日本語, Español (México), 한국어, Português (Brasil), Português (Portugal), Deutsch, Français, العربية, and Türkçe.
 
 ### Free, Pro, and open source
 
@@ -63,15 +60,16 @@ orange-cloud/
 
 ### Android
 
-A native **Kotlin + Jetpack Compose** client lives in [`apps/android/`](apps/android/README.md). It carries iOS's design language and OAuth-first approach, rebuilt the Android-native way rather than mirrored screen for screen, and covers the same core:
+A native **Kotlin + Jetpack Compose** client lives in [`apps/android/`](apps/android/README.md). It carries iOS's design language and OAuth-first approach, rebuilt the Android-native way rather than mirrored screen for screen. It is now feature-complete and aligned with iOS:
 
 - **OAuth 2.0 + PKCE** multi-account sign-in, with tokens kept in the Android Keystore.
-- **Domains & DNS**, **Analytics** (GraphQL + hand-drawn charts), and **Workers** with live log tailing via an ongoing notification.
+- **Domains, Network & Analytics** (GraphQL + hand-drawn charts, Global Traffic Map, Cache Rules, Purge Cache).
+- **Developer Platform** — Workers & Pages with resource creation and live log tailing via an ongoing notification.
 - **Storage** — R2 (browse / upload / download), D1 (SQL console plus table browsing and row editing), and KV.
-- **Security & network** — WAF custom rules (create / toggle / delete) and Cloudflare Tunnel.
-- **Android touches** — Material You dynamic color over the daybreak theme, an adaptive two-pane layout for tablets and foldables, home-screen shortcuts, a Quick Settings tile, predictive back, and per-app language — localized in the same 9 languages.
+- **Security & Zero Trust** — WAF custom rules (create / toggle / delete), Domain Security, and Cloudflare Tunnel.
+- **Android touches** — Material You dynamic color over the daybreak theme, an adaptive two-pane layout for tablets and foldables, home-screen shortcuts, a Quick Settings tile, predictive back, and per-app language — localized in the same 13 languages.
 
-It's feature-complete and in **closed testing — not yet on Google Play**. The open-source story matches iOS: the `oss` build flavor unlocks every Pro feature at no cost.
+The open-source story matches iOS: the `oss` build flavor unlocks every Pro feature at no cost. You can download the direct APK or follow the project.
 
 ### Community
 
@@ -80,7 +78,7 @@ Follow the [Telegram channel](https://t.me/orange_cloud_channel) for release not
 ### Building from source
 
 1. **Xcode 26 or later.** Open `apps/ios/Orange Cloud/Orange Cloud.xcodeproj`. The app targets iOS 17 and watchOS 10.6, with an embedded Apple Watch companion app.
-2. Create your own **Cloudflare OAuth client** and deploy your own callback relay (see [`apps/web/`](apps/web/README.md)) — the official client ID and the `orange-cloud.chatiro.app` relay are not available to third-party builds.
+2. Create your own **Cloudflare OAuth client** and deploy your own callback relay (see [`apps/web/`](apps/web/README.md)) — the official client ID and the `o-c.do` relay are not available to third-party builds.
 3. Add `OPENSOURCE_UNLOCKED` to the main target's `SWIFT_ACTIVE_COMPILATION_CONDITIONS` for the full feature set.
 4. Change the Bundle ID, App Group, and signing team to your own.
 
@@ -100,16 +98,15 @@ Orange Cloud 是一款面向 iPhone、iPad 与 Apple Watch 的 Cloudflare 第三
 
 ### 功能
 
-- **OAuth 2.0 + PKCE 登录**，按 scope 勾选授权；Token 仅存 Keychain，支持多个 Cloudflare 账号并存切换。
-- **域名与 DNS**——域名列表、DNS 记录增删改查、一键代理开关、域名设置。
+- **OAuth 2.0 + PKCE 登录**，按 scope 勾选授权，支持一键重授权；Token 仅存 Keychain，支持多个 Cloudflare 账号并存切换。
+- **域名与网络**——域名列表、DNS 记录增删改查、缓存规则、负载均衡、批量重定向 (Bulk Redirects)、按 URL 清理缓存、全球流量地图、一键代理开关及域名设置。
+- **开发者平台 (Developer Platform)**——聚合 Workers 与 Pages。支持查看脚本详情，**直接创建与部署**资源；实时日志流（类似 `wrangler tail` 的 WebSocket trace），配合锁屏与灵动岛 Live Activity。支持 Snippets（边缘代码查看、编辑与新建）。
+- **存储与 AI**——R2 存储桶与对象浏览（已原生挂载至 iOS **「文件」App**）、D1 SQL 查询控制台、KV 键值管理以及**设备端 AI** 体验。
+- **安全与 Zero Trust**——WAF 自定义规则（完整编辑器）、域名安全（SSL / Transform Rules / IP 访问规则）、Zero Trust 设置以及 Cloudflare 隧道状态。
 - **流量分析**——基于 GraphQL Analytics API，用 Swift Charts 绘制图表（24 小时免费，7 天 / 30 天需 Pro）。
-- **Workers**——脚本列表与详情，以及实时日志流（类似 `wrangler tail` 的 WebSocket trace），配合锁屏与灵动岛 Live Activity。
-- **Snippets**——查看、编辑、新建 zone 级 Cloudflare 边缘代码及其触发规则。
-- **存储**——R2 存储桶与对象浏览、D1 SQL 查询控制台、KV 键值管理。
-- **安全与网络**——WAF 自定义规则（查看 / 启停）与 Cloudflare 隧道状态。
 - **Apple Watch App**——在手腕上查看域名与 24 小时请求，并支持表盘 complication。
 - **系统深度集成**——主屏与锁屏小组件、控制中心控件、Siri / App Intents、Spotlight 索引、后台 Token 静默刷新、iPad 双栏布局。
-- **9 语言本地化**：简体中文、繁體中文（台灣）、繁體中文（香港）、English、日本語、Español（墨西哥）、한국어、Português（巴西）、Português（葡萄牙）。
+- **13 语言本地化**：简体中文、繁體中文（台灣）、繁體中文（香港）、English、日本語、Español（墨西哥）、한국어、Português（巴西）、Português（葡萄牙）、Deutsch、Français、العربية、Türkçe。
 
 ### 免费、Pro 与开源
 
@@ -131,15 +128,16 @@ orange-cloud/
 
 ### Android 版
 
-原生 **Kotlin + Jetpack Compose** 客户端位于 [`apps/android/`](apps/android/README.md)。它延续 iOS 的设计语言与「OAuth 免贴 Token」理念，但以 Android 原生方式重写、而非逐屏镜像，覆盖同一套核心：
+原生 **Kotlin + Jetpack Compose** 客户端位于 [`apps/android/`](apps/android/README.md)。它延续 iOS 的设计语言与「OAuth 免贴 Token」理念，以 Android 原生方式重写。目前功能已全面爆发对齐 iOS 版本：
 
 - **OAuth 2.0 + PKCE** 多账号登录，Token 仅存 Android Keystore。
-- **域名与 DNS**、**流量分析**（GraphQL + 自绘图表）、**Workers** 实时日志（常驻通知）。
+- **域名、网络与流量分析**（GraphQL + 自绘图表、全球流量地图、缓存规则、按 URL 清缓存）。
+- **开发者平台**——Workers 与 Pages 支持创建、部署及实时日志（常驻通知）。
 - **存储**——R2（浏览 / 上传 / 下载）、D1（SQL 控制台，含表浏览与行编辑）、KV。
-- **安全与网络**——WAF 自定义规则（新建 / 启停 / 删除）与 Cloudflare 隧道。
-- **Android 特色**——晨昏主题之上的 Material You 动态取色、平板与折叠屏自适应双栏、主屏长按快捷、快速设置磁贴、predictive back、每应用语言——同样本地化为 9 种语言。
+- **安全与 Zero Trust**——WAF 自定义规则（完整编辑器）、域名安全配置与 Cloudflare 隧道。
+- **Android 特色**——晨昏主题之上的 Material You 动态取色、平板与折叠屏自适应双栏、主屏长按快捷、快速设置磁贴、predictive back、每应用语言——同样本地化为 13 种语言。
 
-功能已完整，正在**封闭测试——尚未上架 Google Play**。开源策略与 iOS 一致：`oss` 构建风味零成本解锁全部 Pro 功能。
+开源策略与 iOS 一致：`oss` 构建风味零成本解锁全部 Pro 功能。已提供直接下载的 APK（Direct Release）。
 
 ### 社区
 
@@ -148,7 +146,7 @@ orange-cloud/
 ### 自行编译
 
 1. **Xcode 26 或更高版本**，打开 `apps/ios/Orange Cloud/Orange Cloud.xcodeproj`。App 面向 iOS 17 与 watchOS 10.6，并内嵌 Apple Watch 配套 App。
-2. 自建 **Cloudflare OAuth Client** 并部署你自己的回调中转（见 [`apps/web/`](apps/web/README.md)）——官方 Client ID 与 `orange-cloud.chatiro.app` 中转不向第三方构建开放。
+2. 自建 **Cloudflare OAuth Client** 并部署你自己的回调中转（见 [`apps/web/`](apps/web/README.md)）——官方 Client ID 与 `o-c.do` 中转不向第三方构建开放。
 3. 向主 target 的 `SWIFT_ACTIVE_COMPILATION_CONDITIONS` 添加 `OPENSOURCE_UNLOCKED` 以解锁全部功能。
 4. 将 Bundle ID、App Group 与签名团队改为你自己的。
 
