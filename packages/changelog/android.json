@@ -1,5 +1,76 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026.07.03",
+    "channel": "Google Play",
+    "items": [
+      {
+        "title": {
+          "zh-Hans": "Pages 自定义域名",
+          "en": "Pages custom domains",
+          "zh-Hant": "Pages 自訂網域",
+          "zh-HK": "Pages 自訂域名",
+          "ja": "Pages カスタムドメイン",
+          "es-MX": "Dominios personalizados de Pages",
+          "ko": "Pages 사용자 지정 도메인",
+          "pt-BR": "Domínios personalizados do Pages",
+          "pt-PT": "Domínios personalizados do Pages",
+          "de": "Benutzerdefinierte Domains für Pages",
+          "fr": "Domaines personnalisés Pages",
+          "ar": "نطاقات Pages المخصصة",
+          "tr": "Pages özel alan adları"
+        },
+        "detail": {
+          "zh-Hans": "Pages 项目现可直接管理自定义域名：添加、删除、重新验证并检查解析状态；域名在当前账号时，还能一键添加指向项目的 CNAME 记录。",
+          "en": "Manage custom domains right inside a Pages project: add, remove, re-validate, and check DNS status — with one-tap CNAME setup when the domain’s zone is on your account.",
+          "zh-Hant": "Pages 專案現可直接管理自訂網域：新增、刪除、重新驗證並檢查解析狀態；網域在目前帳號時，還能一鍵新增指向專案的 CNAME 記錄。",
+          "zh-HK": "Pages 項目現可直接管理自訂域名：新增、刪除、重新驗證並檢查解析狀態；域名在當前帳戶時，還能一鍵新增指向項目的 CNAME 記錄。",
+          "ja": "Pages プロジェクト内でカスタムドメインを直接管理：追加・削除・再検証と DNS 状態の確認に対応。ドメインが現在のアカウントにある場合は、プロジェクトへ向ける CNAME レコードをワンタップで追加できます。",
+          "es-MX": "Administra dominios personalizados dentro de un proyecto de Pages: agregar, eliminar, revalidar y comprobar el estado del DNS; si la zona del dominio está en tu cuenta, agrega el registro CNAME con un toque.",
+          "ko": "Pages 프로젝트에서 사용자 지정 도메인을 직접 관리하세요: 추가·삭제·재확인과 DNS 상태 확인을 지원하며, 도메인이 현재 계정에 있으면 프로젝트를 가리키는 CNAME 레코드를 한 번에 추가할 수 있습니다.",
+          "pt-BR": "Gerencie domínios personalizados dentro de um projeto do Pages: adicionar, remover, revalidar e verificar o status do DNS — com criação do registro CNAME em um toque quando a zona do domínio está na sua conta.",
+          "pt-PT": "Faça a gestão de domínios personalizados dentro de um projeto do Pages: adicionar, remover, revalidar e verificar o estado do DNS — com criação do registo CNAME num toque quando a zona do domínio está na sua conta.",
+          "de": "Verwalte benutzerdefinierte Domains direkt im Pages-Projekt: hinzufügen, entfernen, erneut validieren und DNS-Status prüfen – mit Ein-Tipp-CNAME, wenn die Zone der Domain in deinem Konto liegt.",
+          "fr": "Gérez les domaines personnalisés directement dans un projet Pages : ajout, suppression, revalidation et vérification du DNS — avec création du CNAME en un geste quand la zone du domaine est sur votre compte.",
+          "ar": "أدر النطاقات المخصصة داخل مشروع Pages مباشرة: إضافة وحذف وإعادة تحقق وفحص حالة DNS — مع إضافة سجل CNAME بلمسة واحدة عندما تكون منطقة النطاق ضمن حسابك.",
+          "tr": "Özel alan adlarını doğrudan Pages projesi içinde yönetin: ekleme, silme, yeniden doğrulama ve DNS durumu kontrolü — alan adının bölgesi hesabınızdaysa tek dokunuşla CNAME kaydı ekleyin."
+        }
+      },
+      {
+        "title": {
+          "zh-Hans": "列表排序",
+          "en": "List sorting",
+          "zh-Hant": "清單排序",
+          "zh-HK": "列表排序",
+          "ja": "リストの並べ替え",
+          "es-MX": "Orden de listas",
+          "ko": "목록 정렬",
+          "pt-BR": "Ordenação de listas",
+          "pt-PT": "Ordenação de listas",
+          "de": "Listensortierung",
+          "fr": "Tri des listes",
+          "ar": "ترتيب القوائم",
+          "tr": "Liste sıralama"
+        },
+        "detail": {
+          "zh-Hans": "Workers 与 Pages 列表新增排序：默认（名称）、创建日期、最近更新，选择会被记住。",
+          "en": "Workers and Pages lists can now be sorted by name (default), date created, or recently updated — your choice is remembered.",
+          "zh-Hant": "Workers 與 Pages 清單新增排序：預設（名稱）、建立日期、最近更新，選擇會被記住。",
+          "zh-HK": "Workers 與 Pages 列表新增排序：默認（名稱）、創建日期、最近更新，選擇會被記住。",
+          "ja": "Workers と Pages のリストを名前（デフォルト）・作成日・最近の更新で並べ替えられるようになりました。選択は記憶されます。",
+          "es-MX": "Las listas de Workers y Pages ahora se pueden ordenar por nombre (predeterminado), fecha de creación o actualización reciente; tu elección se recuerda.",
+          "ko": "Workers와 Pages 목록을 이름(기본), 생성일, 최근 업데이트로 정렬할 수 있습니다. 선택은 기억됩니다.",
+          "pt-BR": "As listas de Workers e Pages agora podem ser ordenadas por nome (padrão), data de criação ou atualização recente — sua escolha é lembrada.",
+          "pt-PT": "As listas de Workers e Pages podem agora ser ordenadas por nome (predefinição), data de criação ou atualização recente — a sua escolha é lembrada.",
+          "de": "Workers- und Pages-Listen lassen sich jetzt nach Name (Standard), Erstellungsdatum oder letzter Aktualisierung sortieren – die Auswahl wird gemerkt.",
+          "fr": "Les listes Workers et Pages peuvent désormais être triées par nom (par défaut), date de création ou mise à jour récente — votre choix est mémorisé.",
+          "ar": "يمكن الآن ترتيب قوائم Workers و Pages حسب الاسم (افتراضي) أو تاريخ الإنشاء أو آخر تحديث — ويُحفظ اختيارك.",
+          "tr": "Workers ve Pages listeleri artık ada (varsayılan), oluşturma tarihine veya son güncellemeye göre sıralanabilir; seçiminiz hatırlanır."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.5.0",
     "date": "2026.06.30",
     "channel": "Google Play",
