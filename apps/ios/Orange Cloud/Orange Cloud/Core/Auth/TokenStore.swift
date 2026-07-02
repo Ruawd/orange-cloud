@@ -66,11 +66,18 @@ nonisolated enum TokenStore {
         query[kSecAttrSynchronizable as String] = false
         // 写入共享组让 Widget 可读；entitlement 缺失时回退默认组，保证 token 不丢
         query[kSecAttrAccessGroup as String] = sharedAccessGroup
-        if SecItemAdd(query as CFDictionary, nil) == errSecSuccess {
+        let sharedStatus = SecItemAdd(query as CFDictionary, nil)
+        if sharedStatus == errSecSuccess {
             return true
         }
         query.removeValue(forKey: kSecAttrAccessGroup as String)
-        return SecItemAdd(query as CFDictionary, nil) == errSecSuccess
+        let fallbackStatus = SecItemAdd(query as CFDictionary, nil)
+        if fallbackStatus != errSecSuccess {
+            // 两次写入都失败 = token 已被上面的 SecItemDelete 清掉、新值又没写进去，
+            // 下次读取必是 "token missing"。这里必须留痕，否则表象与静默丢 token 无法区分。
+            AppLog.auth.error("keychain token save FAILED account=\(account) sharedStatus=\(sharedStatus) fallbackStatus=\(fallbackStatus)")
+        }
+        return fallbackStatus == errSecSuccess
     }
 
     private static func load(account: String) -> StoredToken? {

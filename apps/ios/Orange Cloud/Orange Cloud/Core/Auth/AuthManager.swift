@@ -51,6 +51,11 @@ final class AuthManager {
     var isLoading = false
     var errorMessage: String?
 
+    /// 存储的 token 缺少 refresh token 的身份（token 端点当次未发 refresh_token，
+    /// access token 到期后无从续期）。UI 据此把泛化的「刷新失败」升级为「重新授权」引导；
+    /// 重新授权拿到带 refresh token 的新令牌后自动摘除。
+    private(set) var sessionsNeedingReauth: Set<UUID> = []
+
     var isLoggedIn: Bool { currentSessionId != nil }
 
     var currentSession: AuthSessionMeta? {
@@ -96,6 +101,14 @@ final class AuthManager {
         // 看 workers-observability.read 等是否真在 token 里）。重启即可见，无需重新登录。
         if let current = currentSession {
             AppLog.auth.info("active session scopes (\(current.scopes.count))=[\(current.scopes.joined(separator: " "))]")
+        }
+        // 启动即标记「缺 refresh token」的身份（不等到 access token 过期刷新失败才发现），
+        // Dashboard 能在第一时间给出「重新授权」引导而非泛化的刷新失败。
+        for meta in sessions {
+            if let token = TokenStore.load(sessionId: meta.id), token.refreshToken == nil {
+                sessionsNeedingReauth.insert(meta.id)
+                AppLog.auth.error("stored token has no refresh token at launch. session=\(meta.id.uuidString)")
+            }
         }
         // 自愈：清掉 App Group 里已不再登录的身份残留的 Widget 数据（历史登出未清等）
         WidgetDataStore.reconcile(liveSessionIds: Set(sessions.map { $0.id.uuidString }))
@@ -188,6 +201,7 @@ final class AuthManager {
             let id = UUID()
             TokenStore.save(token, sessionId: id)
             AuthDiagnostics.recordWrite(refreshToken: token.refreshToken, sessionId: id)
+            noteRefreshTokenPresence(token, sessionId: id, phase: "login")
             let scopes = token.scope.components(separatedBy: " ").filter { !$0.isEmpty }.sorted()
             AppLog.auth.info("login stored session=\(id.uuidString) granted scopes=[\(scopes.joined(separator: " "))]")
             let label = await fetchIdentityLabel(accessToken: token.accessToken)
@@ -232,6 +246,7 @@ final class AuthManager {
 
             TokenStore.save(token, sessionId: sessionId)
             AuthDiagnostics.recordWrite(refreshToken: token.refreshToken, sessionId: sessionId)
+            noteRefreshTokenPresence(token, sessionId: sessionId, phase: "reauthorize")
             let granted = token.scope.components(separatedBy: " ").filter { !$0.isEmpty }.sorted()
             AppLog.auth.info("reauthorize stored session=\(sessionId.uuidString) granted scopes=[\(granted.joined(separator: " "))]")
             sessions[index].scopes = granted
@@ -409,8 +424,9 @@ final class AuthManager {
             throw AuthError.notLoggedIn
         }
         guard let refreshToken = stored.refreshToken else {
-            // 无刷新令牌则无从续期。同样保留身份，交由用户在账号切换器里手动重新授权，
-            // 不删身份，避免一次 401 把会话连锁清空。
+            // 无刷新令牌则无从续期。同样保留身份，标记「需重新授权」（Dashboard 出引导横幅，
+            // 一键重授权同 UUID 原地换新令牌），不删身份，避免一次 401 把会话连锁清空。
+            sessionsNeedingReauth.insert(sessionId)
             AppLog.auth.error("stored token has no refresh token (session kept). session=\(sessionId.uuidString)")
             throw AuthError.notLoggedIn
         }
@@ -458,6 +474,7 @@ final class AuthManager {
         )
         TokenStore.save(newToken, sessionId: sessionId)
         AuthDiagnostics.recordWrite(refreshToken: newToken.refreshToken, sessionId: sessionId)
+        sessionsNeedingReauth.remove(sessionId)   // 能刷新成功即链路健康，摘除陈旧标记
         AppLog.auth.info("refresh ok session=\(sessionId.uuidString) newRefreshFP=\(AuthDiagnostics.fingerprint(newToken.refreshToken))")
         return newToken.accessToken
     }
@@ -501,9 +518,21 @@ final class AuthManager {
         removeSession(sessionId)
     }
 
+    /// 记录本次交换是否带回 refresh token：缺失时标记该身份「需重新授权」并留证据日志
+    /// （granted scope 一并记录，便于核对 OAuth client 配置）；带回则摘除标记。
+    private func noteRefreshTokenPresence(_ token: TokenStore.StoredToken, sessionId: UUID, phase: String) {
+        if token.refreshToken == nil {
+            sessionsNeedingReauth.insert(sessionId)
+            AppLog.auth.error("token exchange returned NO refresh_token (\(phase)). session=\(sessionId.uuidString) scope=[\(token.scope)] — access token 到期后将无法续期，请核对 OAuth client 配置")
+        } else {
+            sessionsNeedingReauth.remove(sessionId)
+        }
+    }
+
     private func removeSession(_ id: UUID) {
         TokenStore.clear(sessionId: id)
         AuthDiagnostics.clearBaseline(id)
+        sessionsNeedingReauth.remove(id)
         sessions.removeAll { $0.id == id }
         AppLog.auth.notice("session removed=\(id.uuidString) remaining=\(sessions.count)")
         if currentSessionId == id {

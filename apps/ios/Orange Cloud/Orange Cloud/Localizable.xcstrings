@@ -106687,6 +106687,82 @@
         }
       }
     },
+    "登录授权已失效，无法自动续期" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انتهت صلاحية تفويض تسجيل الدخول ولا يمكن تجديده تلقائيًا"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Anmeldeautorisierung ist abgelaufen und kann nicht automatisch erneuert werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-in authorization has expired and can’t be renewed automatically"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La autorización de inicio de sesión expiró y no se puede renovar automáticamente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’autorisation de connexion a expiré et ne peut pas être renouvelée automatiquement"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログイン認証の有効期限が切れ、自動更新できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "로그인 인증이 만료되어 자동 갱신할 수 없습니다"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A autorização de login expirou e não pode ser renovada automaticamente"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A autorização de sessão expirou e não pode ser renovada automaticamente"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oturum açma yetkisi süresi doldu ve otomatik olarak yenilenemiyor"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登入授權已失效，無法自動續期"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登入授權已失效，無法自動續期"
+          }
+        }
+      }
+    },
     "监控中" : {
       "localizations" : {
         "ar" : {

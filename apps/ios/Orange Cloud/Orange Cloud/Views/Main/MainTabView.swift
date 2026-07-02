@@ -76,8 +76,9 @@ struct MainTabView: View {
     // 让按账号过滤的 @Query 谓词刷新、列表数据重新拉取（资源跟着选中账号走）。
 
     @ViewBuilder private var dashboardTab: some View {
+        // 账号维度的重建（.id）在 DashboardView 内部、NavigationStack 之内完成——
+        // 在这里加 .id 会把可见导航栏连栈一起重建，iOS 17.0.x 必崩（详见 DashboardView 注释）。
         DashboardView(session: session)
-            .id(session.selectedAccount?.id)
     }
 
     @ViewBuilder private var zonesTab: some View {

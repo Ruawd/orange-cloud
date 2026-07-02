@@ -27,6 +27,9 @@ struct Orange_CloudApp: App {
         // 最先安装崩溃捕获，让启动期任意一步崩溃都能被记录、随下次反馈带出。
         CrashReporter.install()
         CrashReporter.recordBreadcrumb("AppStart begin")
+        #if DEBUG
+        MockCloudflare.activateIfRequested()   // 诊断 mock：仅 ORANGE_MOCK=1 时生效
+        #endif
         let manager = AuthManager()
         _authManager = State(initialValue: manager)
         CrashReporter.recordBreadcrumb("AppStart auth manager created")

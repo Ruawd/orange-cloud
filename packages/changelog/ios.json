@@ -1,5 +1,79 @@
 [
   {
+    "version": "1.8.2",
+    "date": "2026.07.02",
+    "channel": "App Store",
+    "inApp": false,
+    "items": [
+      {
+        "icon": "wrench.and.screwdriver.fill",
+        "title": {
+          "zh-Hans": "稳定性修复",
+          "en": "Stability fixes",
+          "zh-Hant": "穩定性修復",
+          "zh-HK": "穩定性修復",
+          "ja": "安定性の修正",
+          "es-MX": "Correcciones de estabilidad",
+          "ko": "안정성 수정",
+          "pt-BR": "Correções de estabilidade",
+          "pt-PT": "Correções de estabilidade",
+          "de": "Stabilitätskorrekturen",
+          "fr": "Corrections de stabilité",
+          "ar": "إصلاحات الاستقرار",
+          "tr": "Kararlılık düzeltmeleri"
+        },
+        "detail": {
+          "zh-Hans": "修复 iOS 17.0 上打开概览页闪退的问题；登录授权失效无法自动续期时，概览页现在会给出「一键重新授权」引导，不再反复提示刷新失败。",
+          "en": "Fixes a crash when opening Overview on iOS 17.0. When sign-in authorization can no longer be renewed automatically, Overview now offers one-tap re-authorization instead of repeated refresh failures.",
+          "zh-Hant": "修復在 iOS 17.0 上開啟總覽頁閃退的問題；登入授權失效無法自動續期時，總覽頁現在會提供「一鍵重新授權」引導，不再反覆提示重新整理失敗。",
+          "zh-HK": "修復在 iOS 17.0 上開啟概覽頁閃退的問題；登入授權失效無法自動續期時，概覽頁現在會提供「一鍵重新授權」引導，不再反覆提示重新整理失敗。",
+          "ja": "iOS 17.0 で概要ページを開くとクラッシュする問題を修正しました。ログイン認証を自動更新できない場合は、概要ページにワンタップ再認証の案内を表示し、更新失敗の繰り返しをなくしました。",
+          "es-MX": "Corrige un cierre inesperado al abrir Resumen en iOS 17.0. Cuando la autorización de inicio de sesión ya no puede renovarse automáticamente, Resumen ahora ofrece reautorizar con un toque en lugar de fallas de actualización repetidas.",
+          "ko": "iOS 17.0에서 개요 페이지를 열 때 앱이 종료되는 문제를 수정했습니다. 로그인 인증을 자동 갱신할 수 없을 때는 개요 페이지에서 원탭 재인증 안내를 제공하여 새로 고침 실패가 반복되지 않습니다.",
+          "pt-BR": "Corrige uma falha ao abrir a Visão geral no iOS 17.0. Quando a autorização de login não puder mais ser renovada automaticamente, a Visão geral agora oferece reautorização com um toque em vez de falhas repetidas de atualização.",
+          "pt-PT": "Corrige uma falha ao abrir a Vista geral no iOS 17.0. Quando a autorização de sessão já não puder ser renovada automaticamente, a Vista geral passa a oferecer reautorização com um toque em vez de falhas repetidas de atualização.",
+          "de": "Behebt einen Absturz beim Öffnen der Übersicht unter iOS 17.0. Kann die Anmeldeautorisierung nicht mehr automatisch erneuert werden, bietet die Übersicht jetzt eine Neuautorisierung mit einem Tipp statt wiederholter Aktualisierungsfehler.",
+          "fr": "Corrige un plantage à l’ouverture de l’aperçu sous iOS 17.0. Lorsque l’autorisation de connexion ne peut plus être renouvelée automatiquement, l’aperçu propose désormais une réautorisation en un geste au lieu d’échecs d’actualisation répétés.",
+          "ar": "يصلح انهيارًا عند فتح صفحة النظرة العامة على iOS 17.0. وعندما يتعذر تجديد تفويض تسجيل الدخول تلقائيًا، تعرض النظرة العامة الآن إرشادًا لإعادة التفويض بنقرة واحدة بدلًا من تكرار فشل التحديث.",
+          "tr": "iOS 17.0'da Genel Bakış sayfası açılırken oluşan çökmeyi düzeltir. Oturum açma yetkisi otomatik olarak yenilenemediğinde Genel Bakış artık tekrarlanan yenileme hataları yerine tek dokunuşla yeniden yetkilendirme sunar."
+        }
+      },
+      {
+        "icon": "speedometer",
+        "title": {
+          "zh-Hans": "滑动更流畅",
+          "en": "Smoother scrolling",
+          "zh-Hant": "捲動更流暢",
+          "zh-HK": "滑動更流暢",
+          "ja": "スクロールがより滑らかに",
+          "es-MX": "Desplazamiento más fluido",
+          "ko": "더 부드러운 스크롤",
+          "pt-BR": "Rolagem mais fluida",
+          "pt-PT": "Deslocação mais fluida",
+          "de": "Flüssigeres Scrollen",
+          "fr": "Défilement plus fluide",
+          "ar": "تمرير أكثر سلاسة",
+          "tr": "Daha akıcı kaydırma"
+        },
+        "detail": {
+          "zh-Hans": "重做玻璃卡片的渲染方式：观感不变，滚动开销大幅下降，列表与概览页滑动明显更顺滑，旧机型尤其受益。",
+          "en": "Glass cards are rendered with far less overhead while looking identical — lists and Overview scroll noticeably smoother, especially on older devices.",
+          "zh-Hant": "重做玻璃卡片的算繪方式：觀感不變、捲動負擔大幅下降，清單與總覽頁捲動明顯更順暢，舊機型尤其受益。",
+          "zh-HK": "重做玻璃卡片的渲染方式：觀感不變、滑動負擔大幅下降，列表與概覽頁滑動明顯更順暢，舊機型尤其受益。",
+          "ja": "ガラスカードの描画方式を見直しました。見た目はそのままにスクロール時の負荷を大幅に削減し、リストや概要ページのスクロールが特に旧機種で滑らかになりました。",
+          "es-MX": "Las tarjetas de vidrio ahora se dibujan con mucho menos costo manteniendo el mismo aspecto: las listas y Resumen se desplazan con notable mayor fluidez, sobre todo en equipos antiguos.",
+          "ko": "글래스 카드 렌더링을 개선했습니다. 보이는 모습은 그대로 유지하면서 스크롤 부하를 크게 줄여, 목록과 개요 페이지가 특히 구형 기기에서 눈에 띄게 부드러워졌습니다.",
+          "pt-BR": "Os cartões de vidro agora são renderizados com muito menos custo, mantendo o mesmo visual — as listas e a Visão geral rolam visivelmente mais suave, principalmente em aparelhos antigos.",
+          "pt-PT": "Os cartões de vidro passam a ser renderizados com muito menos custo, mantendo o mesmo aspeto — as listas e a Vista geral deslizam visivelmente melhor, sobretudo em dispositivos antigos.",
+          "de": "Glaskarten werden bei gleichem Aussehen deutlich günstiger gerendert – Listen und die Übersicht scrollen spürbar flüssiger, besonders auf älteren Geräten.",
+          "fr": "Les cartes en verre sont rendues avec beaucoup moins de coût tout en gardant le même aspect — les listes et l’aperçu défilent nettement plus fluidement, surtout sur les appareils anciens.",
+          "ar": "أصبحت البطاقات الزجاجية تُرسم بكلفة أقل بكثير مع الحفاظ على المظهر نفسه — تمرير القوائم وصفحة النظرة العامة أصبح أكثر سلاسة، خصوصًا على الأجهزة الأقدم.",
+          "tr": "Cam kartlar aynı görünümü koruyarak çok daha düşük maliyetle çiziliyor — listeler ve Genel Bakış, özellikle eski cihazlarda belirgin şekilde daha akıcı kayıyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.8.1",
     "date": "2026.06.30",
     "channel": "App Store",

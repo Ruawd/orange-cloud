@@ -10,7 +10,32 @@ import SwiftData
 import TipKit
 import WidgetKit
 
+/// 概览页外壳：NavigationStack 常驻，账号切换只重建栈内内容。
+///
+/// **不要把 `.id(账号)` 加回 NavigationStack 外层**（也别在 MainTabView 的 tab 上加）：
+/// 重建整个 NavigationStack 会连正在显示的导航栏一起换掉，iOS 17.0.x 的 UIKit 在
+/// `-[UINavigationBar layoutSubviews]` 对此硬断言（"top item belongs to a different
+/// navigation bar"）——冷启动账号加载完成时 id 从 nil 翻转，概览页必崩（17.1 起系统才修复）。
+/// 1.5.1 曾误诊为 TipKit popover。账号维度的 @Query 谓词刷新由栈内的 `.id` 完成。
 struct DashboardView: View {
+
+    private let session: SessionStore
+
+    init(session: SessionStore) {
+        self.session = session
+    }
+
+    var body: some View {
+        NavigationStack {
+            DashboardHomeView(session: session)
+                .id(session.selectedAccount?.id)
+        }
+    }
+}
+
+/// 概览页内容（原 DashboardView 本体）：@Query 谓词在 init 按当前账号构建，
+/// 外壳用 `.id(selectedAccount)` 在账号切换时重建本视图以刷新谓词。
+private struct DashboardHomeView: View {
 
     @Environment(SessionStore.self) private var session
     @Environment(AuthManager.self) private var auth
@@ -111,68 +136,91 @@ struct DashboardView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    daybreakHeader
-                        .islandReveal(0)
-                    if session.error != nil || viewModel.loadFailed {
-                        RefreshFailedBanner { Task { await refreshAll() } }
-                    }
-                    Group {
-                        if cachedZones.isEmpty && viewModel.isLoadingAssets {
-                            statSkeleton
-                        } else {
-                            statIslands
-                        }
-                    }
-                    .islandReveal(1)
-                    usageSection
-                        .islandReveal(2)
-                    zonesSection
-                        .islandReveal(3)
-                    networkSection
-                        .islandReveal(4)
-                    bulkRedirectsSection
-                        .islandReveal(5)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                daybreakHeader
+                    .islandReveal(0)
+                if let sid = auth.currentSessionId, auth.sessionsNeedingReauth.contains(sid) {
+                    // token 缺 refresh token（无从续期）：给「重新授权」引导而非泛化的刷新失败——
+                    // 一键重授权对同一身份原地换新令牌，成功后自动摘标并重拉数据
+                    reauthBanner(sessionId: sid)
+                } else if session.error != nil || viewModel.loadFailed {
+                    RefreshFailedBanner { Task { await refreshAll() } }
                 }
-                .padding(OCLayout.pagePadding)
-            }
-            .background { SkyBackground() }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: CachedZone.self) { zone in
-                ZoneDetailView(zone: zone, session: session)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    accountMenu
+                Group {
+                    if cachedZones.isEmpty && viewModel.isLoadingAssets {
+                        statSkeleton
+                    } else {
+                        statIslands
+                    }
                 }
+                .islandReveal(1)
+                usageSection
+                    .islandReveal(2)
+                zonesSection
+                    .islandReveal(3)
+                networkSection
+                    .islandReveal(4)
+                bulkRedirectsSection
+                    .islandReveal(5)
             }
-            .task(id: session.accounts.count) {
-                AccountSwitchTip.hasMultipleAccounts = session.accounts.count > 1 || auth.sessions.count > 1
-            }
-            .task(id: displayZones.map(\.id)) {
-                await loadTraffic()
-            }
-            .task(id: session.selectedAccount?.id) {
-                await loadAssets()
-            }
-            .task(id: session.selectedAccount?.id) {
-                await loadUsage()
-            }
-            .onChange(of: accountPrefs.billingCycleDay) {
-                Task { await loadUsage(force: true) }
-            }
-            .onChange(of: dayBoundaryRaw) {
-                Task { await loadUsage(force: true) }
-            }
-            .refreshable {
-                await refreshAll()
-            }
-            .sheet(item: $usageDetail) { service in
-                usageDetailSheet(service)
+            .padding(OCLayout.pagePadding)
+        }
+        .background { SkyBackground() }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: CachedZone.self) { zone in
+            ZoneDetailView(zone: zone, session: session)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                accountMenu
             }
         }
+        .task(id: session.accounts.count) {
+            AccountSwitchTip.hasMultipleAccounts = session.accounts.count > 1 || auth.sessions.count > 1
+        }
+        .task(id: displayZones.map(\.id)) {
+            await loadTraffic()
+        }
+        .task(id: session.selectedAccount?.id) {
+            await loadAssets()
+        }
+        .task(id: session.selectedAccount?.id) {
+            await loadUsage()
+        }
+        .onChange(of: accountPrefs.billingCycleDay) {
+            Task { await loadUsage(force: true) }
+        }
+        .onChange(of: dayBoundaryRaw) {
+            Task { await loadUsage(force: true) }
+        }
+        .onChange(of: auth.sessionsNeedingReauth) { old, new in
+            // 重新授权成功（当前身份的「需重授权」标记被摘除）→ 立刻重拉全部数据
+            if let sid = auth.currentSessionId, old.contains(sid), !new.contains(sid) {
+                Task { await refreshAll() }
+            }
+        }
+        .refreshable {
+            await refreshAll()
+        }
+        .sheet(item: $usageDetail) { service in
+            usageDetailSheet(service)
+        }
+    }
+
+    /// 「需重新授权」引导：说明 + 一键重授权（同身份原地换令牌），成功摘标后自动重拉
+    private func reauthBanner(sessionId: UUID) -> some View {
+        VStack(spacing: 10) {
+            Label("登录授权已失效，无法自动续期", systemImage: "key.slash")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.red)
+            ReauthorizeButton(sessionId: sessionId, scopes: [])
+                .font(.subheadline.weight(.semibold))
+                .buttonStyle(.borderedProminent)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .glassIsland(cornerRadius: OCLayout.chipRadius)
     }
 
     /// 下拉刷新 / 顶部失败提示重试：强制重拉账号、资产、流量、用量

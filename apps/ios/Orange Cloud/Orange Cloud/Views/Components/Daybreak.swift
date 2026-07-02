@@ -62,7 +62,20 @@ struct SkyBackground: View {
 
 // MARK: - 玻璃岛
 
-/// 「晨昏」的内容容器：材质拾取天色 + 顶亮底暗的折射描边 + 软投影。
+/// 玻璃底色：视觉上等效 `.regularMaterial` 的半透明纯色（按主题实测校准，误差 ≤3/255）。
+/// **不要改回真材质**：天空是平滑渐变，实时背景模糊对它的观感增益≈0，但每个岛/行
+/// 都会各挂一个逐帧 backdrop blur 节点——列表滚动时几十个节点同时重采样，
+/// 是 iPhone 12–14 级设备整页掉帧的主因（且与动画无关，「减少动画」开关救不了）。
+/// 半透明纯色同样透出天色随高度的渐变变化，静态内容可被整层缓存，滚动零逐帧成本。
+nonisolated enum OCGlass {
+    static func fill(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark
+            ? Color(red: 0.170, green: 0.163, blue: 0.157).opacity(0.85)
+            : Color.white.opacity(0.55)
+    }
+}
+
+/// 「晨昏」的内容容器：玻璃底透出天色 + 顶亮底暗的折射描边 + 软投影。
 private struct GlassIsland: ViewModifier {
 
     @Environment(\.colorScheme) private var colorScheme
@@ -70,7 +83,7 @@ private struct GlassIsland: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .background(.regularMaterial, in: .rect(cornerRadius: cornerRadius))
+            .background(OCGlass.fill(for: colorScheme), in: .rect(cornerRadius: cornerRadius))
             .overlay {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .strokeBorder(
@@ -210,9 +223,20 @@ extension View {
             .background { SkyBackground() }
     }
 
-    /// List 行 / Section 的玻璃底（系统按 insetGrouped 分组形状自动裁切圆角）
+    /// List 行 / Section 的玻璃底（系统按 insetGrouped 分组形状自动裁切圆角）。
+    /// 用 OCGlass 纯色而非真材质：每行一个 backdrop blur 是列表掉帧主因，见 OCGlass 注释。
     func glassRow() -> some View {
-        listRowBackground(Rectangle().fill(.regularMaterial))
+        modifier(GlassRowBackground())
+    }
+}
+
+/// glassRow 的实现载体（listRowBackground 的取色需要读 colorScheme 环境）
+private struct GlassRowBackground: ViewModifier {
+
+    @Environment(\.colorScheme) private var colorScheme
+
+    func body(content: Content) -> some View {
+        content.listRowBackground(Rectangle().fill(OCGlass.fill(for: colorScheme)))
     }
 }
 
