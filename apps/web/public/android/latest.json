@@ -1,7 +1,7 @@
 {
-  "versionCode": 9,
-  "versionName": "1.6.0",
+  "versionCode": 10,
+  "versionName": "1.6.1",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "Pages 项目支持自定义域名管理（一键 CNAME 解析）；Workers / Pages 列表支持按创建日期、最近更新排序。"
+  "note": "兼容性下探：最低支持系统降至 Android 8.0（此前为 Android 9），更多老设备可安装使用。"
 }
