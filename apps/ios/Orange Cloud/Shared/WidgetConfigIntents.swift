@@ -68,7 +68,7 @@ nonisolated struct WidgetAccountEntityQuery: EntityQuery {
 
 // MARK: - 账号总览 Widget：配置 Intent（固定某个账号）
 
-nonisolated struct AccountOverviewConfigIntent: WidgetConfigurationIntent {
+struct AccountOverviewConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "选择账号"
     static let description = IntentDescription("展示某个账号的 24 小时请求与域名状态")
 
@@ -113,7 +113,7 @@ nonisolated struct UsageServiceEntityQuery: EntityQuery {
     }
 }
 
-nonisolated struct UsageConfigIntent: WidgetConfigurationIntent {
+struct UsageConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "选择服务"
     static let description = IntentDescription("展示某个服务的额度使用情况")
 
@@ -274,7 +274,7 @@ nonisolated struct ZoneMetricEntityQuery: EntityQuery {
 
 // MARK: - 域名 Widget：配置 Intent
 
-nonisolated struct ZoneStatConfigIntent: WidgetConfigurationIntent {
+struct ZoneStatConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "选择域名与指标"
     static let description = IntentDescription("展示某个域名的单项 24h 指标")
 
@@ -290,7 +290,7 @@ nonisolated struct ZoneStatConfigIntent: WidgetConfigurationIntent {
     }
 }
 
-nonisolated struct ZoneChartConfigIntent: WidgetConfigurationIntent {
+struct ZoneChartConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "选择域名"
     static let description = IntentDescription("展示某个域名的请求地形与总览")
 

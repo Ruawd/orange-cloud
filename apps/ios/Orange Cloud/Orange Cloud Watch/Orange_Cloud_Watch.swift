@@ -60,7 +60,15 @@ struct AccountComplication: Widget {
         }
         .configurationDisplayName("账号总览")
         .description("全账号 24 小时请求合计")
-        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline, .accessoryCorner])
+        .supportedFamilies(supportedFamilies)
+    }
+
+    private var supportedFamilies: [WidgetFamily] {
+        var families: [WidgetFamily] = [.accessoryCircular, .accessoryRectangular, .accessoryInline]
+        #if os(watchOS)
+        families.append(.accessoryCorner)
+        #endif
+        return families
     }
 }
 
@@ -93,12 +101,14 @@ struct ComplicationView: View {
                 .padding(2)
             }
 
+        #if os(watchOS)
         case .accessoryCorner:
             Text(compact)
                 .font(.system(.title3, design: .rounded).weight(.semibold))
                 .minimumScaleFactor(0.5)
                 .widgetLabel("请求 · 24h")
 
+        #endif
         case .accessoryRectangular:
             HStack(spacing: 6) {
                 VStack(alignment: .leading, spacing: 1) {
