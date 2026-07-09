@@ -1,36 +1,74 @@
-name: Build Orange Cloud unlocked unsigned IPA
+name: Sync upstream and build Orange Cloud unlocked IPA
 
 on:
+  workflow_dispatch:
+  schedule:
+    # 每天北京时间 10:25 自动同步上游；有上游更新才构建。
+    - cron: '25 2 * * *'
   push:
     branches: [ main ]
-    paths:
-      - 'apps/ios/**'
-      - '.github/workflows/build-unlocked-ipa.yml'
-  workflow_dispatch:
+    paths-ignore:
+      - 'orange-cloud-build-logs/**'
 
 permissions:
   contents: write
 
 env:
-  ORANGE_REPO: Ruawd/orange-cloud
+  UPSTREAM_REPO: chen2he/orange-cloud
   IPA_NAME: OrangeCloud-OpenSourceUnlocked-unsigned.ipa
 
 jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.sync.outputs.sha }}
+      changed: ${{ steps.sync.outputs.changed }}
+    steps:
+      - name: Checkout Ruawd repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Merge upstream main
+        id: sync
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git remote add upstream "https://github.com/${UPSTREAM_REPO}.git" || git remote set-url upstream "https://github.com/${UPSTREAM_REPO}.git"
+          git fetch upstream main --tags
+          before="$(git rev-parse HEAD)"
+          git merge --no-edit upstream/main
+          after="$(git rev-parse HEAD)"
+          if [ "$before" != "$after" ]; then
+            git push origin HEAD:main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "sha=$after" >> "$GITHUB_OUTPUT"
+
   build-ios:
+    needs: sync-upstream
+    if: needs.sync-upstream.outputs.changed == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     runs-on: macos-latest
     timeout-minutes: 90
     steps:
       - name: Checkout workflow repo
         uses: actions/checkout@v4
         with:
+          ref: main
           path: workflow-repo
           persist-credentials: true
 
-      - name: Checkout Orange Cloud
+      - name: Checkout Orange Cloud source
         uses: actions/checkout@v4
         with:
-          repository: ${{ env.ORANGE_REPO }}
-          ref: ${{ github.sha }}
+          repository: ${{ github.repository }}
+          ref: ${{ needs.sync-upstream.outputs.sha }}
           path: orange-cloud
 
       - name: Xcode version
@@ -109,7 +147,7 @@ jobs:
           gh release create "$TAG" "$IPA" \
             --repo "$GITHUB_REPOSITORY" \
             --title "Orange Cloud unlocked unsigned IPA $TAG" \
-            --notes "Built from Ruawd/orange-cloud with OPENSOURCE_UNLOCKED. Unsigned IPA for self-signing." \
+            --notes "Auto-synced from ${UPSTREAM_REPO} and built with OPENSOURCE_UNLOCKED. Unsigned IPA for self-signing." \
             --latest=false
 
       - name: Commit build logs
