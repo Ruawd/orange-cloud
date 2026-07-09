@@ -1,45 +1,126 @@
 name: Build Orange Cloud unlocked unsigned IPA
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
     paths:
-      # Trigger builds for iOS source and this workflow.
       - 'apps/ios/**'
-      - 'scripts/build-unlocked-ipa-macos.sh'
       - '.github/workflows/build-unlocked-ipa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  ORANGE_REPO: Ruawd/orange-cloud
+  IPA_NAME: OrangeCloud-OpenSourceUnlocked-unsigned.ipa
 
 jobs:
   build-ios:
-    runs-on: macos-15
-    timeout-minutes: 60
+    runs-on: macos-latest
+    timeout-minutes: 90
     steps:
-      - name: Checkout
+      - name: Checkout workflow repo
         uses: actions/checkout@v4
+        with:
+          path: workflow-repo
+          persist-credentials: true
 
-      - name: Select Xcode
+      - name: Checkout Orange Cloud
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.ORANGE_REPO }}
+          ref: ${{ github.sha }}
+          path: orange-cloud
+
+      - name: Xcode version
         shell: bash
         run: |
           set -euxo pipefail
-          sudo xcode-select -s /Applications/Xcode.app || true
-          xcodebuild -version
+          mkdir -p workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}
+          xcodebuild -version | tee workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/xcode-version.log
+          xcodebuild -showsdks | tee -a workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/xcode-version.log
 
-      - name: Build unsigned unlocked IPA
+      - name: Resolve Swift packages
         shell: bash
-        run: scripts/build-unlocked-ipa-macos.sh
+        run: |
+          set -o pipefail
+          cd 'orange-cloud/apps/ios/Orange Cloud'
+          xcodebuild \
+            -project 'Orange Cloud.xcodeproj' \
+            -scheme 'Orange Cloud' \
+            -resolvePackageDependencies \
+            -skipPackagePluginValidation \
+            -skipMacroValidation 2>&1 | tee "$GITHUB_WORKSPACE/workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/resolve.log"
 
-      - name: Upload IPA artifact
+      - name: Build unsigned unlocked app
+        shell: bash
+        run: |
+          set -o pipefail
+          cd 'orange-cloud/apps/ios/Orange Cloud'
+          rm -rf build Payload "$IPA_NAME"
+          xcodebuild build \
+            -project 'Orange Cloud.xcodeproj' \
+            -scheme 'Orange Cloud' \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            -skipPackagePluginValidation \
+            -skipMacroValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY='' \
+            AD_HOC_CODE_SIGNING_ALLOWED=NO \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            OTHER_SWIFT_FLAGS='$(inherited) -D OPENSOURCE_UNLOCKED' \
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS='$(inherited) OPENSOURCE_UNLOCKED' 2>&1 | tee "$GITHUB_WORKSPACE/workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/build.log"
+
+          APP_PATH="$(find build -path '*Release-iphoneos/Orange Cloud.app' -type d | head -n 1)"
+          if [ -z "$APP_PATH" ]; then
+            echo 'Orange Cloud.app not found' | tee -a "$GITHUB_WORKSPACE/workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/build.log"
+            find build -name '*.app' -type d -print | tee -a "$GITHUB_WORKSPACE/workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/build.log"
+            exit 1
+          fi
+
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          find Payload -name '_CodeSignature' -type d -prune -exec rm -rf {} + || true
+          find Payload -name 'embedded.mobileprovision' -type f -delete || true
+          /usr/bin/zip -qry "$IPA_NAME" Payload
+          ls -lh "$IPA_NAME" | tee -a "$GITHUB_WORKSPACE/workflow-repo/orange-cloud-build-logs/${GITHUB_RUN_ID}/build.log"
+
+      - name: Upload artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: OrangeCloud-OpenSourceUnlocked-unsigned-ipa
-          path: apps/ios/Orange Cloud/OrangeCloud-OpenSourceUnlocked-unsigned.ipa
+          path: orange-cloud/apps/ios/Orange Cloud/OrangeCloud-OpenSourceUnlocked-unsigned.ipa
           if-no-files-found: error
 
-      - name: Upload build logs
+      - name: Publish GitHub Release
+        if: success()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euxo pipefail
+          TAG="orange-cloud-unlocked-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}"
+          IPA='orange-cloud/apps/ios/Orange Cloud/OrangeCloud-OpenSourceUnlocked-unsigned.ipa'
+          gh release create "$TAG" "$IPA" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Orange Cloud unlocked unsigned IPA $TAG" \
+            --notes "Built from Ruawd/orange-cloud with OPENSOURCE_UNLOCKED. Unsigned IPA for self-signing." \
+            --latest=false
+
+      - name: Commit build logs
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: OrangeCloud-build-logs
-          path: build-logs
-          if-no-files-found: ignore
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd workflow-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add orange-cloud-build-logs/${GITHUB_RUN_ID} || true
+          git diff --cached --quiet && exit 0
+          git commit -m "ci: orange cloud build logs ${GITHUB_RUN_ID}"
+          git push
