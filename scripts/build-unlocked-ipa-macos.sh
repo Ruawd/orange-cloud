@@ -30,8 +30,12 @@ run_logged() {
       echo ""
       tail -n 80 "$log" || true
     } > "$LOG_DIR/${name}-summary.txt"
-    # Put a compact error into GitHub annotations so it is visible without opening full logs.
-    tail -n 40 "$log" | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g' | while IFS= read -r line; do
+    # Put compact real errors into GitHub annotations so they are visible without opening full logs.
+    {
+      grep -E -i "(^|[[:space:]])(error:|fatal error:|warning:|BUILD FAILED|failed|unavailable|cannot find|no such module|Provisioning profile|CodeSign)" "$log" | tail -n 80 || true
+      echo "---- tail ----"
+      tail -n 40 "$log" || true
+    } | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g' | while IFS= read -r line; do
       echo "::error title=${name} failed::${line}"
     done
     exit "$status"
@@ -53,7 +57,6 @@ run_logged build-unlocked \
     -project 'Orange Cloud.xcodeproj' \
     -scheme 'Orange Cloud' \
     -configuration Release \
-    -sdk iphoneos \
     -destination 'generic/platform=iOS' \
     -derivedDataPath build \
     -skipPackagePluginValidation \
