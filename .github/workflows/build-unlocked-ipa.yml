@@ -35,3 +35,11 @@ jobs:
           name: OrangeCloud-OpenSourceUnlocked-unsigned-ipa
           path: apps/ios/Orange Cloud/OrangeCloud-OpenSourceUnlocked-unsigned.ipa
           if-no-files-found: error
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrangeCloud-build-logs
+          path: build-logs
+          if-no-files-found: ignore
