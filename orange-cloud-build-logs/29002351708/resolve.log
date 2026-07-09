@@ -1,0 +1,16 @@
+Command line invocation:
+    /Applications/Xcode_16.4.app/Contents/Developer/usr/bin/xcodebuild -project "Orange Cloud.xcodeproj" -scheme "Orange Cloud" -resolvePackageDependencies -skipPackagePluginValidation -skipMacroValidation
+
+Resolve Package Graph
+
+Fetching from https://github.com/getsentry/sentry-cocoa
+
+Creating working copy of package ‘sentry-cocoa’
+
+Checking out 8.58.3 of package ‘sentry-cocoa’
+
+
+Resolved source packages:
+  Sentry: https://github.com/getsentry/sentry-cocoa @ 8.58.3
+
+resolved source packages: Sentry
