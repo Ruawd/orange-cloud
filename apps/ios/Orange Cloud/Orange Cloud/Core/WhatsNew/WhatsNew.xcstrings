@@ -1293,6 +1293,82 @@
         }
       }
     },
+    "WAF 自定义防火墙规则现在支持编辑：点按任意规则即可修改动作、表达式、名称与启用状态，无需再删除后重建。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF custom firewall rules can now be edited: tap any rule to change its action, expression, name and enabled state — no need to delete and recreate it."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF 自訂防火牆規則現在支援編輯：點按任一規則即可修改動作、運算式、名稱與啟用狀態，不必再刪除後重建。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF 自訂防火牆規則現在支援編輯：點按任一規則即可修改動作、運算式、名稱與啟用狀態，無需再刪除後重建。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF のカスタムファイアウォールルールを編集できるようになりました。任意のルールをタップして、アクション・式・名前・有効状態を変更でき、削除して作り直す必要はありません。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahora puedes editar las reglas de firewall personalizadas de WAF: toca cualquier regla para cambiar su acción, expresión, nombre y estado, sin tener que eliminarla y volver a crearla."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이제 WAF 사용자 지정 방화벽 규칙을 편집할 수 있습니다. 규칙을 탭해 동작, 표현식, 이름, 사용 여부를 변경할 수 있어 삭제 후 다시 만들 필요가 없습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora é possível editar as regras de firewall personalizadas do WAF: toque em qualquer regra para alterar ação, expressão, nome e estado, sem precisar excluir e recriar."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora é possível editar as regras de firewall personalizadas do WAF: toque em qualquer regra para alterar ação, expressão, nome e estado, sem ter de eliminar e recriar."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF-eigene Firewall-Regeln lassen sich jetzt bearbeiten: Tippe auf eine Regel, um Aktion, Ausdruck, Name und Aktivierungsstatus zu ändern – ohne sie löschen und neu anlegen zu müssen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les règles de pare-feu personnalisées WAF sont désormais modifiables : touchez une règle pour changer son action, son expression, son nom et son état, sans avoir à la supprimer puis à la recréer."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنك الآن تعديل قواعد جدار الحماية المخصّصة في WAF: انقر على أي قاعدة لتغيير إجرائها وتعبيرها واسمها وحالة تفعيلها، دون الحاجة إلى حذفها وإعادة إنشائها."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Artık WAF özel güvenlik duvarı kurallarını düzenleyebilirsiniz: bir kurala dokunarak eylemini, ifadesini, adını ve etkin durumunu değiştirin; silip yeniden oluşturmanıza gerek yok."
+          }
+        }
+      }
+    },
     "Workers 与 Pages 列表新增排序：默认（名称）、创建日期、最近更新，选择会被记住。": {
       "localizations": {
         "en": {
@@ -6841,6 +6917,82 @@
         }
       }
     },
+    "编辑 WAF 规则": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit WAF rules"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯 WAF 規則"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯 WAF 規則"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF ルールの編集"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar reglas de WAF"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF 규칙 편집"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar regras do WAF"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar regras do WAF"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF-Regeln bearbeiten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier les règles WAF"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل قواعد WAF"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WAF kurallarını düzenleme"
+          }
+        }
+      }
+    },
     "规则中心": {
       "localizations": {
         "en": {
@@ -7065,6 +7217,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yük dengeleme"
+          }
+        }
+      }
+    },
+    "进一步收敛 iOS 17 上由缓存数据库引发的偶发闪退：缓存读写全部加上异常兜底并在启动时预热，个别设备上残留的启动崩溃不再发生。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Further hardens against rare crashes caused by the cache database on iOS 17: all cache reads and writes now have exception fallbacks and are warmed up at launch, so the startup crashes that lingered on a few devices no longer occur."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "進一步收斂 iOS 17 上由快取資料庫引發的偶發閃退：快取讀寫全部加上例外兜底並在啟動時預熱，個別裝置上殘留的啟動閃退不再發生。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "進一步收斂 iOS 17 上由緩存資料庫引發的偶發閃退：緩存讀寫全部加上例外兜底並在啟動時預熱，個別裝置上殘留的啟動閃退不再發生。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 17 でキャッシュデータベースに起因するまれなクラッシュをさらに抑制しました。キャッシュの読み書きすべてに例外時のフォールバックを追加し、起動時にウォームアップするようにしたため、一部の端末で残っていた起動時クラッシュが発生しなくなりました。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refuerza aún más frente a cierres poco frecuentes provocados por la base de datos de caché en iOS 17: todas las lecturas y escrituras de caché ahora tienen protección ante excepciones y se precalientan al iniciar, por lo que los cierres al arrancar que quedaban en algunos dispositivos ya no ocurren."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 17에서 캐시 데이터베이스로 인한 드문 종료를 더욱 방지했습니다. 모든 캐시 읽기/쓰기에 예외 대비가 추가되고 실행 시 예열되어, 일부 기기에 남아 있던 실행 시 종료가 더 이상 발생하지 않습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reforça ainda mais contra fechamentos raros causados pelo banco de dados de cache no iOS 17: todas as leituras e gravações de cache agora têm proteção contra exceções e são pré-aquecidas na inicialização, então os fechamentos ao iniciar que persistiam em alguns aparelhos não ocorrem mais."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reforça ainda mais contra fechos raros causados pela base de dados de cache no iOS 17: todas as leituras e escritas de cache passam a ter proteção contra exceções e são pré-aquecidas no arranque, pelo que os fechos no arranque que persistiam em alguns dispositivos deixam de ocorrer."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Härtet weiter gegen seltene Abstürze durch die Cache-Datenbank unter iOS 17 ab: Alle Cache-Zugriffe haben jetzt eine Ausnahmebehandlung und werden beim Start vorgewärmt, sodass die Startabstürze, die auf einzelnen Geräten verblieben, nicht mehr auftreten."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renforce encore la protection contre les plantages rares dus à la base de cache sous iOS 17 : toutes les lectures et écritures du cache disposent désormais d’un repli en cas d’exception et sont préchauffées au démarrage, de sorte que les plantages au lancement qui persistaient sur certains appareils ne se produisent plus."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعزّز الحماية أكثر من الانهيارات النادرة الناتجة عن قاعدة بيانات التخزين المؤقت على iOS 17: أصبحت جميع عمليات قراءة وكتابة التخزين المؤقت محميّة من الاستثناءات ويجري تسخينها عند بدء التشغيل، فلم تعد انهيارات بدء التشغيل التي بقيت على بعض الأجهزة تحدث."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 17'de önbellek veritabanının yol açtığı nadir çökmelere karşı korumayı daha da güçlendirir: tüm önbellek okuma ve yazma işlemleri artık istisna yedeğine sahip ve başlatmada ön ısıtılıyor; böylece bazı cihazlarda kalan başlatma çökmeleri artık yaşanmıyor."
           }
         }
       }

@@ -2,7 +2,7 @@
 //  WAFService.swift
 //  Orange Cloud
 //
-//  WAF 自定义规则：读 entrypoint ruleset；启停单条规则（PATCH）。
+//  WAF 自定义规则：读 entrypoint ruleset；新建 / 编辑 / 删除 / 启停单条规则。
 //
 
 import Foundation
@@ -47,6 +47,23 @@ struct WAFService {
         let response: CFAPIResponse<WAFRuleset> = try await client.patch(
             "zones/\(zoneId)/rulesets/\(rulesetId)/rules/\(ruleId)",
             body: WAFRuleToggle(enabled: enabled)
+        )
+        guard response.success, let ruleset = response.result else {
+            throw response.toAPIError()
+        }
+        return ruleset
+    }
+
+    /// 整条更新规则（动作 / 表达式 / 名称 / 启用），返回更新后的 ruleset
+    func updateRule(
+        zoneId: String,
+        rulesetId: String,
+        ruleId: String,
+        rule: WAFRuleCreate
+    ) async throws -> WAFRuleset {
+        let response: CFAPIResponse<WAFRuleset> = try await client.patch(
+            "zones/\(zoneId)/rulesets/\(rulesetId)/rules/\(ruleId)",
+            body: rule
         )
         guard response.success, let ruleset = response.result else {
             throw response.toAPIError()

@@ -90,6 +90,8 @@ fun WafRulesScreen(
     val onSky = phase.onSky
     val snackbarHostState = remember { SnackbarHostState() }
     var showForm by remember { mutableStateOf(false) }
+    var editingRule by remember { mutableStateOf<WafRule?>(null) }
+    var showUnsupportedEdit by remember { mutableStateOf(false) }
     var ruleToDelete by remember { mutableStateOf<WafRule?>(null) }
 
     val savedMsg = stringResource(R.string.waf_saved)
@@ -98,7 +100,7 @@ fun WafRulesScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                WafEvent.Saved -> { showForm = false; snackbarHostState.showSnackbar(savedMsg) }
+                WafEvent.Saved -> { showForm = false; editingRule = null; snackbarHostState.showSnackbar(savedMsg) }
                 WafEvent.Deleted -> snackbarHostState.showSnackbar(deletedMsg)
                 is WafEvent.Error -> snackbarHostState.showSnackbar(event.message ?: "")
             }
@@ -149,6 +151,14 @@ fun WafRulesScreen(
                                 canWrite = state.canWrite,
                                 onToggle = { viewModel.toggle(rule, it) },
                                 onDelete = { ruleToDelete = rule },
+                                onClick = {
+                                    // skip 等带额外参数的动作不在表单支持范围，整条 PATCH 会丢参数
+                                    if (WafCreateAction.entries.any { it.value == rule.action }) {
+                                        editingRule = rule
+                                    } else {
+                                        showUnsupportedEdit = true
+                                    }
+                                },
                             )
                         }
                     }
@@ -181,6 +191,32 @@ fun WafRulesScreen(
         }
     }
 
+    editingRule?.let { rule ->
+        ModalBottomSheet(
+            onDismissRequest = { if (!state.isSaving) editingRule = null },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            WafRuleForm(
+                isSaving = state.isSaving,
+                initial = rule,
+                onSave = { action, expression, name, enabled ->
+                    viewModel.updateRule(rule.id, action, expression, name, enabled)
+                },
+            )
+        }
+    }
+
+    if (showUnsupportedEdit) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showUnsupportedEdit = false },
+            title = { Text(stringResource(R.string.waf_edit_unsupported_title)) },
+            text = { Text(stringResource(R.string.waf_edit_unsupported_msg)) },
+            confirmButton = {
+                TextButton(onClick = { showUnsupportedEdit = false }) { Text(stringResource(R.string.common_confirm)) }
+            },
+        )
+    }
+
     ruleToDelete?.let { rule ->
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { ruleToDelete = null },
@@ -199,8 +235,16 @@ fun WafRulesScreen(
 }
 
 @Composable
-private fun WafRuleRow(rule: WafRule, canWrite: Boolean, onToggle: (Boolean) -> Unit, onDelete: () -> Unit) {
+private fun WafRuleRow(
+    rule: WafRule,
+    canWrite: Boolean,
+    onToggle: (Boolean) -> Unit,
+    onDelete: () -> Unit,
+    onClick: () -> Unit,
+) {
     Surface(
+        onClick = onClick,
+        enabled = canWrite,
         color = MaterialTheme.colorScheme.surfaceContainerLow,
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth(),
@@ -246,12 +290,15 @@ private fun WafRuleRow(rule: WafRule, canWrite: Boolean, onToggle: (Boolean) -> 
 @Composable
 private fun WafRuleForm(
     isSaving: Boolean,
+    initial: WafRule? = null,
     onSave: (action: String, expression: String, name: String, enabled: Boolean) -> Unit,
 ) {
-    var name by rememberSaveable { mutableStateOf("") }
-    var expression by rememberSaveable { mutableStateOf("") }
-    var enabled by rememberSaveable { mutableStateOf(true) }
-    var action by rememberSaveable { mutableStateOf(WafCreateAction.BLOCK) }
+    var name by rememberSaveable { mutableStateOf(initial?.description.orEmpty()) }
+    var expression by rememberSaveable { mutableStateOf(initial?.expression.orEmpty()) }
+    var enabled by rememberSaveable { mutableStateOf(initial?.enabled ?: true) }
+    var action by rememberSaveable {
+        mutableStateOf(WafCreateAction.entries.firstOrNull { it.value == initial?.action } ?: WafCreateAction.BLOCK)
+    }
     var expanded by remember { mutableStateOf(false) }
     var showBuilder by remember { mutableStateOf(false) }
 
@@ -265,7 +312,7 @@ private fun WafRuleForm(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            stringResource(R.string.waf_add_title),
+            stringResource(if (initial == null) R.string.waf_add_title else R.string.waf_edit_title),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,

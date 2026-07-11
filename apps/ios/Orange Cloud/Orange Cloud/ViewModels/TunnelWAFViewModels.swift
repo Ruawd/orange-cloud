@@ -338,6 +338,23 @@ final class WAFRulesViewModel {
         }
     }
 
+    /// 编辑既有规则（整条 PATCH）。成功返回 true。
+    func updateRule(ruleId: String, draft: WAFRuleCreate) async -> Bool {
+        guard let rulesetId = ruleset?.id, !isSaving else { return false }
+        isSaving = true
+        error = nil
+        defer { isSaving = false }
+        do {
+            ruleset = try await service.updateRule(
+                zoneId: zoneId, rulesetId: rulesetId, ruleId: ruleId, rule: draft
+            )
+            return true
+        } catch {
+            self.error = error.localizedDescription
+            return false
+        }
+    }
+
     func delete(rule: WAFRule) async {
         guard let rulesetId = ruleset?.id else { return }
         error = nil

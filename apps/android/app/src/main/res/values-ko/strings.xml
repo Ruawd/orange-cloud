@@ -244,6 +244,9 @@
     <string name="waf_deleted">삭제됨</string>
     <string name="waf_delete_confirm_title">이 규칙을 삭제할까요?</string>
     <string name="waf_delete_confirm_msg">되돌릴 수 없으며, 규칙이 즉시 적용 중지됩니다.</string>
+    <string name="waf_edit_title">규칙 편집</string>
+    <string name="waf_edit_unsupported_title">편집 미지원</string>
+    <string name="waf_edit_unsupported_msg">「건너뛰기」 등 추가 매개변수가 있는 규칙은 아직 앱에서 편집할 수 없습니다. Cloudflare 대시보드에서 수정해 주세요.</string>
 
     <string name="tunnel_title">터널</string>
     <string name="tunnel_empty">아직 터널이 없습니다</string>

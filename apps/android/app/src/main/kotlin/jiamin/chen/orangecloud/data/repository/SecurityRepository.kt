@@ -35,6 +35,10 @@ class SecurityRepository @Inject constructor(
     suspend fun setRuleEnabled(zoneId: String, rulesetId: String, rule: WafRule, enabled: Boolean): WafRuleset =
         api.patch("zones/$zoneId/rulesets/$rulesetId/rules/${rule.id}", WafRuleToggle(enabled))
 
+    /** 整条更新规则（动作 / 表达式 / 名称 / 启用），返回更新后的 ruleset。 */
+    suspend fun updateRule(zoneId: String, rulesetId: String, ruleId: String, rule: WafRuleCreate): WafRuleset =
+        api.patch("zones/$zoneId/rulesets/$rulesetId/rules/$ruleId", rule)
+
     /** 向已有规则集追加规则，返回更新后的 ruleset。 */
     suspend fun addRule(zoneId: String, rulesetId: String, rule: WafRuleCreate): WafRuleset =
         api.post("zones/$zoneId/rulesets/$rulesetId/rules", rule)

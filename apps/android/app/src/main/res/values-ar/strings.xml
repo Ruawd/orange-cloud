@@ -356,6 +356,9 @@
     <string name="waf_deleted">تم الحذف</string>
     <string name="waf_delete_confirm_title">حذف هذه القاعدة؟</string>
     <string name="waf_delete_confirm_msg">لا يمكن التراجع؛ تتوقف القاعدة عن العمل فورًا.</string>
+    <string name="waf_edit_title">تعديل القاعدة</string>
+    <string name="waf_edit_unsupported_title">التعديل غير مدعوم</string>
+    <string name="waf_edit_unsupported_msg">القواعد التي تتضمن معلمات إضافية (مثل التخطي) لا يمكن تعديلها داخل التطبيق حالياً. يُرجى تعديلها من لوحة تحكم Cloudflare.</string>
     <string name="tunnel_title">الأنفاق</string>
     <string name="tunnel_empty">لا توجد أنفاق بعد</string>
     <string name="tunnel_connections">%1$d اتصالات نشطة</string>

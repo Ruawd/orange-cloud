@@ -356,6 +356,9 @@
     <string name="waf_deleted">Supprimé</string>
     <string name="waf_delete_confirm_title">Supprimer cette règle ?</string>
     <string name="waf_delete_confirm_msg">Action irréversible ; la règle cesse de s’appliquer immédiatement.</string>
+    <string name="waf_edit_title">Modifier la règle</string>
+    <string name="waf_edit_unsupported_title">Modification non prise en charge</string>
+    <string name="waf_edit_unsupported_msg">Les règles avec des paramètres supplémentaires (comme Ignorer) ne peuvent pas encore être modifiées dans l’app. Veuillez les modifier dans le tableau de bord Cloudflare.</string>
     <string name="tunnel_title">Tunnels</string>
     <string name="tunnel_empty">Aucun tunnel pour l’instant</string>
     <string name="tunnel_connections">%1$d connexions actives</string>

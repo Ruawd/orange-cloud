@@ -261,6 +261,9 @@
     <string name="waf_deleted">Deleted</string>
     <string name="waf_delete_confirm_title">Delete this rule?</string>
     <string name="waf_delete_confirm_msg">This can\'t be undone; the rule stops applying immediately.</string>
+    <string name="waf_edit_title">Edit rule</string>
+    <string name="waf_edit_unsupported_title">Editing not supported</string>
+    <string name="waf_edit_unsupported_msg">Rules with extra parameters (such as Skip) can’t be edited in the app yet. Please modify them in the Cloudflare Dashboard.</string>
 
     <!-- Tunnel -->
     <string name="tunnel_title">Tunnels</string>

@@ -46,7 +46,7 @@ final class WorkerListViewModel {
         error = nil
         do {
             let scripts = try await workerService.listScripts(accountId: accountId)
-            try CacheSync.syncWorkers(scripts, accountId: accountId, context: context)
+            CacheSync.syncWorkers(scripts, accountId: accountId, context: context)
         } catch is CancellationError {
             // 任务取消属正常生命周期，不算加载失败
         } catch let urlError as URLError where urlError.code == .cancelled {

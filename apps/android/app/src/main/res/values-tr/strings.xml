@@ -356,6 +356,9 @@
     <string name="waf_deleted">Silindi</string>
     <string name="waf_delete_confirm_title">Bu kural silinsin mi?</string>
     <string name="waf_delete_confirm_msg">Bu geri alınamaz; kural hemen uygulanmayı durdurur.</string>
+    <string name="waf_edit_title">Kuralı düzenle</string>
+    <string name="waf_edit_unsupported_title">Düzenleme desteklenmiyor</string>
+    <string name="waf_edit_unsupported_msg">Ek parametreler içeren kurallar (ör. Atla) şimdilik uygulama içinde düzenlenemez. Lütfen Cloudflare panosundan değiştirin.</string>
     <string name="tunnel_title">Tüneller</string>
     <string name="tunnel_empty">Henüz tünel yok</string>
     <string name="tunnel_connections">%1$d etkin bağlantı</string>

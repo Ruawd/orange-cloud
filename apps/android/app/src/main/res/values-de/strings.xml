@@ -356,6 +356,9 @@
     <string name="waf_deleted">Gelöscht</string>
     <string name="waf_delete_confirm_title">Diese Regel löschen?</string>
     <string name="waf_delete_confirm_msg">Dies kann nicht rückgängig gemacht werden; die Regel gilt sofort nicht mehr.</string>
+    <string name="waf_edit_title">Regel bearbeiten</string>
+    <string name="waf_edit_unsupported_title">Bearbeiten nicht unterstützt</string>
+    <string name="waf_edit_unsupported_msg">Regeln mit zusätzlichen Parametern (z. B. Überspringen) können in der App noch nicht bearbeitet werden. Bitte im Cloudflare-Dashboard ändern.</string>
     <string name="tunnel_title">Tunnel</string>
     <string name="tunnel_empty">Noch keine Tunnel</string>
     <string name="tunnel_connections">%1$d aktive Verbindungen</string>

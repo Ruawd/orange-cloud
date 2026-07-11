@@ -117036,6 +117036,234 @@
         }
       }
     },
+    "规则按从上到下的顺序执行，点按可编辑，左滑可删除。" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تُنفَّذ القواعد من الأعلى إلى الأسفل. انقر للتعديل، واسحب لليسار للحذف."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regeln werden von oben nach unten ausgeführt. Zum Bearbeiten antippen, zum Löschen nach links wischen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rules run top to bottom. Tap to edit, swipe left to delete."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reglas se ejecutan de arriba abajo. Toca para editar, desliza a la izquierda para eliminar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les règles s’exécutent de haut en bas. Touchez pour modifier, balayez vers la gauche pour supprimer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ルールは上から順に実行されます。タップで編集、左にスワイプで削除できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "규칙은 위에서 아래로 실행됩니다. 탭하여 편집하고 왼쪽으로 밀어 삭제하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As regras são executadas de cima para baixo. Toque para editar, deslize para a esquerda para excluir."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As regras são executadas de cima para baixo. Toque para editar, deslize para a esquerda para eliminar."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kurallar yukarıdan aşağıya çalışır. Düzenlemek için dokunun, silmek için sola kaydırın."
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "規則按從上到下的順序執行，點按可編輯，左滑可刪除。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "規則按從上到下的順序執行，點按可編輯，左滑可刪除。"
+          }
+        }
+      }
+    },
+    "暂不支持编辑" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التعديل غير مدعوم"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bearbeiten nicht unterstützt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing Not Supported"
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edición no disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modification non prise en charge"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編集には未対応"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "편집 미지원"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edição não suportada"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edição não suportada"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzenleme desteklenmiyor"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫不支援編輯"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫不支援編輯"
+          }
+        }
+      }
+    },
+    "「跳过」等带额外参数的规则暂不支持在 App 内编辑，请在 Cloudflare Dashboard 中修改。" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القواعد التي تتضمن معلمات إضافية (مثل التخطي) لا يمكن تعديلها داخل التطبيق حالياً. يُرجى تعديلها من لوحة تحكم Cloudflare."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regeln mit zusätzlichen Parametern (z. B. Überspringen) können in der App noch nicht bearbeitet werden. Bitte im Cloudflare-Dashboard ändern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rules with extra parameters (such as Skip) can’t be edited in the app yet. Please modify them in the Cloudflare Dashboard."
+          }
+        },
+        "es-MX" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las reglas con parámetros adicionales (como Omitir) aún no se pueden editar en la app. Modifícalas en el panel de Cloudflare."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les règles avec des paramètres supplémentaires (comme Ignorer) ne peuvent pas encore être modifiées dans l’app. Veuillez les modifier dans le tableau de bord Cloudflare."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「スキップ」など追加パラメータを持つルールはアプリ内では編集できません。Cloudflare ダッシュボードで変更してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「건너뛰기」 등 추가 매개변수가 있는 규칙은 아직 앱에서 편집할 수 없습니다. Cloudflare 대시보드에서 수정해 주세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regras com parâmetros adicionais (como Ignorar) ainda não podem ser editadas no app. Modifique-as no painel da Cloudflare."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As regras com parâmetros adicionais (como Ignorar) ainda não podem ser editadas na app. Modifique-as no painel da Cloudflare."
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ek parametreler içeren kurallar (ör. Atla) şimdilik uygulama içinde düzenlenemez. Lütfen Cloudflare panosundan değiştirin."
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「跳過」等帶額外參數的規則暫不支援在 App 內編輯，請在 Cloudflare Dashboard 中修改。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「跳過」等帶額外參數的規則暫不支援在 App 內編輯，請在 Cloudflare Dashboard 中修改。"
+          }
+        }
+      }
+    },
     "规则按从上到下的顺序执行，左滑可删除。" : {
       "localizations" : {
         "ar" : {

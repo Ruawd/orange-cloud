@@ -43,12 +43,14 @@ final class AddZoneViewModel {
 
     private func upsert(_ zone: Zone, accountId: String, context: ModelContext) {
         let zoneId = zone.id
-        let descriptor = FetchDescriptor<CachedZone>(predicate: #Predicate { $0.id == zoneId })
-        if let existing = try? context.fetch(descriptor).first {
-            existing.update(from: zone)
-        } else {
-            context.insert(CachedZone(from: zone, accountId: accountId))
+        SafeCache.perform("新 Zone 缓存 upsert") {
+            let descriptor = FetchDescriptor<CachedZone>(predicate: #Predicate { $0.id == zoneId })
+            if let existing = try context.fetch(descriptor).first {
+                existing.update(from: zone)
+            } else {
+                context.insert(CachedZone(from: zone, accountId: accountId))
+            }
+            try context.save()
         }
-        try? context.save()
     }
 }

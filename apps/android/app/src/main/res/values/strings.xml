@@ -429,6 +429,9 @@
     <string name="waf_deleted">已删除</string>
     <string name="waf_delete_confirm_title">删除此规则？</string>
     <string name="waf_delete_confirm_msg">此操作不可撤销，规则将立即停止生效。</string>
+    <string name="waf_edit_title">编辑规则</string>
+    <string name="waf_edit_unsupported_title">暂不支持编辑</string>
+    <string name="waf_edit_unsupported_msg">「跳过」等带额外参数的规则暂不支持在 App 内编辑，请在 Cloudflare Dashboard 中修改。</string>
 
     <!-- Tunnel -->
     <string name="tunnel_title">隧道</string>

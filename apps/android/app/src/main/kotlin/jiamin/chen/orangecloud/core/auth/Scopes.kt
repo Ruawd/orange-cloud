@@ -2,7 +2,8 @@ package jiamin.chen.orangecloud.core.auth
 
 /**
  * OAuth scope ID（来自 GET /client/v4/oauth/scopes 的 id 字段，与 iOS PermissionModels 一致）。
- * 注意：Cloudflare 的 authorization_code 授权默认返回 refresh_token，**不需要** offline_access。
+ * 注意：CF dash OAuth（Hydra 系）只在请求 offline_access 时才签发 refresh token（issue #44 踩坑实证），
+ * 该 scope 由 AuthRepository.buildAuthorizationUri 在咽喉点统一追加，此处无需（也勿）列入目录。
  */
 object Scopes {
     const val ACCOUNT_READ = "account-settings.read"

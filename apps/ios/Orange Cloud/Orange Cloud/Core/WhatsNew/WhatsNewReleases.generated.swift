@@ -10,6 +10,18 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "1.8.4", items: [
+            WhatsNewItem(
+                icon:   "shield.lefthalf.filled",
+                title:  String(localized: "编辑 WAF 规则", table: "WhatsNew"),
+                detail: String(localized: "WAF 自定义防火墙规则现在支持编辑：点按任意规则即可修改动作、表达式、名称与启用状态，无需再删除后重建。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "wrench.and.screwdriver.fill",
+                title:  String(localized: "稳定性修复", table: "WhatsNew"),
+                detail: String(localized: "进一步收敛 iOS 17 上由缓存数据库引发的偶发闪退：缓存读写全部加上异常兜底并在启动时预热，个别设备上残留的启动崩溃不再发生。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.8.2", items: [
             WhatsNewItem(
                 icon:   "arrow.triangle.branch",

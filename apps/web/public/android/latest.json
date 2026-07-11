@@ -1,7 +1,7 @@
 {
-  "versionCode": 11,
-  "versionName": "1.6.2",
+  "versionCode": 12,
+  "versionName": "1.6.3",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "修复登录一段时间后被自动退出账号的问题。更新后请重新登录一次即可恢复正常。"
+  "note": "本次更新：WAF 自定义规则支持编辑（点按规则即可修改）。以及若干稳定性改进。"
 }

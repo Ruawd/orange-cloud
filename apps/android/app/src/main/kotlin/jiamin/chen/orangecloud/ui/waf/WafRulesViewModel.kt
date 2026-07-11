@@ -116,6 +116,25 @@ class WafRulesViewModel @Inject constructor(
         }
     }
 
+    /** 编辑既有规则（整条 PATCH：动作 / 表达式 / 名称 / 启用）。 */
+    fun updateRule(ruleId: String, action: String, expression: String, description: String, enabled: Boolean) {
+        val rulesetId = _uiState.value.rulesetId ?: return
+        if (!canWrite) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSaving = true) }
+            try {
+                val rule = WafRuleCreate(action, expression.trim(), description.trim().ifBlank { null }, enabled)
+                val updated = securityRepository.updateRule(zoneId, rulesetId, ruleId, rule)
+                _uiState.update { it.copy(rules = updated.rules.orEmpty(), rulesetId = updated.id) }
+                eventChannel.send(WafEvent.Saved)
+            } catch (e: Exception) {
+                eventChannel.send(WafEvent.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
+    }
+
     fun deleteRule(rule: WafRule) {
         val rulesetId = _uiState.value.rulesetId ?: return
         if (!canWrite) return

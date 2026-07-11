@@ -28,7 +28,7 @@ enum CachePolicy {
     // CoreData 层抛 ObjC 异常（TF 崩溃点 D8tiH4pqdctLgx_nCLGnZ，1.8.1/1.8.2 实测）。
     // 1.8.2(24) 改纯谓词后同一台设备仍在崩（build 24/27 日志砸在纯谓词 fetch 本身），
     // 说明该机缓存库已损坏——Swift 的 try? 接不住 CoreData 的 NSException，必须经
-    // safeFetch 的 ObjC @try 垫片兜底：异常按「缓存不新鲜」处理（触发正常重拉），
+    // SafeCache 的 ObjC @try 垫片兜底：异常按「缓存不新鲜」处理（触发正常重拉），
     // 连续异常由 CacheContainer 标记下次启动清库重建。
     // 单账号/单域名下的缓存行数很小，内存里取 max(updatedAt) 足够。
 
@@ -37,7 +37,7 @@ enum CachePolicy {
         let descriptor = FetchDescriptor<CachedZone>(
             predicate: #Predicate { $0.accountId == accountId }
         )
-        guard let cached = safeFetch(descriptor, context: context), !cached.isEmpty else { return false }
+        guard let cached = SafeCache.fetch(descriptor, context: context), !cached.isEmpty else { return false }
         return isFresh(cached.map(\.updatedAt).max(), ttl: zones)
     }
 
@@ -46,24 +46,7 @@ enum CachePolicy {
         let descriptor = FetchDescriptor<CachedDNSRecord>(
             predicate: #Predicate { $0.zoneId == zoneId }
         )
-        guard let cached = safeFetch(descriptor, context: context), !cached.isEmpty else { return false }
+        guard let cached = SafeCache.fetch(descriptor, context: context), !cached.isEmpty else { return false }
         return isFresh(cached.map(\.updatedAt).max(), ttl: dns)
-    }
-
-    /// 带 ObjC 异常兜底的 fetch：异常时记一次店异常并返回 nil（调用方当缓存不新鲜）。
-    private static func safeFetch<T: PersistentModel>(
-        _ descriptor: FetchDescriptor<T>, context: ModelContext
-    ) -> [T]? {
-        var fetched: [T]?
-        let exception = OCCatchException {
-            fetched = try? context.fetch(descriptor)
-        }
-        if let exception {
-            AppLog.app.error("缓存 fetch 抛 ObjC 异常（已兜住，按不新鲜处理）：\(exception.name.rawValue) — \(exception.reason ?? "无 reason")")
-            CacheContainer.noteFetchException()
-            return nil
-        }
-        CacheContainer.noteFetchHealthy()
-        return fetched
     }
 }

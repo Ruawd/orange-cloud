@@ -245,6 +245,9 @@
     <string name="waf_deleted">Excluído</string>
     <string name="waf_delete_confirm_title">Eliminar esta regra?</string>
     <string name="waf_delete_confirm_msg">Não pode ser desfeito; a regra para de valer imediatamente.</string>
+    <string name="waf_edit_title">Editar regra</string>
+    <string name="waf_edit_unsupported_title">Edição não suportada</string>
+    <string name="waf_edit_unsupported_msg">As regras com parâmetros adicionais (como Ignorar) ainda não podem ser editadas na app. Modifique-as no painel da Cloudflare.</string>
 
     <string name="tunnel_title">Túneis</string>
     <string name="tunnel_empty">Ainda não há túneis</string>

@@ -51,7 +51,8 @@ enum AppNotifications {
     /// Zone 状态：与 SwiftData 缓存对比，变化即通知并回写缓存
     private static func checkZoneStatusChanges(zoneService: ZoneService) async {
         let context = ModelContext(CacheContainer.shared)
-        guard let cached = try? context.fetch(FetchDescriptor<CachedZone>()), !cached.isEmpty else { return }
+        guard let cached = SafeCache.fetch(FetchDescriptor<CachedZone>(), context: context),
+              !cached.isEmpty else { return }
 
         var changes: [(name: String, from: String, to: String)] = []
         // 按缓存中的账户分组拉取（上限 5 个账户，控制后台时间预算）
@@ -66,7 +67,7 @@ enum AppNotifications {
                 }
             }
         }
-        try? context.save()
+        SafeCache.perform("Zone 状态回写") { try context.save() }
 
         guard !changes.isEmpty else { return }
         if changes.count == 1, let change = changes.first {

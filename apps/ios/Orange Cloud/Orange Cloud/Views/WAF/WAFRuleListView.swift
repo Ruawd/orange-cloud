@@ -2,7 +2,7 @@
 //  WAFRuleListView.swift
 //  Orange Cloud
 //
-//  WAF 自定义规则：查看 / 新建 / 删除 / 启停，写操作按 zone-waf.write 门控。
+//  WAF 自定义规则：查看 / 新建 / 编辑 / 删除 / 启停，写操作按 zone-waf.write 门控。
 //
 
 import SwiftUI
@@ -15,6 +15,8 @@ struct WAFRuleListView: View {
     @State private var viewModel: WAFRulesViewModel
     @State private var showDenied = false
     @State private var showForm = false
+    @State private var editingRule: WAFRule?
+    @State private var showUnsupportedEdit = false
     @State private var ruleToDelete: WAFRule?
     @State private var searchText = ""
 
@@ -68,6 +70,16 @@ struct WAFRuleListView: View {
                                 },
                                 onDenied: { showDenied = true }
                             )
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                guard canWrite else { return }
+                                // skip 等带额外参数的动作不在表单支持范围，改动会丢参数
+                                if WAFRuleAction(rawValue: rule.action ?? "") != nil {
+                                    editingRule = rule
+                                } else {
+                                    showUnsupportedEdit = true
+                                }
+                            }
                             .swipeActions(edge: .trailing) {
                                 Button(role: .destructive) {
                                     if canWrite {
@@ -82,7 +94,7 @@ struct WAFRuleListView: View {
                         }
                     } footer: {
                         Text(canWrite
-                             ? String(localized: "规则按从上到下的顺序执行，左滑可删除。")
+                             ? String(localized: "规则按从上到下的顺序执行，点按可编辑，左滑可删除。")
                              : String(localized: "当前授权仅限读取（zone-waf.read），无法修改规则。"))
                     }
                     .glassRow()
@@ -107,7 +119,10 @@ struct WAFRuleListView: View {
             }
         }
         .sheet(isPresented: $showForm) {
-            WAFRuleFormView(viewModel: viewModel)
+            WAFRuleFormView(viewModel: viewModel, rule: nil)
+        }
+        .sheet(item: $editingRule) { rule in
+            WAFRuleFormView(viewModel: viewModel, rule: rule)
         }
         .task { await viewModel.load() }
         .confirmationDialog(
@@ -126,13 +141,18 @@ struct WAFRuleListView: View {
         } message: {
             Text("此操作不可撤销，规则将立即停止生效。")
         }
+        .alert("暂不支持编辑", isPresented: $showUnsupportedEdit) {
+            Button("好", role: .cancel) {}
+        } message: {
+            Text("「跳过」等带额外参数的规则暂不支持在 App 内编辑，请在 Cloudflare Dashboard 中修改。")
+        }
         .alert("权限不足", isPresented: $showDenied) {
             Button("好", role: .cancel) {}
         } message: {
             Text("当前授权未包含 WAF 编辑权限（zone-waf.write）。\n请在设置中退出登录后重新授权以启用此功能。")
         }
         .alert("出错了", isPresented: .init(
-            get: { viewModel.error != nil && !showForm },
+            get: { viewModel.error != nil && !showForm && editingRule == nil },
             set: { if !$0 { viewModel.error = nil } }
         )) {
             Button("好", role: .cancel) {}
@@ -142,11 +162,13 @@ struct WAFRuleListView: View {
     }
 }
 
-// MARK: - 新建规则表单
+// MARK: - 新建 / 编辑规则表单
 
 private struct WAFRuleFormView: View {
 
     let viewModel: WAFRulesViewModel
+    /// 非 nil 为编辑模式：预填并以表达式编辑器打开（表达式反解回条件行不可靠）
+    let rule: WAFRule?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -178,6 +200,18 @@ private struct WAFRuleFormView: View {
     // 设备端 AI 生成
     @State private var nlPrompt = ""
     @State private var readback: String?
+
+    init(viewModel: WAFRulesViewModel, rule: WAFRule?) {
+        self.viewModel = viewModel
+        self.rule = rule
+        if let rule {
+            _name = State(initialValue: rule.description ?? "")
+            _action = State(initialValue: WAFRuleAction(rawValue: rule.action ?? "") ?? .block)
+            _enabled = State(initialValue: rule.enabled ?? true)
+            _expression = State(initialValue: rule.expression ?? "")
+            _mode = State(initialValue: .expression)
+        }
+    }
 
     /// 由条件行实时生成的表达式
     private var generatedExpression: String {
@@ -248,7 +282,7 @@ private struct WAFRuleFormView: View {
                     }
                 }
             }
-            .navigationTitle("新建规则")
+            .navigationTitle(rule == nil ? String(localized: "新建规则") : String(localized: "编辑规则"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -442,7 +476,13 @@ private struct WAFRuleFormView: View {
             description: name.trimmingCharacters(in: .whitespaces),
             enabled: enabled
         )
-        if await viewModel.addRule(draft) {
+        let saved: Bool
+        if let rule {
+            saved = await viewModel.updateRule(ruleId: rule.id, draft: draft)
+        } else {
+            saved = await viewModel.addRule(draft)
+        }
+        if saved {
             dismiss()
         }
     }

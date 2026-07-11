@@ -121,10 +121,10 @@ final class DashboardViewModel {
             loadFailed = true
             return
         }
-        try? CacheSync.syncZones(zones, accountId: accountId, accountName: accountName, context: context)
+        CacheSync.syncZones(zones, accountId: accountId, accountName: accountName, context: context)
 
         if canReadWorkers, let scripts = try? await workerService.listScripts(accountId: accountId) {
-            try? CacheSync.syncWorkers(scripts, accountId: accountId, context: context)
+            CacheSync.syncWorkers(scripts, accountId: accountId, context: context)
         }
 
         if canReadDNS {
@@ -148,14 +148,16 @@ final class DashboardViewModel {
             } else if !counts.isEmpty {
                 dnsRecordTotal = counts.reduce(0) { $0 + $1.count }
                 // 分域名回写缓存：域名详情页首屏直显记录数（不再默认 0 条等进列表刷新）
-                let rows = (try? context.fetch(
-                    FetchDescriptor<CachedZone>(predicate: #Predicate { $0.accountId == accountId })
-                )) ?? []
-                let byId = Dictionary(rows.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-                for (zoneId, count) in counts {
-                    byId[zoneId]?.dnsRecordCount = count
+                SafeCache.perform("dnsRecordCount 回写") {
+                    let rows = try context.fetch(
+                        FetchDescriptor<CachedZone>(predicate: #Predicate { $0.accountId == accountId })
+                    )
+                    let byId = Dictionary(rows.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+                    for (zoneId, count) in counts {
+                        byId[zoneId]?.dnsRecordCount = count
+                    }
+                    try context.save()
                 }
-                try? context.save()
             }
         }
 

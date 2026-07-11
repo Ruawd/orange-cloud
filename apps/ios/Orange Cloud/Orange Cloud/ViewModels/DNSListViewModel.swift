@@ -53,7 +53,7 @@ final class DNSListViewModel {
         error = nil
         do {
             let records = try await dnsService.listRecords(zoneId: zoneId)
-            try sync(records: records, context: context)
+            sync(records: records, context: context)
             SpotlightIndexer.indexDNSRecords(records, zoneId: zoneId, zoneName: zoneName)
         } catch is CancellationError {
             // 任务取消属正常生命周期，不算加载失败
@@ -77,7 +77,7 @@ final class DNSListViewModel {
             } else {
                 saved = try await dnsService.createRecord(zoneId: zoneId, record: record)
             }
-            try upsert(saved, context: context)
+            upsert(saved, context: context)
             didSave.toggle()
             return true
         } catch {
@@ -110,52 +110,58 @@ final class DNSListViewModel {
         error = nil
         do {
             try await dnsService.deleteRecord(zoneId: zoneId, recordId: recordId)
-            let descriptor = FetchDescriptor<CachedDNSRecord>(
-                predicate: #Predicate { $0.id == recordId }
-            )
-            for cached in try context.fetch(descriptor) {
-                context.delete(cached)
+            SafeCache.perform("DNS 缓存删除") {
+                let descriptor = FetchDescriptor<CachedDNSRecord>(
+                    predicate: #Predicate { $0.id == recordId }
+                )
+                for cached in try context.fetch(descriptor) {
+                    context.delete(cached)
+                }
+                try context.save()
             }
-            try context.save()
         } catch {
             self.error = error.localizedDescription
         }
     }
 
-    // MARK: - 缓存同步
+    // MARK: - 缓存同步（写失败静默放弃：API 数据已在手，UI 不受影响）
 
-    private func sync(records: [DNSRecord], context: ModelContext) throws {
+    private func sync(records: [DNSRecord], context: ModelContext) {
         let zoneId = self.zoneId
-        let descriptor = FetchDescriptor<CachedDNSRecord>(
-            predicate: #Predicate { $0.zoneId == zoneId }
-        )
-        let existing = try context.fetch(descriptor)
-        let fetchedIDs = Set(records.map(\.id))
+        SafeCache.perform("DNS 缓存同步") {
+            let descriptor = FetchDescriptor<CachedDNSRecord>(
+                predicate: #Predicate { $0.zoneId == zoneId }
+            )
+            let existing = try context.fetch(descriptor)
+            let fetchedIDs = Set(records.map(\.id))
 
-        for cached in existing where !fetchedIDs.contains(cached.id) {
-            context.delete(cached)
+            for cached in existing where !fetchedIDs.contains(cached.id) {
+                context.delete(cached)
+            }
+            let existingByID = Dictionary(uniqueKeysWithValues: existing.map { ($0.id, $0) })
+            for record in records {
+                if let cached = existingByID[record.id] {
+                    cached.update(from: record)
+                } else {
+                    context.insert(CachedDNSRecord(from: record, zoneId: zoneId))
+                }
+            }
+            try context.save()
         }
-        let existingByID = Dictionary(uniqueKeysWithValues: existing.map { ($0.id, $0) })
-        for record in records {
-            if let cached = existingByID[record.id] {
+    }
+
+    private func upsert(_ record: DNSRecord, context: ModelContext) {
+        let recordId = record.id
+        SafeCache.perform("DNS 缓存 upsert") {
+            let descriptor = FetchDescriptor<CachedDNSRecord>(
+                predicate: #Predicate { $0.id == recordId }
+            )
+            if let cached = try context.fetch(descriptor).first {
                 cached.update(from: record)
             } else {
                 context.insert(CachedDNSRecord(from: record, zoneId: zoneId))
             }
+            try context.save()
         }
-        try context.save()
-    }
-
-    private func upsert(_ record: DNSRecord, context: ModelContext) throws {
-        let recordId = record.id
-        let descriptor = FetchDescriptor<CachedDNSRecord>(
-            predicate: #Predicate { $0.id == recordId }
-        )
-        if let cached = try context.fetch(descriptor).first {
-            cached.update(from: record)
-        } else {
-            context.insert(CachedDNSRecord(from: record, zoneId: zoneId))
-        }
-        try context.save()
     }
 }

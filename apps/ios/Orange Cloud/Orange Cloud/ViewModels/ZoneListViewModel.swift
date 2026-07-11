@@ -52,7 +52,7 @@ final class ZoneListViewModel {
         error = nil
         do {
             let zones = try await zoneService.listZones(accountId: accountId)
-            try CacheSync.syncZones(zones, accountId: accountId, accountName: accountName, context: context)
+            CacheSync.syncZones(zones, accountId: accountId, accountName: accountName, context: context)
         } catch is CancellationError {
             // 任务取消属正常生命周期，不算加载失败
         } catch let urlError as URLError where urlError.code == .cancelled {

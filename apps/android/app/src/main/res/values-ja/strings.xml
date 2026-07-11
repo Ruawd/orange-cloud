@@ -244,6 +244,9 @@
     <string name="waf_deleted">削除しました</string>
     <string name="waf_delete_confirm_title">このルールを削除しますか？</string>
     <string name="waf_delete_confirm_msg">この操作は元に戻せません。ルールは直ちに適用停止されます。</string>
+    <string name="waf_edit_title">ルールを編集</string>
+    <string name="waf_edit_unsupported_title">編集には未対応</string>
+    <string name="waf_edit_unsupported_msg">「スキップ」など追加パラメータを持つルールはアプリ内では編集できません。Cloudflare ダッシュボードで変更してください。</string>
 
     <string name="tunnel_title">トンネル</string>
     <string name="tunnel_empty">トンネルがありません</string>

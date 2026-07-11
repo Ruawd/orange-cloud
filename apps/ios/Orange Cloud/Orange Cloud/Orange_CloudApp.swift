@@ -33,6 +33,8 @@ struct Orange_CloudApp: App {
         let manager = AuthManager()
         _authManager = State(initialValue: manager)
         CrashReporter.recordBreadcrumb("AppStart auth manager created")
+        // 串行预热缓存库实体解析（iOS 17.x 冷启动首次并发 fetch 竞态，Sentry APPLE-IOS-Y）
+        CacheContainer.warmUp()
         WhatsNewGate.wasLoggedInAtLaunch = manager.isLoggedIn
         BackgroundRefresh.register(authManager: manager)
         // iOS 26 连续后台任务（R2 大对象 copy/move 续传），须在启动时注册处理器

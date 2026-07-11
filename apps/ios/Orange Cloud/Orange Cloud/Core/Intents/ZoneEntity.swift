@@ -37,10 +37,13 @@ nonisolated struct ZoneEntity: AppEntity, Identifiable {
 
 nonisolated struct ZoneEntityQuery: EntityQuery {
 
+    // fetch 一律走 SafeCache（iOS 17.x CoreData 会抛 Swift 接不住的 NSException，
+    // 系统在冷启动就可能来查实体，异常按无缓存处理，绝不让 Intents 查询崩掉 App）。
+
     func entities(for identifiers: [ZoneEntity.ID]) async throws -> [ZoneEntity] {
-        try await MainActor.run {
+        await MainActor.run {
             let context = ModelContext(CacheContainer.shared)
-            let zones = try context.fetch(FetchDescriptor<CachedZone>())
+            let zones = SafeCache.fetch(FetchDescriptor<CachedZone>(), context: context) ?? []
             return zones
                 .filter { identifiers.contains($0.id) }
                 .map(ZoneEntity.init(from:))
@@ -48,12 +51,13 @@ nonisolated struct ZoneEntityQuery: EntityQuery {
     }
 
     func suggestedEntities() async throws -> [ZoneEntity] {
-        try await MainActor.run {
+        await MainActor.run {
             let context = ModelContext(CacheContainer.shared)
-            let zones = try context.fetch(
-                FetchDescriptor<CachedZone>(sortBy: [SortDescriptor(\.name)])
-            )
-            return zones.map(ZoneEntity.init(from:))
+            let zones = SafeCache.fetch(FetchDescriptor<CachedZone>(), context: context) ?? []
+            // 内存排序：iOS 17.0 的 CoreData 对带 sortBy 的 fetch 更易触发 NSException（缓存行数小，内存排序足够）
+            return zones
+                .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+                .map(ZoneEntity.init(from:))
         }
     }
 }

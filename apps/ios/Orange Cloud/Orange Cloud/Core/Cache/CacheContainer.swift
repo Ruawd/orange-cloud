@@ -49,6 +49,16 @@ nonisolated enum CacheContainer {
         }
     }()
 
+    /// 启动早期在主线程串行预热一次实体解析。Sentry APPLE-IOS-Y（1.8.2+27~1.8.3+30）：
+    /// iOS 17.x 冷启动后数秒内的首次 fetch 抛「could not locate an NSEntityDescription for
+    /// entity name 'CachedZone'」，疑为首次实体解析的并发竞态（@Query / Intents 查询 /
+    /// ViewModel fetch 同窗口首触）。在任何并发访问前做一次守卫下的空谓词 fetch 灌热实体
+    /// 描述；即便竞态假说不成立，异常也会被 SafeCache 兜住并计入店健康。
+    @MainActor
+    static func warmUp() {
+        _ = SafeCache.fetch(FetchDescriptor<CachedZone>(), context: shared.mainContext)
+    }
+
     // MARK: - 店健康记录（TF 崩溃点 D8tiH4pqdctLgx_nCLGnZ：单机纯谓词 fetch 也抛 NSException）
 
     private static let rebuildFlagKey = "ocCacheStoreNeedsRebuild"

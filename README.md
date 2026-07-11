@@ -12,7 +12,7 @@
 
 <a href="https://trendshift.io/repositories/53962" target="_blank"><img src="https://trendshift.io/api/badge/trendshift/repositories/53962/daily?language=Swift" alt="#3 Swift Repository Of The Day" height="20" /></a>
 
-[Website](https://o-c.do) · [Privacy](https://o-c.do/privacy) · [Terms](https://o-c.do/terms) · [TestFlight (beta)](https://testflight.apple.com/join/ZGhbsphj) · [Telegram](https://t.me/orange_cloud_channel)
+[Website](https://o-c.do) · [Privacy](https://o-c.do/privacy) · [Terms](https://o-c.do/terms) · [TestFlight (beta)](https://testflight.apple.com/join/ZGhbsphj) · [Telegram](https://t.me/orange_cloud_channel) · [Ko-fi](https://ko-fi.com/chen2he)
 
 [English](#english) | [中文](#中文)
 
@@ -76,6 +76,8 @@ The open-source story matches iOS: the `oss` build flavor unlocks every Pro feat
 ### Community
 
 Follow the [Telegram channel](https://t.me/orange_cloud_channel) for release notes, news, and announcements.
+
+If Orange Cloud is useful to you, you can support the project on [Ko-fi](https://ko-fi.com/chen2he) ☕. It's entirely optional — the app stays free and open source either way.
 
 ### Building from source
 
@@ -144,6 +146,8 @@ orange-cloud/
 ### 社区
 
 关注 [Telegram 频道](https://t.me/orange_cloud_channel)，获取版本更新、项目动态与发布公告。
+
+如果 Orange Cloud 对你有帮助，欢迎在 [Ko-fi](https://ko-fi.com/chen2he) 上请作者喝杯咖啡 ☕。这完全是自愿的——无论是否赞助，App 始终免费且开源。
 
 ### 自行编译
 

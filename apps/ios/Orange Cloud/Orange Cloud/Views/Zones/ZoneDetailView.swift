@@ -294,7 +294,7 @@ struct ZoneDetailView: View {
                     withAnimation(.smooth) {
                         zone.pinned.toggle()
                     }
-                    try? modelContext.save()
+                    SafeCache.perform("pin 状态保存") { try modelContext.save() }
                 }
                 .contentTransition(.symbolEffect(.replace))
             }
@@ -312,7 +312,7 @@ struct ZoneDetailView: View {
             if zone.dnsRecordCount == nil, records.isEmpty, auth.hasScope("dns.read"),
                let count = try? await session.dnsService.recordCount(zoneId: zone.id) {
                 zone.dnsRecordCount = count
-                try? modelContext.save()
+                SafeCache.perform("dnsRecordCount 保存") { try modelContext.save() }
             }
         }
         .refreshable {
