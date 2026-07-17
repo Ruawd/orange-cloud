@@ -211,11 +211,7 @@ class DashboardViewModel @Inject constructor(
      */
     fun loadUsage(force: Boolean = false) {
         val accountId = accountStore.selectedAccountId.value ?: return
-        // 门控用 analytics.read：Cloudflare 会把 account-analytics.read 从授权里丢掉（该 scope 被
-        // GraphQL 拒），账号用量实际由 analytics.read + workers-observability.read 驱动。用 account-analytics.read
-        // 门控会把已授「流量分析」的用户误挡在外（issue：授权后仍提示需要权限）。
-        val hasScope = authRepository.hasScope(Scopes.ANALYTICS_READ) ||
-            authRepository.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)
+        val hasScope = authRepository.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)
         _uiState.update { it.copy(hasAccountAnalytics = hasScope) }
         if (!hasScope) return
 

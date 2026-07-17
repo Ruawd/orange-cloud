@@ -303,9 +303,7 @@ private struct DashboardHomeView: View {
     }
 
     private func loadUsage(force: Bool = false) async {
-        // 门控用 analytics.read：Cloudflare 会把 account-analytics.read 从授权丢弃（被 GraphQL 拒），
-        // 账号用量实际由 analytics.read + workers-observability.read 驱动。用 account-analytics.read 门控会误挡已授权用户。
-        guard auth.hasScope("analytics.read") || auth.hasScope("account-analytics.read"),
+        guard auth.hasScope("account-analytics.read"),
               let accountId = session.selectedAccount?.id else { return }
         await viewModel.loadUsage(
             accountId: accountId,
@@ -612,7 +610,7 @@ private struct DashboardHomeView: View {
                 }
             }
 
-            if !(auth.hasScope("analytics.read") || auth.hasScope("account-analytics.read")) {
+            if !auth.hasScope("account-analytics.read") {
                 Label("需要「流量分析」权限才能展示账号用量", systemImage: "lock")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
