@@ -44,7 +44,7 @@ android {
         // 实况通知促升(API36) 均 if-guard 渐进增强，Android 8–11 落固定品牌调色板与常驻通知回退。
         minSdk = 26
         targetSdk = 36
-        versionCode = 13
+        versionCode = 14
         versionName = "1.6.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

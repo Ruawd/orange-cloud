@@ -32,7 +32,9 @@ object PermissionCatalog {
         PermissionFeature("ssl_certs", R.string.perm_ssl_certs, R.string.perm_ssl_certs_desc, listOf(Scopes.SSL_CERTS_READ), listOf(Scopes.SSL_CERTS_WRITE)),
         PermissionFeature("transform_rules", R.string.perm_transform, R.string.perm_transform_desc, listOf(Scopes.TRANSFORM_READ), listOf(Scopes.TRANSFORM_WRITE)),
         PermissionFeature("ip_access_rules", R.string.perm_ip_rules, R.string.perm_ip_rules_desc, listOf(Scopes.FIREWALL_READ), listOf(Scopes.FIREWALL_WRITE)),
-        PermissionFeature("analytics", R.string.perm_analytics, R.string.perm_analytics_desc, listOf(Scopes.ACCOUNT_ANALYTICS_READ, Scopes.ANALYTICS_READ)),
+        // 账号用量（workersInvocationsAdaptive 等 adaptive 数据集）需 workers-observability.read；
+        // account-analytics.read 会被 CF 从授权丢弃，仅作请求项占位（与 iOS PermissionModels 对齐）。
+        PermissionFeature("analytics", R.string.perm_analytics, R.string.perm_analytics_desc, listOf(Scopes.ACCOUNT_ANALYTICS_READ, Scopes.ANALYTICS_READ, Scopes.WORKERS_OBSERVABILITY_READ)),
         // —— 1.4「G–J 爆发」新增功能（与 iOS PermissionModels 对齐）——
         PermissionFeature("cache_rules", R.string.perm_cache_rules, R.string.perm_cache_rules_desc, listOf(Scopes.CACHE_RULES_READ), listOf(Scopes.CACHE_RULES_WRITE)),
         PermissionFeature("email_routing", R.string.perm_email_routing, R.string.perm_email_routing_desc, listOf(Scopes.EMAIL_ADDR_READ, Scopes.EMAIL_RULE_READ), listOf(Scopes.EMAIL_ADDR_WRITE, Scopes.EMAIL_RULE_WRITE)),
