@@ -1,12 +1,31 @@
 package jiamin.chen.orangecloud.data.repository
 
 import jiamin.chen.orangecloud.core.network.CfApiClient
+import jiamin.chen.orangecloud.data.model.AccountUsage
+import jiamin.chen.orangecloud.data.model.AccountUsageData
+import jiamin.chen.orangecloud.data.model.AccountUsageQueries
+import jiamin.chen.orangecloud.data.model.AccountUsageVariables
 import jiamin.chen.orangecloud.data.model.AnalyticsGroup
 import jiamin.chen.orangecloud.data.model.AnalyticsQueries
 import jiamin.chen.orangecloud.data.model.AnalyticsTimeRange
+import jiamin.chen.orangecloud.data.model.D1Usage
+import jiamin.chen.orangecloud.data.model.D1UsageData
+import jiamin.chen.orangecloud.data.model.D1UsageGroup
+import jiamin.chen.orangecloud.data.model.D1UsageVariables
+import jiamin.chen.orangecloud.data.model.KVOpsGroup
+import jiamin.chen.orangecloud.data.model.KVUsage
+import jiamin.chen.orangecloud.data.model.KVUsageData
+import jiamin.chen.orangecloud.data.model.R2_CLASS_B_ACTIONS
+import jiamin.chen.orangecloud.data.model.R2UsageData
+import jiamin.chen.orangecloud.data.model.R2UsageVariables
 import jiamin.chen.orangecloud.data.model.TrafficDataPoint
+import jiamin.chen.orangecloud.data.model.WorkersCpuData
 import jiamin.chen.orangecloud.data.model.ZoneAnalyticsData
 import jiamin.chen.orangecloud.data.model.ZoneAnalyticsVariables
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -97,6 +116,127 @@ class AnalyticsRepository @Inject constructor(
         )
         val zone = data.viewer.zones.firstOrNull() ?: return emptyList()
         return zone.groups.mapNotNull { it.toDataPoint() }
+    }
+
+    // MARK: - 账号用量（Dashboard 用量模块，对应 iOS AnalyticsService account usage 系列）
+
+    /** Time 标量窗口（Workers / R2）：periodStart 传计费周期起点，null 回退自然月（UTC）。 */
+    private fun usageVariables(accountId: String, periodStart: Instant?): AccountUsageVariables {
+        val now = Instant.now().truncatedTo(ChronoUnit.SECONDS)
+        val todayStart = now.atZone(ZoneOffset.UTC).toLocalDate().atStartOfDay(ZoneOffset.UTC).toInstant()
+        val monthStart = periodStart
+            ?: now.atZone(ZoneOffset.UTC).toLocalDate().withDayOfMonth(1).atStartOfDay(ZoneOffset.UTC).toInstant()
+        val iso = DateTimeFormatter.ISO_INSTANT
+        return AccountUsageVariables(accountId, iso.format(monthStart), iso.format(todayStart), iso.format(now))
+    }
+
+    /** Date 标量窗口（D1 / KV）：yyyy-MM-dd（UTC）。 */
+    private fun dateVariables(accountId: String, periodStart: Instant?): D1UsageVariables {
+        val today = Instant.now().atZone(ZoneOffset.UTC).toLocalDate()
+        val monthStart = periodStart?.atZone(ZoneOffset.UTC)?.toLocalDate() ?: today.withDayOfMonth(1)
+        val day = DateTimeFormatter.ISO_LOCAL_DATE
+        return D1UsageVariables(accountId, monthStart.format(day), today.format(day), today.format(day))
+    }
+
+    /** Workers 账号用量（今日/周期请求、月度错误、单次 CPU 分位）。authz 错误由 api.graphQL 抛出交调用方降级。 */
+    suspend fun accountWorkersUsage(accountId: String, periodStart: Instant?): AccountUsage {
+        val data = api.graphQL<AccountUsageData, AccountUsageVariables>(
+            AccountUsageQueries.WORKERS, usageVariables(accountId, periodStart),
+        )
+        val node = data.viewer.accounts.firstOrNull() ?: error("no account")
+        val q = node.month?.firstOrNull()?.quantiles
+        return AccountUsage(
+            workersRequestsToday = node.today.orEmpty().sumOf { it.sum?.requests ?: 0L },
+            workersRequestsMonth = node.month.orEmpty().sumOf { it.sum?.requests ?: 0L },
+            workersErrorsMonth = node.month.orEmpty().sumOf { it.sum?.errors ?: 0L },
+            cpuP50Us = q?.cpuTimeP50,
+            cpuP99Us = q?.cpuTimeP99,
+        )
+    }
+
+    /** Workers CPU 总耗时（周期/今日，微秒）。schema 不支持时抛错由调用方降级。 */
+    suspend fun workersCpuTotals(accountId: String, periodStart: Instant?): Pair<Double, Double> {
+        val data = api.graphQL<WorkersCpuData, AccountUsageVariables>(
+            AccountUsageQueries.WORKERS_CPU, usageVariables(accountId, periodStart),
+        )
+        val node = data.viewer.accounts.firstOrNull() ?: return 0.0 to 0.0
+        val month = node.month.orEmpty().sumOf { it.sum?.cpuTimeUs ?: 0.0 }
+        val today = node.today.orEmpty().sumOf { it.sum?.cpuTimeUs ?: 0.0 }
+        return month to today
+    }
+
+    /** R2 账号级用量：A/B 类操作合计 + 当前存储/对象数。读类计 Class B，其余 Class A。 */
+    data class R2Totals(val classA: Long, val classB: Long, val storageBytes: Long, val objectCount: Long)
+
+    suspend fun accountR2Usage(accountId: String, periodStart: Instant?): R2Totals {
+        val v = usageVariables(accountId, periodStart)
+        val data = api.graphQL<R2UsageData, R2UsageVariables>(
+            AccountUsageQueries.R2, R2UsageVariables(v.accountTag, v.monthStart, v.todayStart, v.now),
+        )
+        val account = data.viewer?.accounts?.firstOrNull() ?: return R2Totals(0, 0, 0, 0)
+        var classA = 0L
+        var classB = 0L
+        account.r2Ops?.forEach { g ->
+            val action = g.dimensions?.actionType ?: return@forEach
+            val count = g.sum?.requests ?: 0L
+            if (action in R2_CLASS_B_ACTIONS) classB += count else classA += count
+        }
+        var storage = 0L
+        var objects = 0L
+        account.r2Storage?.forEach { g ->
+            storage += (g.max?.payloadSize ?: 0L) + (g.max?.metadataSize ?: 0L)
+            objects += (g.max?.objectCount ?: 0).toLong()
+        }
+        return R2Totals(classA, classB, storage, objects)
+    }
+
+    /** D1 行读/写（今日 + 周期）。 */
+    suspend fun d1Usage(accountId: String, periodStart: Instant?): D1Usage {
+        val data = api.graphQL<D1UsageData, D1UsageVariables>(
+            AccountUsageQueries.D1, dateVariables(accountId, periodStart),
+        )
+        val node = data.viewer.accounts.firstOrNull() ?: error("no account")
+        fun totals(groups: List<D1UsageGroup>?): Pair<Long, Long> {
+            var read = 0L
+            var written = 0L
+            groups?.forEach { read += it.sum?.rowsRead ?: 0L; written += it.sum?.rowsWritten ?: 0L }
+            return read to written
+        }
+        val (periodRead, periodWritten) = totals(node.period)
+        val (todayRead, todayWritten) = totals(node.today)
+        return D1Usage(todayRead, todayWritten, periodRead, periodWritten)
+    }
+
+    /** KV 读/写（今日 + 周期；delete/list 不计入主额度行）。 */
+    suspend fun kvUsage(accountId: String, periodStart: Instant?): KVUsage {
+        val data = api.graphQL<KVUsageData, D1UsageVariables>(
+            AccountUsageQueries.KV_OPERATIONS, dateVariables(accountId, periodStart),
+        )
+        val node = data.viewer.accounts.firstOrNull() ?: error("no account")
+        fun totals(groups: List<KVOpsGroup>?): Pair<Long, Long> {
+            var reads = 0L
+            var writes = 0L
+            groups?.forEach {
+                val count = it.sum?.requests ?: 0L
+                when (it.dimensions?.actionType) {
+                    "read" -> reads += count
+                    "write" -> writes += count
+                }
+            }
+            return reads to writes
+        }
+        val (periodReads, periodWrites) = totals(node.period)
+        val (todayReads, todayWrites) = totals(node.today)
+        return KVUsage(todayReads, todayWrites, periodReads, periodWrites)
+    }
+
+    /** KV 当前存储（各 namespace 当日 max byteCount 求和）。 */
+    suspend fun kvStorageBytes(accountId: String): Long {
+        val data = api.graphQL<KVUsageData, D1UsageVariables>(
+            AccountUsageQueries.KV_STORAGE, dateVariables(accountId, null),
+        )
+        val node = data.viewer.accounts.firstOrNull() ?: return 0L
+        return node.storage.orEmpty().sumOf { it.max?.byteCount ?: 0L }
     }
 }
 

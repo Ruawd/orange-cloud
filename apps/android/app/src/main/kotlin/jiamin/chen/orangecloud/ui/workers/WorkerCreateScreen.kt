@@ -52,15 +52,23 @@ fun WorkerCreateScreen(
     viewModel: WorkerCreateViewModel = hiltViewModel(),
 ) {
     val isUploading by viewModel.isUploading.collectAsStateWithLifecycle()
+    val sourceState by viewModel.sourceState.collectAsStateWithLifecycle()
+    val isEdit = viewModel.isEdit
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
     val snackbar = remember { SnackbarHostState() }
 
-    var name by rememberSaveable { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf(viewModel.editScript.orEmpty()) }
     var compatDate by rememberSaveable { mutableStateOf(viewModel.defaultCompatibilityDate) }
-    var code by rememberSaveable { mutableStateOf(SAMPLE_CODE) }
+    // 新建预填示例代码；编辑时初始为空，等 /content/v2 读回后由 LaunchedEffect 填入
+    var code by rememberSaveable { mutableStateOf(if (isEdit) "" else SAMPLE_CODE) }
 
-    val createdMsg = stringResource(R.string.worker_create_ok)
+    // 源码读回后预填一次编辑器
+    LaunchedEffect(sourceState.code) {
+        sourceState.code?.let { code = it }
+    }
+
+    val createdMsg = if (isEdit) stringResource(R.string.worker_edit_ok) else stringResource(R.string.worker_create_ok)
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -71,14 +79,15 @@ fun WorkerCreateScreen(
     }
 
     val nameValid = name.isBlank() || viewModel.isValidName(name)
-    val canSave = viewModel.isValidName(name) && code.isNotBlank() && !isUploading
+    val canSave = (isEdit || viewModel.isValidName(name)) && code.isNotBlank() &&
+        !isUploading && !sourceState.isLoading && !sourceState.uneditable
 
     SkyBackground(phase = phase) {
         Column(Modifier.fillMaxSize().systemBarsPadding()) {
             SkyHeader(
-                title = stringResource(R.string.worker_create_title),
+                title = if (isEdit) stringResource(R.string.worker_edit_title) else stringResource(R.string.worker_create_title),
                 onSky = onSky,
-                isLoading = isUploading,
+                isLoading = isUploading || sourceState.isLoading,
                 onRefresh = {},
                 onBack = onBack,
                 titleSize = 22,
@@ -88,42 +97,59 @@ fun WorkerCreateScreen(
                 Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                // 编辑现有脚本时名称固定不可改
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it.lowercase() },
                     label = { Text(stringResource(R.string.worker_create_name)) },
                     singleLine = true,
                     isError = !nameValid,
-                    supportingText = { Text(stringResource(R.string.worker_create_name_hint)) },
+                    enabled = !isEdit,
+                    readOnly = isEdit,
+                    supportingText = if (isEdit) null else ({ Text(stringResource(R.string.worker_create_name_hint)) }),
                     modifier = Modifier.fillMaxWidth(),
                 )
-                OutlinedTextField(
-                    value = compatDate,
-                    onValueChange = { compatDate = it },
-                    label = { Text(stringResource(R.string.worker_create_compat)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                if (!isEdit) {
+                    OutlinedTextField(
+                        value = compatDate,
+                        onValueChange = { compatDate = it },
+                        label = { Text(stringResource(R.string.worker_create_compat)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
                 Text(stringResource(R.string.worker_create_code), fontSize = 13.sp, color = onSky)
-                OutlinedTextField(
-                    value = code,
-                    onValueChange = { code = it },
-                    textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                    minLines = 10,
-                    modifier = Modifier.fillMaxWidth(),
+                when {
+                    sourceState.isLoading ->
+                        Text(stringResource(R.string.worker_edit_loading), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    sourceState.uneditable ->
+                        Text(stringResource(R.string.worker_edit_multimodule), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    else -> OutlinedTextField(
+                        value = code,
+                        onValueChange = { code = it },
+                        textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                        minLines = 10,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                Text(
+                    if (isEdit) stringResource(R.string.worker_edit_note) else stringResource(R.string.worker_create_note),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                Text(stringResource(R.string.worker_create_note), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Button(
-                    onClick = { viewModel.create(name, code, compatDate) },
-                    enabled = canSave,
-                    colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    if (isUploading) {
-                        CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
-                        Spacer(Modifier.width(8.dp))
+                if (!sourceState.uneditable) {
+                    Button(
+                        onClick = { viewModel.submit(name, code, compatDate) },
+                        enabled = canSave,
+                        colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        if (isUploading) {
+                            CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Text(stringResource(R.string.worker_create_deploy))
                     }
-                    Text(stringResource(R.string.worker_create_deploy))
                 }
             }
             SnackbarHost(snackbar)

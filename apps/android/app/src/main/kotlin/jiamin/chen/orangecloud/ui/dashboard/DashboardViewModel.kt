@@ -6,9 +6,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.AuthSessionMeta
 import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.core.network.ApiError
+import jiamin.chen.orangecloud.core.system.AppPrefs
+import jiamin.chen.orangecloud.core.system.UsagePlanPrefs
 import jiamin.chen.orangecloud.data.model.Account
+import jiamin.chen.orangecloud.data.model.AccountUsage
 import jiamin.chen.orangecloud.data.model.AnalyticsTimeRange
+import jiamin.chen.orangecloud.data.model.BillingCycle
 import jiamin.chen.orangecloud.data.model.Zone
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.AnalyticsRepository
 import jiamin.chen.orangecloud.data.repository.StorageRepository
@@ -49,6 +56,13 @@ data class DashboardUiState(
     val isLoading: Boolean = false,
     val authSessions: List<AuthSessionMeta> = emptyList(),
     val currentAuthSessionId: String? = null,
+    // 用量模块
+    val usage: AccountUsage? = null,
+    val usagePlan: UsagePlanPrefs = UsagePlanPrefs(),
+    val usageLoading: Boolean = false,
+    val usageLoadFailed: Boolean = false,
+    val accountAnalyticsUnavailable: Boolean = false,
+    val hasAccountAnalytics: Boolean = false,
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -61,10 +75,17 @@ class DashboardViewModel @Inject constructor(
     private val workerRepository: WorkerRepository,
     private val storageRepository: StorageRepository,
     private val analyticsRepository: AnalyticsRepository,
+    private val appPrefs: AppPrefs,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState(isLoading = true))
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
+
+    // 用量：账号级会话缓存（切回同账号即时回显）+ 加载/不可用惰性标记
+    private val usageCache = mutableMapOf<String, AccountUsage>()
+    private var usageLoadedForAccount: String? = null
+    private var analyticsUnavailableForAccount: String? = null
+    private var usageJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -72,7 +93,15 @@ class DashboardViewModel @Inject constructor(
         }
         viewModelScope.launch {
             accountStore.selectedAccountId.collect { id ->
-                _uiState.update { it.copy(selectedAccountId = id) }
+                // 切账号时清掉上一个账号的用量快照，避免旧数字在新账号加载期间残留
+                _uiState.update {
+                    it.copy(
+                        selectedAccountId = id,
+                        usage = null,
+                        usageLoadFailed = false,
+                        accountAnalyticsUnavailable = false,
+                    )
+                }
             }
         }
         // 登录身份列表 / 当前身份：头像菜单「登录身份」段的数据源
@@ -100,6 +129,12 @@ class DashboardViewModel @Inject constructor(
                 .collect { zones ->
                     _uiState.update { it.copy(zoneCount = zones.size.toString(), recentZones = zones.take(4)) }
                 }
+        }
+        // 用量套餐设置：随账号切流，仅驱动菜单显示（改动由 setter 主动触发重载，避免切账号双刷）。
+        viewModelScope.launch {
+            accountStore.selectedAccountId
+                .flatMapLatest { id -> if (id == null) flowOf(UsagePlanPrefs()) else appPrefs.usagePlan(id) }
+                .collect { plan -> _uiState.update { it.copy(usagePlan = plan) } }
         }
         // 桌面小组件快照：账号总览（账号名 / 今日请求 / 域名数）变化即写入并刷新 Glance。
         viewModelScope.launch {
@@ -165,6 +200,122 @@ class DashboardViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
+        loadUsage()
+    }
+
+    // MARK: - 用量模块
+
+    /**
+     * 加载账号用量：Workers 主查询（authz = 整账号无账户级数据权限即降级停发其余），
+     * R2 / CPU / D1 / KV 独立合并，能显示多少显示多少（对齐 iOS performLoadUsage）。
+     */
+    fun loadUsage(force: Boolean = false) {
+        val accountId = accountStore.selectedAccountId.value ?: return
+        val hasScope = authRepository.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)
+        _uiState.update { it.copy(hasAccountAnalytics = hasScope) }
+        if (!hasScope) return
+
+        usageCache[accountId]?.let { cached ->
+            if (_uiState.value.usage == null) _uiState.update { it.copy(usage = cached) }
+        }
+        if (!force && usageLoadedForAccount == accountId) return
+        if (!force && analyticsUnavailableForAccount == accountId) {
+            _uiState.update { it.copy(accountAnalyticsUnavailable = true, usageLoading = false) }
+            return
+        }
+
+        usageJob?.cancel()
+        usageJob = viewModelScope.launch {
+            _uiState.update { it.copy(usageLoading = true, usageLoadFailed = false, accountAnalyticsUnavailable = false) }
+            // 内存无缓存时先从磁盘回显上次快照，网络回来再覆盖（对齐 iOS UsageCache 落盘）
+            if (usageCache[accountId] == null) {
+                appPrefs.loadUsageCache(accountId)?.let { disk ->
+                    usageCache[accountId] = disk
+                    if (_uiState.value.usage == null) _uiState.update { it.copy(usage = disk) }
+                }
+            }
+            val plan = appPrefs.usagePlan(accountId).first()
+            val periodStart = if (plan.workersPaid || plan.billingDay != 1) BillingCycle.periodStart(plan.billingDay) else null
+
+            val workers = try {
+                analyticsRepository.accountWorkersUsage(accountId, periodStart)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: ApiError.Cloudflare) {
+                if (isAuthz(e)) {
+                    analyticsUnavailableForAccount = accountId
+                    _uiState.update {
+                        it.copy(accountAnalyticsUnavailable = true, usage = null, usageLoading = false, usageLoadFailed = false)
+                    }
+                    return@launch
+                }
+                null
+            } catch (e: Exception) {
+                null
+            }
+            analyticsUnavailableForAccount = null
+
+            var usage = workers ?: AccountUsage()
+            var anyData = workers != null
+
+            runCatching { analyticsRepository.accountR2Usage(accountId, periodStart) }.getOrNull()?.let { r2 ->
+                usage = usage.copy(
+                    r2ClassAMonth = r2.classA, r2ClassBMonth = r2.classB,
+                    r2StorageBytes = r2.storageBytes, r2ObjectCount = r2.objectCount,
+                )
+                anyData = true
+            }
+            runCatching { analyticsRepository.workersCpuTotals(accountId, periodStart) }.getOrNull()?.let { (month, today) ->
+                usage = usage.copy(cpuTimeMonthUs = month, cpuTimeTodayUs = today)
+            }
+            runCatching { analyticsRepository.d1Usage(accountId, periodStart) }.getOrNull()?.let { d1 ->
+                usage = usage.copy(d1Usage = d1); anyData = true
+            }
+            if (authRepository.hasScope(Scopes.D1_READ)) {
+                runCatching { storageRepository.listDatabases(accountId) }.getOrNull()?.let { dbs ->
+                    usage = usage.copy(d1StorageBytes = dbs.sumOf { it.fileSize ?: 0L }); anyData = true
+                }
+            }
+            runCatching { analyticsRepository.kvUsage(accountId, periodStart) }.getOrNull()?.let { kv ->
+                usage = usage.copy(kvUsage = kv); anyData = true
+            }
+            runCatching { analyticsRepository.kvStorageBytes(accountId) }.getOrNull()?.let { bytes ->
+                usage = usage.copy(kvStorageBytes = bytes); anyData = true
+            }
+
+            if (anyData) {
+                usageCache[accountId] = usage
+                usageLoadedForAccount = accountId
+                appPrefs.saveUsageCache(accountId, usage)   // 落盘供下次冷启动/切回即时回显
+                _uiState.update {
+                    it.copy(usage = usage, usageLoading = false, usageLoadFailed = false, accountAnalyticsUnavailable = false)
+                }
+            } else {
+                _uiState.update { it.copy(usageLoading = false, usageLoadFailed = true) }
+            }
+        }
+    }
+
+    fun setUsageWorkersPaid(paid: Boolean) {
+        val id = accountStore.selectedAccountId.value ?: return
+        viewModelScope.launch { appPrefs.setUsageWorkersPaid(id, paid); loadUsage(force = true) }
+    }
+
+    fun setUsageR2Paid(paid: Boolean) {
+        val id = accountStore.selectedAccountId.value ?: return
+        viewModelScope.launch { appPrefs.setUsageR2Paid(id, paid); loadUsage(force = true) }
+    }
+
+    fun setUsageBillingDay(day: Int) {
+        val id = accountStore.selectedAccountId.value ?: return
+        viewModelScope.launch { appPrefs.setUsageBillingDay(id, day); loadUsage(force = true) }
+    }
+
+    /** GraphQL 账户级 authz 错误识别（免费账号账户级数据集常被 authz 挡）。 */
+    private fun isAuthz(e: ApiError.Cloudflare): Boolean {
+        val msg = e.errors.joinToString(" ") { it.message }.lowercase()
+        return "authz" in msg || "not authorized" in msg || "unauthorized" in msg ||
+            "permission" in msg || "authentication" in msg
     }
 
     /** 今日请求总数 = 各域名 24h 请求之和（best-effort，缺 analytics scope 返回 null）。 */

@@ -13,12 +13,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
@@ -38,31 +34,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jiamin.chen.orangecloud.R
 import jiamin.chen.orangecloud.core.design.theme.OcOrange
-import jiamin.chen.orangecloud.data.model.D1Database
+import jiamin.chen.orangecloud.data.model.KVNamespace
+import jiamin.chen.orangecloud.data.model.R2Bucket
 
-/** D1 主副本放置提示（primary_location_hint）。AUTOMATIC 不传 hint，由 Cloudflare 就近分配。 */
-private enum class D1Loc(val hint: String?, val labelRes: Int) {
-    AUTOMATIC(null, R.string.d1_loc_auto),
-    WNAM("wnam", R.string.d1_loc_wnam),
-    ENAM("enam", R.string.d1_loc_enam),
-    WEUR("weur", R.string.d1_loc_weur),
-    EEUR("eeur", R.string.d1_loc_eeur),
-    APAC("apac", R.string.d1_loc_apac),
-    OC("oc", R.string.d1_loc_oc),
-}
+// MARK: - R2 桶
 
-/** 创建数据库底部表单：名称 + 可选主要位置。 */
+/** 创建 R2 桶底部表单：仅名称（小写字母/数字/连字符，3–63 位，服务端校验）。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun D1CreateSheet(
+fun R2CreateSheet(
     isCreating: Boolean,
     sheetState: SheetState,
-    onCreate: (name: String, locationHint: String?) -> Unit,
+    onCreate: (name: String) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf(D1Loc.AUTOMATIC) }
-    var expanded by remember { mutableStateOf(false) }
     val canCreate = name.trim().isNotEmpty() && !isCreating
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
@@ -75,43 +61,22 @@ fun D1CreateSheet(
                 .padding(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text(stringResource(R.string.d1_create_title), fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
+            Text(stringResource(R.string.r2_create_title), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text(stringResource(R.string.d1_name)) },
+                label = { Text(stringResource(R.string.r2_name)) },
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
                 modifier = Modifier.fillMaxWidth(),
             )
-
-            ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
-                OutlinedTextField(
-                    value = stringResource(location.labelRes),
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text(stringResource(R.string.d1_location)) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
-                )
-                ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    D1Loc.entries.forEach { option ->
-                        DropdownMenuItem(
-                            text = { Text(stringResource(option.labelRes)) },
-                            onClick = { location = option; expanded = false },
-                        )
-                    }
-                }
-            }
             Text(
-                stringResource(R.string.d1_location_hint),
+                stringResource(R.string.r2_name_hint),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-
             Button(
-                onClick = { onCreate(name.trim(), location.hint) },
+                onClick = { onCreate(name.trim()) },
                 enabled = canCreate,
                 colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
                 modifier = Modifier.fillMaxWidth(),
@@ -120,34 +85,34 @@ fun D1CreateSheet(
                     CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
                     Spacer(Modifier.width(8.dp))
                 }
-                Text(stringResource(R.string.d1_create))
+                Text(stringResource(R.string.r2_create))
             }
         }
     }
 }
 
-/** 删除数据库二次确认：必须原样输入库名才启用删除（对齐 iOS / Dashboard）。 */
+/** 删除 R2 桶二次确认：必须原样输入桶名才启用删除。 */
 @Composable
-fun D1DeleteDialog(
-    database: D1Database,
+fun R2DeleteDialog(
+    bucket: R2Bucket,
     isDeleting: Boolean,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     var typed by remember { mutableStateOf("") }
-    val matches = typed.trim() == database.name
+    val matches = typed.trim() == bucket.name
 
     AlertDialog(
         onDismissRequest = { if (!isDeleting) onDismiss() },
-        title = { Text(stringResource(R.string.d1_delete_title)) },
+        title = { Text(stringResource(R.string.r2_delete_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.d1_delete_warn, database.name), fontSize = 14.sp)
+                Text(stringResource(R.string.r2_delete_warn, bucket.name), fontSize = 14.sp)
                 OutlinedTextField(
                     value = typed,
                     onValueChange = { typed = it },
-                    label = { Text(stringResource(R.string.d1_delete_confirm_label)) },
-                    placeholder = { Text(database.name) },
+                    label = { Text(stringResource(R.string.r2_delete_confirm_label)) },
+                    placeholder = { Text(bucket.name) },
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
                     modifier = Modifier.fillMaxWidth(),
@@ -156,7 +121,7 @@ fun D1DeleteDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm, enabled = matches && !isDeleting) {
-                Text(stringResource(R.string.d1_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.r2_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
             }
         },
         dismissButton = {
@@ -165,28 +130,77 @@ fun D1DeleteDialog(
     )
 }
 
-/** 删除表二次确认：必须原样输入表名才启用删除（对齐 D1DeleteDialog）。 */
+// MARK: - KV 命名空间
+
+/** 创建 KV 命名空间底部表单：仅标题。 */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun D1DropTableDialog(
-    tableName: String,
+fun KVCreateSheet(
+    isCreating: Boolean,
+    sheetState: SheetState,
+    onCreate: (title: String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var title by remember { mutableStateOf("") }
+    val canCreate = title.trim().isNotEmpty() && !isCreating
+
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .imePadding()
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.kv_create_title), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            OutlinedTextField(
+                value = title,
+                onValueChange = { title = it },
+                label = { Text(stringResource(R.string.kv_title_label)) },
+                singleLine = true,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Button(
+                onClick = { onCreate(title.trim()) },
+                enabled = canCreate,
+                colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                if (isCreating) {
+                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(R.string.kv_create))
+            }
+        }
+    }
+}
+
+/** 删除 KV 命名空间二次确认：必须原样输入标题才启用删除。 */
+@Composable
+fun KVDeleteDialog(
+    namespace: KVNamespace,
     isDeleting: Boolean,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     var typed by remember { mutableStateOf("") }
-    val matches = typed.trim() == tableName
+    val matches = typed.trim() == namespace.title
 
     AlertDialog(
         onDismissRequest = { if (!isDeleting) onDismiss() },
-        title = { Text(stringResource(R.string.d1_drop_table_title)) },
+        title = { Text(stringResource(R.string.kv_delete_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.d1_drop_table_warn, tableName), fontSize = 14.sp)
+                Text(stringResource(R.string.kv_delete_warn, namespace.title), fontSize = 14.sp)
                 OutlinedTextField(
                     value = typed,
                     onValueChange = { typed = it },
-                    label = { Text(stringResource(R.string.d1_drop_table_confirm_label)) },
-                    placeholder = { Text(tableName) },
+                    label = { Text(stringResource(R.string.kv_delete_confirm_label)) },
+                    placeholder = { Text(namespace.title) },
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
                     modifier = Modifier.fillMaxWidth(),
@@ -195,7 +209,7 @@ fun D1DropTableDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm, enabled = matches && !isDeleting) {
-                Text(stringResource(R.string.d1_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.kv_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
             }
         },
         dismissButton = {

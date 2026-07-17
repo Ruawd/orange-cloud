@@ -7,10 +7,12 @@ import jiamin.chen.orangecloud.data.model.D1CreateRequest
 import jiamin.chen.orangecloud.data.model.D1Database
 import jiamin.chen.orangecloud.data.model.D1QueryRequest
 import jiamin.chen.orangecloud.data.model.D1QueryResult
+import jiamin.chen.orangecloud.data.model.KVCreateRequest
 import jiamin.chen.orangecloud.data.model.KVKey
 import jiamin.chen.orangecloud.data.model.KVNamespace
 import jiamin.chen.orangecloud.data.model.R2Bucket
 import jiamin.chen.orangecloud.data.model.R2BucketList
+import jiamin.chen.orangecloud.data.model.R2CreateRequest
 import jiamin.chen.orangecloud.data.model.R2BucketUsage
 import jiamin.chen.orangecloud.data.model.R2CorsPolicy
 import jiamin.chen.orangecloud.data.model.R2CustomDomain
@@ -44,6 +46,14 @@ class StorageRepository @Inject constructor(
 
     suspend fun listBuckets(accountId: String): List<R2Bucket> =
         api.get<R2BucketList>("accounts/$accountId/r2/buckets", listOf("per_page" to "100")).buckets
+
+    /** 创建 R2 桶（workers-r2-storage.write）。名称须小写字母/数字/连字符，3–63 位。 */
+    suspend fun createBucket(accountId: String, name: String): R2Bucket =
+        api.post("accounts/$accountId/r2/buckets", R2CreateRequest(name))
+
+    /** 删除 R2 桶（workers-r2-storage.write）。Cloudflare 要求桶必须为空，否则报错。不可恢复。 */
+    suspend fun deleteBucket(accountId: String, name: String) =
+        api.delete("accounts/$accountId/r2/buckets/$name")
 
     /**
      * 对象列表一页。传 delimiter=/ 让服务端把子前缀折叠成「文件夹」，prefix 为当前所在文件夹；
@@ -245,6 +255,14 @@ class StorageRepository @Inject constructor(
         }
         return all
     }
+
+    /** 创建 KV 命名空间（workers-kv-storage.write）。POST 返回新建的命名空间。 */
+    suspend fun createNamespace(accountId: String, title: String): KVNamespace =
+        api.post("accounts/$accountId/storage/kv/namespaces", KVCreateRequest(title))
+
+    /** 删除 KV 命名空间（workers-kv-storage.write）。连同全部键值，不可恢复。 */
+    suspend fun deleteNamespace(accountId: String, namespaceId: String) =
+        api.delete("accounts/$accountId/storage/kv/namespaces/$namespaceId")
 
     /** 键列表（游标分页，一次一页）。cursor 为空串表示已到末尾。 */
     suspend fun listKeys(accountId: String, namespaceId: String, cursor: String?): Pair<List<KVKey>, String?> {

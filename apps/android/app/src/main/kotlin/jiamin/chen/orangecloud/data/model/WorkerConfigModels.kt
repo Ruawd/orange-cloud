@@ -4,14 +4,105 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Workers 脚本管理（变量 / 密钥 / 触发器）相关模型（对应 iOS WorkerConfigModels.swift）。
- * 源码读取端点在 OAuth 登录下被 Cloudflare 拒绝（cf=10405），故客户端不做脚本编辑，仅做配置管理。
+ * Workers 脚本管理（源码 / 变量 / 密钥 / 触发器）相关模型（对应 iOS WorkerConfigModels.swift）。
  *
+ * GET  /accounts/{a}/workers/scripts/{n}/content/v2  源码（v1 /content 被 OAuth 10405 挡，必须 v2；真机实测 issue #55）
+ * PUT  /accounts/{a}/workers/scripts/{n}             上传（multipart：metadata + 模块 part），保留绑定用 inherit
  * GET  /accounts/{a}/workers/scripts/{n}/settings    绑定 + 兼容性日期/标志
  * PATCH .../settings (multipart settings part)        改绑定（变量），其余绑定回传 inherit
  * GET/PUT/DELETE .../secrets                           密钥（仅名+类型，无值）
  * GET/PUT .../schedules                                Cron 触发器（整组替换）
  */
+
+// MARK: - 部署历史
+
+/** 一次部署（GET .../deployments 的 result.deployments 元素）。列表首项为当前活跃部署，不可删。 */
+@Serializable
+data class WorkerDeployment(
+    val id: String,
+    @SerialName("created_on") val createdOn: String? = null,
+    val source: String? = null,
+    @SerialName("author_email") val authorEmail: String? = null,
+    val annotations: Map<String, String>? = null,
+) {
+    /** annotations["workers/message"]（部署备注）。 */
+    val message: String? get() = annotations?.get("workers/message")
+}
+
+@Serializable
+data class WorkerDeploymentsResult(val deployments: List<WorkerDeployment> = emptyList())
+
+// MARK: - 脚本源码（原地编辑）
+
+/** 单个脚本模块（multipart 的一个 part；service worker 视为单条）。 */
+data class WorkerModule(val name: String, val contentType: String, val body: String)
+
+/** 解析后的脚本源码。单模块 / service worker 可原地编辑；多模块（打包产物）只读。 */
+data class WorkerContent(val modules: List<WorkerModule>, val isModule: Boolean) {
+    /** 单模块 / service worker 才可安全往返编辑；多模块整体替换会丢失其它模块。 */
+    val isEditable: Boolean get() = modules.size <= 1
+    val mainModule: WorkerModule? get() = modules.firstOrNull()
+
+    companion object {
+        /**
+         * 从 /content/v2 原始响应解析。响应体以 `--boundary` 开头且含 Content-Disposition = multipart（module worker）；
+         * 否则为经典 service worker 裸 JS。边界从首行推导，无需读响应头。
+         */
+        fun parse(bytes: ByteArray): WorkerContent {
+            val raw = bytes.toString(Charsets.UTF_8)
+            val lead = raw.trimStart('\r', '\n', ' ')
+            if (!lead.startsWith("--") || !raw.contains("Content-Disposition")) {
+                return WorkerContent(listOf(WorkerModule("worker.js", "application/javascript", raw)), isModule = false)
+            }
+            val boundary = lead.substringBefore('\n').trim().trimEnd('\r').removePrefix("--")
+            val modules = parseParts(raw, boundary)
+            return if (modules.isEmpty())
+                WorkerContent(listOf(WorkerModule("worker.js", "application/javascript", raw)), isModule = false)
+            else WorkerContent(modules, isModule = true)
+        }
+
+        private fun parseParts(raw: String, boundary: String): List<WorkerModule> {
+            val out = mutableListOf<WorkerModule>()
+            for (chunk in raw.split("--$boundary")) {
+                val part = chunk.trim('\r', '\n')
+                if (part.isEmpty() || part == "--") continue
+                var sep = part.indexOf("\r\n\r\n"); var sepLen = 4
+                if (sep < 0) { sep = part.indexOf("\n\n"); sepLen = 2 }
+                if (sep < 0) continue
+                val headers = part.substring(0, sep)
+                val body = part.substring(sep + sepLen)
+                val name = headerValue(headers, "name") ?: headerValue(headers, "filename") ?: "module"
+                val type = contentTypeHeader(headers) ?: "application/javascript+module"
+                out.add(WorkerModule(name, type, body))
+            }
+            return out
+        }
+
+        private fun headerValue(headers: String, key: String): String? {
+            val marker = "$key=\""
+            val i = headers.indexOf(marker)
+            if (i < 0) return null
+            val rest = headers.substring(i + marker.length)
+            val end = rest.indexOf('"')
+            return if (end < 0) null else rest.substring(0, end)
+        }
+
+        private fun contentTypeHeader(headers: String): String? =
+            headers.lineSequence()
+                .firstOrNull { it.lowercase().startsWith("content-type:") }
+                ?.substringAfter(':')?.trim()
+    }
+}
+
+/** PUT 脚本上传的 metadata part（新建 / 原地编辑整体替换共用）。 */
+@Serializable
+data class WorkerDeployMetadata(
+    @SerialName("main_module") val mainModule: String? = null,
+    @SerialName("body_part") val bodyPart: String? = null,
+    @SerialName("compatibility_date") val compatibilityDate: String? = null,
+    @SerialName("compatibility_flags") val compatibilityFlags: List<String>? = null,
+    val bindings: List<WorkerBindingInput> = emptyList(),
+)
 
 // MARK: - 绑定与设置
 

@@ -54,6 +54,7 @@ import jiamin.chen.orangecloud.core.design.onSky
 import jiamin.chen.orangecloud.core.design.rememberSkyPhase
 import jiamin.chen.orangecloud.core.design.theme.OcOrange
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KVNamespaceListScreen(
     onBack: () -> Unit,
@@ -61,25 +62,79 @@ fun KVNamespaceListScreen(
     viewModel: KVNamespaceListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val opState by viewModel.opState.collectAsStateWithLifecycle()
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showCreate by remember { mutableStateOf(false) }
+    var toDelete by remember { mutableStateOf<jiamin.chen.orangecloud.data.model.KVNamespace?>(null) }
+    val createSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val createdMsg = stringResource(R.string.kv_created)
+    val deletedMsg = stringResource(R.string.kv_deleted)
+    val errMsg = stringResource(R.string.error_generic)
 
-    SkyBackground(phase = phase) {
-        Column(Modifier.fillMaxSize().systemBarsPadding()) {
-            SkyHeader(
-                title = stringResource(R.string.storage_kv),
-                onSky = onSky,
-                isLoading = state.isLoading,
-                onRefresh = { viewModel.load() },
-                onBack = onBack,
-                titleSize = 22,
-                backDescription = stringResource(R.string.common_back),
-                refreshDescription = stringResource(R.string.common_refresh),
-            )
-            StorageListBody(state, onSky, Icons.Outlined.Key, stringResource(R.string.kv_empty), { viewModel.load() }) { ns ->
-                StorageRow(Icons.Outlined.Key, ns.title, ns.id, onClick = { onOpenNamespace(ns.id, ns.title) })
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                StorageOpEvent.Created -> { showCreate = false; snackbarHostState.showSnackbar(createdMsg) }
+                StorageOpEvent.Deleted -> { toDelete = null; snackbarHostState.showSnackbar(deletedMsg) }
+                is StorageOpEvent.Error -> snackbarHostState.showSnackbar(event.message ?: errMsg)
             }
         }
+    }
+
+    SkyBackground(phase = phase) {
+        Box(Modifier.fillMaxSize().systemBarsPadding()) {
+            Column(Modifier.fillMaxSize()) {
+                SkyHeader(
+                    title = stringResource(R.string.storage_kv),
+                    onSky = onSky,
+                    isLoading = state.isLoading,
+                    onRefresh = { viewModel.load() },
+                    onBack = onBack,
+                    titleSize = 22,
+                    backDescription = stringResource(R.string.common_back),
+                    refreshDescription = stringResource(R.string.common_refresh),
+                )
+                StorageListBody(state, onSky, Icons.Outlined.Key, stringResource(R.string.kv_empty), { viewModel.load() }) { ns ->
+                    StorageRow(
+                        Icons.Outlined.Key,
+                        ns.title,
+                        ns.id,
+                        onClick = { onOpenNamespace(ns.id, ns.title) },
+                        onLongClick = if (viewModel.canWrite) ({ toDelete = ns }) else null,
+                    )
+                }
+            }
+            if (viewModel.canWrite) {
+                FloatingActionButton(
+                    onClick = { showCreate = true },
+                    containerColor = OcOrange,
+                    contentColor = Color.White,
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
+                ) {
+                    Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.kv_create_title))
+                }
+            }
+            SnackbarHost(snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
+        }
+    }
+
+    if (showCreate) {
+        KVCreateSheet(
+            isCreating = opState.isCreating,
+            sheetState = createSheetState,
+            onCreate = { title -> viewModel.create(title) },
+            onDismiss = { showCreate = false },
+        )
+    }
+    toDelete?.let { ns ->
+        KVDeleteDialog(
+            namespace = ns,
+            isDeleting = opState.isDeleting,
+            onConfirm = { viewModel.delete(ns) },
+            onDismiss = { toDelete = null },
+        )
     }
 }
 

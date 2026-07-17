@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">Account usage overview</string>
+    <string name="whatsnew_1_6_4_0_detail">The overview now has a usage module — see Workers, R2, D1 and KV usage against their quotas at a glance, with plan switching and per-metric details.</string>
+    <string name="whatsnew_1_6_4_1_title">Worker deployment history and delete</string>
+    <string name="whatsnew_1_6_4_1_detail">View a Worker’s past deployments and delete old ones, plus edit and delete Workers.</string>
+    <string name="whatsnew_1_6_4_2_title">More storage management</string>
+    <string name="whatsnew_1_6_4_2_detail">Create and delete KV namespaces and R2 buckets, drop D1 tables, and delete Pages deployments.</string>
     <string name="whatsnew_1_6_0_0_title">Pages custom domains</string>
     <string name="whatsnew_1_6_0_0_detail">Manage custom domains right inside a Pages project: add, remove, re-validate, and check DNS status — with one-tap CNAME setup when the domain’s zone is on your account.</string>
     <string name="whatsnew_1_6_0_1_title">List sorting</string>

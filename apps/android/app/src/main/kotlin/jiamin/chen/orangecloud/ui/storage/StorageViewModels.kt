@@ -33,14 +33,73 @@ import javax.inject.Inject
 
 // MARK: - 简单列表（存储桶 / 数据库 / 命名空间）
 
+/** 创建/删除资源的进行态（存储各列表共用）。 */
+data class StorageOpState(
+    val isCreating: Boolean = false,
+    val isDeleting: Boolean = false,
+)
+
+/** 创建/删除资源的一次性事件（存储各列表共用）。 */
+sealed interface StorageOpEvent {
+    data object Created : StorageOpEvent
+    data object Deleted : StorageOpEvent
+    data class Error(val message: String?) : StorageOpEvent
+}
+
 @HiltViewModel
 class R2BucketListViewModel @Inject constructor(
-    accountStore: AccountStore,
+    private val accountStore: AccountStore,
     private val storageRepository: StorageRepository,
     authRepository: AuthRepository,
 ) : StorageListViewModel<R2Bucket>(accountStore, authRepository.hasScope(Scopes.R2_READ)) {
+
+    /** 创建 / 删除桶都需要 workers-r2-storage.write。 */
+    val canWrite: Boolean = authRepository.hasScope(Scopes.R2_WRITE)
+
+    private val _opState = MutableStateFlow(StorageOpState())
+    val opState: StateFlow<StorageOpState> = _opState.asStateFlow()
+
+    private val eventChannel = Channel<StorageOpEvent>(Channel.BUFFERED)
+    val events: Flow<StorageOpEvent> = eventChannel.receiveAsFlow()
+
     override suspend fun fetch(accountId: String) = storageRepository.listBuckets(accountId)
     init { load() }
+
+    /** 创建桶：成功后插到列表顶端。 */
+    fun create(name: String) {
+        if (!canWrite || _opState.value.isCreating) return
+        viewModelScope.launch {
+            _opState.update { it.copy(isCreating = true) }
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                val created = storageRepository.createBucket(accountId, name)
+                state.update { it.copy(items = listOf(created) + it.items) }
+                eventChannel.send(StorageOpEvent.Created)
+            } catch (e: Exception) {
+                eventChannel.send(StorageOpEvent.Error(e.message))
+            } finally {
+                _opState.update { it.copy(isCreating = false) }
+            }
+        }
+    }
+
+    /** 删除桶：成功后从列表移除。须桶为空，且经二次确认。不可恢复。 */
+    fun delete(bucket: R2Bucket) {
+        if (!canWrite || _opState.value.isDeleting) return
+        viewModelScope.launch {
+            _opState.update { it.copy(isDeleting = true) }
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.deleteBucket(accountId, bucket.name)
+                state.update { it.copy(items = it.items.filterNot { b -> b.name == bucket.name }) }
+                eventChannel.send(StorageOpEvent.Deleted)
+            } catch (e: Exception) {
+                eventChannel.send(StorageOpEvent.Error(e.message))
+            } finally {
+                _opState.update { it.copy(isDeleting = false) }
+            }
+        }
+    }
 }
 
 sealed interface D1DbEvent {
@@ -119,12 +178,58 @@ class D1DatabaseListViewModel @Inject constructor(
 
 @HiltViewModel
 class KVNamespaceListViewModel @Inject constructor(
-    accountStore: AccountStore,
+    private val accountStore: AccountStore,
     private val storageRepository: StorageRepository,
     authRepository: AuthRepository,
 ) : StorageListViewModel<KVNamespace>(accountStore, authRepository.hasScope(Scopes.KV_READ)) {
+
+    /** 创建 / 删除命名空间都需要 workers-kv-storage.write。 */
+    val canWrite: Boolean = authRepository.hasScope(Scopes.KV_WRITE)
+
+    private val _opState = MutableStateFlow(StorageOpState())
+    val opState: StateFlow<StorageOpState> = _opState.asStateFlow()
+
+    private val eventChannel = Channel<StorageOpEvent>(Channel.BUFFERED)
+    val events: Flow<StorageOpEvent> = eventChannel.receiveAsFlow()
+
     override suspend fun fetch(accountId: String) = storageRepository.listNamespaces(accountId)
     init { load() }
+
+    /** 创建命名空间：成功后插到列表顶端。 */
+    fun create(title: String) {
+        if (!canWrite || _opState.value.isCreating) return
+        viewModelScope.launch {
+            _opState.update { it.copy(isCreating = true) }
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                val created = storageRepository.createNamespace(accountId, title)
+                state.update { it.copy(items = listOf(created) + it.items) }
+                eventChannel.send(StorageOpEvent.Created)
+            } catch (e: Exception) {
+                eventChannel.send(StorageOpEvent.Error(e.message))
+            } finally {
+                _opState.update { it.copy(isCreating = false) }
+            }
+        }
+    }
+
+    /** 删除命名空间：成功后从列表移除。连同全部键值，经二次确认。不可恢复。 */
+    fun delete(namespace: KVNamespace) {
+        if (!canWrite || _opState.value.isDeleting) return
+        viewModelScope.launch {
+            _opState.update { it.copy(isDeleting = true) }
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.deleteNamespace(accountId, namespace.id)
+                state.update { it.copy(items = it.items.filterNot { ns -> ns.id == namespace.id }) }
+                eventChannel.send(StorageOpEvent.Deleted)
+            } catch (e: Exception) {
+                eventChannel.send(StorageOpEvent.Error(e.message))
+            } finally {
+                _opState.update { it.copy(isDeleting = false) }
+            }
+        }
+    }
 }
 
 // MARK: - R2 对象（游标分页）
@@ -319,6 +424,11 @@ class R2ObjectListViewModel @Inject constructor(
 
 // MARK: - D1 查询控制台
 
+sealed interface D1QueryEvent {
+    data object TableDropped : D1QueryEvent
+    data class Error(val message: String?) : D1QueryEvent
+}
+
 data class D1QueryUiState(
     val results: List<D1QueryResult> = emptyList(),
     val columns: List<String> = emptyList(),
@@ -327,6 +437,8 @@ data class D1QueryUiState(
     val missingScope: Boolean = false,
     val tables: List<String> = emptyList(),
     val tablesLoaded: Boolean = false,
+    val canWrite: Boolean = false,
+    val droppingTable: String? = null,
 )
 
 @HiltViewModel
@@ -340,9 +452,14 @@ class D1QueryViewModel @Inject constructor(
     val databaseId: String = checkNotNull(savedStateHandle["dbId"])
     val databaseName: String = savedStateHandle.get<String>("dbName").orEmpty()
     private val hasScope = authRepository.hasScope(Scopes.D1_READ)
+    /** 删表需要 d1.write（读权限已是进入 D1 段的前置条件）。 */
+    private val canWrite = authRepository.hasScope(Scopes.D1_WRITE)
 
-    private val _uiState = MutableStateFlow(D1QueryUiState(missingScope = !hasScope))
+    private val _uiState = MutableStateFlow(D1QueryUiState(missingScope = !hasScope, canWrite = canWrite))
     val uiState: StateFlow<D1QueryUiState> = _uiState.asStateFlow()
+
+    private val eventChannel = Channel<D1QueryEvent>(Channel.BUFFERED)
+    val events: Flow<D1QueryEvent> = eventChannel.receiveAsFlow()
 
     init {
         if (hasScope) loadTables()
@@ -379,6 +496,29 @@ class D1QueryViewModel @Inject constructor(
                 _uiState.update { it.copy(error = e.message ?: "error", results = emptyList(), columns = emptyList()) }
             } finally {
                 _uiState.update { it.copy(isRunning = false) }
+            }
+        }
+    }
+
+    /** 标识符加引号并转义内部双引号，防 SQL 注入（对齐 D1TableViewModel.quoted）。 */
+    private fun quoted(identifier: String): String =
+        "\"" + identifier.replace("\"", "\"\"") + "\""
+
+    /** DROP TABLE：删除整张表及其全部数据（d1.write 门控，标识符加引号防注入）。 */
+    fun dropTable(name: String) {
+        if (!canWrite || _uiState.value.droppingTable != null) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(droppingTable = name) }
+            try {
+                accountStore.ensureLoaded()
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                storageRepository.query(accountId, databaseId, "DROP TABLE IF EXISTS ${quoted(name)}")
+                _uiState.update { it.copy(tables = it.tables - name) }
+                eventChannel.send(D1QueryEvent.TableDropped)
+            } catch (e: Exception) {
+                eventChannel.send(D1QueryEvent.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(droppingTable = null) }
             }
         }
     }

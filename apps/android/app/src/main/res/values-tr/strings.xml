@@ -550,6 +550,10 @@
     <string name="d1_delete_warn">Bu, %1$s veritabanını ve tüm tablo ve verilerini kalıcı olarak siler. Geri alınamaz veya kurtarılamaz.</string>
     <string name="d1_delete_confirm_label">Onaylamak için veritabanı adını yazın</string>
     <string name="d1_delete_button">Kalıcı olarak sil</string>
+    <string name="d1_drop_table_title">Tabloyu sil</string>
+    <string name="d1_drop_table_warn">Bu, %1$s tablosunu ve tüm verilerini kalıcı olarak siler. Geri alınamaz veya kurtarılamaz.</string>
+    <string name="d1_drop_table_confirm_label">Onaylamak için tablo adını yazın</string>
+    <string name="d1_table_dropped">Tablo silindi</string>
     <string name="worker_manage_secrets">Değişkenler ve sırlar</string>
     <string name="worker_manage_triggers">Tetikleyiciler</string>
     <string name="worker_manage_domains">Alan adları</string>
@@ -984,7 +988,7 @@
     <string name="worker_create_name_hint">Küçük harf/rakamla başlar; tire ve alt çizgi olabilir</string>
     <string name="worker_create_compat">Uyumluluk tarihi</string>
     <string name="worker_create_code">Kod (ES module)</string>
-    <string name="worker_create_note">Not: Bu uygulama mevcut Worker kaynağını okuyamaz (Cloudflare bu uç noktayı OAuth için engeller); oluşturma veya değiştirme tam kod gerektirir. Bağlamaları (değişkenler/sırlar/KV) Worker ayrıntılarında yönetin.</string>
+    <string name="worker_create_note">İpucu: Oluşturmak veya tamamen değiştirmek için kodun tamamı gerekir. Bağlamaları (değişkenler, gizli anahtarlar, KV vb.) Worker ayrıntılarında ayrıca yönetin.</string>
     <string name="worker_create_deploy">Dağıt</string>
     <string name="worker_create_ok">Dağıtıldı</string>
     <string name="pages_deploy_code">Kodu dağıt</string>
@@ -1137,4 +1141,70 @@
     <string name="sort_default">Varsayılan (ad)</string>
     <string name="sort_created">Oluşturma tarihi</string>
     <string name="sort_modified">Son güncelleme</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Kodu düzenle</string>
+    <string name="worker_edit_ok">Dağıtıldı</string>
+    <string name="worker_edit_loading">Kaynak kodu yükleniyor…</string>
+    <string name="worker_edit_multimodule">Bu, çok modüllü (paketlenmiş) bir Worker\'dır; uygulama içinde yerinde düzenleme desteklenmez (diğer modüller kaybolur).</string>
+    <string name="worker_edit_note">Geçerli canlı kaynak yüklendi. Doğrudan düzenleyip dağıtabilirsiniz. Mevcut değişkenler, gizli anahtarlar ve bağlamalar otomatik olarak korunur.</string>
+    <string name="worker_manage_edit">Kodu düzenle</string>
+    <string name="worker_delete_button">Worker\'ı sil</string>
+    <string name="worker_delete_title">Worker\'ı sil</string>
+    <string name="worker_delete_warn">Bu işlem, %1$s adlı Worker\'ı, dağıtımlarını ve rota bağlamalarını kalıcı olarak siler. Geri alınamaz ve kurtarılamaz.</string>
+    <string name="worker_delete_confirm_label">Onaylamak için Worker adını girin</string>
+    <string name="kv_create_title">Ad alanı oluştur</string>
+    <string name="kv_create">Oluştur</string>
+    <string name="kv_title_label">Ad</string>
+    <string name="kv_created">Oluşturuldu</string>
+    <string name="kv_deleted">Silindi</string>
+    <string name="kv_delete_title">Ad alanını sil</string>
+    <string name="kv_delete_warn">Bu işlem, %1$s ad alanını ve tüm anahtar ve değerlerini kalıcı olarak siler. Geri alınamaz ve kurtarılamaz.</string>
+    <string name="kv_delete_confirm_label">Onaylamak için ad alanı adını girin</string>
+    <string name="kv_delete_button">Kalıcı olarak sil</string>
+    <string name="r2_create_title">Bucket oluştur</string>
+    <string name="r2_create">Oluştur</string>
+    <string name="r2_name">Ad</string>
+    <string name="r2_name_hint">Küçük harfler, rakamlar ve tireler, 3–63 karakter.</string>
+    <string name="r2_created">Oluşturuldu</string>
+    <string name="r2_delete_title">Bucket\'ı sil</string>
+    <string name="r2_delete_warn">Bu işlem, %1$s bucket\'ını kalıcı olarak siler. Geri alınamaz. Silmek için bucket boş olmalıdır.</string>
+    <string name="r2_delete_confirm_label">Onaylamak için bucket adını girin</string>
+    <string name="r2_delete_button">Kalıcı olarak sil</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Dağıtım silindi</string>
+    <string name="pages_deployment_delete_title">Dağıtımı sil</string>
+    <string name="pages_deployment_delete_msg">%1$s dağıtımını kalıcı olarak siler. Geri alınamaz. Mevcut üretim dağıtımı silinemez.</string>
+    <string name="worker_manage_deployments">Dağıtım geçmişi</string>
+    <string name="worker_deployments_title">Dağıtım geçmişi</string>
+    <string name="worker_deployments_empty">Dağıtım yok</string>
+    <string name="worker_deployments_note">İlk giriş etkin dağıtımdır ve silinemez.</string>
+    <string name="worker_deployment_active">Etkin</string>
+    <string name="worker_deployment_deleted">Dağıtım silindi</string>
+    <string name="worker_deployment_delete_title">Dağıtımı sil</string>
+    <string name="worker_deployment_delete_msg">%1$s dağıtımını kalıcı olarak siler. Geri alınamaz. Etkin dağıtım silinemez.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Kullanım</string>
+    <string name="usage_locked">Hesap kullanımını göstermek için trafik analizi izni gerekir</string>
+    <string name="usage_unavailable_title">Bu hesap için hesap düzeyinde veri kullanılamıyor</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV kullanımı genellikle ücretli bir Cloudflare hesabı gerektirir; alan adı trafik analizi bundan etkilenmez.</string>
+    <string name="usage_failed">Kullanım yüklenemedi — yeniden denemek için dokunun</string>
+    <string name="usage_period_month">Bu ay</string>
+    <string name="usage_period_cycle">Dönem</string>
+    <string name="usage_today">Bugün</string>
+    <string name="usage_plan_workers">Workers planı</string>
+    <string name="usage_plan_r2">R2 planı</string>
+    <string name="usage_ctx_requests">İstekler · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">A Sınıfı · %1$s</string>
+    <string name="usage_ctx_r2b">B Sınıfı · %1$s</string>
+    <string name="usage_ctx_storage">Depolama</string>
+    <string name="usage_ctx_rows_read">Okunan satır · %1$s</string>
+    <string name="usage_ctx_rows_write">Yazılan satır · %1$s</string>
+    <string name="usage_ctx_reads">Okumalar · %1$s</string>
+    <string name="usage_ctx_writes">Yazmalar · %1$s</string>
+    <string name="usage_billing_day">Faturalama günü</string>
+    <string name="usage_billing_natural">Takvim ayı</string>
+    <string name="usage_billing_day_n">%1$d. gün</string>
 </resources>

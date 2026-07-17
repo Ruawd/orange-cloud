@@ -21,6 +21,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Schedule
@@ -37,7 +40,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,11 +82,26 @@ fun WorkerDetailScreen(
     onOpenSecrets: () -> Unit = {},
     onOpenTriggers: () -> Unit = {},
     onOpenDomains: () -> Unit = {},
+    onOpenDeployments: () -> Unit = {},
+    onEditCode: () -> Unit = {},
     viewModel: WorkerDetailViewModel = hiltViewModel(),
 ) {
     val worker by viewModel.worker.collectAsStateWithLifecycle()
+    val isDeleting by viewModel.isDeleting.collectAsStateWithLifecycle()
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
+    val snackbar = remember { androidx.compose.material3.SnackbarHostState() }
+    var showDelete by remember { mutableStateOf(false) }
+    val deleteErr = stringResource(R.string.error_generic)
+
+    LaunchedEffect(Unit) {
+        viewModel.deleteEvents.collect { event ->
+            when (event) {
+                WorkerDeleteEvent.Deleted -> { showDelete = false; onBack() }
+                is WorkerDeleteEvent.Error -> { showDelete = false; snackbar.showSnackbar(event.message ?: deleteErr) }
+            }
+        }
+    }
 
     SkyBackground(phase = phase) {
         Column(Modifier.fillMaxSize().systemBarsPadding()) {
@@ -118,9 +140,13 @@ fun WorkerDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(Modifier.padding(vertical = 4.dp)) {
+                        if (viewModel.canWrite) {
+                            ManageRow(Icons.Outlined.Edit, stringResource(R.string.worker_manage_edit), onEditCode)
+                        }
                         ManageRow(Icons.Outlined.Key, stringResource(R.string.worker_manage_secrets), onOpenSecrets)
                         ManageRow(Icons.Outlined.Schedule, stringResource(R.string.worker_manage_triggers), onOpenTriggers)
                         ManageRow(Icons.Outlined.Public, stringResource(R.string.worker_manage_domains), onOpenDomains)
+                        ManageRow(Icons.Outlined.History, stringResource(R.string.worker_manage_deployments), onOpenDeployments)
                     }
                 }
 
@@ -204,9 +230,69 @@ fun WorkerDetailScreen(
                         }
                     }
                 }
+
+                if (viewModel.canWrite) {
+                    androidx.compose.material3.OutlinedButton(
+                        onClick = { showDelete = true },
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFE5484D)),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.Outlined.Delete, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.worker_delete_button))
+                    }
+                }
             }
+            androidx.compose.material3.SnackbarHost(snackbar)
         }
     }
+
+    if (showDelete) {
+        WorkerDeleteDialog(
+            scriptName = viewModel.scriptName,
+            isDeleting = isDeleting,
+            onConfirm = { viewModel.delete() },
+            onDismiss = { if (!isDeleting) showDelete = false },
+        )
+    }
+}
+
+/** 删除 Worker 二次确认：必须原样输入脚本名才启用删除（对齐 iOS / Dashboard）。 */
+@Composable
+private fun WorkerDeleteDialog(
+    scriptName: String,
+    isDeleting: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var typed by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+    val matches = typed.trim() == scriptName
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = { if (!isDeleting) onDismiss() },
+        title = { Text(stringResource(R.string.worker_delete_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.worker_delete_warn, scriptName), fontSize = 14.sp)
+                androidx.compose.material3.OutlinedTextField(
+                    value = typed,
+                    onValueChange = { typed = it },
+                    label = { Text(stringResource(R.string.worker_delete_confirm_label)) },
+                    placeholder = { Text(scriptName) },
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(onClick = onConfirm, enabled = matches && !isDeleting) {
+                Text(stringResource(R.string.worker_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss, enabled = !isDeleting) { Text(stringResource(R.string.common_cancel)) }
+        },
+    )
 }
 
 @Composable

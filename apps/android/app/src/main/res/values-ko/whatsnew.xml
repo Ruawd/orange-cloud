@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">계정 사용량 개요</string>
+    <string name="whatsnew_1_6_4_0_detail">개요 화면에 사용량 모듈이 추가되어 Workers, R2, D1, KV 사용량과 한도를 한눈에 확인하고 요금제 전환과 항목별 세부 정보를 볼 수 있습니다.</string>
+    <string name="whatsnew_1_6_4_1_title">Worker 배포 기록 및 삭제</string>
+    <string name="whatsnew_1_6_4_1_detail">Worker의 과거 배포를 확인하고 이전 배포를 삭제할 수 있으며 Worker 편집과 삭제도 지원합니다.</string>
+    <string name="whatsnew_1_6_4_2_title">스토리지 관리 강화</string>
+    <string name="whatsnew_1_6_4_2_detail">KV 네임스페이스와 R2 버킷 생성/삭제, D1 테이블 삭제, Pages 배포 삭제를 지원합니다.</string>
     <string name="whatsnew_1_6_0_0_title">Pages 사용자 지정 도메인</string>
     <string name="whatsnew_1_6_0_0_detail">Pages 프로젝트에서 사용자 지정 도메인을 직접 관리하세요: 추가·삭제·재확인과 DNS 상태 확인을 지원하며, 도메인이 현재 계정에 있으면 프로젝트를 가리키는 CNAME 레코드를 한 번에 추가할 수 있습니다.</string>
     <string name="whatsnew_1_6_0_1_title">목록 정렬</string>

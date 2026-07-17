@@ -431,6 +431,10 @@
     <string name="d1_delete_warn">Isso exclui permanentemente o banco de dados %1$s e todas as suas tabelas e dados. Não é possível desfazer nem recuperar.</string>
     <string name="d1_delete_confirm_label">Digite o nome do banco de dados para confirmar</string>
     <string name="d1_delete_button">Excluir permanentemente</string>
+    <string name="d1_drop_table_title">Excluir tabela</string>
+    <string name="d1_drop_table_warn">Isso exclui permanentemente a tabela %1$s e todos os seus dados. Não é possível desfazer nem recuperar.</string>
+    <string name="d1_drop_table_confirm_label">Digite o nome da tabela para confirmar</string>
+    <string name="d1_table_dropped">Tabela excluída</string>
 
     <!-- Gerenciamento de Workers -->
     <string name="worker_manage_secrets">Variáveis e segredos</string>
@@ -1023,7 +1027,7 @@
     <string name="worker_create_name_hint">Começa com minúscula/dígito; aceita hífen e sublinhado</string>
     <string name="worker_create_compat">Data de compatibilidade</string>
     <string name="worker_create_code">Código (módulo ES)</string>
-    <string name="worker_create_note">Nota: o app não consegue ler o código de um Worker existente (a Cloudflare bloqueia esse endpoint para OAuth); criar ou substituir exige o código completo. Gerencie os bindings (variáveis/segredos/KV) nos detalhes do Worker.</string>
+    <string name="worker_create_note">Dica: Criar ou substituir por completo requer o código completo. Gerencie as vinculações (variáveis, segredos, KV etc.) separadamente nos detalhes do Worker.</string>
     <string name="worker_create_deploy">Implantar</string>
     <string name="worker_create_ok">Implantado</string>
     <string name="pages_deploy_code">Implantar código</string>
@@ -1176,4 +1180,70 @@
     <string name="sort_default">Padrão (nome)</string>
     <string name="sort_created">Data de criação</string>
     <string name="sort_modified">Atualização recente</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Editar código</string>
+    <string name="worker_edit_ok">Implantado</string>
+    <string name="worker_edit_loading">Carregando código-fonte…</string>
+    <string name="worker_edit_multimodule">Este Worker é de múltiplos módulos (empacotado); a edição direta no app não é compatível (os outros módulos seriam perdidos).</string>
+    <string name="worker_edit_note">Código-fonte em produção carregado. Edite e implante diretamente. Variáveis, segredos e vinculações existentes são mantidos automaticamente.</string>
+    <string name="worker_manage_edit">Editar código</string>
+    <string name="worker_delete_button">Excluir Worker</string>
+    <string name="worker_delete_title">Excluir Worker</string>
+    <string name="worker_delete_warn">Isso excluirá permanentemente o Worker %1$s e suas implantações e vinculações de rota. Não é possível desfazer nem recuperar.</string>
+    <string name="worker_delete_confirm_label">Digite o nome do Worker para confirmar</string>
+    <string name="kv_create_title">Criar namespace</string>
+    <string name="kv_create">Criar</string>
+    <string name="kv_title_label">Nome</string>
+    <string name="kv_created">Criado</string>
+    <string name="kv_deleted">Excluído</string>
+    <string name="kv_delete_title">Excluir namespace</string>
+    <string name="kv_delete_warn">Isso excluirá permanentemente o namespace %1$s e todas as suas chaves e valores. Não é possível desfazer nem recuperar.</string>
+    <string name="kv_delete_confirm_label">Digite o nome do namespace para confirmar</string>
+    <string name="kv_delete_button">Excluir permanentemente</string>
+    <string name="r2_create_title">Criar bucket</string>
+    <string name="r2_create">Criar</string>
+    <string name="r2_name">Nome</string>
+    <string name="r2_name_hint">Letras minúsculas, números e hifens, 3–63 caracteres.</string>
+    <string name="r2_created">Criado</string>
+    <string name="r2_delete_title">Excluir bucket</string>
+    <string name="r2_delete_warn">Isso excluirá permanentemente o bucket %1$s. Não é possível desfazer. O bucket deve estar vazio para ser excluído.</string>
+    <string name="r2_delete_confirm_label">Digite o nome do bucket para confirmar</string>
+    <string name="r2_delete_button">Excluir permanentemente</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Implantação excluída</string>
+    <string name="pages_deployment_delete_title">Excluir implantação</string>
+    <string name="pages_deployment_delete_msg">Isso excluirá permanentemente a implantação %1$s. Não é possível desfazer. A implantação de produção atual não pode ser excluída.</string>
+    <string name="worker_manage_deployments">Histórico de implantações</string>
+    <string name="worker_deployments_title">Histórico de implantações</string>
+    <string name="worker_deployments_empty">Nenhuma implantação</string>
+    <string name="worker_deployments_note">A primeira entrada é a implantação ativa e não pode ser excluída.</string>
+    <string name="worker_deployment_active">Ativo</string>
+    <string name="worker_deployment_deleted">Implantação excluída</string>
+    <string name="worker_deployment_delete_title">Excluir implantação</string>
+    <string name="worker_deployment_delete_msg">Isso excluirá permanentemente a implantação %1$s. Não é possível desfazer. A implantação ativa não pode ser excluída.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Uso</string>
+    <string name="usage_locked">A permissão de análise de tráfego é necessária para mostrar o uso da conta</string>
+    <string name="usage_unavailable_title">Dados no nível da conta não estão disponíveis para esta conta</string>
+    <string name="usage_unavailable_body">O uso de Workers / R2 / D1 / KV normalmente exige uma conta paga da Cloudflare; a análise de tráfego de domínios não é afetada.</string>
+    <string name="usage_failed">Falha ao carregar o uso — toque para tentar novamente</string>
+    <string name="usage_period_month">Este mês</string>
+    <string name="usage_period_cycle">Ciclo</string>
+    <string name="usage_today">Hoje</string>
+    <string name="usage_plan_workers">Plano do Workers</string>
+    <string name="usage_plan_r2">Plano do R2</string>
+    <string name="usage_ctx_requests">Solicitações · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">Classe A · %1$s</string>
+    <string name="usage_ctx_r2b">Classe B · %1$s</string>
+    <string name="usage_ctx_storage">Armazenamento</string>
+    <string name="usage_ctx_rows_read">Linhas lidas · %1$s</string>
+    <string name="usage_ctx_rows_write">Linhas gravadas · %1$s</string>
+    <string name="usage_ctx_reads">Leituras · %1$s</string>
+    <string name="usage_ctx_writes">Gravações · %1$s</string>
+    <string name="usage_billing_day">Dia de cobrança</string>
+    <string name="usage_billing_natural">Mês civil</string>
+    <string name="usage_billing_day_n">Dia %1$d</string>
 </resources>

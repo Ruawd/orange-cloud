@@ -550,6 +550,10 @@
     <string name="d1_delete_warn">Dies löscht die Datenbank %1$s und alle ihre Tabellen und Daten dauerhaft. Dies kann nicht rückgängig gemacht oder wiederhergestellt werden.</string>
     <string name="d1_delete_confirm_label">Datenbanknamen zur Bestätigung eingeben</string>
     <string name="d1_delete_button">Dauerhaft löschen</string>
+    <string name="d1_drop_table_title">Tabelle löschen</string>
+    <string name="d1_drop_table_warn">Dies löscht die Tabelle %1$s und alle ihre Daten dauerhaft. Dies kann nicht rückgängig gemacht oder wiederhergestellt werden.</string>
+    <string name="d1_drop_table_confirm_label">Tabellennamen zur Bestätigung eingeben</string>
+    <string name="d1_table_dropped">Tabelle gelöscht</string>
     <string name="worker_manage_secrets">Variablen &amp; Secrets</string>
     <string name="worker_manage_triggers">Trigger</string>
     <string name="worker_manage_domains">Domains</string>
@@ -984,7 +988,7 @@
     <string name="worker_create_name_hint">Mit Kleinbuchstabe/Ziffer beginnen; Bindestrich/Unterstrich erlaubt</string>
     <string name="worker_create_compat">Kompatibilitätsdatum</string>
     <string name="worker_create_code">Code (ES-Modul)</string>
-    <string name="worker_create_note">Hinweis: Diese App kann den vorhandenen Worker-Quellcode nicht lesen (Cloudflare sperrt diesen Endpunkt für OAuth); Erstellen/Überschreiben erfordert den vollständigen Code. Bindings (Variablen/Secrets/KV) separat in den Worker-Details verwalten.</string>
+    <string name="worker_create_note">Tipp: Zum Erstellen oder vollständigen Ersetzen ist der komplette Code erforderlich. Bindings (Variablen, Secrets, KV usw.) werden separat in den Worker-Details verwaltet.</string>
     <string name="worker_create_deploy">Bereitstellen</string>
     <string name="worker_create_ok">Bereitgestellt</string>
     <string name="pages_deploy_code">Code bereitstellen</string>
@@ -1137,4 +1141,70 @@
     <string name="sort_default">Standard (Name)</string>
     <string name="sort_created">Erstellungsdatum</string>
     <string name="sort_modified">Zuletzt aktualisiert</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Code bearbeiten</string>
+    <string name="worker_edit_ok">Bereitgestellt</string>
+    <string name="worker_edit_loading">Quellcode wird geladen…</string>
+    <string name="worker_edit_multimodule">Dies ist ein Worker mit mehreren Modulen (gebündelt). Direktes Bearbeiten in der App wird nicht unterstützt (andere Module gingen verloren).</string>
+    <string name="worker_edit_note">Aktueller Live-Quellcode geladen. Direkt bearbeiten und bereitstellen. Vorhandene Variablen, Secrets und Bindings bleiben automatisch erhalten.</string>
+    <string name="worker_manage_edit">Code bearbeiten</string>
+    <string name="worker_delete_button">Worker löschen</string>
+    <string name="worker_delete_title">Worker löschen</string>
+    <string name="worker_delete_warn">Dadurch werden der Worker %1$s sowie seine Bereitstellungen und Routen-Bindings dauerhaft gelöscht. Das kann nicht rückgängig gemacht oder wiederhergestellt werden.</string>
+    <string name="worker_delete_confirm_label">Zur Bestätigung den Worker-Namen eingeben</string>
+    <string name="kv_create_title">Namespace erstellen</string>
+    <string name="kv_create">Erstellen</string>
+    <string name="kv_title_label">Name</string>
+    <string name="kv_created">Erstellt</string>
+    <string name="kv_deleted">Gelöscht</string>
+    <string name="kv_delete_title">Namespace löschen</string>
+    <string name="kv_delete_warn">Dadurch werden der Namespace %1$s und alle seine Schlüssel und Werte dauerhaft gelöscht. Das kann nicht rückgängig gemacht oder wiederhergestellt werden.</string>
+    <string name="kv_delete_confirm_label">Zur Bestätigung den Namespace-Namen eingeben</string>
+    <string name="kv_delete_button">Dauerhaft löschen</string>
+    <string name="r2_create_title">Bucket erstellen</string>
+    <string name="r2_create">Erstellen</string>
+    <string name="r2_name">Name</string>
+    <string name="r2_name_hint">Kleinbuchstaben, Zahlen und Bindestriche, 3–63 Zeichen.</string>
+    <string name="r2_created">Erstellt</string>
+    <string name="r2_delete_title">Bucket löschen</string>
+    <string name="r2_delete_warn">Dadurch wird der Bucket %1$s dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden. Der Bucket muss leer sein, um gelöscht zu werden.</string>
+    <string name="r2_delete_confirm_label">Zur Bestätigung den Bucket-Namen eingeben</string>
+    <string name="r2_delete_button">Dauerhaft löschen</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Bereitstellung gelöscht</string>
+    <string name="pages_deployment_delete_title">Bereitstellung löschen</string>
+    <string name="pages_deployment_delete_msg">Dadurch wird die Bereitstellung %1$s dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden. Die aktuelle Produktionsbereitstellung kann nicht gelöscht werden.</string>
+    <string name="worker_manage_deployments">Bereitstellungsverlauf</string>
+    <string name="worker_deployments_title">Bereitstellungsverlauf</string>
+    <string name="worker_deployments_empty">Keine Bereitstellungen</string>
+    <string name="worker_deployments_note">Der erste Eintrag ist die aktive Bereitstellung und kann nicht gelöscht werden.</string>
+    <string name="worker_deployment_active">Aktiv</string>
+    <string name="worker_deployment_deleted">Bereitstellung gelöscht</string>
+    <string name="worker_deployment_delete_title">Bereitstellung löschen</string>
+    <string name="worker_deployment_delete_msg">Dadurch wird die Bereitstellung %1$s dauerhaft gelöscht. Das kann nicht rückgängig gemacht werden. Die aktive Bereitstellung kann nicht gelöscht werden.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Nutzung</string>
+    <string name="usage_locked">Für die Anzeige der Kontonutzung ist die Berechtigung „Traffic-Analyse“ erforderlich</string>
+    <string name="usage_unavailable_title">Für dieses Konto sind keine Daten auf Kontoebene verfügbar</string>
+    <string name="usage_unavailable_body">Die Nutzung von Workers / R2 / D1 / KV erfordert in der Regel ein kostenpflichtiges Cloudflare-Konto; die Domain-Traffic-Analyse ist nicht betroffen.</string>
+    <string name="usage_failed">Nutzung konnte nicht geladen werden – zum Wiederholen tippen</string>
+    <string name="usage_period_month">Diesen Monat</string>
+    <string name="usage_period_cycle">Zeitraum</string>
+    <string name="usage_today">Heute</string>
+    <string name="usage_plan_workers">Workers-Tarif</string>
+    <string name="usage_plan_r2">R2-Tarif</string>
+    <string name="usage_ctx_requests">Anfragen · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">Klasse A · %1$s</string>
+    <string name="usage_ctx_r2b">Klasse B · %1$s</string>
+    <string name="usage_ctx_storage">Speicher</string>
+    <string name="usage_ctx_rows_read">Zeilen gelesen · %1$s</string>
+    <string name="usage_ctx_rows_write">Zeilen geschrieben · %1$s</string>
+    <string name="usage_ctx_reads">Lesevorgänge · %1$s</string>
+    <string name="usage_ctx_writes">Schreibvorgänge · %1$s</string>
+    <string name="usage_billing_day">Abrechnungstag</string>
+    <string name="usage_billing_natural">Kalendermonat</string>
+    <string name="usage_billing_day_n">Tag %1$d</string>
 </resources>

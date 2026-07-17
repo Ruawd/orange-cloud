@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">Resumen de uso de la cuenta</string>
+    <string name="whatsnew_1_6_4_0_detail">La pantalla de resumen ahora incluye un módulo de uso: consulta de un vistazo el uso de Workers, R2, D1 y KV frente a sus límites, con cambio de plan y detalles por métrica.</string>
+    <string name="whatsnew_1_6_4_1_title">Historial de despliegues y eliminación de Workers</string>
+    <string name="whatsnew_1_6_4_1_detail">Consulta los despliegues anteriores de un Worker y elimina los antiguos; además, edita y elimina Workers.</string>
+    <string name="whatsnew_1_6_4_2_title">Más gestión de almacenamiento</string>
+    <string name="whatsnew_1_6_4_2_detail">Crea y elimina espacios de nombres de KV y buckets de R2, elimina tablas de D1 y borra despliegues de Pages.</string>
     <string name="whatsnew_1_6_0_0_title">Dominios personalizados de Pages</string>
     <string name="whatsnew_1_6_0_0_detail">Administra dominios personalizados dentro de un proyecto de Pages: agregar, eliminar, revalidar y comprobar el estado del DNS; si la zona del dominio está en tu cuenta, agrega el registro CNAME con un toque.</string>
     <string name="whatsnew_1_6_0_1_title">Orden de listas</string>

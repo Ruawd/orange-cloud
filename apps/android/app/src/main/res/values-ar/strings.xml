@@ -550,6 +550,10 @@
     <string name="d1_delete_warn">يحذف هذا قاعدة البيانات %1$s وكل جداولها وبياناتها نهائيًا. لا يمكن التراجع أو الاسترداد.</string>
     <string name="d1_delete_confirm_label">اكتب اسم قاعدة البيانات للتأكيد</string>
     <string name="d1_delete_button">حذف نهائي</string>
+    <string name="d1_drop_table_title">حذف الجدول</string>
+    <string name="d1_drop_table_warn">يحذف هذا الجدول %1$s وكل بياناته نهائيًا. لا يمكن التراجع أو الاسترداد.</string>
+    <string name="d1_drop_table_confirm_label">اكتب اسم الجدول للتأكيد</string>
+    <string name="d1_table_dropped">تم حذف الجدول</string>
     <string name="worker_manage_secrets">المتغيرات والأسرار</string>
     <string name="worker_manage_triggers">المُشغّلات</string>
     <string name="worker_manage_domains">النطاقات</string>
@@ -984,7 +988,7 @@
     <string name="worker_create_name_hint">يبدأ بحرف صغير/رقم؛ يسمح بالشرطة والشرطة السفلية</string>
     <string name="worker_create_compat">تاريخ التوافق</string>
     <string name="worker_create_code">الكود (ES module)</string>
-    <string name="worker_create_note">ملاحظة: لا يمكن للتطبيق قراءة كود Worker الحالي (يحظر Cloudflare هذه النقطة لـ OAuth)؛ يتطلب الإنشاء أو الاستبدال الكود الكامل. أدِر الارتباطات (المتغيرات/الأسرار/KV) في تفاصيل Worker.</string>
+    <string name="worker_create_note">تلميح: يتطلب الإنشاء أو الاستبدال الكامل الشيفرة الكاملة. أدِر الارتباطات (المتغيرات والأسرار وKV وغيرها) بشكل منفصل في تفاصيل Worker.</string>
     <string name="worker_create_deploy">نشر</string>
     <string name="worker_create_ok">تم النشر</string>
     <string name="pages_deploy_code">نشر الكود</string>
@@ -1137,4 +1141,70 @@
     <string name="sort_default">افتراضي (الاسم)</string>
     <string name="sort_created">تاريخ الإنشاء</string>
     <string name="sort_modified">آخر تحديث</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">تعديل الشيفرة</string>
+    <string name="worker_edit_ok">تم النشر</string>
+    <string name="worker_edit_loading">جارٍ تحميل الشيفرة المصدرية…</string>
+    <string name="worker_edit_multimodule">هذا Worker متعدد الوحدات (مُجمَّع)؛ لا يُدعم التعديل المباشر داخل التطبيق (ستُفقد الوحدات الأخرى).</string>
+    <string name="worker_edit_note">تم تحميل الشيفرة المصدرية الحالية المباشرة. يمكنك تعديلها ونشرها مباشرةً. تُحفظ المتغيرات والأسرار والارتباطات الحالية تلقائيًا.</string>
+    <string name="worker_manage_edit">تعديل الشيفرة</string>
+    <string name="worker_delete_button">حذف Worker</string>
+    <string name="worker_delete_title">حذف Worker</string>
+    <string name="worker_delete_warn">سيؤدي هذا إلى حذف Worker %1$s نهائيًا مع عمليات النشر وارتباطات المسار الخاصة به. لا يمكن التراجع عن ذلك أو استعادته.</string>
+    <string name="worker_delete_confirm_label">أدخل اسم Worker للتأكيد</string>
+    <string name="kv_create_title">إنشاء مساحة أسماء</string>
+    <string name="kv_create">إنشاء</string>
+    <string name="kv_title_label">الاسم</string>
+    <string name="kv_created">تم الإنشاء</string>
+    <string name="kv_deleted">تم الحذف</string>
+    <string name="kv_delete_title">حذف مساحة الأسماء</string>
+    <string name="kv_delete_warn">سيؤدي هذا إلى حذف مساحة الأسماء %1$s وجميع مفاتيحها وقيمها نهائيًا. لا يمكن التراجع عن ذلك أو استعادته.</string>
+    <string name="kv_delete_confirm_label">أدخل اسم مساحة الأسماء للتأكيد</string>
+    <string name="kv_delete_button">حذف نهائي</string>
+    <string name="r2_create_title">إنشاء حاوية تخزين</string>
+    <string name="r2_create">إنشاء</string>
+    <string name="r2_name">الاسم</string>
+    <string name="r2_name_hint">أحرف صغيرة وأرقام وشرطات، من 3 إلى 63 حرفًا.</string>
+    <string name="r2_created">تم الإنشاء</string>
+    <string name="r2_delete_title">حذف حاوية التخزين</string>
+    <string name="r2_delete_warn">سيؤدي هذا إلى حذف الحاوية %1$s نهائيًا. لا يمكن التراجع عن ذلك. يجب أن تكون الحاوية فارغة لحذفها.</string>
+    <string name="r2_delete_confirm_label">أدخل اسم الحاوية للتأكيد</string>
+    <string name="r2_delete_button">حذف نهائي</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">تم حذف النشر</string>
+    <string name="pages_deployment_delete_title">حذف النشر</string>
+    <string name="pages_deployment_delete_msg">سيؤدي هذا إلى حذف النشر %1$s نهائيًا. لا يمكن التراجع عن ذلك. لا يمكن حذف نشر الإنتاج الحالي.</string>
+    <string name="worker_manage_deployments">سجل عمليات النشر</string>
+    <string name="worker_deployments_title">سجل عمليات النشر</string>
+    <string name="worker_deployments_empty">لا توجد عمليات نشر</string>
+    <string name="worker_deployments_note">العنصر الأول هو النشر النشط ولا يمكن حذفه.</string>
+    <string name="worker_deployment_active">نشط</string>
+    <string name="worker_deployment_deleted">تم حذف النشر</string>
+    <string name="worker_deployment_delete_title">حذف النشر</string>
+    <string name="worker_deployment_delete_msg">سيؤدي هذا إلى حذف النشر %1$s نهائيًا. لا يمكن التراجع عن ذلك. لا يمكن حذف النشر النشط.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">الاستخدام</string>
+    <string name="usage_locked">يلزم إذن تحليلات الحركة لعرض استخدام الحساب</string>
+    <string name="usage_unavailable_title">بيانات مستوى الحساب غير متاحة لهذا الحساب</string>
+    <string name="usage_unavailable_body">يتطلب استخدام Workers / R2 / D1 / KV عادةً حساب Cloudflare مدفوعًا؛ ولا يتأثر تحليل حركة النطاقات.</string>
+    <string name="usage_failed">تعذّر تحميل الاستخدام — انقر لإعادة المحاولة</string>
+    <string name="usage_period_month">هذا الشهر</string>
+    <string name="usage_period_cycle">الدورة</string>
+    <string name="usage_today">اليوم</string>
+    <string name="usage_plan_workers">خطة Workers</string>
+    <string name="usage_plan_r2">خطة R2</string>
+    <string name="usage_ctx_requests">الطلبات · %1$s</string>
+    <string name="usage_ctx_cpu">المعالج · %1$s</string>
+    <string name="usage_ctx_r2a">الفئة A · %1$s</string>
+    <string name="usage_ctx_r2b">الفئة B · %1$s</string>
+    <string name="usage_ctx_storage">التخزين</string>
+    <string name="usage_ctx_rows_read">صفوف مقروءة · %1$s</string>
+    <string name="usage_ctx_rows_write">صفوف مكتوبة · %1$s</string>
+    <string name="usage_ctx_reads">القراءات · %1$s</string>
+    <string name="usage_ctx_writes">الكتابات · %1$s</string>
+    <string name="usage_billing_day">يوم الفوترة</string>
+    <string name="usage_billing_natural">الشهر الميلادي</string>
+    <string name="usage_billing_day_n">اليوم %1$d</string>
 </resources>

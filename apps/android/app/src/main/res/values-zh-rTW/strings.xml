@@ -431,6 +431,10 @@
     <string name="d1_delete_warn">此操作將永久刪除資料庫 %1$s 及其全部資料表與資料，無法復原，也無法還原。</string>
     <string name="d1_delete_confirm_label">輸入資料庫名稱以確認</string>
     <string name="d1_delete_button">永久刪除</string>
+    <string name="d1_drop_table_title">刪除資料表</string>
+    <string name="d1_drop_table_warn">此操作將永久刪除資料表 %1$s 及其全部資料，無法復原，也無法還原。</string>
+    <string name="d1_drop_table_confirm_label">輸入資料表名稱以確認</string>
+    <string name="d1_table_dropped">資料表已刪除</string>
 
     <!-- Worker 管理 -->
     <string name="worker_manage_secrets">變數與密鑰</string>
@@ -1023,7 +1027,7 @@
     <string name="worker_create_name_hint">小寫字母/數字開頭，可含連字號、底線</string>
     <string name="worker_create_compat">相容性日期</string>
     <string name="worker_create_code">程式碼（ES module）</string>
-    <string name="worker_create_note">提示：本應用無法讀取現有 Worker 原始碼（Cloudflare 對 OAuth 封鎖該端點），新建或覆寫都需提供完整程式碼。綁定（變數/密鑰/KV 等）請在 Worker 詳情中單獨管理。</string>
+    <string name="worker_create_note">提示：新增或整體覆寫都需提供完整程式碼。綁定（變數/密鑰/KV 等）請在 Worker 詳情裡單獨管理。</string>
     <string name="worker_create_deploy">部署</string>
     <string name="worker_create_ok">已部署</string>
     <string name="pages_deploy_code">部署程式碼</string>
@@ -1176,4 +1180,70 @@
     <string name="sort_default">預設（名稱）</string>
     <string name="sort_created">建立日期</string>
     <string name="sort_modified">最近更新</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">編輯程式碼</string>
+    <string name="worker_edit_ok">已部署</string>
+    <string name="worker_edit_loading">正在讀取原始碼…</string>
+    <string name="worker_edit_multimodule">這是多模組打包 Worker，暫不支援在應用程式內原地編輯（會遺失其他模組）。</string>
+    <string name="worker_edit_note">已載入目前線上原始碼，可直接修改後部署。現有變數 / 密鑰 / 綁定會自動保留。</string>
+    <string name="worker_manage_edit">編輯程式碼</string>
+    <string name="worker_delete_button">刪除 Worker</string>
+    <string name="worker_delete_title">刪除 Worker</string>
+    <string name="worker_delete_warn">此操作將永久刪除 Worker %1$s 及其部署與路由綁定，無法復原，也無法還原。</string>
+    <string name="worker_delete_confirm_label">輸入 Worker 名稱以確認</string>
+    <string name="kv_create_title">建立命名空間</string>
+    <string name="kv_create">建立</string>
+    <string name="kv_title_label">名稱</string>
+    <string name="kv_created">已建立</string>
+    <string name="kv_deleted">已刪除</string>
+    <string name="kv_delete_title">刪除命名空間</string>
+    <string name="kv_delete_warn">此操作將永久刪除命名空間 %1$s 及其全部鍵值，無法復原，也無法還原。</string>
+    <string name="kv_delete_confirm_label">輸入命名空間名稱以確認</string>
+    <string name="kv_delete_button">永久刪除</string>
+    <string name="r2_create_title">建立儲存桶</string>
+    <string name="r2_create">建立</string>
+    <string name="r2_name">名稱</string>
+    <string name="r2_name_hint">小寫字母、數字與連字號，3–63 位。</string>
+    <string name="r2_created">已建立</string>
+    <string name="r2_delete_title">刪除儲存桶</string>
+    <string name="r2_delete_warn">此操作將永久刪除儲存桶 %1$s，無法復原。儲存桶必須為空才能刪除。</string>
+    <string name="r2_delete_confirm_label">輸入儲存桶名稱以確認</string>
+    <string name="r2_delete_button">永久刪除</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">已刪除部署</string>
+    <string name="pages_deployment_delete_title">刪除部署</string>
+    <string name="pages_deployment_delete_msg">將永久刪除部署 %1$s，無法復原。目前的生產部署無法刪除。</string>
+    <string name="worker_manage_deployments">部署歷史</string>
+    <string name="worker_deployments_title">部署歷史</string>
+    <string name="worker_deployments_empty">尚無部署記錄</string>
+    <string name="worker_deployments_note">第一項為目前使用中的部署，無法刪除。</string>
+    <string name="worker_deployment_active">使用中</string>
+    <string name="worker_deployment_deleted">已刪除部署</string>
+    <string name="worker_deployment_delete_title">刪除部署</string>
+    <string name="worker_deployment_delete_msg">將永久刪除部署 %1$s，無法復原。目前使用中的部署無法刪除。</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">用量</string>
+    <string name="usage_locked">需要「流量分析」權限才能顯示帳戶用量</string>
+    <string name="usage_unavailable_title">此帳戶暫無帳戶層級資料查詢權限</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV 用量通常需要付費版 Cloudflare 帳戶；網域流量分析不受影響。</string>
+    <string name="usage_failed">用量載入失敗，點此重試</string>
+    <string name="usage_period_month">本月</string>
+    <string name="usage_period_cycle">帳期</string>
+    <string name="usage_today">今日</string>
+    <string name="usage_plan_workers">Workers 方案</string>
+    <string name="usage_plan_r2">R2 方案</string>
+    <string name="usage_ctx_requests">請求 · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">A 類 · %1$s</string>
+    <string name="usage_ctx_r2b">B 類 · %1$s</string>
+    <string name="usage_ctx_storage">儲存</string>
+    <string name="usage_ctx_rows_read">列讀取 · %1$s</string>
+    <string name="usage_ctx_rows_write">列寫入 · %1$s</string>
+    <string name="usage_ctx_reads">讀取 · %1$s</string>
+    <string name="usage_ctx_writes">寫入 · %1$s</string>
+    <string name="usage_billing_day">帳單日</string>
+    <string name="usage_billing_natural">自然月</string>
+    <string name="usage_billing_day_n">%1$d 日</string>
 </resources>

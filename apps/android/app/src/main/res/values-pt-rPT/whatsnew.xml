@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">Visão geral da utilização da conta</string>
+    <string name="whatsnew_1_6_4_0_detail">O ecrã de visão geral passa a ter um módulo de utilização: veja num relance o uso de Workers, R2, D1 e KV face às quotas, com troca de plano e detalhes por métrica.</string>
+    <string name="whatsnew_1_6_4_1_title">Histórico de implementações e eliminação de Workers</string>
+    <string name="whatsnew_1_6_4_1_detail">Veja as implementações anteriores de um Worker e elimine as antigas; também pode editar e eliminar Workers.</string>
+    <string name="whatsnew_1_6_4_2_title">Mais gestão de armazenamento</string>
+    <string name="whatsnew_1_6_4_2_detail">Crie e elimine namespaces de KV e buckets de R2, elimine tabelas do D1 e apague implementações do Pages.</string>
     <string name="whatsnew_1_6_0_0_title">Domínios personalizados do Pages</string>
     <string name="whatsnew_1_6_0_0_detail">Faça a gestão de domínios personalizados dentro de um projeto do Pages: adicionar, remover, revalidar e verificar o estado do DNS — com criação do registo CNAME num toque quando a zona do domínio está na sua conta.</string>
     <string name="whatsnew_1_6_0_1_title">Ordenação de listas</string>

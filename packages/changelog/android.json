@@ -1,5 +1,108 @@
 [
   {
+    "version": "1.6.4",
+    "date": "2026.07.18",
+    "channel": "Google Play",
+    "items": [
+      {
+        "title": {
+          "zh-Hans": "账号用量总览",
+          "en": "Account usage overview",
+          "zh-Hant": "帳戶用量總覽",
+          "zh-HK": "帳戶用量總覽",
+          "ja": "アカウント使用量の概要",
+          "es-MX": "Resumen de uso de la cuenta",
+          "ko": "계정 사용량 개요",
+          "pt-BR": "Visão geral de uso da conta",
+          "pt-PT": "Visão geral da utilização da conta",
+          "de": "Übersicht der Kontonutzung",
+          "fr": "Aperçu de l’utilisation du compte",
+          "ar": "نظرة عامة على استخدام الحساب",
+          "tr": "Hesap kullanımı özeti"
+        },
+        "detail": {
+          "zh-Hans": "概览页新增用量模块，一眼看清 Workers、R2、D1、KV 的用量与额度，可切换套餐并查看各项明细。",
+          "en": "The overview now has a usage module — see Workers, R2, D1 and KV usage against their quotas at a glance, with plan switching and per-metric details.",
+          "zh-Hant": "總覽頁新增用量模組，一眼看清 Workers、R2、D1、KV 的用量與額度，可切換方案並檢視各項明細。",
+          "zh-HK": "概覽頁新增用量模組，一眼看清 Workers、R2、D1、KV 的用量與額度，可切換計劃並查看各項明細。",
+          "ja": "概要画面に使用量モジュールを追加。Workers・R2・D1・KV の使用量と上限をひと目で確認でき、プラン切り替えと項目ごとの詳細に対応します。",
+          "es-MX": "La pantalla de resumen ahora incluye un módulo de uso: consulta de un vistazo el uso de Workers, R2, D1 y KV frente a sus límites, con cambio de plan y detalles por métrica.",
+          "ko": "개요 화면에 사용량 모듈이 추가되어 Workers, R2, D1, KV 사용량과 한도를 한눈에 확인하고 요금제 전환과 항목별 세부 정보를 볼 수 있습니다.",
+          "pt-BR": "A tela de visão geral agora tem um módulo de uso: veja de relance o uso de Workers, R2, D1 e KV em relação às cotas, com troca de plano e detalhes por métrica.",
+          "pt-PT": "O ecrã de visão geral passa a ter um módulo de utilização: veja num relance o uso de Workers, R2, D1 e KV face às quotas, com troca de plano e detalhes por métrica.",
+          "de": "Die Übersicht zeigt jetzt ein Nutzungsmodul – Workers-, R2-, D1- und KV-Nutzung im Verhältnis zu den Kontingenten auf einen Blick, mit Tarifwechsel und Details je Kennzahl.",
+          "fr": "L’aperçu affiche désormais un module d’utilisation : usage de Workers, R2, D1 et KV par rapport aux quotas d’un coup d’œil, avec changement de forfait et détails par métrique.",
+          "ar": "أصبحت شاشة النظرة العامة تعرض وحدة استخدام: استخدام Workers وR2 وD1 وKV مقابل الحصص في لمحة، مع تبديل الخطة وتفاصيل لكل مقياس.",
+          "tr": "Genel bakış ekranı artık bir kullanım modülü gösteriyor: Workers, R2, D1 ve KV kullanımını kotalara göre tek bakışta görün; plan değiştirme ve metrik ayrıntıları dahil."
+        }
+      },
+      {
+        "title": {
+          "zh-Hans": "Worker 部署历史与删除",
+          "en": "Worker deployment history and delete",
+          "zh-Hant": "Worker 部署歷史與刪除",
+          "zh-HK": "Worker 部署歷史與刪除",
+          "ja": "Worker のデプロイ履歴と削除",
+          "es-MX": "Historial de despliegues y eliminación de Workers",
+          "ko": "Worker 배포 기록 및 삭제",
+          "pt-BR": "Histórico de implantações e exclusão de Workers",
+          "pt-PT": "Histórico de implementações e eliminação de Workers",
+          "de": "Worker-Bereitstellungsverlauf und Löschen",
+          "fr": "Historique des déploiements et suppression de Workers",
+          "ar": "سجل عمليات نشر Worker وحذفه",
+          "tr": "Worker dağıtım geçmişi ve silme"
+        },
+        "detail": {
+          "zh-Hans": "查看每个 Worker 的历次部署并删除旧部署，同时支持编辑与删除 Worker。",
+          "en": "View a Worker’s past deployments and delete old ones, plus edit and delete Workers.",
+          "zh-Hant": "檢視每個 Worker 的歷次部署並刪除舊部署，同時支援編輯與刪除 Worker。",
+          "zh-HK": "查看每個 Worker 的歷次部署並刪除舊部署，同時支援編輯與刪除 Worker。",
+          "ja": "各 Worker の過去のデプロイを確認して古いものを削除できるほか、Worker の編集・削除にも対応します。",
+          "es-MX": "Consulta los despliegues anteriores de un Worker y elimina los antiguos; además, edita y elimina Workers.",
+          "ko": "Worker의 과거 배포를 확인하고 이전 배포를 삭제할 수 있으며 Worker 편집과 삭제도 지원합니다.",
+          "pt-BR": "Veja as implantações anteriores de um Worker e exclua as antigas; também dá para editar e excluir Workers.",
+          "pt-PT": "Veja as implementações anteriores de um Worker e elimine as antigas; também pode editar e eliminar Workers.",
+          "de": "Sieh dir frühere Bereitstellungen eines Workers an und lösche alte – außerdem Worker bearbeiten und löschen.",
+          "fr": "Consultez les déploiements passés d’un Worker et supprimez les anciens ; modifiez et supprimez aussi des Workers.",
+          "ar": "اطّلع على عمليات نشر Worker السابقة واحذف القديمة، مع إمكانية تعديل وحذف Workers.",
+          "tr": "Bir Worker’ın geçmiş dağıtımlarını görüp eskileri silin; ayrıca Worker düzenleyip silebilirsiniz."
+        }
+      },
+      {
+        "title": {
+          "zh-Hans": "存储管理增强",
+          "en": "More storage management",
+          "zh-Hant": "儲存管理增強",
+          "zh-HK": "儲存管理增強",
+          "ja": "ストレージ管理の強化",
+          "es-MX": "Más gestión de almacenamiento",
+          "ko": "스토리지 관리 강화",
+          "pt-BR": "Mais gerenciamento de armazenamento",
+          "pt-PT": "Mais gestão de armazenamento",
+          "de": "Mehr Speicherverwaltung",
+          "fr": "Gestion du stockage étendue",
+          "ar": "مزيد من إدارة التخزين",
+          "tr": "Daha fazla depolama yönetimi"
+        },
+        "detail": {
+          "zh-Hans": "新增 KV 命名空间与 R2 存储桶的创建/删除、D1 数据表删除，以及 Pages 部署删除。",
+          "en": "Create and delete KV namespaces and R2 buckets, drop D1 tables, and delete Pages deployments.",
+          "zh-Hant": "新增 KV 命名空間與 R2 儲存桶的建立/刪除、D1 資料表刪除，以及 Pages 部署刪除。",
+          "zh-HK": "新增 KV 命名空間與 R2 儲存桶的建立/刪除、D1 資料表刪除，以及 Pages 部署刪除。",
+          "ja": "KV 名前空間と R2 バケットの作成・削除、D1 テーブルの削除、Pages デプロイの削除に対応しました。",
+          "es-MX": "Crea y elimina espacios de nombres de KV y buckets de R2, elimina tablas de D1 y borra despliegues de Pages.",
+          "ko": "KV 네임스페이스와 R2 버킷 생성/삭제, D1 테이블 삭제, Pages 배포 삭제를 지원합니다.",
+          "pt-BR": "Crie e exclua namespaces de KV e buckets de R2, exclua tabelas do D1 e apague implantações do Pages.",
+          "pt-PT": "Crie e elimine namespaces de KV e buckets de R2, elimine tabelas do D1 e apague implementações do Pages.",
+          "de": "KV-Namespaces und R2-Buckets erstellen/löschen, D1-Tabellen löschen und Pages-Bereitstellungen entfernen.",
+          "fr": "Créez et supprimez des namespaces KV et des buckets R2, supprimez des tables D1 et des déploiements Pages.",
+          "ar": "أنشئ واحذف مساحات أسماء KV وحاويات R2، واحذف جداول D1 وعمليات نشر Pages.",
+          "tr": "KV ad alanları ve R2 paketleri oluşturup silin, D1 tablolarını silin ve Pages dağıtımlarını kaldırın."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.6.0",
     "date": "2026.07.03",
     "channel": "Google Play",

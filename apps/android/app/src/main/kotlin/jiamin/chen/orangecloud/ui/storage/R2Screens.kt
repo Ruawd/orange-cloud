@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
@@ -82,6 +83,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun R2BucketListScreen(
     onBack: () -> Unit,
@@ -89,25 +91,79 @@ fun R2BucketListScreen(
     viewModel: R2BucketListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val opState by viewModel.opState.collectAsStateWithLifecycle()
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showCreate by remember { mutableStateOf(false) }
+    var toDelete by remember { mutableStateOf<jiamin.chen.orangecloud.data.model.R2Bucket?>(null) }
+    val createSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val createdMsg = stringResource(R.string.r2_created)
+    val deletedMsg = stringResource(R.string.r2_deleted)
+    val errMsg = stringResource(R.string.error_generic)
 
-    SkyBackground(phase = phase) {
-        Column(Modifier.fillMaxSize().systemBarsPadding()) {
-            SkyHeader(
-                title = stringResource(R.string.storage_r2),
-                onSky = onSky,
-                isLoading = state.isLoading,
-                onRefresh = { viewModel.load() },
-                onBack = onBack,
-                titleSize = 22,
-                backDescription = stringResource(R.string.common_back),
-                refreshDescription = stringResource(R.string.common_refresh),
-            )
-            StorageListBody(state, onSky, Icons.Outlined.Cloud, stringResource(R.string.r2_empty), { viewModel.load() }) { bucket ->
-                StorageRow(Icons.Outlined.Cloud, bucket.name, bucket.location, onClick = { onOpenBucket(bucket.name) })
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                StorageOpEvent.Created -> { showCreate = false; snackbarHostState.showSnackbar(createdMsg) }
+                StorageOpEvent.Deleted -> { toDelete = null; snackbarHostState.showSnackbar(deletedMsg) }
+                is StorageOpEvent.Error -> snackbarHostState.showSnackbar(event.message ?: errMsg)
             }
         }
+    }
+
+    SkyBackground(phase = phase) {
+        Box(Modifier.fillMaxSize().systemBarsPadding()) {
+            Column(Modifier.fillMaxSize()) {
+                SkyHeader(
+                    title = stringResource(R.string.storage_r2),
+                    onSky = onSky,
+                    isLoading = state.isLoading,
+                    onRefresh = { viewModel.load() },
+                    onBack = onBack,
+                    titleSize = 22,
+                    backDescription = stringResource(R.string.common_back),
+                    refreshDescription = stringResource(R.string.common_refresh),
+                )
+                StorageListBody(state, onSky, Icons.Outlined.Cloud, stringResource(R.string.r2_empty), { viewModel.load() }) { bucket ->
+                    StorageRow(
+                        Icons.Outlined.Cloud,
+                        bucket.name,
+                        bucket.location,
+                        onClick = { onOpenBucket(bucket.name) },
+                        onLongClick = if (viewModel.canWrite) ({ toDelete = bucket }) else null,
+                    )
+                }
+            }
+            if (viewModel.canWrite) {
+                FloatingActionButton(
+                    onClick = { showCreate = true },
+                    containerColor = OcOrange,
+                    contentColor = Color.White,
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(20.dp),
+                ) {
+                    Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.r2_create_title))
+                }
+            }
+            SnackbarHost(snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
+        }
+    }
+
+    if (showCreate) {
+        R2CreateSheet(
+            isCreating = opState.isCreating,
+            sheetState = createSheetState,
+            onCreate = { name -> viewModel.create(name) },
+            onDismiss = { showCreate = false },
+        )
+    }
+    toDelete?.let { bucket ->
+        R2DeleteDialog(
+            bucket = bucket,
+            isDeleting = opState.isDeleting,
+            onConfirm = { viewModel.delete(bucket) },
+            onDismiss = { toDelete = null },
+        )
     }
 }
 

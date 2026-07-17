@@ -431,6 +431,10 @@
     <string name="d1_delete_warn">データベース %1$s とそのすべてのテーブル・データを完全に削除します。取り消しや復元はできません。</string>
     <string name="d1_delete_confirm_label">確認のためデータベース名を入力</string>
     <string name="d1_delete_button">完全に削除</string>
+    <string name="d1_drop_table_title">テーブルを削除</string>
+    <string name="d1_drop_table_warn">テーブル %1$s とそのすべてのデータを完全に削除します。取り消しや復元はできません。</string>
+    <string name="d1_drop_table_confirm_label">確認のためテーブル名を入力</string>
+    <string name="d1_table_dropped">テーブルを削除しました</string>
 
     <!-- Worker 管理 -->
     <string name="worker_manage_secrets">変数とシークレット</string>
@@ -1023,7 +1027,7 @@
     <string name="worker_create_name_hint">小文字/数字で始め、ハイフン・アンダースコア可</string>
     <string name="worker_create_compat">互換性日付</string>
     <string name="worker_create_code">コード（ES module）</string>
-    <string name="worker_create_note">注意：本アプリは既存 Worker のソースを取得できません（Cloudflare が OAuth に対し当該エンドポイントを禁止）。新規・上書きには完全なコードが必要です。バインディング（変数/シークレット/KV 等）は Worker 詳細で個別に管理してください。</string>
+    <string name="worker_create_note">ヒント：新規作成または全体の置き換えには完全なコードが必要です。バインディング（変数・シークレット・KV など）は Worker の詳細で個別に管理してください。</string>
     <string name="worker_create_deploy">デプロイ</string>
     <string name="worker_create_ok">デプロイしました</string>
     <string name="pages_deploy_code">コードをデプロイ</string>
@@ -1176,4 +1180,70 @@
     <string name="sort_default">デフォルト（名前）</string>
     <string name="sort_created">作成日</string>
     <string name="sort_modified">最近の更新</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">コードを編集</string>
+    <string name="worker_edit_ok">デプロイしました</string>
+    <string name="worker_edit_loading">ソースを読み込み中…</string>
+    <string name="worker_edit_multimodule">これは複数モジュールのバンドル Worker です。アプリ内での直接編集には対応していません（他のモジュールが失われます）。</string>
+    <string name="worker_edit_note">現在の本番ソースを読み込みました。そのまま編集してデプロイできます。既存の変数・シークレット・バインディングは自動的に保持されます。</string>
+    <string name="worker_manage_edit">コードを編集</string>
+    <string name="worker_delete_button">Worker を削除</string>
+    <string name="worker_delete_title">Worker を削除</string>
+    <string name="worker_delete_warn">この操作は Worker %1$s とそのデプロイおよびルートバインディングを完全に削除します。取り消しも復元もできません。</string>
+    <string name="worker_delete_confirm_label">確認のため Worker 名を入力</string>
+    <string name="kv_create_title">名前空間を作成</string>
+    <string name="kv_create">作成</string>
+    <string name="kv_title_label">名前</string>
+    <string name="kv_created">作成しました</string>
+    <string name="kv_deleted">削除しました</string>
+    <string name="kv_delete_title">名前空間を削除</string>
+    <string name="kv_delete_warn">この操作は名前空間 %1$s とそのすべてのキーと値を完全に削除します。取り消しも復元もできません。</string>
+    <string name="kv_delete_confirm_label">確認のため名前空間名を入力</string>
+    <string name="kv_delete_button">完全に削除</string>
+    <string name="r2_create_title">バケットを作成</string>
+    <string name="r2_create">作成</string>
+    <string name="r2_name">名前</string>
+    <string name="r2_name_hint">小文字・数字・ハイフン、3〜63 文字。</string>
+    <string name="r2_created">作成しました</string>
+    <string name="r2_delete_title">バケットを削除</string>
+    <string name="r2_delete_warn">この操作はバケット %1$s を完全に削除します。取り消せません。削除するにはバケットが空である必要があります。</string>
+    <string name="r2_delete_confirm_label">確認のためバケット名を入力</string>
+    <string name="r2_delete_button">完全に削除</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">デプロイを削除しました</string>
+    <string name="pages_deployment_delete_title">デプロイを削除</string>
+    <string name="pages_deployment_delete_msg">デプロイ %1$s を完全に削除します。元に戻せません。現在の本番デプロイは削除できません。</string>
+    <string name="worker_manage_deployments">デプロイ履歴</string>
+    <string name="worker_deployments_title">デプロイ履歴</string>
+    <string name="worker_deployments_empty">デプロイがありません</string>
+    <string name="worker_deployments_note">先頭は稼働中のデプロイで、削除できません。</string>
+    <string name="worker_deployment_active">稼働中</string>
+    <string name="worker_deployment_deleted">デプロイを削除しました</string>
+    <string name="worker_deployment_delete_title">デプロイを削除</string>
+    <string name="worker_deployment_delete_msg">デプロイ %1$s を完全に削除します。元に戻せません。稼働中のデプロイは削除できません。</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">使用量</string>
+    <string name="usage_locked">アカウントの使用量を表示するには「トラフィック分析」権限が必要です</string>
+    <string name="usage_unavailable_title">このアカウントではアカウントレベルのデータを取得できません</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV の使用量は通常、有料版の Cloudflare アカウントが必要です。ドメインのトラフィック分析には影響しません。</string>
+    <string name="usage_failed">使用量の読み込みに失敗しました。タップして再試行</string>
+    <string name="usage_period_month">今月</string>
+    <string name="usage_period_cycle">期間</string>
+    <string name="usage_today">今日</string>
+    <string name="usage_plan_workers">Workers プラン</string>
+    <string name="usage_plan_r2">R2 プラン</string>
+    <string name="usage_ctx_requests">リクエスト · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">クラス A · %1$s</string>
+    <string name="usage_ctx_r2b">クラス B · %1$s</string>
+    <string name="usage_ctx_storage">ストレージ</string>
+    <string name="usage_ctx_rows_read">行の読み取り · %1$s</string>
+    <string name="usage_ctx_rows_write">行の書き込み · %1$s</string>
+    <string name="usage_ctx_reads">読み取り · %1$s</string>
+    <string name="usage_ctx_writes">書き込み · %1$s</string>
+    <string name="usage_billing_day">請求日</string>
+    <string name="usage_billing_natural">暦月</string>
+    <string name="usage_billing_day_n">%1$d 日</string>
 </resources>

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">帳戶用量總覽</string>
+    <string name="whatsnew_1_6_4_0_detail">總覽頁新增用量模組，一眼看清 Workers、R2、D1、KV 的用量與額度，可切換方案並檢視各項明細。</string>
+    <string name="whatsnew_1_6_4_1_title">Worker 部署歷史與刪除</string>
+    <string name="whatsnew_1_6_4_1_detail">檢視每個 Worker 的歷次部署並刪除舊部署，同時支援編輯與刪除 Worker。</string>
+    <string name="whatsnew_1_6_4_2_title">儲存管理增強</string>
+    <string name="whatsnew_1_6_4_2_detail">新增 KV 命名空間與 R2 儲存桶的建立/刪除、D1 資料表刪除，以及 Pages 部署刪除。</string>
     <string name="whatsnew_1_6_0_0_title">Pages 自訂網域</string>
     <string name="whatsnew_1_6_0_0_detail">Pages 專案現可直接管理自訂網域：新增、刪除、重新驗證並檢查解析狀態；網域在目前帳號時，還能一鍵新增指向專案的 CNAME 記錄。</string>
     <string name="whatsnew_1_6_0_1_title">清單排序</string>

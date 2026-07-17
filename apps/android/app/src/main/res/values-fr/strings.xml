@@ -550,6 +550,10 @@
     <string name="d1_delete_warn">Cela supprime définitivement la base %1$s et toutes ses tables et données. Irréversible et non récupérable.</string>
     <string name="d1_delete_confirm_label">Tapez le nom de la base pour confirmer</string>
     <string name="d1_delete_button">Supprimer définitivement</string>
+    <string name="d1_drop_table_title">Supprimer la table</string>
+    <string name="d1_drop_table_warn">Cela supprime définitivement la table %1$s et toutes ses données. Irréversible et non récupérable.</string>
+    <string name="d1_drop_table_confirm_label">Tapez le nom de la table pour confirmer</string>
+    <string name="d1_table_dropped">Table supprimée</string>
     <string name="worker_manage_secrets">Variables &amp; secrets</string>
     <string name="worker_manage_triggers">Déclencheurs</string>
     <string name="worker_manage_domains">Domaines</string>
@@ -984,7 +988,7 @@
     <string name="worker_create_name_hint">Commence par minuscule/chiffre ; tiret et tiret bas autorisés</string>
     <string name="worker_create_compat">Date de compatibilité</string>
     <string name="worker_create_code">Code (module ES)</string>
-    <string name="worker_create_note">Remarque : l\'app ne peut pas lire le code d\'un Worker existant (Cloudflare bloque cet endpoint pour OAuth) ; créer ou remplacer exige le code complet. Gérez les bindings (variables/secrets/KV) dans les détails du Worker.</string>
+    <string name="worker_create_note">Astuce : la création ou le remplacement complet nécessite le code complet. Gérez les liaisons (variables, secrets, KV, etc.) séparément dans les détails du Worker.</string>
     <string name="worker_create_deploy">Déployer</string>
     <string name="worker_create_ok">Déployé</string>
     <string name="pages_deploy_code">Déployer le code</string>
@@ -1137,4 +1141,70 @@
     <string name="sort_default">Par défaut (nom)</string>
     <string name="sort_created">Date de création</string>
     <string name="sort_modified">Mise à jour récente</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Modifier le code</string>
+    <string name="worker_edit_ok">Déployé</string>
+    <string name="worker_edit_loading">Chargement du code source…</string>
+    <string name="worker_edit_multimodule">Ce Worker est multi-module (regroupé) ; la modification directe dans l\'app n\'est pas prise en charge (les autres modules seraient perdus).</string>
+    <string name="worker_edit_note">Code source en production chargé. Modifiez et déployez directement. Les variables, secrets et liaisons existants sont conservés automatiquement.</string>
+    <string name="worker_manage_edit">Modifier le code</string>
+    <string name="worker_delete_button">Supprimer le Worker</string>
+    <string name="worker_delete_title">Supprimer le Worker</string>
+    <string name="worker_delete_warn">Cette action supprimera définitivement le Worker %1$s ainsi que ses déploiements et liaisons de route. Elle est irréversible et irrécupérable.</string>
+    <string name="worker_delete_confirm_label">Saisissez le nom du Worker pour confirmer</string>
+    <string name="kv_create_title">Créer un espace de noms</string>
+    <string name="kv_create">Créer</string>
+    <string name="kv_title_label">Nom</string>
+    <string name="kv_created">Créé</string>
+    <string name="kv_deleted">Supprimé</string>
+    <string name="kv_delete_title">Supprimer l\'espace de noms</string>
+    <string name="kv_delete_warn">Cette action supprimera définitivement l\'espace de noms %1$s ainsi que toutes ses clés et valeurs. Elle est irréversible et irrécupérable.</string>
+    <string name="kv_delete_confirm_label">Saisissez le nom de l\'espace de noms pour confirmer</string>
+    <string name="kv_delete_button">Supprimer définitivement</string>
+    <string name="r2_create_title">Créer un bucket</string>
+    <string name="r2_create">Créer</string>
+    <string name="r2_name">Nom</string>
+    <string name="r2_name_hint">Lettres minuscules, chiffres et traits d\'union, 3 à 63 caractères.</string>
+    <string name="r2_created">Créé</string>
+    <string name="r2_delete_title">Supprimer le bucket</string>
+    <string name="r2_delete_warn">Cette action supprimera définitivement le bucket %1$s. Elle est irréversible. Le bucket doit être vide pour être supprimé.</string>
+    <string name="r2_delete_confirm_label">Saisissez le nom du bucket pour confirmer</string>
+    <string name="r2_delete_button">Supprimer définitivement</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Déploiement supprimé</string>
+    <string name="pages_deployment_delete_title">Supprimer le déploiement</string>
+    <string name="pages_deployment_delete_msg">Cette action supprimera définitivement le déploiement %1$s. Elle est irréversible. Le déploiement de production actuel ne peut pas être supprimé.</string>
+    <string name="worker_manage_deployments">Historique des déploiements</string>
+    <string name="worker_deployments_title">Historique des déploiements</string>
+    <string name="worker_deployments_empty">Aucun déploiement</string>
+    <string name="worker_deployments_note">La première entrée est le déploiement actif et ne peut pas être supprimée.</string>
+    <string name="worker_deployment_active">Actif</string>
+    <string name="worker_deployment_deleted">Déploiement supprimé</string>
+    <string name="worker_deployment_delete_title">Supprimer le déploiement</string>
+    <string name="worker_deployment_delete_msg">Cette action supprimera définitivement le déploiement %1$s. Elle est irréversible. Le déploiement actif ne peut pas être supprimé.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Utilisation</string>
+    <string name="usage_locked">L\'autorisation d\'analyse du trafic est nécessaire pour afficher l\'utilisation du compte</string>
+    <string name="usage_unavailable_title">Les données au niveau du compte ne sont pas disponibles pour ce compte</string>
+    <string name="usage_unavailable_body">L\'utilisation de Workers / R2 / D1 / KV nécessite généralement un compte Cloudflare payant ; l\'analyse du trafic des domaines n\'est pas affectée.</string>
+    <string name="usage_failed">Échec du chargement de l\'utilisation — touchez pour réessayer</string>
+    <string name="usage_period_month">Ce mois-ci</string>
+    <string name="usage_period_cycle">Cycle</string>
+    <string name="usage_today">Aujourd\'hui</string>
+    <string name="usage_plan_workers">Forfait Workers</string>
+    <string name="usage_plan_r2">Forfait R2</string>
+    <string name="usage_ctx_requests">Requêtes · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">Classe A · %1$s</string>
+    <string name="usage_ctx_r2b">Classe B · %1$s</string>
+    <string name="usage_ctx_storage">Stockage</string>
+    <string name="usage_ctx_rows_read">Lignes lues · %1$s</string>
+    <string name="usage_ctx_rows_write">Lignes écrites · %1$s</string>
+    <string name="usage_ctx_reads">Lectures · %1$s</string>
+    <string name="usage_ctx_writes">Écritures · %1$s</string>
+    <string name="usage_billing_day">Jour de facturation</string>
+    <string name="usage_billing_natural">Mois civil</string>
+    <string name="usage_billing_day_n">Jour %1$d</string>
 </resources>

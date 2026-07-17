@@ -5,6 +5,10 @@ import jiamin.chen.orangecloud.data.local.WorkerDao
 import jiamin.chen.orangecloud.data.local.toEntity
 import jiamin.chen.orangecloud.data.local.toWorker
 import jiamin.chen.orangecloud.data.model.WorkerBindingInput
+import jiamin.chen.orangecloud.data.model.WorkerContent
+import jiamin.chen.orangecloud.data.model.WorkerDeployMetadata
+import jiamin.chen.orangecloud.data.model.WorkerDeployment
+import jiamin.chen.orangecloud.data.model.WorkerDeploymentsResult
 import jiamin.chen.orangecloud.data.model.WorkerCustomDomain
 import jiamin.chen.orangecloud.data.model.WorkerCustomDomainInput
 import jiamin.chen.orangecloud.data.model.WorkerRoute
@@ -45,8 +49,7 @@ class WorkerRepository @Inject constructor(
 
     /**
      * 新建 / 覆盖一个 module Worker（粘贴的 JS 代码）。PUT 脚本 = multipart（metadata + worker.js 模块）。
-     * 对应 iOS WorkerService.deployScript。注意：读取现有源码端点 /content 在 OAuth 下被封（cf-10405），
-     * 故只支持「提供新代码」创建/覆盖，不预填现有代码。成功后刷新 Room 列表。
+     * 对应 iOS WorkerService.deployScript。成功后刷新 Room 列表。
      */
     suspend fun deployScript(accountId: String, name: String, code: String, compatibilityDate: String) {
         val metadata = """{"main_module":"worker.js","compatibility_date":"$compatibilityDate","bindings":[]}"""
@@ -56,6 +59,58 @@ class WorkerRepository @Inject constructor(
         )
         refreshWorkers(accountId)
     }
+
+    /**
+     * 读现有源码用于原地编辑预填。必须走 /content/v2：v1 /content 对 OAuth 认证方案返回 cf=10405，
+     * v2 与裸 GET 才放行（真机实测 2026-07-14，issue #55）。响应为 multipart/form-data（module）或裸 JS（service worker）。
+     */
+    suspend fun content(accountId: String, scriptName: String): WorkerContent {
+        val bytes = api.getRaw("accounts/$accountId/workers/scripts/$scriptName/content/v2")
+        return WorkerContent.parse(bytes)
+    }
+
+    /**
+     * 原地编辑：只替换脚本正文，现有绑定按名 inherit 保留（连同读不到值的密钥），兼容性日期/标志沿用旧值。
+     * 带 ?bindings_inherit=strict，缺绑定时报错而非静默丢弃。对应 iOS WorkerUploadViewModel.replace。
+     */
+    suspend fun replaceScript(accountId: String, name: String, code: String, isModule: Boolean) {
+        val s = settings(accountId, name)
+        val moduleName = "worker.js"
+        val metadata = WorkerDeployMetadata(
+            mainModule = if (isModule) moduleName else null,
+            bodyPart = if (isModule) null else moduleName,
+            compatibilityDate = s.compatibilityDate ?: java.time.LocalDate.now(java.time.ZoneOffset.UTC).toString(),
+            compatibilityFlags = s.compatibilityFlags,
+            bindings = s.inheritedBindings(),
+        )
+        api.putMultipartFile<kotlinx.serialization.json.JsonElement>(
+            "accounts/$accountId/workers/scripts/$name",
+            json.encodeToString(WorkerDeployMetadata.serializer(), metadata),
+            moduleName, code,
+            if (isModule) "application/javascript+module" else "application/javascript",
+            query = listOf("bindings_inherit" to "strict"),
+        )
+        refreshWorkers(accountId)
+    }
+
+    /**
+     * 删除整个 Worker 脚本（连同其部署、路由绑定）。OAuth 下放行（真机实测 issue #55）。
+     * 需 workers-scripts.write。不可撤销。成功后刷新 Room 列表。
+     */
+    suspend fun deleteScript(accountId: String, name: String) {
+        api.delete("accounts/$accountId/workers/scripts/$name")
+        refreshWorkers(accountId)
+    }
+
+    // MARK: - 部署历史
+
+    /** 部署列表（result.deployments，首项为活跃部署）。 */
+    suspend fun listDeployments(accountId: String, scriptName: String): List<WorkerDeployment> =
+        api.get<WorkerDeploymentsResult>("accounts/$accountId/workers/scripts/$scriptName/deployments").deployments
+
+    /** 删除某次部署（page.write 不需要，需 workers-scripts.write）。活跃部署 Cloudflare 会拒绝删除。 */
+    suspend fun deleteDeployment(accountId: String, scriptName: String, deploymentId: String) =
+        api.delete("accounts/$accountId/workers/scripts/$scriptName/deployments/$deploymentId")
 
     // MARK: - 设置（绑定 / 变量）
 

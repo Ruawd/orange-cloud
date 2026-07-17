@@ -455,6 +455,10 @@
     <string name="d1_delete_warn">This permanently deletes the database %1$s and all its tables and data. This cannot be undone or recovered.</string>
     <string name="d1_delete_confirm_label">Type the database name to confirm</string>
     <string name="d1_delete_button">Delete permanently</string>
+    <string name="d1_drop_table_title">Delete table</string>
+    <string name="d1_drop_table_warn">This permanently deletes the table %1$s and all its data. This cannot be undone or recovered.</string>
+    <string name="d1_drop_table_confirm_label">Type the table name to confirm</string>
+    <string name="d1_table_dropped">Table deleted</string>
 
     <!-- Worker management -->
     <string name="worker_manage_secrets">Variables &amp; secrets</string>
@@ -1047,7 +1051,7 @@
     <string name="worker_create_name_hint">Start with lowercase letter/digit; may contain hyphen and underscore</string>
     <string name="worker_create_compat">Compatibility date</string>
     <string name="worker_create_code">Code (ES module)</string>
-    <string name="worker_create_note">Note: this app can\'t read existing Worker source (Cloudflare blocks that endpoint for OAuth); creating or replacing requires full code. Manage bindings (vars/secrets/KV) separately in Worker details.</string>
+    <string name="worker_create_note">Tip: Creating or fully replacing requires the complete code. Manage bindings (variables, secrets, KV, etc.) separately in the Worker details.</string>
     <string name="worker_create_deploy">Deploy</string>
     <string name="worker_create_ok">Deployed</string>
     <string name="pages_deploy_code">Deploy code</string>
@@ -1200,4 +1204,70 @@
     <string name="sort_default">Default (name)</string>
     <string name="sort_created">Date created</string>
     <string name="sort_modified">Recently updated</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Edit Code</string>
+    <string name="worker_edit_ok">Deployed</string>
+    <string name="worker_edit_loading">Loading source…</string>
+    <string name="worker_edit_multimodule">This is a multi-module (bundled) Worker; in-app in-place editing isn\'t supported (other modules would be lost).</string>
+    <string name="worker_edit_note">Current live source loaded. Edit and deploy directly. Existing variables, secrets and bindings are kept automatically.</string>
+    <string name="worker_manage_edit">Edit Code</string>
+    <string name="worker_delete_button">Delete Worker</string>
+    <string name="worker_delete_title">Delete Worker</string>
+    <string name="worker_delete_warn">This will permanently delete the Worker %1$s along with its deployments and route bindings. This cannot be undone or recovered.</string>
+    <string name="worker_delete_confirm_label">Enter the Worker name to confirm</string>
+    <string name="kv_create_title">Create Namespace</string>
+    <string name="kv_create">Create</string>
+    <string name="kv_title_label">Name</string>
+    <string name="kv_created">Created</string>
+    <string name="kv_deleted">Deleted</string>
+    <string name="kv_delete_title">Delete Namespace</string>
+    <string name="kv_delete_warn">This will permanently delete the namespace %1$s and all of its keys and values. This cannot be undone or recovered.</string>
+    <string name="kv_delete_confirm_label">Enter the namespace name to confirm</string>
+    <string name="kv_delete_button">Permanently Delete</string>
+    <string name="r2_create_title">Create Bucket</string>
+    <string name="r2_create">Create</string>
+    <string name="r2_name">Name</string>
+    <string name="r2_name_hint">Lowercase letters, numbers and hyphens, 3–63 characters.</string>
+    <string name="r2_created">Created</string>
+    <string name="r2_delete_title">Delete Bucket</string>
+    <string name="r2_delete_warn">This will permanently delete the bucket %1$s. This cannot be undone. The bucket must be empty to delete.</string>
+    <string name="r2_delete_confirm_label">Enter the bucket name to confirm</string>
+    <string name="r2_delete_button">Permanently Delete</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Deployment deleted</string>
+    <string name="pages_deployment_delete_title">Delete Deployment</string>
+    <string name="pages_deployment_delete_msg">This will permanently delete deployment %1$s. This cannot be undone. The current production deployment cannot be deleted.</string>
+    <string name="worker_manage_deployments">Deployment History</string>
+    <string name="worker_deployments_title">Deployment History</string>
+    <string name="worker_deployments_empty">No deployments</string>
+    <string name="worker_deployments_note">The first entry is the active deployment and cannot be deleted.</string>
+    <string name="worker_deployment_active">Active</string>
+    <string name="worker_deployment_deleted">Deployment deleted</string>
+    <string name="worker_deployment_delete_title">Delete Deployment</string>
+    <string name="worker_deployment_delete_msg">This will permanently delete deployment %1$s. This cannot be undone. The active deployment cannot be deleted.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Usage</string>
+    <string name="usage_locked">Traffic analytics permission is required to show account usage</string>
+    <string name="usage_unavailable_title">Account-level data isn\'t available for this account</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV usage usually needs a paid Cloudflare account; domain traffic analytics is unaffected.</string>
+    <string name="usage_failed">Usage failed to load — tap to retry</string>
+    <string name="usage_period_month">This month</string>
+    <string name="usage_period_cycle">Cycle</string>
+    <string name="usage_today">Today</string>
+    <string name="usage_plan_workers">Workers plan</string>
+    <string name="usage_plan_r2">R2 plan</string>
+    <string name="usage_ctx_requests">Requests · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">Class A · %1$s</string>
+    <string name="usage_ctx_r2b">Class B · %1$s</string>
+    <string name="usage_ctx_storage">Storage</string>
+    <string name="usage_ctx_rows_read">Rows read · %1$s</string>
+    <string name="usage_ctx_rows_write">Rows written · %1$s</string>
+    <string name="usage_ctx_reads">Reads · %1$s</string>
+    <string name="usage_ctx_writes">Writes · %1$s</string>
+    <string name="usage_billing_day">Billing day</string>
+    <string name="usage_billing_natural">Calendar month</string>
+    <string name="usage_billing_day_n">Day %1$d</string>
 </resources>

@@ -432,6 +432,10 @@
     <string name="d1_delete_warn">Esta ação elimina permanentemente a base de dados %1$s e todas as suas tabelas e dados. Não é possível anular nem recuperar.</string>
     <string name="d1_delete_confirm_label">Escreva o nome da base de dados para confirmar</string>
     <string name="d1_delete_button">Eliminar permanentemente</string>
+    <string name="d1_drop_table_title">Eliminar tabela</string>
+    <string name="d1_drop_table_warn">Esta ação elimina permanentemente a tabela %1$s e todos os seus dados. Não é possível anular nem recuperar.</string>
+    <string name="d1_drop_table_confirm_label">Escreva o nome da tabela para confirmar</string>
+    <string name="d1_table_dropped">Tabela eliminada</string>
 
     <!-- Gestão de Workers -->
     <string name="worker_manage_secrets">Variáveis e segredos</string>
@@ -1024,7 +1028,7 @@
     <string name="worker_create_name_hint">Começa com minúscula/dígito; aceita hífen e sublinhado</string>
     <string name="worker_create_compat">Data de compatibilidade</string>
     <string name="worker_create_code">Código (módulo ES)</string>
-    <string name="worker_create_note">Nota: a app não consegue ler o código de um Worker existente (a Cloudflare bloqueia esse endpoint para OAuth); criar ou substituir exige o código completo. Faça a gestão dos bindings (variáveis/segredos/KV) nos detalhes do Worker.</string>
+    <string name="worker_create_note">Dica: Criar ou substituir por completo requer o código completo. Faça a gestão das ligações (variáveis, segredos, KV, etc.) separadamente nos detalhes do Worker.</string>
     <string name="worker_create_deploy">Implementar</string>
     <string name="worker_create_ok">Implementado</string>
     <string name="pages_deploy_code">Implementar código</string>
@@ -1177,4 +1181,70 @@
     <string name="sort_default">Predefinição (nome)</string>
     <string name="sort_created">Data de criação</string>
     <string name="sort_modified">Atualização recente</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">Editar código</string>
+    <string name="worker_edit_ok">Implementado</string>
+    <string name="worker_edit_loading">A carregar código-fonte…</string>
+    <string name="worker_edit_multimodule">Este Worker é de múltiplos módulos (empacotado); a edição direta na app não é suportada (os outros módulos seriam perdidos).</string>
+    <string name="worker_edit_note">Código-fonte em produção carregado. Edite e implemente diretamente. As variáveis, segredos e ligações existentes são mantidos automaticamente.</string>
+    <string name="worker_manage_edit">Editar código</string>
+    <string name="worker_delete_button">Eliminar Worker</string>
+    <string name="worker_delete_title">Eliminar Worker</string>
+    <string name="worker_delete_warn">Isto eliminará permanentemente o Worker %1$s e as respetivas implementações e ligações de rota. Não é possível anular nem recuperar.</string>
+    <string name="worker_delete_confirm_label">Introduza o nome do Worker para confirmar</string>
+    <string name="kv_create_title">Criar namespace</string>
+    <string name="kv_create">Criar</string>
+    <string name="kv_title_label">Nome</string>
+    <string name="kv_created">Criado</string>
+    <string name="kv_deleted">Eliminado</string>
+    <string name="kv_delete_title">Eliminar namespace</string>
+    <string name="kv_delete_warn">Isto eliminará permanentemente o namespace %1$s e todas as suas chaves e valores. Não é possível anular nem recuperar.</string>
+    <string name="kv_delete_confirm_label">Introduza o nome do namespace para confirmar</string>
+    <string name="kv_delete_button">Eliminar permanentemente</string>
+    <string name="r2_create_title">Criar bucket</string>
+    <string name="r2_create">Criar</string>
+    <string name="r2_name">Nome</string>
+    <string name="r2_name_hint">Letras minúsculas, números e hífens, 3–63 caracteres.</string>
+    <string name="r2_created">Criado</string>
+    <string name="r2_delete_title">Eliminar bucket</string>
+    <string name="r2_delete_warn">Isto eliminará permanentemente o bucket %1$s. Não é possível anular. O bucket tem de estar vazio para ser eliminado.</string>
+    <string name="r2_delete_confirm_label">Introduza o nome do bucket para confirmar</string>
+    <string name="r2_delete_button">Eliminar permanentemente</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">Implementação eliminada</string>
+    <string name="pages_deployment_delete_title">Eliminar implementação</string>
+    <string name="pages_deployment_delete_msg">Isto eliminará permanentemente a implementação %1$s. Não é possível anular. A implementação de produção atual não pode ser eliminada.</string>
+    <string name="worker_manage_deployments">Histórico de implementações</string>
+    <string name="worker_deployments_title">Histórico de implementações</string>
+    <string name="worker_deployments_empty">Nenhuma implementação</string>
+    <string name="worker_deployments_note">A primeira entrada é a implementação ativa e não pode ser eliminada.</string>
+    <string name="worker_deployment_active">Ativo</string>
+    <string name="worker_deployment_deleted">Implementação eliminada</string>
+    <string name="worker_deployment_delete_title">Eliminar implementação</string>
+    <string name="worker_deployment_delete_msg">Isto eliminará permanentemente a implementação %1$s. Não é possível anular. A implementação ativa não pode ser eliminada.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">Utilização</string>
+    <string name="usage_locked">É necessária a permissão de análise de tráfego para mostrar a utilização da conta</string>
+    <string name="usage_unavailable_title">Os dados ao nível da conta não estão disponíveis para esta conta</string>
+    <string name="usage_unavailable_body">A utilização de Workers / R2 / D1 / KV normalmente requer uma conta paga da Cloudflare; a análise de tráfego de domínios não é afetada.</string>
+    <string name="usage_failed">Falha ao carregar a utilização — toque para tentar novamente</string>
+    <string name="usage_period_month">Este mês</string>
+    <string name="usage_period_cycle">Ciclo</string>
+    <string name="usage_today">Hoje</string>
+    <string name="usage_plan_workers">Plano do Workers</string>
+    <string name="usage_plan_r2">Plano do R2</string>
+    <string name="usage_ctx_requests">Pedidos · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">Classe A · %1$s</string>
+    <string name="usage_ctx_r2b">Classe B · %1$s</string>
+    <string name="usage_ctx_storage">Armazenamento</string>
+    <string name="usage_ctx_rows_read">Linhas lidas · %1$s</string>
+    <string name="usage_ctx_rows_write">Linhas escritas · %1$s</string>
+    <string name="usage_ctx_reads">Leituras · %1$s</string>
+    <string name="usage_ctx_writes">Escritas · %1$s</string>
+    <string name="usage_billing_day">Dia de faturação</string>
+    <string name="usage_billing_natural">Mês civil</string>
+    <string name="usage_billing_day_n">Dia %1$d</string>
 </resources>

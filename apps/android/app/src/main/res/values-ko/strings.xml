@@ -431,6 +431,10 @@
     <string name="d1_delete_warn">데이터베이스 %1$s와 모든 테이블 및 데이터를 영구적으로 삭제합니다. 취소하거나 복구할 수 없습니다.</string>
     <string name="d1_delete_confirm_label">확인을 위해 데이터베이스 이름 입력</string>
     <string name="d1_delete_button">영구 삭제</string>
+    <string name="d1_drop_table_title">테이블 삭제</string>
+    <string name="d1_drop_table_warn">테이블 %1$s와 모든 데이터를 영구적으로 삭제합니다. 취소하거나 복구할 수 없습니다.</string>
+    <string name="d1_drop_table_confirm_label">확인을 위해 테이블 이름 입력</string>
+    <string name="d1_table_dropped">테이블 삭제됨</string>
 
     <!-- Worker 관리 -->
     <string name="worker_manage_secrets">변수 및 시크릿</string>
@@ -1023,7 +1027,7 @@
     <string name="worker_create_name_hint">소문자/숫자로 시작, 하이픈·밑줄 가능</string>
     <string name="worker_create_compat">호환성 날짜</string>
     <string name="worker_create_code">코드(ES module)</string>
-    <string name="worker_create_note">참고: 이 앱은 기존 Worker 소스를 읽을 수 없습니다(Cloudflare가 OAuth에 대해 해당 엔드포인트를 차단). 생성/덮어쓰기에는 전체 코드가 필요합니다. 바인딩(변수/시크릿/KV)은 Worker 세부정보에서 관리하세요.</string>
+    <string name="worker_create_note">팁: 새로 만들거나 전체를 교체하려면 전체 코드가 필요합니다. 바인딩(변수, 시크릿, KV 등)은 Worker 세부 정보에서 별도로 관리하세요.</string>
     <string name="worker_create_deploy">배포</string>
     <string name="worker_create_ok">배포됨</string>
     <string name="pages_deploy_code">코드 배포</string>
@@ -1176,4 +1180,70 @@
     <string name="sort_default">기본(이름)</string>
     <string name="sort_created">생성일</string>
     <string name="sort_modified">최근 업데이트</string>
+
+    <!-- issue #55: Worker 编辑/删除 + KV/R2 增删 -->
+    <string name="worker_edit_title">코드 편집</string>
+    <string name="worker_edit_ok">배포됨</string>
+    <string name="worker_edit_loading">소스 불러오는 중…</string>
+    <string name="worker_edit_multimodule">이 Worker는 다중 모듈(번들) 형식으로, 앱 내 직접 편집을 지원하지 않습니다(다른 모듈이 사라집니다).</string>
+    <string name="worker_edit_note">현재 라이브 소스를 불러왔습니다. 바로 수정해 배포할 수 있습니다. 기존 변수·시크릿·바인딩은 자동으로 유지됩니다.</string>
+    <string name="worker_manage_edit">코드 편집</string>
+    <string name="worker_delete_button">Worker 삭제</string>
+    <string name="worker_delete_title">Worker 삭제</string>
+    <string name="worker_delete_warn">이 작업은 Worker %1$s 및 배포와 라우트 바인딩을 영구적으로 삭제합니다. 되돌리거나 복구할 수 없습니다.</string>
+    <string name="worker_delete_confirm_label">확인하려면 Worker 이름을 입력하세요</string>
+    <string name="kv_create_title">네임스페이스 만들기</string>
+    <string name="kv_create">만들기</string>
+    <string name="kv_title_label">이름</string>
+    <string name="kv_created">생성됨</string>
+    <string name="kv_deleted">삭제됨</string>
+    <string name="kv_delete_title">네임스페이스 삭제</string>
+    <string name="kv_delete_warn">이 작업은 네임스페이스 %1$s와 모든 키와 값을 영구적으로 삭제합니다. 되돌리거나 복구할 수 없습니다.</string>
+    <string name="kv_delete_confirm_label">확인하려면 네임스페이스 이름을 입력하세요</string>
+    <string name="kv_delete_button">영구 삭제</string>
+    <string name="r2_create_title">버킷 만들기</string>
+    <string name="r2_create">만들기</string>
+    <string name="r2_name">이름</string>
+    <string name="r2_name_hint">소문자, 숫자, 하이픈, 3–63자.</string>
+    <string name="r2_created">생성됨</string>
+    <string name="r2_delete_title">버킷 삭제</string>
+    <string name="r2_delete_warn">이 작업은 버킷 %1$s를 영구적으로 삭제합니다. 되돌릴 수 없습니다. 삭제하려면 버킷이 비어 있어야 합니다.</string>
+    <string name="r2_delete_confirm_label">확인하려면 버킷 이름을 입력하세요</string>
+    <string name="r2_delete_button">영구 삭제</string>
+
+    <!-- issue #55: 部署删除 -->
+    <string name="pages_deployment_deleted">배포 삭제됨</string>
+    <string name="pages_deployment_delete_title">배포 삭제</string>
+    <string name="pages_deployment_delete_msg">배포 %1$s를 영구적으로 삭제합니다. 되돌릴 수 없습니다. 현재 프로덕션 배포는 삭제할 수 없습니다.</string>
+    <string name="worker_manage_deployments">배포 기록</string>
+    <string name="worker_deployments_title">배포 기록</string>
+    <string name="worker_deployments_empty">배포 없음</string>
+    <string name="worker_deployments_note">첫 번째 항목은 활성 배포로 삭제할 수 없습니다.</string>
+    <string name="worker_deployment_active">활성</string>
+    <string name="worker_deployment_deleted">배포 삭제됨</string>
+    <string name="worker_deployment_delete_title">배포 삭제</string>
+    <string name="worker_deployment_delete_msg">배포 %1$s를 영구적으로 삭제합니다. 되돌릴 수 없습니다. 활성 배포는 삭제할 수 없습니다.</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">사용량</string>
+    <string name="usage_locked">계정 사용량을 표시하려면 트래픽 분석 권한이 필요합니다</string>
+    <string name="usage_unavailable_title">이 계정은 계정 수준 데이터를 사용할 수 없습니다</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV 사용량은 보통 유료 Cloudflare 계정이 필요합니다. 도메인 트래픽 분석에는 영향이 없습니다.</string>
+    <string name="usage_failed">사용량을 불러오지 못했습니다. 눌러서 다시 시도</string>
+    <string name="usage_period_month">이번 달</string>
+    <string name="usage_period_cycle">청구 주기</string>
+    <string name="usage_today">오늘</string>
+    <string name="usage_plan_workers">Workers 요금제</string>
+    <string name="usage_plan_r2">R2 요금제</string>
+    <string name="usage_ctx_requests">요청 · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">클래스 A · %1$s</string>
+    <string name="usage_ctx_r2b">클래스 B · %1$s</string>
+    <string name="usage_ctx_storage">저장용량</string>
+    <string name="usage_ctx_rows_read">행 읽기 · %1$s</string>
+    <string name="usage_ctx_rows_write">행 쓰기 · %1$s</string>
+    <string name="usage_ctx_reads">읽기 · %1$s</string>
+    <string name="usage_ctx_writes">쓰기 · %1$s</string>
+    <string name="usage_billing_day">청구일</string>
+    <string name="usage_billing_natural">역월</string>
+    <string name="usage_billing_day_n">%1$d일</string>
 </resources>

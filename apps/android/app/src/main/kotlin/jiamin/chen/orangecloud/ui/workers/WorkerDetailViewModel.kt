@@ -13,20 +13,29 @@ import jiamin.chen.orangecloud.data.model.WorkerSeriesPoint
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.AnalyticsRepository
 import jiamin.chen.orangecloud.data.repository.WorkerRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed interface WorkerDeleteEvent {
+    data object Deleted : WorkerDeleteEvent
+    data class Error(val message: String?) : WorkerDeleteEvent
+}
 
 @HiltViewModel
 class WorkerDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     accountStore: AccountStore,
-    workerRepository: WorkerRepository,
+    private val workerRepository: WorkerRepository,
     private val analyticsRepository: AnalyticsRepository,
     authRepository: AuthRepository,
 ) : ViewModel() {
@@ -34,6 +43,29 @@ class WorkerDetailViewModel @Inject constructor(
     val scriptName: String = checkNotNull(savedStateHandle["scriptName"])
     private val accountId: String? = accountStore.selectedAccountId.value
     val canViewMetrics: Boolean = authRepository.hasScope(Scopes.ANALYTICS_READ)
+    val canWrite: Boolean = authRepository.hasScope(Scopes.WORKERS_WRITE)
+
+    private val _isDeleting = MutableStateFlow(false)
+    val isDeleting: StateFlow<Boolean> = _isDeleting.asStateFlow()
+
+    private val deleteChannel = Channel<WorkerDeleteEvent>(Channel.BUFFERED)
+    val deleteEvents: Flow<WorkerDeleteEvent> = deleteChannel.receiveAsFlow()
+
+    /** 删除整个 Worker（连同部署 / 路由绑定）。须经二次确认，不可恢复。成功后触发返回。 */
+    fun delete() {
+        if (!canWrite || accountId == null || _isDeleting.value) return
+        _isDeleting.update { true }
+        viewModelScope.launch {
+            try {
+                workerRepository.deleteScript(accountId, scriptName)
+                deleteChannel.send(WorkerDeleteEvent.Deleted)
+            } catch (e: Exception) {
+                deleteChannel.send(WorkerDeleteEvent.Error(e.message))
+            } finally {
+                _isDeleting.update { false }
+            }
+        }
+    }
 
     val worker: StateFlow<WorkerScript?> =
         if (accountId == null) {

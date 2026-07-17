@@ -653,6 +653,10 @@
     <string name="d1_delete_warn">此操作将永久删除数据库 %1$s 及其全部表和数据，无法撤销，也无法恢复。</string>
     <string name="d1_delete_confirm_label">输入数据库名称以确认</string>
     <string name="d1_delete_button">永久删除</string>
+    <string name="d1_drop_table_title">删除表</string>
+    <string name="d1_drop_table_warn">此操作将永久删除表 %1$s 及其全部数据，无法撤销，也无法恢复。</string>
+    <string name="d1_drop_table_confirm_label">输入表名以确认</string>
+    <string name="d1_table_dropped">表已删除</string>
 
     <!-- Worker 管理：变量与密钥 / 触发器 / 域名 -->
     <string name="worker_manage_secrets">变量与密钥</string>
@@ -987,6 +991,9 @@
     <string name="pages_empty">暂无 Pages 项目</string>
     <string name="pages_retried">已触发重新部署</string>
     <string name="pages_rolled_back">已回滚</string>
+    <string name="pages_deployment_deleted">已删除部署</string>
+    <string name="pages_deployment_delete_title">删除部署</string>
+    <string name="pages_deployment_delete_msg">将永久删除部署 %1$s，无法恢复。当前生产部署无法删除。</string>
     <string name="pages_deployments">部署记录</string>
     <string name="pages_production">生产</string>
     <string name="pages_preview">预览</string>
@@ -1059,9 +1066,49 @@
     <string name="worker_create_name_hint">小写字母/数字开头，可含连字符、下划线</string>
     <string name="worker_create_compat">兼容性日期</string>
     <string name="worker_create_code">代码（ES module）</string>
-    <string name="worker_create_note">提示：本应用无法读取现有 Worker 源码（Cloudflare 对 OAuth 封禁该端点），新建或覆盖都需提供完整代码。绑定（变量/密钥/KV 等）请在 Worker 详情里单独管理。</string>
+    <string name="worker_create_note">提示：新建或整体覆盖都需提供完整代码。绑定（变量/密钥/KV 等）请在 Worker 详情里单独管理。</string>
     <string name="worker_create_deploy">部署</string>
     <string name="worker_create_ok">已部署</string>
+
+    <!-- Worker 原地编辑 / 删除（issue #55） -->
+    <string name="worker_edit_title">编辑代码</string>
+    <string name="worker_edit_ok">已部署</string>
+    <string name="worker_edit_loading">正在读取源码…</string>
+    <string name="worker_edit_multimodule">这是多模块打包 Worker，暂不支持在应用内原地编辑（会丢失其它模块）。</string>
+    <string name="worker_edit_note">已载入当前线上源码，可直接修改后部署。现有变量 / 密钥 / 绑定会自动保留。</string>
+    <string name="worker_manage_edit">编辑代码</string>
+    <string name="worker_manage_deployments">部署历史</string>
+    <string name="worker_deployments_title">部署历史</string>
+    <string name="worker_deployments_empty">暂无部署记录</string>
+    <string name="worker_deployments_note">首项为当前活跃部署，不可删除。</string>
+    <string name="worker_deployment_active">活跃</string>
+    <string name="worker_deployment_deleted">已删除部署</string>
+    <string name="worker_deployment_delete_title">删除部署</string>
+    <string name="worker_deployment_delete_msg">将永久删除部署 %1$s，无法恢复。当前活跃部署无法删除。</string>
+    <string name="worker_delete_button">删除 Worker</string>
+    <string name="worker_delete_title">删除 Worker</string>
+    <string name="worker_delete_warn">此操作将永久删除 Worker %1$s 及其部署与路由绑定，无法撤销，也无法恢复。</string>
+    <string name="worker_delete_confirm_label">输入 Worker 名称以确认</string>
+
+    <!-- KV 命名空间 / R2 桶 增删（issue #55） -->
+    <string name="kv_create_title">创建命名空间</string>
+    <string name="kv_create">创建</string>
+    <string name="kv_title_label">名称</string>
+    <string name="kv_created">已创建</string>
+    <string name="kv_deleted">已删除</string>
+    <string name="kv_delete_title">删除命名空间</string>
+    <string name="kv_delete_warn">此操作将永久删除命名空间 %1$s 及其全部键值，无法撤销，也无法恢复。</string>
+    <string name="kv_delete_confirm_label">输入命名空间名称以确认</string>
+    <string name="kv_delete_button">永久删除</string>
+    <string name="r2_create_title">创建存储桶</string>
+    <string name="r2_create">创建</string>
+    <string name="r2_name">名称</string>
+    <string name="r2_name_hint">小写字母、数字与连字符，3–63 位。</string>
+    <string name="r2_created">已创建</string>
+    <string name="r2_delete_title">删除存储桶</string>
+    <string name="r2_delete_warn">此操作将永久删除存储桶 %1$s，无法撤销。桶必须为空才能删除。</string>
+    <string name="r2_delete_confirm_label">输入存储桶名称以确认</string>
+    <string name="r2_delete_button">永久删除</string>
 
     <!-- WAF 可视化表达式构建器 -->
     <string name="wafb_open">可视化构建表达式</string>
@@ -1265,4 +1312,27 @@
     <string name="sort_default">默认（名称）</string>
     <string name="sort_created">创建日期</string>
     <string name="sort_modified">最近更新</string>
+    <!-- Dashboard 用量模块 -->
+    <string name="usage_title">用量</string>
+    <string name="usage_locked">需要「流量分析」权限才能展示账号用量</string>
+    <string name="usage_unavailable_title">此账号暂无账户级数据查询权限</string>
+    <string name="usage_unavailable_body">Workers / R2 / D1 / KV 用量通常需要付费版 Cloudflare 账号；域名流量分析不受影响。</string>
+    <string name="usage_failed">用量加载失败，点此重试</string>
+    <string name="usage_period_month">本月</string>
+    <string name="usage_period_cycle">账期</string>
+    <string name="usage_today">今日</string>
+    <string name="usage_plan_workers">Workers 套餐</string>
+    <string name="usage_plan_r2">R2 套餐</string>
+    <string name="usage_ctx_requests">请求 · %1$s</string>
+    <string name="usage_ctx_cpu">CPU · %1$s</string>
+    <string name="usage_ctx_r2a">A 类 · %1$s</string>
+    <string name="usage_ctx_r2b">B 类 · %1$s</string>
+    <string name="usage_ctx_storage">存储</string>
+    <string name="usage_ctx_rows_read">行读取 · %1$s</string>
+    <string name="usage_ctx_rows_write">行写入 · %1$s</string>
+    <string name="usage_ctx_reads">读取 · %1$s</string>
+    <string name="usage_ctx_writes">写入 · %1$s</string>
+    <string name="usage_billing_day">账单日</string>
+    <string name="usage_billing_natural">自然月</string>
+    <string name="usage_billing_day_n">%1$d 日</string>
 </resources>

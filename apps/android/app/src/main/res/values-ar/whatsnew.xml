@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_4_0_title">نظرة عامة على استخدام الحساب</string>
+    <string name="whatsnew_1_6_4_0_detail">أصبحت شاشة النظرة العامة تعرض وحدة استخدام: استخدام Workers وR2 وD1 وKV مقابل الحصص في لمحة، مع تبديل الخطة وتفاصيل لكل مقياس.</string>
+    <string name="whatsnew_1_6_4_1_title">سجل عمليات نشر Worker وحذفه</string>
+    <string name="whatsnew_1_6_4_1_detail">اطّلع على عمليات نشر Worker السابقة واحذف القديمة، مع إمكانية تعديل وحذف Workers.</string>
+    <string name="whatsnew_1_6_4_2_title">مزيد من إدارة التخزين</string>
+    <string name="whatsnew_1_6_4_2_detail">أنشئ واحذف مساحات أسماء KV وحاويات R2، واحذف جداول D1 وعمليات نشر Pages.</string>
     <string name="whatsnew_1_6_0_0_title">نطاقات Pages المخصصة</string>
     <string name="whatsnew_1_6_0_0_detail">أدر النطاقات المخصصة داخل مشروع Pages مباشرة: إضافة وحذف وإعادة تحقق وفحص حالة DNS — مع إضافة سجل CNAME بلمسة واحدة عندما تكون منطقة النطاق ضمن حسابك.</string>
     <string name="whatsnew_1_6_0_1_title">ترتيب القوائم</string>
