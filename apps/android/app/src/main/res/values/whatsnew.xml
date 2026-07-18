@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">workers.dev 子域直达</string>
+    <string name="whatsnew_1_6_5_0_detail">Worker 开启 workers.dev 子域后，直接显示完整访问地址，点一下即可打开。</string>
+    <string name="whatsnew_1_6_5_1_title">快速绑定 D1 / KV</string>
+    <string name="whatsnew_1_6_5_1_detail">在变量与密钥页直接把现有 D1 数据库或 KV 命名空间绑定到 Worker，也能一键解除。</string>
+    <string name="whatsnew_1_6_5_2_title">修复编辑长脚本闪退</string>
+    <string name="whatsnew_1_6_5_2_detail">修复编辑较长 Worker 源码时可能闪退的问题。</string>
     <string name="whatsnew_1_6_4_0_title">账号用量总览</string>
     <string name="whatsnew_1_6_4_0_detail">概览页新增用量模块，一眼看清 Workers、R2、D1、KV 的用量与额度，可切换套餐并查看各项明细。</string>
     <string name="whatsnew_1_6_4_1_title">Worker 部署历史与删除</string>

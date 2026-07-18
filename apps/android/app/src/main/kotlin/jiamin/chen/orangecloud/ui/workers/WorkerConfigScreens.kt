@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Button
@@ -44,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -57,7 +59,10 @@ import jiamin.chen.orangecloud.core.design.SkyHeader
 import jiamin.chen.orangecloud.core.design.onSky
 import jiamin.chen.orangecloud.core.design.rememberSkyPhase
 import jiamin.chen.orangecloud.core.design.theme.OcOrange
+import jiamin.chen.orangecloud.data.model.D1Database
+import jiamin.chen.orangecloud.data.model.KVNamespace
 import jiamin.chen.orangecloud.data.model.WorkerBinding
+import jiamin.chen.orangecloud.data.model.WorkerBindingInput
 import jiamin.chen.orangecloud.data.model.WorkerSchedule
 import jiamin.chen.orangecloud.data.model.Zone
 
@@ -120,6 +125,7 @@ fun WorkerSecretsScreen(
     val onSky = phase.onSky
     // sheet: null = closed; "secret" = new secret; "var:" + name = edit/new variable
     var sheet by remember { mutableStateOf<EditorTarget?>(null) }
+    var showBindSheet by remember { mutableStateOf(false) }
 
     SkyBackground(phase = phase) {
         Column(Modifier.fillMaxSize().systemBarsPadding()) {
@@ -171,16 +177,28 @@ fun WorkerSecretsScreen(
                     if (state.canWrite) AddInlineButton(stringResource(R.string.worker_vars_add)) { sheet = EditorTarget.NewVar }
                 }
 
-                // 只读绑定
-                if (state.otherBindings.isNotEmpty()) {
+                // 资源绑定（D1 / KV 可增删，其余只读）
+                if (state.otherBindings.isNotEmpty() || state.canBind) {
                     WorkerSection(
                         stringResource(R.string.worker_other_section),
-                        footer = stringResource(R.string.worker_other_footer),
+                        footer = if (state.canBind) stringResource(R.string.worker_bind_footer) else stringResource(R.string.worker_other_footer),
                     ) {
+                        if (state.otherBindings.isEmpty()) EmptyHint(stringResource(R.string.worker_bind_empty))
                         state.otherBindings.forEach { binding ->
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                                 Text(binding.name, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
                                 Text(bindingTypeLabel(binding), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                if (state.canWrite && binding.isQuickManaged) {
+                                    IconButton(onClick = { viewModel.unbindResource(binding) }) {
+                                        Icon(Icons.Outlined.Delete, contentDescription = stringResource(R.string.worker_bind_remove), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    }
+                                }
+                            }
+                        }
+                        if (state.canBind) {
+                            AddInlineButton(stringResource(R.string.worker_bind_add)) {
+                                viewModel.loadResources()
+                                showBindSheet = true
                             }
                         }
                     }
@@ -205,6 +223,15 @@ fun WorkerSecretsScreen(
                 sheet = null
             },
             onDismiss = { sheet = null },
+        )
+    }
+
+    if (showBindSheet) {
+        WorkerBindResourceSheet(
+            state = state,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            onSubmit = { resource -> viewModel.bindResource(resource); showBindSheet = false },
+            onDismiss = { showBindSheet = false },
         )
     }
 }
@@ -278,6 +305,150 @@ private fun WorkerValueSheet(
             }
         }
     }
+}
+
+/** 绑定既有 D1 数据库 / KV 命名空间：选类型 → 选资源 → 填绑定变量名 → PATCH settings（其余绑定 inherit）。 */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WorkerBindResourceSheet(
+    state: WorkerBindingsUiState,
+    sheetState: androidx.compose.material3.SheetState,
+    onSubmit: (WorkerBindingInput) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val kvKind = "kv"
+    val d1Kind = "d1"
+    val availableKinds = buildList {
+        if (state.canReadKV) add(kvKind)
+        if (state.canReadD1) add(d1Kind)
+    }
+    var kind by remember { mutableStateOf(availableKinds.firstOrNull() ?: kvKind) }
+    var selectedId by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var nameEdited by remember { mutableStateOf(false) }
+    var resourceExpanded by remember { mutableStateOf(false) }
+
+    val options: List<Pair<String, String>> = if (kind == kvKind) {
+        state.kvNamespaces.map { it.id to it.title }
+    } else {
+        state.d1Databases.map { it.uuid to it.name }
+    }
+    val selectedTitle = options.firstOrNull { it.first == selectedId }?.second
+
+    val nameValid = name.matches(Regex("^[A-Za-z_][A-Za-z0-9_]*$"))
+    val nameDuplicate = state.boundNames.contains(name)
+    val canSave = selectedId.isNotEmpty() && nameValid && !nameDuplicate && !state.isSaving
+
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+        Column(
+            modifier = Modifier.fillMaxWidth().navigationBarsPadding().imePadding().padding(horizontal = 24.dp).padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            Text(stringResource(R.string.worker_bind_add), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
+            // 类型选择（两类都可读时才显示）
+            if (availableKinds.size > 1) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    availableKinds.forEach { k ->
+                        val selected = k == kind
+                        Button(
+                            onClick = {
+                                if (k != kind) {
+                                    kind = k
+                                    selectedId = ""
+                                    if (!nameEdited) name = ""
+                                }
+                            },
+                            colors = if (selected)
+                                ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White)
+                            else
+                                ButtonDefaults.outlinedButtonColors(),
+                            modifier = Modifier.weight(1f),
+                        ) { Text(if (k == kvKind) "KV" else "D1") }
+                    }
+                }
+            }
+
+            // 资源选择
+            if (state.loadingResources && options.isEmpty()) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = OcOrange)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.common_loading), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            } else if (options.isEmpty()) {
+                Text(
+                    stringResource(if (kind == kvKind) R.string.worker_bind_no_kv else R.string.worker_bind_no_d1),
+                    fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                ExposedDropdownMenuBox(expanded = resourceExpanded, onExpandedChange = { resourceExpanded = !resourceExpanded }) {
+                    OutlinedTextField(
+                        value = selectedTitle ?: stringResource(R.string.worker_bind_pick),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text(stringResource(if (kind == kvKind) R.string.worker_bind_kv_ns else R.string.worker_bind_d1_db)) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = resourceExpanded) },
+                        modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
+                    )
+                    ExposedDropdownMenu(expanded = resourceExpanded, onDismissRequest = { resourceExpanded = false }) {
+                        options.forEach { (id, title) ->
+                            DropdownMenuItem(
+                                text = { Text(title) },
+                                onClick = {
+                                    selectedId = id
+                                    if (!nameEdited) name = suggestBindingName(title)
+                                    resourceExpanded = false
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+
+            // 绑定变量名
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it; nameEdited = true },
+                label = { Text(stringResource(R.string.worker_bind_var_name)) },
+                singleLine = true,
+                isError = nameDuplicate,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Text(
+                if (nameDuplicate) stringResource(R.string.worker_bind_dup) else stringResource(R.string.worker_bind_var_name_hint),
+                fontSize = 12.sp,
+                color = if (nameDuplicate) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            Button(
+                onClick = {
+                    val resource = if (kind == kvKind)
+                        WorkerBindingInput.kv(name.trim(), selectedId)
+                    else
+                        WorkerBindingInput.d1(name.trim(), selectedId)
+                    onSubmit(resource)
+                },
+                enabled = canSave,
+                colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                if (state.isSaving) {
+                    CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = Color.White)
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(stringResource(R.string.worker_bind_confirm))
+            }
+        }
+    }
+}
+
+/** 资源名 → 合法绑定变量名（大写、非法字符转下划线、数字开头补前缀）。 */
+private fun suggestBindingName(title: String): String {
+    val mapped = title.uppercase().map { if (it.isLetterOrDigit()) it else '_' }.joinToString("")
+    val prefixed = if (mapped.firstOrNull()?.isDigit() == true) "_$mapped" else mapped
+    return prefixed.ifEmpty { "BINDING" }
 }
 
 @Composable
@@ -531,6 +702,23 @@ fun WorkerRoutesScreen(
                                     onCheckedChange = { viewModel.toggleSubdomain(it) },
                                     enabled = state.canWrite,
                                 )
+                            }
+                        }
+                        state.workersDevUrl?.let { url ->
+                            val uriHandler = LocalUriHandler.current
+                            Row(
+                                Modifier.fillMaxWidth().clickable { uriHandler.openUri(url) },
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    url.removePrefix("https://"),
+                                    fontSize = 13.sp,
+                                    fontFamily = FontFamily.Monospace,
+                                    color = OcOrange,
+                                    maxLines = 1,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null, tint = OcOrange, modifier = Modifier.size(16.dp))
                             }
                         }
                     }

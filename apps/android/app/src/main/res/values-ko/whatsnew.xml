@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">workers.dev 서브도메인 바로 열기</string>
+    <string name="whatsnew_1_6_5_0_detail">Worker의 workers.dev 서브도메인을 켜면 전체 주소가 바로 표시되며, 탭하면 열립니다.</string>
+    <string name="whatsnew_1_6_5_1_title">D1 / KV 빠른 바인딩</string>
+    <string name="whatsnew_1_6_5_1_detail">변수·시크릿 페이지에서 기존 D1 데이터베이스나 KV 네임스페이스를 Worker에 바인딩하고, 해제도 간편합니다.</string>
+    <string name="whatsnew_1_6_5_2_title">긴 스크립트 편집 시 앱 종료 문제 수정</string>
+    <string name="whatsnew_1_6_5_2_detail">긴 Worker 소스 코드를 편집할 때 앱이 종료될 수 있던 문제를 수정했습니다.</string>
     <string name="whatsnew_1_6_4_0_title">계정 사용량 개요</string>
     <string name="whatsnew_1_6_4_0_detail">개요 화면에 사용량 모듈이 추가되어 Workers, R2, D1, KV 사용량과 한도를 한눈에 확인하고 요금제 전환과 항목별 세부 정보를 볼 수 있습니다.</string>
     <string name="whatsnew_1_6_4_1_title">Worker 배포 기록 및 삭제</string>

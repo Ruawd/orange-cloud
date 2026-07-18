@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">Acceso directo al subdominio workers.dev</string>
+    <string name="whatsnew_1_6_5_0_detail">Cuando el subdominio workers.dev de un Worker está activo, ahora se muestra su URL completa: tócala para abrir.</string>
+    <string name="whatsnew_1_6_5_1_title">Vincula D1 / KV rápidamente</string>
+    <string name="whatsnew_1_6_5_1_detail">Vincula una base de datos D1 o un espacio de nombres KV existente a un Worker desde la página de vínculos, y desvincúlalos con la misma facilidad.</string>
+    <string name="whatsnew_1_6_5_2_title">Corregido un cierre al editar scripts largos</string>
+    <string name="whatsnew_1_6_5_2_detail">Se corrigió un cierre que podía ocurrir al editar el código de un Worker más largo.</string>
     <string name="whatsnew_1_6_4_0_title">Resumen de uso de la cuenta</string>
     <string name="whatsnew_1_6_4_0_detail">La pantalla de resumen ahora incluye un módulo de uso: consulta de un vistazo el uso de Workers, R2, D1 y KV frente a sus límites, con cambio de plan y detalles por métrica.</string>
     <string name="whatsnew_1_6_4_1_title">Historial de despliegues y eliminación de Workers</string>

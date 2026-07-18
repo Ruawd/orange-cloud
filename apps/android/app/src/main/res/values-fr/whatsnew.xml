@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">Accès direct au sous-domaine workers.dev</string>
+    <string name="whatsnew_1_6_5_0_detail">Lorsque le sous-domaine workers.dev d’un Worker est activé, son URL complète s’affiche : touchez pour l’ouvrir.</string>
+    <string name="whatsnew_1_6_5_1_title">Lier rapidement D1 / KV</string>
+    <string name="whatsnew_1_6_5_1_detail">Liez une base de données D1 ou un espace de noms KV existant à un Worker depuis la page des liaisons, et dissociez-les tout aussi facilement.</string>
+    <string name="whatsnew_1_6_5_2_title">Correction d’un plantage lors de l’édition de longs scripts</string>
+    <string name="whatsnew_1_6_5_2_detail">Correction d’un plantage pouvant survenir lors de l’édition d’un code source de Worker plus long.</string>
     <string name="whatsnew_1_6_4_0_title">Aperçu de l’utilisation du compte</string>
     <string name="whatsnew_1_6_4_0_detail">L’aperçu affiche désormais un module d’utilisation : usage de Workers, R2, D1 et KV par rapport aux quotas d’un coup d’œil, avec changement de forfait et détails par métrique.</string>
     <string name="whatsnew_1_6_4_1_title">Historique des déploiements et suppression de Workers</string>

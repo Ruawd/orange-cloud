@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">Direkter workers.dev-Zugriff</string>
+    <string name="whatsnew_1_6_5_0_detail">Ist die workers.dev-Subdomain eines Workers aktiv, wird jetzt die vollständige URL angezeigt – zum Öffnen tippen.</string>
+    <string name="whatsnew_1_6_5_1_title">D1 / KV schnell binden</string>
+    <string name="whatsnew_1_6_5_1_detail">Binde eine vorhandene D1-Datenbank oder einen KV-Namespace direkt auf der Bindungsseite an einen Worker – und löse die Bindung ebenso einfach.</string>
+    <string name="whatsnew_1_6_5_2_title">Absturz beim Bearbeiten langer Skripte behoben</string>
+    <string name="whatsnew_1_6_5_2_detail">Ein Absturz beim Bearbeiten längerer Worker-Quelltexte wurde behoben.</string>
     <string name="whatsnew_1_6_4_0_title">Übersicht der Kontonutzung</string>
     <string name="whatsnew_1_6_4_0_detail">Die Übersicht zeigt jetzt ein Nutzungsmodul – Workers-, R2-, D1- und KV-Nutzung im Verhältnis zu den Kontingenten auf einen Blick, mit Tarifwechsel und Details je Kennzahl.</string>
     <string name="whatsnew_1_6_4_1_title">Worker-Bereitstellungsverlauf und Löschen</string>

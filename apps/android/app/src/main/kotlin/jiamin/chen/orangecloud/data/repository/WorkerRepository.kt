@@ -21,6 +21,7 @@ import jiamin.chen.orangecloud.data.model.WorkerSecret
 import jiamin.chen.orangecloud.data.model.WorkerSecretInput
 import jiamin.chen.orangecloud.data.model.WorkerSettings
 import jiamin.chen.orangecloud.data.model.WorkerSettingsPatch
+import jiamin.chen.orangecloud.data.model.WorkerAccountSubdomain
 import jiamin.chen.orangecloud.data.model.WorkerSubdomain
 import jiamin.chen.orangecloud.data.model.WorkerSubdomainInput
 import kotlinx.coroutines.flow.Flow
@@ -164,6 +165,10 @@ class WorkerRepository @Inject constructor(
     /** workers.dev 子域状态。 */
     suspend fun subdomain(accountId: String, scriptName: String): WorkerSubdomain =
         api.get("accounts/$accountId/workers/scripts/$scriptName/subdomain")
+
+    /** 账号级 workers.dev 子域前缀（拼 <脚本名>.<前缀>.workers.dev）。账号未注册时 subdomain 为 null。 */
+    suspend fun accountSubdomain(accountId: String): String? =
+        api.get<WorkerAccountSubdomain>("accounts/$accountId/workers/subdomain").subdomain
 
     /** 切换 workers.dev 子域。 */
     suspend fun setSubdomain(accountId: String, scriptName: String, enabled: Boolean) =

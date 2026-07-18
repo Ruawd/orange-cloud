@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">One-tap workers.dev URL</string>
+    <string name="whatsnew_1_6_5_0_detail">When a Worker’s workers.dev subdomain is on, its full URL now shows right there — tap to open.</string>
+    <string name="whatsnew_1_6_5_1_title">Quickly bind D1 / KV</string>
+    <string name="whatsnew_1_6_5_1_detail">Bind an existing D1 database or KV namespace to a Worker right from the bindings page — and unbind just as easily.</string>
+    <string name="whatsnew_1_6_5_2_title">Fixed crash when editing long scripts</string>
+    <string name="whatsnew_1_6_5_2_detail">Fixed a crash that could occur when editing a longer Worker script.</string>
     <string name="whatsnew_1_6_4_0_title">Account usage overview</string>
     <string name="whatsnew_1_6_4_0_detail">The overview now has a usage module — see Workers, R2, D1 and KV usage against their quotas at a glance, with plan switching and per-metric details.</string>
     <string name="whatsnew_1_6_4_1_title">Worker deployment history and delete</string>

@@ -119,6 +119,9 @@ data class WorkerBinding(
     val isSecret: Boolean get() = type == "secret_text" || type == "secrets_store_secret"
     val isPlainText: Boolean get() = type == "plain_text"
 
+    /** 本客户端可原地增删的资源绑定（D1 / KV）——其余类型仍只读。 */
+    val isQuickManaged: Boolean get() = type == "kv_namespace" || type == "d1"
+
     /** 回传时转为 inherit（按名保留旧绑定，密钥值我们读不到也能保住）。 */
     fun asInherit(): WorkerBindingInput = WorkerBindingInput(type = "inherit", name = name)
 }
@@ -142,13 +145,27 @@ data class WorkerSettings(
 
 // MARK: - 上传 / 写入请求体
 
-/** PATCH settings 的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}。 */
+/**
+ * PATCH settings 的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}；
+ * kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}。
+ * Json explicitNulls=false，null 字段不编码（omitted）。
+ */
 @Serializable
 data class WorkerBindingInput(
     val type: String,
     val name: String,
     val text: String? = null,
-)
+    @SerialName("namespace_id") val namespaceId: String? = null, // kv_namespace
+    val id: String? = null, // d1 数据库 UUID
+) {
+    companion object {
+        /** 绑定既有 KV 命名空间。 */
+        fun kv(name: String, namespaceId: String) = WorkerBindingInput(type = "kv_namespace", name = name, namespaceId = namespaceId)
+
+        /** 绑定既有 D1 数据库。 */
+        fun d1(name: String, databaseId: String) = WorkerBindingInput(type = "d1", name = name, id = databaseId)
+    }
+}
 
 /** PATCH settings 的 settings part（改变量时回传：变更项 + 其余 inherit）。 */
 @Serializable

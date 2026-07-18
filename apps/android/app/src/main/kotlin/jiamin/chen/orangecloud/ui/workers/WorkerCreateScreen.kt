@@ -124,11 +124,16 @@ fun WorkerCreateScreen(
                         Text(stringResource(R.string.worker_edit_loading), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     sourceState.uneditable ->
                         Text(stringResource(R.string.worker_edit_multimodule), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    // maxLines 必须有限：外层是 verticalScroll（传下无限高约束），
+                    // 无上限时输入框会把全部源码撑成实际高度，长脚本超出 Compose Constraints 上限
+                    // （Can't represent a height of … in Constraints）而闪退。封顶后内容在框内自滚，
+                    // 与 iOS TextEditor 原生内滚同理（issue #55）。
                     else -> OutlinedTextField(
                         value = code,
                         onValueChange = { code = it },
                         textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
                         minLines = 10,
+                        maxLines = 20,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

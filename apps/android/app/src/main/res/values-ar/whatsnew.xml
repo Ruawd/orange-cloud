@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_6_5_0_title">وصول مباشر إلى نطاق workers.dev الفرعي</string>
+    <string name="whatsnew_1_6_5_0_detail">عند تفعيل نطاق workers.dev الفرعي لأحد Workers، يظهر عنوانه الكامل الآن — انقر لفتحه.</string>
+    <string name="whatsnew_1_6_5_1_title">ربط D1 / KV بسرعة</string>
+    <string name="whatsnew_1_6_5_1_detail">اربط قاعدة بيانات D1 أو مساحة أسماء KV موجودة بأحد Workers مباشرة من صفحة الروابط، وألغِ الربط بالسهولة نفسها.</string>
+    <string name="whatsnew_1_6_5_2_title">إصلاح تعطّل عند تحرير النصوص البرمجية الطويلة</string>
+    <string name="whatsnew_1_6_5_2_detail">تم إصلاح تعطّل قد يحدث عند تحرير شفرة مصدر Worker أطول.</string>
     <string name="whatsnew_1_6_4_0_title">نظرة عامة على استخدام الحساب</string>
     <string name="whatsnew_1_6_4_0_detail">أصبحت شاشة النظرة العامة تعرض وحدة استخدام: استخدام Workers وR2 وD1 وKV مقابل الحصص في لمحة، مع تبديل الخطة وتفاصيل لكل مقياس.</string>
     <string name="whatsnew_1_6_4_1_title">سجل عمليات نشر Worker وحذفه</string>
