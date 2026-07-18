@@ -579,6 +579,32 @@ final class D1QueryViewModel {
         }
         isRunning = false
     }
+
+    // MARK: - 删表（DROP TABLE）
+
+    var isDroppingTable = false
+    var dropError: String?
+
+    /// 标识符加引号并转义内部双引号，防 SQL 注入（对齐 D1TableViewModel.quoted）
+    private func quoted(_ identifier: String) -> String {
+        "\"" + identifier.replacingOccurrences(of: "\"", with: "\"\"") + "\""
+    }
+
+    /// DROP TABLE：删除整张表及其全部数据（d1.write 门控，标识符加引号防注入）
+    func dropTable(_ name: String) async -> Bool {
+        guard !isDroppingTable else { return false }
+        isDroppingTable = true
+        dropError = nil
+        defer { isDroppingTable = false }
+        do {
+            _ = try await service.query(accountId: accountId, databaseId: databaseId, sql: "DROP TABLE IF EXISTS \(quoted(name))")
+            tables.removeAll { $0 == name }
+            return true
+        } catch {
+            dropError = error.localizedDescription
+            return false
+        }
+    }
 }
 
 @Observable

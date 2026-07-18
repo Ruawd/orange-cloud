@@ -21,6 +21,10 @@ final class WorkerUploadViewModel {
     var error: String?
     var didUpload = false       // sensoryFeedback 触发器
 
+    // 原地编辑：读现有源码预填（/content/v2，OAuth 下可读）
+    var isLoadingSource = false
+    var sourceUneditable = false   // 多模块打包产物：无法安全单文件替换（会丢其它模块）
+
     // 静态资源上传进度
     var uploadedAssets = 0
     var totalAssets = 0
@@ -151,6 +155,23 @@ final class WorkerUploadViewModel {
         } catch {
             self.error = error.localizedDescription
             return false
+        }
+    }
+
+    /// 原地编辑前读取当前线上源码用于预填。多模块打包产物置 sourceUneditable，
+    /// 单文件替换会丢失其它模块，故不允许原地编辑（引导用户走多模块整体替换）。
+    func fetchSource(scriptName: String) async -> WorkerContent? {
+        isLoadingSource = true
+        sourceUneditable = false
+        error = nil
+        defer { isLoadingSource = false }
+        do {
+            let content = try await service.content(accountId: accountId, scriptName: scriptName)
+            sourceUneditable = !content.isEditable
+            return content
+        } catch {
+            self.error = error.localizedDescription
+            return nil
         }
     }
 

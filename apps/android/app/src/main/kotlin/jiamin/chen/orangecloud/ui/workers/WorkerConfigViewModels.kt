@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.data.model.D1Database
+import jiamin.chen.orangecloud.data.model.KVNamespace
 import jiamin.chen.orangecloud.data.model.ScopedWorkerRoute
 import jiamin.chen.orangecloud.data.model.WorkerBinding
 import jiamin.chen.orangecloud.data.model.WorkerBindingInput
@@ -15,6 +17,7 @@ import jiamin.chen.orangecloud.data.model.WorkerSecret
 import jiamin.chen.orangecloud.data.model.WorkerSettings
 import jiamin.chen.orangecloud.data.model.WorkerSubdomain
 import jiamin.chen.orangecloud.data.repository.AccountStore
+import jiamin.chen.orangecloud.data.repository.StorageRepository
 import jiamin.chen.orangecloud.data.repository.WorkerRepository
 import jiamin.chen.orangecloud.data.repository.ZoneRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,8 +37,18 @@ data class WorkerBindingsUiState(
     val isSaving: Boolean = false,
     val loaded: Boolean = false,
     val canWrite: Boolean = false,
+    val canReadD1: Boolean = false,
+    val canReadKV: Boolean = false,
+    // 快速绑定用可选资源（打开绑定选择器时惰性加载）
+    val d1Databases: List<D1Database> = emptyList(),
+    val kvNamespaces: List<KVNamespace> = emptyList(),
+    val loadingResources: Boolean = false,
+    val boundNames: Set<String> = emptySet(),
     val error: String? = null,
-)
+) {
+    /** 能读到至少一类资源、且可写脚本，才提供快速绑定入口。 */
+    val canBind: Boolean get() = canWrite && (canReadD1 || canReadKV)
+}
 
 /**
  * Worker 密钥（secret_text，专用端点）+ 环境变量（plain_text，PATCH settings）+ 只读绑定清单。
@@ -46,14 +59,18 @@ class WorkerBindingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val accountStore: AccountStore,
     private val workerRepository: WorkerRepository,
+    private val storageRepository: StorageRepository,
     authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val scriptName: String = checkNotNull(savedStateHandle["scriptName"])
     private val canWrite = authRepository.hasScope(Scopes.WORKERS_WRITE)
+    private val canReadD1 = authRepository.hasScope(Scopes.D1_READ)
+    private val canReadKV = authRepository.hasScope(Scopes.KV_READ)
     private var settings: WorkerSettings? = null
+    private var resourcesLoaded = false
 
-    private val _uiState = MutableStateFlow(WorkerBindingsUiState(canWrite = canWrite))
+    private val _uiState = MutableStateFlow(WorkerBindingsUiState(canWrite = canWrite, canReadD1 = canReadD1, canReadKV = canReadKV))
     val uiState: StateFlow<WorkerBindingsUiState> = _uiState.asStateFlow()
 
     init { load() }
@@ -71,6 +88,7 @@ class WorkerBindingsViewModel @Inject constructor(
                         secrets = secrets,
                         variables = s.validBindings.filter { b -> b.isPlainText }.sortedBy { b -> b.name },
                         otherBindings = s.validBindings.filter { b -> !b.isPlainText && !b.isSecret }.sortedBy { b -> b.name },
+                        boundNames = s.validBindings.map { b -> b.name }.toSet(),
                         loaded = true,
                     )
                 }
@@ -149,7 +167,56 @@ class WorkerBindingsViewModel @Inject constructor(
             it.copy(
                 variables = fresh.validBindings.filter { b -> b.isPlainText }.sortedBy { b -> b.name },
                 otherBindings = fresh.validBindings.filter { b -> !b.isPlainText && !b.isSecret }.sortedBy { b -> b.name },
+                boundNames = fresh.validBindings.map { b -> b.name }.toSet(),
             )
+        }
+    }
+
+    // MARK: - 快速绑定 D1 / KV
+
+    /** 打开绑定选择器时按需加载可选资源（各类型读权限缺失时静默跳过对应列表）。 */
+    fun loadResources() {
+        if (resourcesLoaded || _uiState.value.loadingResources) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(loadingResources = true) }
+            try {
+                val accountId = accountId()
+                val d1 = if (canReadD1) runCatching { storageRepository.listDatabases(accountId) }.getOrDefault(emptyList()) else emptyList()
+                val kv = if (canReadKV) runCatching { storageRepository.listNamespaces(accountId) }.getOrDefault(emptyList()) else emptyList()
+                _uiState.update { it.copy(d1Databases = d1, kvNamespaces = kv) }
+                resourcesLoaded = true
+            } finally {
+                _uiState.update { it.copy(loadingResources = false) }
+            }
+        }
+    }
+
+    /** 绑定一个 D1 数据库 / KV 命名空间：新绑定为实体、其余绑定 inherit，单次 PATCH，原子保留既有。 */
+    fun bindResource(resource: WorkerBindingInput) {
+        val s = settings ?: return
+        if (!canWrite || _uiState.value.isSaving) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSaving = true, error = null) }
+            try {
+                patchAndReload(s.inheritedBindings(excludingName = resource.name) + resource)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
+    }
+
+    /** 解除某个 D1 / KV 绑定（其余绑定 inherit 回写）。 */
+    fun unbindResource(binding: WorkerBinding) {
+        val s = settings ?: return
+        if (!canWrite) return
+        viewModelScope.launch {
+            try {
+                patchAndReload(s.inheritedBindings(excludingName = binding.name))
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
         }
     }
 
@@ -246,6 +313,7 @@ class WorkerTriggersViewModel @Inject constructor(
 
 data class WorkerRoutesUiState(
     val subdomain: WorkerSubdomain? = null,
+    val workersDevUrl: String? = null, // 子域开启且账号前缀已知时的完整访问地址
     val customDomains: List<WorkerCustomDomain> = emptyList(),
     val routes: List<ScopedWorkerRoute> = emptyList(),
     val zones: List<jiamin.chen.orangecloud.data.model.Zone> = emptyList(),
@@ -268,11 +336,17 @@ class WorkerRoutesViewModel @Inject constructor(
 
     private val scriptName: String = checkNotNull(savedStateHandle["scriptName"])
     private val canWrite = authRepository.hasScope(Scopes.WORKERS_WRITE)
+    private var accountSubdomain: String? = null // 账号级 workers.dev 前缀
 
     private val _uiState = MutableStateFlow(WorkerRoutesUiState(canWrite = canWrite))
     val uiState: StateFlow<WorkerRoutesUiState> = _uiState.asStateFlow()
 
     init { load() }
+
+    /** 子域已开启且账号前缀已知时的完整访问地址：https://<脚本名>.<前缀>.workers.dev。 */
+    private fun workersDevUrl(sub: WorkerSubdomain?): String? =
+        accountSubdomain?.takeIf { sub?.enabled == true && it.isNotEmpty() }
+            ?.let { "https://$scriptName.$it.workers.dev" }
 
     fun load() {
         viewModelScope.launch {
@@ -283,8 +357,12 @@ class WorkerRoutesViewModel @Inject constructor(
                 val customDomains = workerRepository.customDomains(accountId, scriptName)
                 // 子域可能未在账号开通，单独容错，不阻断整页
                 val subdomain = runCatching { workerRepository.subdomain(accountId, scriptName) }.getOrNull()
+                accountSubdomain = runCatching { workerRepository.accountSubdomain(accountId) }.getOrNull()
                 _uiState.update {
-                    it.copy(zones = zones, customDomains = customDomains, subdomain = subdomain, loaded = true)
+                    it.copy(
+                        zones = zones, customDomains = customDomains, subdomain = subdomain,
+                        workersDevUrl = workersDevUrl(subdomain), loaded = true,
+                    )
                 }
                 loadRoutes(zones)
             } catch (e: Exception) {
@@ -315,7 +393,7 @@ class WorkerRoutesViewModel @Inject constructor(
                 val accountId = accountId()
                 workerRepository.setSubdomain(accountId, scriptName, enabled)
                 val fresh = runCatching { workerRepository.subdomain(accountId, scriptName) }.getOrNull()
-                _uiState.update { it.copy(subdomain = fresh) }
+                _uiState.update { it.copy(subdomain = fresh, workersDevUrl = workersDevUrl(fresh)) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             } finally {

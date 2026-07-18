@@ -104,6 +104,10 @@ class PagesRepository @Inject constructor(
     suspend fun rollbackDeployment(accountId: String, projectName: String, deploymentId: String): PagesDeployment =
         api.post("accounts/$accountId/pages/projects/$projectName/deployments/$deploymentId/rollback", PagesEmptyBody())
 
+    /** 删除某次部署（page.write）。当前生产部署不可删，Cloudflare 会拒绝。不可恢复。 */
+    suspend fun deleteDeployment(accountId: String, projectName: String, deploymentId: String) =
+        api.delete("accounts/$accountId/pages/projects/$projectName/deployments/$deploymentId")
+
     // MARK: - 直接上传部署（Direct Upload）
     // 流程对齐 wrangler：取上传 JWT → check-missing 问缺哪些资源 → 缺的 base64 分批 upload
     // → upsert-hashes 关联全部哈希 → 带 manifest（路径→blake3 哈希）创建部署。资源端点用 JWT 鉴权。

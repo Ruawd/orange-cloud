@@ -23,6 +23,13 @@ data class WorkerSubdomain(
 @Serializable
 data class WorkerSubdomainInput(val enabled: Boolean)
 
+/**
+ * 账号级 workers.dev 子域前缀（GET /accounts/{a}/workers/subdomain → { subdomain }）。
+ * 拼 <脚本名>.<前缀>.workers.dev 得完整访问地址；账号未注册子域时 subdomain 为 null。
+ */
+@Serializable
+data class WorkerAccountSubdomain(val subdomain: String? = null)
+
 // MARK: - 自定义域
 
 /** Worker 自定义域（账号级，service = 脚本名）。 */

@@ -23,6 +23,8 @@ struct WorkerListView: View {
     @State private var showTailDenied = false
     @State private var showCreate = false
     @State private var createDenied = false
+    @State private var deleteTarget: CachedWorkerScript?
+    @State private var deleteDenied = false
     @AppStorage("workerListSort") private var sort: ResourceSort = .name
 
     private var canWrite: Bool { auth.hasScope("workers-scripts.write") }
@@ -94,7 +96,11 @@ struct WorkerListView: View {
                     Task { await refresh() }
                 }
             }
+            .sheet(item: $deleteTarget) { script in
+                WorkerDeleteConfirmView(script: script, viewModel: viewModel, accountId: script.accountId)
+            }
             .sensoryFeedback(.success, trigger: uploadViewModel.didUpload)
+            .sensoryFeedback(.success, trigger: viewModel.didDelete)
             .task {
                 await refresh()
             }
@@ -104,6 +110,11 @@ struct WorkerListView: View {
                 Text("当前授权未包含实时日志权限（workers-tail.read）。\n请在设置中退出登录后重新授权以启用此功能。")
             }
             .alert("权限不足", isPresented: $createDenied) {
+                Button("好", role: .cancel) {}
+            } message: {
+                Text("当前授权未包含 Workers 写权限（workers-scripts.write）。\n请在设置中退出登录后重新授权以启用此功能。")
+            }
+            .alert("权限不足", isPresented: $deleteDenied) {
                 Button("好", role: .cancel) {}
             } message: {
                 Text("当前授权未包含 Workers 写权限（workers-scripts.write）。\n请在设置中退出登录后重新授权以启用此功能。")
@@ -119,6 +130,11 @@ struct WorkerListView: View {
                         WorkerRow(script: script)
                     }
                     .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            if canWrite { deleteTarget = script } else { deleteDenied = true }
+                        } label: {
+                            Label("删除", systemImage: "trash")
+                        }
                         Button {
                             if auth.hasScope("workers-tail.read") {
                                 tailTarget = script
@@ -134,7 +150,7 @@ struct WorkerListView: View {
             } header: {
                 Text("\(cachedScripts.count) 个 Worker")
             } footer: {
-                Label("向左滑动查看实时日志 · 点按查看详情", systemImage: "hand.draw")
+                Label("向左滑动查看实时日志或删除 · 点按查看详情", systemImage: "hand.draw")
                     .font(.caption)
             }
             .glassRow()

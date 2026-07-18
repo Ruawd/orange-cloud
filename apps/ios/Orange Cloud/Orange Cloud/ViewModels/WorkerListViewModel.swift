@@ -15,6 +15,8 @@ final class WorkerListViewModel {
 
     var isLoading = false
     var error: String?
+    var isDeleting = false
+    var didDelete = false       // sensoryFeedback 触发器
 
     private let workerService: WorkerService
     /// 进行中的加载任务（见 ZoneListViewModel：独立 Task 承载加载，避免下拉手势取消导致 .cancelled 误报）
@@ -39,6 +41,24 @@ final class WorkerListViewModel {
         loadTask = task
         defer { loadTask = nil }
         await task.value
+    }
+
+    /// 删除 Worker 脚本，成功后从缓存移除该条目（@Query 列表随之更新）。需 workers-scripts.write。
+    func delete(accountId: String, script: CachedWorkerScript, context: ModelContext) async -> Bool {
+        guard !isDeleting else { return false }
+        isDeleting = true
+        error = nil
+        defer { isDeleting = false }
+        do {
+            try await workerService.deleteScript(accountId: accountId, scriptName: script.id)
+            context.delete(script)
+            try? context.save()
+            didDelete.toggle()
+            return true
+        } catch {
+            self.error = error.localizedDescription
+            return false
+        }
     }
 
     private func load(accountId: String, context: ModelContext) async {

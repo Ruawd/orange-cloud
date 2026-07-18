@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "打开 ${applicationName}" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -156,7 +155,6 @@
       }
     },
     "用 ${applicationName} 查域名" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

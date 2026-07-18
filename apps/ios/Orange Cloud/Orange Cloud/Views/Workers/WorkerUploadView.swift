@@ -44,6 +44,7 @@ struct WorkerUploadView: View {
     @State private var code = ""
     @State private var isModule = true
     @State private var showCodeImporter = false
+    @State private var didLoadSource = false   // 原地编辑：只预填一次
 
     // 多模块
     @State private var modules: [WorkerUploadModule] = []
@@ -67,6 +68,9 @@ struct WorkerUploadView: View {
 
     private var canSubmit: Bool {
         guard nameValid, !viewModel.isUploading else { return false }
+        if case .replace = mode, viewModel.isLoadingSource || viewModel.sourceUneditable {
+            return false   // 原地编辑：源码未就绪 / 多模块不可替换时禁止部署
+        }
         switch effectiveKind {
         case .single:  return !code.isEmpty
         case .modules: return !modules.isEmpty && entryCandidates.contains(entryName)
@@ -134,6 +138,7 @@ struct WorkerUploadView: View {
             }
             .interactiveDismissDisabled(viewModel.isUploading)
             .onAppear { viewModel.error = nil }
+            .task { await loadSourceIfNeeded() }
             .fileImporter(isPresented: $showCodeImporter, allowedContentTypes: [.javaScript, .text, .item], allowsMultipleSelection: false) { importCode($0) }
             .fileImporter(isPresented: $showModuleImporter, allowedContentTypes: [.javaScript, .text, .item], allowsMultipleSelection: true) { importModules($0) }
             .fileImporter(isPresented: $showAssetImporter, allowedContentTypes: [.item], allowsMultipleSelection: true) { importAssets($0) }
@@ -173,30 +178,53 @@ struct WorkerUploadView: View {
                     Text("Service Worker").tag(false)
                 }
                 .pickerStyle(.segmented)
-                .disabled(viewModel.isUploading)
+                // 编辑现有脚本时格式由源码决定，不允许更改（避免以错误类型回写）
+                .disabled(viewModel.isUploading || !isCreate)
             } footer: {
                 Text(isModule
                      ? String(localized: "ES Module：export default { fetch }（推荐）。")
                      : String(localized: "Service Worker：addEventListener(\"fetch\", …)。"))
             }
             Section {
-                TextEditor(text: $code)
-                    .font(.callout.monospaced())
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .frame(minHeight: 220)
+                if !isCreate && viewModel.isLoadingSource {
+                    HStack(spacing: 10) {
+                        ProgressView()
+                        Text("正在读取源码…").font(.callout).foregroundStyle(.secondary)
+                    }
+                } else if !isCreate && viewModel.sourceUneditable {
+                    Label("这是多模块打包 Worker，无法在此原地编辑（会丢失其它模块）。可在「新建」里用多模块方式整体替换。", systemImage: "exclamationmark.triangle")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                } else {
+                    TextEditor(text: $code)
+                        .font(.callout.monospaced())
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .frame(minHeight: 220)
+                        .disabled(viewModel.isUploading)
+                    Button { showCodeImporter = true } label: {
+                        Label("从 .js 文件导入", systemImage: "doc.badge.plus")
+                    }
                     .disabled(viewModel.isUploading)
-                Button { showCodeImporter = true } label: {
-                    Label("从 .js 文件导入", systemImage: "doc.badge.plus")
                 }
-                .disabled(viewModel.isUploading)
             } header: {
                 Text("代码")
             } footer: {
-                if !isCreate {
-                    Text("Cloudflare 不允许第三方授权读取 Worker 源码，因此只能整体替换、无法在原代码上修改。现有变量 / 密钥 / 绑定会自动保留。")
+                if !isCreate && !viewModel.sourceUneditable && !viewModel.isLoadingSource {
+                    Text("已载入当前线上源码，可直接修改后部署。现有变量 / 密钥 / 绑定会自动保留。")
                 }
             }
+        }
+    }
+
+    /// 原地编辑：进 sheet 时读取现有源码预填（仅 .replace 单文件模式，只做一次）
+    private func loadSourceIfNeeded() async {
+        guard case .replace(let scriptName) = mode, !didLoadSource else { return }
+        didLoadSource = true
+        if let content = await viewModel.fetchSource(scriptName: scriptName),
+           let main = content.mainModule {
+            code = main.body
+            isModule = content.isModule
         }
     }
 

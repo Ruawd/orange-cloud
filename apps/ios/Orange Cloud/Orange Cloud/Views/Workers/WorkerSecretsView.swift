@@ -15,14 +15,20 @@ struct WorkerSecretsView: View {
     @State private var sheet: EditorSheet?
     @State private var secretToDelete: WorkerSecret?
     @State private var variableToDelete: WorkerBinding?
+    @State private var bindingToUnbind: WorkerBinding?
 
     init(accountId: String, scriptName: String, session: SessionStore) {
         _viewModel = State(initialValue: WorkerBindingsViewModel(
-            service: session.workerService, accountId: accountId, scriptName: scriptName
+            service: session.workerService, d1Service: session.d1Service, kvService: session.kvService,
+            accountId: accountId, scriptName: scriptName
         ))
     }
 
-    private var canWrite: Bool { auth.hasScope("workers-scripts.write") }
+    private var canWrite:   Bool { auth.hasScope("workers-scripts.write") }
+    private var canReadD1:  Bool { auth.hasScope("d1.read") }
+    private var canReadKV:  Bool { auth.hasScope("workers-kv-storage.read") }
+    /// 能读到至少一类资源才提供快速绑定入口
+    private var canBind:    Bool { canWrite && (canReadD1 || canReadKV) }
 
     var body: some View {
         Group {
@@ -32,7 +38,7 @@ struct WorkerSecretsView: View {
                 List {
                     secretsSection
                     variablesSection
-                    if !viewModel.otherBindings.isEmpty {
+                    if !viewModel.otherBindings.isEmpty || canBind {
                         otherSection
                     }
                 }
@@ -72,11 +78,24 @@ struct WorkerSecretsView: View {
                 if let v = variableToDelete { Task { await viewModel.deleteVariable(v) } }
             }
         }
+        .confirmationDialog(
+            bindingToUnbind.map { String(localized: "解除绑定「\($0.name)」？") } ?? "",
+            isPresented: Binding(get: { bindingToUnbind != nil }, set: { if !$0 { bindingToUnbind = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("解除绑定", role: .destructive) {
+                if let b = bindingToUnbind { Task { await viewModel.unbindResource(b) } }
+            }
+        } message: {
+            Text("仅解除该 Worker 与此资源的绑定，不会删除资源本身。")
+        }
         .task { if !viewModel.loaded { await viewModel.load() } }
         .sheet(item: $sheet) { kind in
             switch kind {
             case .bulkImport:
                 WorkerBulkImportSheet(viewModel: viewModel)
+            case .bindResource:
+                WorkerBindResourceSheet(viewModel: viewModel, canReadD1: canReadD1, canReadKV: canReadKV)
             default:
                 WorkerValueEditorSheet(kind: kind, viewModel: viewModel)
             }
@@ -183,22 +202,43 @@ struct WorkerSecretsView: View {
         .glassRow()
     }
 
-    // MARK: - 只读绑定
+    // MARK: - 资源绑定（D1 / KV 可增删，其余只读）
 
     private var otherSection: some View {
         Section {
-            ForEach(viewModel.otherBindings) { binding in
-                HStack(spacing: 12) {
-                    TintIcon(systemImage: "cube", color: .gray)
-                    Text(binding.name).font(.callout)
-                    Spacer()
-                    Text(binding.typeLabel).font(.caption).foregroundStyle(.secondary)
+            if viewModel.otherBindings.isEmpty {
+                Text("暂无资源绑定").font(.callout).foregroundStyle(.secondary)
+            } else {
+                ForEach(viewModel.otherBindings) { binding in
+                    HStack(spacing: 12) {
+                        TintIcon(systemImage: binding.isQuickManaged ? "cube.fill" : "cube",
+                                 color: binding.isQuickManaged ? .ocOrange : .gray)
+                        Text(binding.name).font(.callout)
+                        Spacer()
+                        Text(binding.typeLabel).font(.caption).foregroundStyle(.secondary)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        if canWrite && binding.isQuickManaged {
+                            Button("解除", role: .destructive) {
+                                bindingToUnbind = binding
+                            }
+                        }
+                    }
+                }
+            }
+            if canBind {
+                Button {
+                    sheet = .bindResource
+                } label: {
+                    Label("绑定 D1 / KV", systemImage: "plus")
                 }
             }
         } header: {
-            Text("其它绑定（只读）")
+            Text("资源绑定")
         } footer: {
-            Text("KV / D1 / R2 等资源绑定在此查看，编辑请用 Wrangler 或 Dashboard。")
+            Text(canBind
+                 ? String(localized: "可绑定既有 D1 数据库 / KV 命名空间；R2 等其它资源仍为只读，请用 Wrangler 或 Dashboard。")
+                 : String(localized: "KV / D1 / R2 等资源绑定在此查看，编辑请用 Wrangler 或 Dashboard。"))
         }
         .glassRow()
     }
@@ -211,12 +251,14 @@ private enum EditorSheet: Identifiable {
     case secret
     case variable(WorkerBinding?)
     case bulkImport
+    case bindResource
 
     var id: String {
         switch self {
         case .secret:            "secret"
         case .variable(let b):   "var-\(b?.name ?? "new")"
         case .bulkImport:        "bulk"
+        case .bindResource:      "bind"
         }
     }
 }
@@ -472,5 +514,153 @@ private struct WorkerBulkImportSheet: View {
             return .failure(BulkParseError(message: String(localized: "以下名称非法（须字母 / 数字 / 下划线，且不以数字开头）：\(list)")))
         }
         return .success(pairs.sorted { $0.name < $1.name })
+    }
+}
+
+// MARK: - 快速绑定 D1 / KV
+
+/// 绑定既有 D1 数据库 / KV 命名空间：选类型 → 选资源 → 填绑定变量名 → PATCH settings（其余绑定 inherit）
+private struct WorkerBindResourceSheet: View {
+
+    let viewModel: WorkerBindingsViewModel
+    let canReadD1: Bool
+    let canReadKV: Bool
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var kind: ResourceKind = .kv
+    @State private var selectedId = ""
+    @State private var name = ""
+    @State private var nameEditedManually = false
+
+    private enum ResourceKind: String, CaseIterable, Identifiable {
+        case kv, d1
+        var id: String { rawValue }
+        var label: String { self == .kv ? "KV" : "D1" }
+    }
+
+    /// 仅展示有读权限的类型
+    private var availableKinds: [ResourceKind] {
+        var kinds: [ResourceKind] = []
+        if canReadKV { kinds.append(.kv) }
+        if canReadD1 { kinds.append(.d1) }
+        return kinds
+    }
+
+    /// 当前类型下可选资源：(id, 显示名)
+    private var options: [(id: String, title: String)] {
+        switch kind {
+        case .kv: viewModel.kvNamespaces.map { ($0.id, $0.title) }
+        case .d1: viewModel.d1Databases.map { ($0.uuid, $0.name) }
+        }
+    }
+
+    private var nameValid: Bool {
+        name.range(of: "^[A-Za-z_][A-Za-z0-9_]*$", options: .regularExpression) != nil
+    }
+
+    private var nameDuplicate: Bool { viewModel.boundNames.contains(name) }
+
+    private var canSave: Bool {
+        !selectedId.isEmpty && nameValid && !nameDuplicate && !viewModel.isSaving
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                if availableKinds.count > 1 {
+                    Section {
+                        Picker("类型", selection: $kind) {
+                            ForEach(availableKinds) { Text($0.label).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+                        .onChange(of: kind) { _, _ in
+                            selectedId = ""
+                            if !nameEditedManually { name = "" }
+                        }
+                    }
+                }
+
+                Section {
+                    if viewModel.loadingResources && options.isEmpty {
+                        HStack { ProgressView(); Text("加载中…").foregroundStyle(.secondary) }
+                    } else if options.isEmpty {
+                        Text(kind == .kv ? String(localized: "该账号暂无 KV 命名空间") : String(localized: "该账号暂无 D1 数据库"))
+                            .font(.callout).foregroundStyle(.secondary)
+                    } else {
+                        Picker(kind == .kv ? String(localized: "命名空间") : String(localized: "数据库"), selection: $selectedId) {
+                            Text("请选择").tag("")
+                            ForEach(options, id: \.id) { option in
+                                Text(option.title).tag(option.id)
+                            }
+                        }
+                    }
+                } header: {
+                    Text(kind == .kv ? String(localized: "KV 命名空间") : String(localized: "D1 数据库"))
+                }
+
+                Section {
+                    TextField("BINDING_NAME", text: $name)
+                        .font(.callout.monospaced())
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .onChange(of: name) { _, _ in nameEditedManually = true }
+                } header: {
+                    Text("绑定变量名")
+                } footer: {
+                    if nameDuplicate {
+                        Text("已存在同名绑定。").foregroundStyle(.red)
+                    } else {
+                        Text("代码中通过 env 访问。字母、数字、下划线，且不以数字开头。")
+                    }
+                }
+
+                if let error = viewModel.error {
+                    Section { Text(error).font(.footnote).foregroundStyle(.red) }
+                }
+            }
+            .navigationTitle("绑定 D1 / KV")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("取消") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        Task { await save() }
+                    } label: {
+                        if viewModel.isSaving { ProgressView() } else { Text("绑定").fontWeight(.semibold) }
+                    }
+                    .disabled(!canSave)
+                }
+            }
+            .interactiveDismissDisabled(viewModel.isSaving)
+            .task {
+                kind = availableKinds.first ?? .kv
+                await viewModel.loadResources(canReadD1: canReadD1, canReadKV: canReadKV)
+            }
+            .onChange(of: selectedId) { _, newValue in
+                // 未手动改过名字时，用所选资源名推导一个合法默认绑定名
+                guard !nameEditedManually, !newValue.isEmpty,
+                      let picked = options.first(where: { $0.id == newValue }) else { return }
+                name = Self.suggestName(from: picked.title)
+                nameEditedManually = false
+            }
+        }
+    }
+
+    private func save() async {
+        viewModel.error = nil
+        let resource: WorkerBindingInput = kind == .kv
+            ? .kv(name: name, namespaceId: selectedId)
+            : .d1(name: name, databaseId: selectedId)
+        if await viewModel.bindResource(resource) { dismiss() }
+    }
+
+    /// 资源名 → 合法绑定变量名（大写、非法字符转下划线、数字开头补前缀）
+    private static func suggestName(from title: String) -> String {
+        var s = title.uppercased().map { $0.isLetter || $0.isNumber ? $0 : "_" }
+        if let first = s.first, first.isNumber { s.insert("_", at: s.startIndex) }
+        let result = String(s)
+        return result.isEmpty ? "BINDING" : result
     }
 }

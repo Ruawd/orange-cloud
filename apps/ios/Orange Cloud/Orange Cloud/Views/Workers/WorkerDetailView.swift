@@ -14,10 +14,12 @@ struct WorkerDetailView: View {
     let session: SessionStore
 
     @Environment(AuthManager.self) private var auth
+    @Environment(EntitlementStore.self) private var entitlements
     @State private var metricsViewModel: WorkerMetricsViewModel
     @State private var uploadViewModel: WorkerUploadViewModel
     @State private var showUpload = false
     @State private var uploadDenied = false
+    @State private var editPaywallPresented = false
 
     init(script: CachedWorkerScript, session: SessionStore) {
         self.script = script
@@ -64,15 +66,26 @@ struct WorkerDetailView: View {
 
             Section("管理") {
                 Button {
-                    if canWrite { showUpload = true } else { uploadDenied = true }
+                    // 编辑（更新代码）收进 Pro：非 Pro 先弹付费墙，Pro 再走 scope 门控
+                    if !entitlements.isPro {
+                        editPaywallPresented = true
+                    } else if canWrite {
+                        showUpload = true
+                    } else {
+                        uploadDenied = true
+                    }
                 } label: {
                     HStack(spacing: 12) {
                         TintIcon(systemImage: "arrow.up.doc", color: .ocOrange)
                         Text("更新代码").foregroundStyle(.primary)
                         Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.tertiary)
+                        if entitlements.isPro {
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        } else {
+                            ProBadge()
+                        }
                     }
                 }
                 ProGatedNavigationLink(
@@ -90,6 +103,14 @@ struct WorkerDetailView: View {
                     feature: .workerTriggers
                 ) {
                     WorkerTriggersView(accountId: script.accountId, scriptName: script.id, session: session)
+                }
+                ProGatedNavigationLink(
+                    label: String(localized: "部署历史"),
+                    systemImage: "clock.arrow.circlepath",
+                    requiredScope: "workers-scripts.read",
+                    feature: .workerRoutes
+                ) {
+                    WorkerDeploymentsView(accountId: script.accountId, scriptName: script.id, session: session)
                 }
                 ProGatedNavigationLink(
                     label: String(localized: "域名"),
@@ -119,6 +140,9 @@ struct WorkerDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showUpload) {
             WorkerUploadView(mode: .replace(scriptName: script.id), viewModel: uploadViewModel) {}
+        }
+        .sheet(isPresented: $editPaywallPresented) {
+            PaywallView(feature: .workerEdit)
         }
         .sensoryFeedback(.success, trigger: uploadViewModel.didUpload)
         .alert("权限不足", isPresented: $uploadDenied) {

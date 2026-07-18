@@ -26,10 +26,13 @@ struct WorkerService {
 
     // MARK: - 脚本源码与设置
 
-    /// 脚本源码（模块→multipart 解析为各模块；service worker→raw JS）
+    /// 脚本源码（模块→multipart 解析为各模块；service worker→raw JS）。
+    /// 必须走 /content/v2：v1 的 `/content` 对 OAuth 认证方案返回 405 cf=10405
+    /// （Method not allowed for this authentication scheme），v2 与裸 GET 才放行
+    /// （真机实测 2026-07-14，issue #55）。响应仍是 multipart/form-data，解码口径不变。
     func content(accountId: String, scriptName: String) async throws -> WorkerContent {
         let (data, response) = try await client.getRawResponse(
-            "accounts/\(accountId)/workers/scripts/\(scriptName)/content"
+            "accounts/\(accountId)/workers/scripts/\(scriptName)/content/v2"
         )
         let contentType = response.value(forHTTPHeaderField: "Content-Type")
         return WorkerContent.parse(data: data, contentType: contentType)
@@ -75,7 +78,7 @@ struct WorkerService {
     }
 
     /// 新建 / 整体替换脚本（PUT 即「不存在则建、存在则覆盖」）。主模块名由我们定，
-    /// 不读 /content（OAuth 下读不到，见 cloudflare-oauth-content-405）——新建无需读旧码；
+    /// 新建无需读旧码（原地编辑改走 content() 读 /content/v2 预填）；
     /// 替换时传 inheritBindings（现有绑定按名 inherit，连同读不到值的密钥一并保住），带
     /// ?bindings_inherit=strict 缺绑定即报错而非静默丢弃。
     func deployScript(
@@ -142,6 +145,28 @@ struct WorkerService {
             files: modules.map { (name: $0.name, contentType: $0.contentType, content: $0.data) }
         )
         guard response.success else { throw response.toAPIError() }
+    }
+
+    /// 删除整个 Worker 脚本（连同其部署、路由绑定）。OAuth 下放行（真机实测 issue #55）。
+    /// 需 workers-scripts.write。不可撤销。
+    func deleteScript(accountId: String, scriptName: String) async throws {
+        try await client.delete("accounts/\(accountId)/workers/scripts/\(scriptName)")
+    }
+
+    // MARK: - 部署历史
+
+    /// 部署列表（result.deployments，首项为活跃部署）。
+    func listDeployments(accountId: String, scriptName: String) async throws -> [WorkerDeployment] {
+        let response: CFAPIResponse<WorkerDeploymentsResult> = try await client.get(
+            "accounts/\(accountId)/workers/scripts/\(scriptName)/deployments"
+        )
+        guard response.success, let result = response.result else { throw response.toAPIError() }
+        return result.deployments
+    }
+
+    /// 删除某次部署。当前活跃（最新）部署 Cloudflare 会拒绝删除。需 workers-scripts.write。
+    func deleteDeployment(accountId: String, scriptName: String, deploymentId: String) async throws {
+        try await client.delete("accounts/\(accountId)/workers/scripts/\(scriptName)/deployments/\(deploymentId)")
     }
 
     // MARK: - 静态资源（Workers Assets）
@@ -284,6 +309,16 @@ struct WorkerService {
     }
 
     // MARK: - 域名 / 路由
+
+    /// 账号级 workers.dev 子域前缀（拼 <脚本名>.<前缀>.workers.dev）。
+    /// 账号未注册子域时端点可能 404 或返回空，调用方以 try? 容错。
+    func accountSubdomain(accountId: String) async throws -> String? {
+        let response: CFAPIResponse<WorkerAccountSubdomain> = try await client.get(
+            "accounts/\(accountId)/workers/subdomain"
+        )
+        guard response.success else { throw response.toAPIError() }
+        return response.result?.subdomain
+    }
 
     /// workers.dev 子域状态
     func subdomain(accountId: String, scriptName: String) async throws -> WorkerSubdomain {

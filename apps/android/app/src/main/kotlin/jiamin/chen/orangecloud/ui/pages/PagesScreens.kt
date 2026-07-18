@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.InsertDriveFile
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Restore
 import androidx.compose.material.icons.outlined.Web
 import androidx.compose.foundation.layout.Box
@@ -223,6 +224,7 @@ fun PagesProjectDetailScreen(
     var showAddDomain by remember { mutableStateOf(false) }
     var domainSheet by remember { mutableStateOf<PagesDomain?>(null) }
     var domainToDelete by remember { mutableStateOf<PagesDomain?>(null) }
+    var pendingDeleteDep by remember { mutableStateOf<PagesDeployment?>(null) }
 
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) deployViewModel.deployFrom(uri, pendingZip)
@@ -234,6 +236,7 @@ fun PagesProjectDetailScreen(
     val domainAddedMsg = stringResource(R.string.pages_domain_added)
     val domainDeletedMsg = stringResource(R.string.pages_domain_deleted)
     val cnameCreatedMsg = stringResource(R.string.pages_cname_created)
+    val deploymentDeletedMsg = stringResource(R.string.pages_deployment_deleted)
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
@@ -242,6 +245,7 @@ fun PagesProjectDetailScreen(
                 PagesEvent.DomainAdded -> snackbarHostState.showSnackbar(domainAddedMsg)
                 PagesEvent.DomainDeleted -> snackbarHostState.showSnackbar(domainDeletedMsg)
                 PagesEvent.CnameCreated -> snackbarHostState.showSnackbar(cnameCreatedMsg)
+                PagesEvent.DeploymentDeleted -> snackbarHostState.showSnackbar(deploymentDeletedMsg)
                 is PagesEvent.Error -> snackbarHostState.showSnackbar(event.message ?: "")
             }
         }
@@ -337,6 +341,7 @@ fun PagesProjectDetailScreen(
                                 busy = state.busyDeploymentId == dep.id,
                                 onRetry = { viewModel.retry(dep) },
                                 onRollback = { viewModel.rollback(dep) },
+                                onDelete = { pendingDeleteDep = dep },
                             )
                         }
                     }
@@ -389,6 +394,20 @@ fun PagesProjectDetailScreen(
                 }
             },
             dismissButton = { TextButton(onClick = { domainToDelete = null }) { Text(stringResource(R.string.common_cancel)) } },
+        )
+    }
+
+    pendingDeleteDep?.let { dep ->
+        AlertDialog(
+            onDismissRequest = { pendingDeleteDep = null },
+            title = { Text(stringResource(R.string.pages_deployment_delete_title)) },
+            text = { Text(stringResource(R.string.pages_deployment_delete_msg, dep.shortId ?: dep.id.take(8))) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.deleteDeployment(dep); pendingDeleteDep = null }) {
+                    Text(stringResource(R.string.dns_delete), color = Color(0xFFE5484D))
+                }
+            },
+            dismissButton = { TextButton(onClick = { pendingDeleteDep = null }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 
@@ -467,6 +486,7 @@ private fun DeploymentRow(
     busy: Boolean,
     onRetry: () -> Unit,
     onRollback: () -> Unit,
+    onDelete: () -> Unit,
 ) {
     Surface(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(14.dp)) {
@@ -502,6 +522,11 @@ private fun DeploymentRow(
                             Spacer(Modifier.width(4.dp))
                             Text(stringResource(R.string.pages_rollback), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
                         }
+                    }
+                    TextButton(onClick = onDelete) {
+                        Icon(Icons.Outlined.Delete, contentDescription = null, tint = Color(0xFFE5484D), modifier = Modifier.width(16.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text(stringResource(R.string.dns_delete), color = Color(0xFFE5484D), fontSize = 13.sp)
                     }
                 }
             }

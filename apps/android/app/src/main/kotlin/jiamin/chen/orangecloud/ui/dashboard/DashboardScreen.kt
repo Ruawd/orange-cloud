@@ -136,6 +136,22 @@ fun DashboardScreen(
                     }
                 }
 
+                // 用量模块（账号级 Workers/R2/D1/KV 用量，环形仪表 + 点开明细）
+                Spacer(Modifier.height(26.dp))
+                DashboardUsageSection(
+                    usage = state.usage,
+                    plan = state.usagePlan,
+                    loading = state.usageLoading,
+                    loadFailed = state.usageLoadFailed,
+                    hasScope = state.hasAccountAnalytics,
+                    unavailable = state.accountAnalyticsUnavailable,
+                    onSky = onSky,
+                    onRetry = { viewModel.loadUsage(force = true) },
+                    onSetWorkersPaid = { viewModel.setUsageWorkersPaid(it) },
+                    onSetR2Paid = { viewModel.setUsageR2Paid(it) },
+                    onSetBillingDay = { viewModel.setUsageBillingDay(it) },
+                )
+
                 // 最近访问
                 Row(
                     Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 26.dp, bottom = 10.dp),

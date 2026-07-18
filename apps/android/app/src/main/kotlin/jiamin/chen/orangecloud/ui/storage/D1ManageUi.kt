@@ -164,3 +164,42 @@ fun D1DeleteDialog(
         },
     )
 }
+
+/** 删除表二次确认：必须原样输入表名才启用删除（对齐 D1DeleteDialog）。 */
+@Composable
+fun D1DropTableDialog(
+    tableName: String,
+    isDeleting: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var typed by remember { mutableStateOf("") }
+    val matches = typed.trim() == tableName
+
+    AlertDialog(
+        onDismissRequest = { if (!isDeleting) onDismiss() },
+        title = { Text(stringResource(R.string.d1_drop_table_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.d1_drop_table_warn, tableName), fontSize = 14.sp)
+                OutlinedTextField(
+                    value = typed,
+                    onValueChange = { typed = it },
+                    label = { Text(stringResource(R.string.d1_drop_table_confirm_label)) },
+                    placeholder = { Text(tableName) },
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm, enabled = matches && !isDeleting) {
+                Text(stringResource(R.string.d1_delete_button), color = if (matches && !isDeleting) Color(0xFFE5484D) else MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, enabled = !isDeleting) { Text(stringResource(R.string.common_cancel)) }
+        },
+    )
+}

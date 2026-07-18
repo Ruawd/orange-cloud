@@ -8,6 +8,12 @@
 
 import SwiftUI
 
+/// 待删除表的 sheet 载荷（String 非 Identifiable，包一层用于 .sheet(item:)）
+private struct DropTarget: Identifiable {
+    let id = UUID()
+    let name: String
+}
+
 // MARK: - SQL 查询控制台
 
 struct D1QueryView: View {
@@ -18,6 +24,7 @@ struct D1QueryView: View {
     @Environment(AuthManager.self) private var auth
     @State private var viewModel: D1QueryViewModel
     @State private var showLimitReminder = false
+    @State private var tableToDrop: DropTarget?
     @FocusState private var sqlFocused: Bool
 
     init(database: D1Database, session: SessionStore) {
@@ -92,6 +99,9 @@ struct D1QueryView: View {
         } message: {
             Text("大表可能返回大量行，造成等待和内存占用。建议加 LIMIT 后执行。")
         }
+        .sheet(item: $tableToDrop) { target in
+            D1DropTableConfirmView(tableName: target.name, viewModel: viewModel)
+        }
     }
 
     /// 表入口：玻璃岛列表，点按进入 D1TableView 浏览/编辑行
@@ -130,6 +140,15 @@ struct D1QueryView: View {
                                 .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
+                            .contextMenu {
+                                if canWrite {
+                                    Button(role: .destructive) {
+                                        tableToDrop = DropTarget(name: table)
+                                    } label: {
+                                        Label("删除表", systemImage: "trash")
+                                    }
+                                }
+                            }
 
                             if table != viewModel.tables.last {
                                 Divider()

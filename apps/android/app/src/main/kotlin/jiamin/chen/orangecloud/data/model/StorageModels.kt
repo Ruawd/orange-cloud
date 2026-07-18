@@ -83,6 +83,14 @@ data class D1QueryMeta(
     @SerialName("rows_written") val rowsWritten: Int? = null,
 )
 
+/** 创建 R2 桶请求体。R2 端点为 camelCase（无 snake 映射，对齐 iOS R2CreateRequest）。 */
+@Serializable
+data class R2CreateRequest(
+    val name: String,
+    val locationHint: String? = null,
+    val storageClass: String? = null,
+)
+
 // MARK: - KV
 
 @Serializable
@@ -90,6 +98,10 @@ data class KVNamespace(
     val id: String,
     val title: String,
 )
+
+/** 创建 KV 命名空间请求体。 */
+@Serializable
+data class KVCreateRequest(val title: String)
 
 @Serializable
 data class KVKey(

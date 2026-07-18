@@ -81,6 +81,7 @@ sealed interface PagesEvent {
     data object RolledBack : PagesEvent
     data object DomainAdded : PagesEvent
     data object DomainDeleted : PagesEvent
+    data object DeploymentDeleted : PagesEvent
     data object CnameCreated : PagesEvent
     data class Error(val message: String?) : PagesEvent
 }
@@ -243,6 +244,12 @@ class PagesDetailViewModel @Inject constructor(
     fun rollback(deployment: PagesDeployment) = mutate(deployment) { accountId ->
         repository.rollbackDeployment(accountId, projectName, deployment.id)
         eventChannel.send(PagesEvent.RolledBack)
+    }
+
+    fun deleteDeployment(deployment: PagesDeployment) = mutate(deployment) { accountId ->
+        repository.deleteDeployment(accountId, projectName, deployment.id)
+        _uiState.update { it.copy(deployments = it.deployments.filterNot { d -> d.id == deployment.id }) }
+        eventChannel.send(PagesEvent.DeploymentDeleted)
     }
 
     /** 编辑构建配置（构建命令 / 输出目录 / 根目录）。 */

@@ -238,10 +238,11 @@ class CfApiClient @Inject constructor(
         fileName: String,
         fileText: String,
         fileContentType: String,
+        query: List<Pair<String, String>> = emptyList(),
     ): T {
         val boundary = "OrangeCloud-${UUID.randomUUID()}"
         val body = buildMultipartFileBody(boundary, metadataJson, fileName, fileText, fileContentType)
-        val bytes = executeRaw("PUT", path, emptyList(), body, "multipart/form-data; boundary=$boundary")
+        val bytes = executeRaw("PUT", path, query, body, "multipart/form-data; boundary=$boundary")
         return decodeResult(bytes, serializer<T>())
     }
 

@@ -14,6 +14,7 @@ import Observation
 final class WorkerRoutesViewModel {
 
     private(set) var subdomain:     WorkerSubdomain?
+    private(set) var accountSubdomain: String?      // 账号级 workers.dev 前缀，用于拼完整地址
     private(set) var customDomains: [WorkerCustomDomain] = []
     private(set) var routes:        [ScopedWorkerRoute] = []
     private(set) var zones:         [Zone] = []
@@ -42,7 +43,8 @@ final class WorkerRoutesViewModel {
             zones         = try await zoneService.listZones(accountId: accountId)
             customDomains = try await service.customDomains(accountId: accountId, scriptName: scriptName)
             // 子域可能未在账号开通，单独容错，不阻断整页
-            subdomain     = try? await service.subdomain(accountId: accountId, scriptName: scriptName)
+            subdomain        = try? await service.subdomain(accountId: accountId, scriptName: scriptName)
+            accountSubdomain = try? await service.accountSubdomain(accountId: accountId)
             await loadRoutes()
             loaded = true
         } catch {
@@ -64,6 +66,12 @@ final class WorkerRoutesViewModel {
     }
 
     // MARK: - workers.dev 子域
+
+    /// 子域已开启且账号前缀已知时的完整访问地址：https://<脚本名>.<前缀>.workers.dev
+    var workersDevURL: URL? {
+        guard subdomain?.enabled == true, let prefix = accountSubdomain, !prefix.isEmpty else { return nil }
+        return URL(string: "https://\(scriptName).\(prefix).workers.dev")
+    }
 
     func toggleSubdomain(_ enabled: Bool) async {
         guard !togglingSubdomain else { return }

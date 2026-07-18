@@ -1,7 +1,7 @@
 {
-  "versionCode": 12,
-  "versionName": "1.6.3",
+  "versionCode": 17,
+  "versionName": "1.6.4",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "本次更新：WAF 自定义规则支持编辑（点按规则即可修改）。以及若干稳定性改进。"
+  "note": "修复：账号用量在冷启动时误显「需要流量分析权限」的问题；Worker 新建/编辑/删除已归入 Pro 会员。"
 }

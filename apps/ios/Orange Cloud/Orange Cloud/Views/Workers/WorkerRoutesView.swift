@@ -78,6 +78,22 @@ struct WorkerRoutesView: View {
                         .disabled(!canWriteScript)
                     }
                 }
+                if let url = viewModel.workersDevURL {
+                    Link(destination: url) {
+                        HStack(spacing: 12) {
+                            TintIcon(systemImage: "arrow.up.right.square", color: .ocOrange)
+                            Text(url.host ?? url.absoluteString)
+                                .font(.callout.monospaced())
+                                .foregroundStyle(Color.ocOrangeText)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
+                            Spacer()
+                            Image(systemName: "arrow.up.forward")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
             } else {
                 Label("该账号未开通 workers.dev 子域", systemImage: "globe.badge.chevron.backward")
                     .font(.callout)

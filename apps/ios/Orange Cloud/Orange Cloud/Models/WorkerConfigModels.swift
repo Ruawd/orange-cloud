@@ -3,7 +3,7 @@
 //  Orange Cloud
 //
 //  Workers 脚本管理（编辑 / 变量 / 密钥 / 触发器）相关模型。
-//  GET  /accounts/{a}/workers/scripts/{n}/content     源码（模块→multipart，service worker→raw JS）
+//  GET  /accounts/{a}/workers/scripts/{n}/content/v2  源码（模块→multipart，service worker→raw JS；v1 /content 被 OAuth 10405 挡，必须 v2）
 //  PUT  /accounts/{a}/workers/scripts/{n}             上传（multipart：metadata + 模块 part），保留绑定用 inherit
 //  GET  /accounts/{a}/workers/scripts/{n}/settings    绑定 + 兼容性日期/标志
 //  PATCH .../settings                                 改绑定（变量），其余绑定回传 inherit
@@ -12,6 +12,34 @@
 //
 
 import Foundation
+
+// MARK: - 部署历史
+
+/// 一次部署（GET /workers/scripts/{n}/deployments 的 result.deployments 元素）。
+/// 列表首项为当前正在服务的活跃部署（Cloudflare 不允许删除活跃部署）。
+nonisolated struct WorkerDeployment: Codable, Identifiable, Hashable, Sendable {
+    let id: String
+    let createdOn: String?
+    let source: String?
+    let authorEmail: String?
+    let annotations: [String: String]?
+
+    enum CodingKeys: String, CodingKey {
+        case id, source, annotations
+        case createdOn   = "created_on"
+        case authorEmail = "author_email"
+    }
+
+    /// annotations["workers/message"]（部署备注）
+    var message: String? { annotations?["workers/message"] }
+
+    var createdDate: Date? { WorkerScript.parseDate(createdOn) }
+}
+
+/// deployments 端点信封的 result（{ deployments: [...] }）
+nonisolated struct WorkerDeploymentsResult: Codable, Sendable {
+    let deployments: [WorkerDeployment]
+}
 
 // MARK: - 脚本源码
 
@@ -120,6 +148,8 @@ nonisolated struct WorkerBinding: Codable, Identifiable, Hashable, Sendable {
 
     var isSecret:    Bool { type == "secret_text" || type == "secrets_store_secret" }
     var isPlainText: Bool { type == "plain_text" }
+    /// 本客户端可原地增删的资源绑定（D1 / KV）——其余类型仍只读
+    var isQuickManaged: Bool { type == "kv_namespace" || type == "d1" }
 
     /// 人类可读的绑定类型标签
     var typeLabel: String {
@@ -180,16 +210,36 @@ nonisolated struct WorkerSettings: Codable, Sendable {
 
 // MARK: - 上传 / 写入请求体
 
-/// 上传 / patch settings 时的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}。
+/// 上传 / patch settings 时的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}；
+/// kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}。可选字段为 nil 时不编码（omitted）。
 nonisolated struct WorkerBindingInput: Codable, Sendable {
     let type: String
     let name: String
     let text: String?
+    let namespaceId: String?    // kv_namespace 绑定的命名空间 ID
+    let id: String?             // d1 绑定的数据库 UUID
 
-    init(type: String, name: String, text: String? = nil) {
+    init(type: String, name: String, text: String? = nil, namespaceId: String? = nil, id: String? = nil) {
         self.type = type
         self.name = name
         self.text = text
+        self.namespaceId = namespaceId
+        self.id = id
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case type, name, text, id
+        case namespaceId = "namespace_id"
+    }
+
+    /// 绑定既有 KV 命名空间
+    static func kv(name: String, namespaceId: String) -> WorkerBindingInput {
+        WorkerBindingInput(type: "kv_namespace", name: name, namespaceId: namespaceId)
+    }
+
+    /// 绑定既有 D1 数据库
+    static func d1(name: String, databaseId: String) -> WorkerBindingInput {
+        WorkerBindingInput(type: "d1", name: name, id: databaseId)
     }
 }
 

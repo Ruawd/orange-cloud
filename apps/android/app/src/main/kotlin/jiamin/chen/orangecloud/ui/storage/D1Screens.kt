@@ -155,8 +155,22 @@ fun D1QueryScreen(
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
     var sql by rememberSaveable { mutableStateOf("SELECT name FROM sqlite_master WHERE type='table';") }
+    var toDropTable by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val droppedMsg = stringResource(R.string.d1_table_dropped)
+    val errMsg = stringResource(R.string.error_generic)
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                D1QueryEvent.TableDropped -> { toDropTable = null; snackbarHostState.showSnackbar(droppedMsg) }
+                is D1QueryEvent.Error -> snackbarHostState.showSnackbar(event.message ?: errMsg)
+            }
+        }
+    }
 
     SkyBackground(phase = phase) {
+        Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().systemBarsPadding()) {
             SkyHeader(
                 title = viewModel.databaseName.ifBlank { stringResource(R.string.storage_d1) },
@@ -192,6 +206,7 @@ fun D1QueryScreen(
                                 Icons.Outlined.TableRows,
                                 table,
                                 onClick = { onOpenTable(table) },
+                                onLongClick = if (state.canWrite) ({ toDropTable = table }) else null,
                             )
                         }
                     }
@@ -232,6 +247,17 @@ fun D1QueryScreen(
                 }
             }
         }
+            SnackbarHost(snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
+        }
+    }
+
+    toDropTable?.let { table ->
+        D1DropTableDialog(
+            tableName = table,
+            isDeleting = state.droppingTable == table,
+            onConfirm = { viewModel.dropTable(table) },
+            onDismiss = { toDropTable = null },
+        )
     }
 }
 
