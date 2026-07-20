@@ -10,7 +10,34 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
-        WhatsNewRelease(version: "1.8.6", items: [
+        WhatsNewRelease(version: "1.9.0", items: [
+            WhatsNewItem(
+                icon:   "magnifyingglass",
+                title:  String(localized: "一处搜遍所有资源", table: "WhatsNew"),
+                detail: String(localized: "概览页顶栏的放大镜可一次搜索域名、Worker、R2 存储桶、D1 数据库、KV 命名空间与隧道，点一下直达；任意资源都能星标固定到概览页。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "bell.badge",
+                title:  String(localized: "告警中心", table: "WhatsNew"),
+                detail: String(localized: "概览页新增告警卡片，汇总需要注意的资源——未启用的域名、状态异常的隧道等，点一下直达。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "text.magnifyingglass",
+                title:  String(localized: "实时日志更好用", table: "WhatsNew"),
+                detail: String(localized: "Worker 实时日志支持关键词搜索与级别筛选；长按复制整行，轻点展开完整详情并选取片段。「暂停」现在只冻结画面、日志照常接收，恢复后能看到完整记录。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "clock.arrow.circlepath",
+                title:  String(localized: "SQL 历史与收藏", table: "WhatsNew"),
+                detail: String(localized: "D1 查询自动记录最近 12 条，常用语句可收藏（按数据库分别保存）；查询结果一键导出 CSV，表详情还能查看索引。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "photo.artframe",
+                title:  String(localized: "Workers AI 文生图", table: "WhatsNew"),
+                detail: String(localized: "模型试运行新增文生图：输入提示词直接出图，可分享保存。", table: "WhatsNew")
+            )
+        ]),
+        WhatsNewRelease(version: "1.8.7", items: [
             WhatsNewItem(
                 icon:   "globe",
                 title:  String(localized: "workers.dev 子域直达", table: "WhatsNew"),
@@ -20,6 +47,11 @@ nonisolated enum WhatsNewGenerated {
                 icon:   "cube.fill",
                 title:  String(localized: "快速绑定 D1 / KV", table: "WhatsNew"),
                 detail: String(localized: "在变量与密钥页直接把现有 D1 数据库或 KV 命名空间绑定到 Worker，也能一键解除。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "shippingbox.fill",
+                title:  String(localized: "快速绑定 R2 存储桶", table: "WhatsNew"),
+                detail: String(localized: "资源绑定新增 R2：可把现有存储桶直接绑定到 Worker，与 D1 / KV 一样支持一键解除。", table: "WhatsNew")
             )
         ]),
         WhatsNewRelease(version: "1.8.5", items: [

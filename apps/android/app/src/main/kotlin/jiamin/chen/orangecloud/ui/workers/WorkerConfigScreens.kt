@@ -318,9 +318,11 @@ private fun WorkerBindResourceSheet(
 ) {
     val kvKind = "kv"
     val d1Kind = "d1"
+    val r2Kind = "r2"
     val availableKinds = buildList {
         if (state.canReadKV) add(kvKind)
         if (state.canReadD1) add(d1Kind)
+        if (state.canReadR2) add(r2Kind)
     }
     var kind by remember { mutableStateOf(availableKinds.firstOrNull() ?: kvKind) }
     var selectedId by remember { mutableStateOf("") }
@@ -328,10 +330,11 @@ private fun WorkerBindResourceSheet(
     var nameEdited by remember { mutableStateOf(false) }
     var resourceExpanded by remember { mutableStateOf(false) }
 
-    val options: List<Pair<String, String>> = if (kind == kvKind) {
-        state.kvNamespaces.map { it.id to it.title }
-    } else {
-        state.d1Databases.map { it.uuid to it.name }
+    // R2 按桶名引用，故 id 即桶名
+    val options: List<Pair<String, String>> = when (kind) {
+        kvKind -> state.kvNamespaces.map { it.id to it.title }
+        d1Kind -> state.d1Databases.map { it.uuid to it.name }
+        else -> state.r2Buckets.map { it.name to it.name }
     }
     val selectedTitle = options.firstOrNull { it.first == selectedId }?.second
 
@@ -364,7 +367,7 @@ private fun WorkerBindResourceSheet(
                             else
                                 ButtonDefaults.outlinedButtonColors(),
                             modifier = Modifier.weight(1f),
-                        ) { Text(if (k == kvKind) "KV" else "D1") }
+                        ) { Text(when (k) { kvKind -> "KV"; d1Kind -> "D1"; else -> "R2" }) }
                     }
                 }
             }
@@ -378,7 +381,13 @@ private fun WorkerBindResourceSheet(
                 }
             } else if (options.isEmpty()) {
                 Text(
-                    stringResource(if (kind == kvKind) R.string.worker_bind_no_kv else R.string.worker_bind_no_d1),
+                    stringResource(
+                        when (kind) {
+                            kvKind -> R.string.worker_bind_no_kv
+                            d1Kind -> R.string.worker_bind_no_d1
+                            else -> R.string.worker_bind_no_r2
+                        }
+                    ),
                     fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
@@ -387,7 +396,17 @@ private fun WorkerBindResourceSheet(
                         value = selectedTitle ?: stringResource(R.string.worker_bind_pick),
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text(stringResource(if (kind == kvKind) R.string.worker_bind_kv_ns else R.string.worker_bind_d1_db)) },
+                        label = {
+                            Text(
+                                stringResource(
+                                    when (kind) {
+                                        kvKind -> R.string.worker_bind_kv_ns
+                                        d1Kind -> R.string.worker_bind_d1_db
+                                        else -> R.string.worker_bind_r2_bucket
+                                    }
+                                )
+                            )
+                        },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = resourceExpanded) },
                         modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
                     )
@@ -424,10 +443,11 @@ private fun WorkerBindResourceSheet(
 
             Button(
                 onClick = {
-                    val resource = if (kind == kvKind)
-                        WorkerBindingInput.kv(name.trim(), selectedId)
-                    else
-                        WorkerBindingInput.d1(name.trim(), selectedId)
+                    val resource = when (kind) {
+                        kvKind -> WorkerBindingInput.kv(name.trim(), selectedId)
+                        d1Kind -> WorkerBindingInput.d1(name.trim(), selectedId)
+                        else -> WorkerBindingInput.r2(name.trim(), selectedId)
+                    }
                     onSubmit(resource)
                 },
                 enabled = canSave,

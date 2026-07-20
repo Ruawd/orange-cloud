@@ -13,8 +13,11 @@ import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.WorkerTailRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,6 +35,27 @@ data class TailLogLine(
     val level: String,   // event | log | info | warn | error | debug | exception
     val text: String,
 )
+
+/**
+ * 日志级别过滤档位。ERROR 档同时收 exception（异常与错误在控制台同色同义）。
+ * 过滤只作用于展示，原始 buffer 永不裁剪。
+ */
+enum class TailLevelFilter(val id: String) {
+    ALL("all"),
+    EVENT("event"),
+    LOG("log"),
+    DEBUG("debug"),
+    INFO("info"),
+    WARN("warn"),
+    ERROR("error"),
+    ;
+
+    fun matches(level: String): Boolean = when (this) {
+        ALL -> true
+        ERROR -> level.equals("error", ignoreCase = true) || level.equals("exception", ignoreCase = true)
+        else -> level.equals(id, ignoreCase = true)
+    }
+}
 
 /**
  * Workers 实时日志编排（对应 iOS WorkerTailViewModel）：
@@ -54,11 +78,37 @@ class WorkerTailViewModel @Inject constructor(
     private val _state = MutableStateFlow<TailConnState>(TailConnState.Idle)
     val state: StateFlow<TailConnState> = _state.asStateFlow()
 
+    /** 全量接收 buffer（只受 MAX_LINES 环形封顶影响，过滤条件变化不丢历史）。 */
     private val _lines = MutableStateFlow<List<TailLogLine>>(emptyList())
     val lines: StateFlow<List<TailLogLine>> = _lines.asStateFlow()
 
+    private val _query = MutableStateFlow("")
+    val query: StateFlow<String> = _query.asStateFlow()
+
+    private val _levelFilter = MutableStateFlow(TailLevelFilter.ALL)
+    val levelFilter: StateFlow<TailLevelFilter> = _levelFilter.asStateFlow()
+
+    /** 展示用派生结果：关键词（不区分大小写，匹配正文）+ 级别。 */
+    val visibleLines: StateFlow<List<TailLogLine>> =
+        combine(_lines, _query, _levelFilter) { all, rawQuery, level ->
+            val keyword = rawQuery.trim()
+            if (keyword.isEmpty() && level == TailLevelFilter.ALL) {
+                all
+            } else {
+                all.filter { line ->
+                    level.matches(line.level) &&
+                        (keyword.isEmpty() || line.text.contains(keyword, ignoreCase = true))
+                }
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+    // 暂停 = 冻结视图（停止自动滚到底），事件照常入 buffer，恢复后能看到这段日志
     private val _paused = MutableStateFlow(false)
     val paused: StateFlow<Boolean> = _paused.asStateFlow()
+
+    /** 暂停期间累积的新行数，用于提示「暂停期间新增 N 条」。 */
+    private val _pausedNewCount = MutableStateFlow(0)
+    val pausedNewCount: StateFlow<Int> = _pausedNewCount.asStateFlow()
 
     private var collectJob: Job? = null
     private var tailId: String? = null
@@ -92,10 +142,22 @@ class WorkerTailViewModel @Inject constructor(
 
     fun clear() {
         _lines.value = emptyList()
+        _pausedNewCount.value = 0
     }
 
+    /** 切换暂停；恢复时清零计数（视图会随之自动滚到底）。 */
     fun togglePause() {
-        _paused.update { !it }
+        val nowPaused = !_paused.value
+        _paused.value = nowPaused
+        if (!nowPaused) _pausedNewCount.value = 0
+    }
+
+    fun updateQuery(text: String) {
+        _query.value = text
+    }
+
+    fun setLevelFilter(filter: TailLevelFilter) {
+        _levelFilter.value = filter
     }
 
     private suspend fun connect() {
@@ -150,7 +212,6 @@ class WorkerTailViewModel @Inject constructor(
     }
 
     private fun handle(item: TailTraceItem) {
-        if (_paused.value) return
         val eventMs = item.eventTimestamp ?: System.currentTimeMillis()
         val newLines = buildList {
             val request = item.event?.request
@@ -173,6 +234,7 @@ class WorkerTailViewModel @Inject constructor(
             val all = current + newLines
             if (all.size > MAX_LINES) all.takeLast(MAX_LINES) else all
         }
+        if (_paused.value) _pausedNewCount.update { it + newLines.size }
         eventCount += newLines.size
         val now = System.currentTimeMillis()
         if (now - lastNotifyMs > 1000) {   // 节流：最多每秒更新一次通知

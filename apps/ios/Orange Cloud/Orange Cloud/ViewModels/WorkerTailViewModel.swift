@@ -28,9 +28,78 @@ final class WorkerTailViewModel {
         let text: String
     }
 
+    /// 级别筛选（只影响展示，不丢原始日志）。
+    /// log/debug/info/warn 是 Workers runtime 的原样 token，不翻译；
+    /// error 归并 runtime 抛出的 exception 行。
+    nonisolated enum LevelFilter: String, CaseIterable, Identifiable, Sendable {
+        case all, event, log, debug, info, warn, error
+
+        var id: String { rawValue }
+
+        var title: String {
+            switch self {
+            case .all:   String(localized: "全部级别")
+            case .event: String(localized: "事件")
+            case .log:   "log"
+            case .debug: "debug"
+            case .info:  "info"
+            case .warn:  "warn"
+            case .error: "error"
+            }
+        }
+
+        func matches(_ level: String) -> Bool {
+            switch self {
+            case .all:   true
+            case .event: level == "event"
+            case .log:   level == "log"
+            case .debug: level == "debug"
+            case .info:  level == "info"
+            case .warn:  level == "warn"
+            case .error: level == "error" || level == "exception"
+            }
+        }
+    }
+
     private(set) var lines: [LogLine] = []
     private(set) var state: ConnectionState = .idle
-    var isPaused = false       // 暂停 = 丢弃新事件，连接保持
+
+    /// 暂停 = 冻结视图（停止自动滚到底），事件照常入 buffer，恢复后能看到这段日志
+    private(set) var isPaused = false
+    /// 暂停期间累积的新行数，用于提示「暂停期间新增 N 条」
+    private(set) var pausedNewCount = 0
+
+    /// 切换暂停；恢复时清零计数（视图会随之自动滚到底）
+    func togglePause() {
+        isPaused.toggle()
+        if !isPaused { pausedNewCount = 0 }
+    }
+
+    // MARK: - 展示过滤（原始 lines 始终保留全量，改条件不丢历史）
+
+    var searchText = ""
+    var levelFilter: LevelFilter = .all
+
+    /// 是否处于筛选态（决定空态文案）
+    var isFiltering: Bool {
+        levelFilter != .all || !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    /// 实际渲染的日志行：关键词（不区分大小写，匹配正文）+ 级别双重过滤
+    var visibleLines: [LogLine] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard levelFilter != .all || !query.isEmpty else { return lines }
+        return lines.filter { line in
+            guard levelFilter.matches(line.level) else { return false }
+            guard !query.isEmpty else { return true }
+            return line.text.localizedCaseInsensitiveContains(query)
+        }
+    }
+
+    func clearFilters() {
+        searchText = ""
+        levelFilter = .all
+    }
 
     private let service: WorkerTailService
     private let accountId: String
@@ -77,6 +146,7 @@ final class WorkerTailViewModel {
 
     func clear() {
         lines.removeAll()
+        pausedNewCount = 0
     }
 
     private func connect() async {
@@ -158,8 +228,6 @@ final class WorkerTailViewModel {
     // MARK: - 事件 → 日志行
 
     private func handle(_ item: TailTraceItem) {
-        guard !isPaused else { return }
-
         var newLines: [LogLine] = []
         let eventDate = item.eventTimestamp.map { Date(timeIntervalSince1970: TimeInterval($0) / 1000) } ?? Date()
 
@@ -193,6 +261,7 @@ final class WorkerTailViewModel {
         if lines.count > Self.maxLines {
             lines.removeFirst(lines.count - Self.maxLines)
         }
+        if isPaused { pausedNewCount += newLines.count }
 
         eventCount += 1
         updateActivity()

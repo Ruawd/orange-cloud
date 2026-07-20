@@ -126082,82 +126082,6 @@
         }
       }
     },
-    "试运行文本生成模型需要 Workers AI 写权限（ai.write）。点上方按钮一键补齐授权，无需退出登录。": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تتطلب تجربة نماذج توليد النصوص صلاحية كتابة Workers AI (ai.write). اضغط الزر أعلاه لمنحها بخطوة واحدة دون تسجيل الخروج."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Das Testen von Textgenerierungsmodellen erfordert Workers-AI-Schreibzugriff (ai.write). Tippe oben auf die Schaltfläche, um ihn in einem Schritt zu erteilen – ohne Abmeldung."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trying out text-generation models requires Workers AI write access (ai.write). Tap the button above to grant it in one step — no need to sign out."
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Probar modelos de generación de texto requiere acceso de escritura de Workers AI (ai.write). Toca el botón de arriba para concederlo en un paso, sin cerrar sesión."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tester les modèles de génération de texte nécessite l’accès en écriture Workers AI (ai.write). Touchez le bouton ci-dessus pour l’accorder en une étape, sans vous déconnecter."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テキスト生成モデルの試用には Workers AI の書き込み権限（ai.write）が必要です。上のボタンでワンタップで付与できます。ログアウトは不要です。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "텍스트 생성 모델 시험 실행에는 Workers AI 쓰기 권한(ai.write)이 필요합니다. 위 버튼을 눌러 한 번에 권한을 추가하세요. 로그아웃할 필요가 없습니다."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Testar modelos de geração de texto requer acesso de escrita do Workers AI (ai.write). Toque no botão acima para conceder em uma etapa, sem sair da conta."
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Testar modelos de geração de texto requer acesso de escrita do Workers AI (ai.write). Toque no botão acima para conceder num passo, sem terminar sessão."
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Metin üretme modellerini denemek için Workers AI yazma erişimi (ai.write) gerekir. Tek adımda vermek için yukarıdaki düğmeye dokunun; oturumu kapatmaya gerek yok."
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "試執行文字生成模型需要 Workers AI 寫入權限（ai.write）。點上方按鈕一鍵補齊授權，無需登出。"
-          }
-        },
-        "zh-HK": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "試執行文字生成模型需要 Workers AI 寫入權限（ai.write）。點上方按鈕一鍵補齊授權，無需登出。"
-          }
-        }
-      }
-    },
     "该 Worker 未配置 Cron 触发器。": {
       "localizations": {
         "ar": {
@@ -147148,6 +147072,4724 @@
           "stringUnit": {
             "state": "translated",
             "value": "綁定"
+          }
+        }
+      }
+    },
+    "该账号暂无 R2 存储桶": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد حاويات R2 في هذا الحساب"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine R2-Buckets in diesem Konto"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No R2 buckets in this account"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay buckets R2 en esta cuenta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun bucket R2 dans ce compte"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアカウントに R2 バケットがありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 계정에 R2 버킷이 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum bucket R2 nesta conta"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum bucket R2 nesta conta"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hesapta R2 bucket yok"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此帳戶尚無 R2 儲存桶"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此帳戶尚無 R2 儲存桶"
+          }
+        }
+      }
+    },
+    "R2 存储桶": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حاوية R2"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2-Bucket"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 bucket"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bucket R2"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bucket R2"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 バケット"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 버킷"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bucket R2"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bucket R2"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 bucket"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 儲存桶"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 儲存桶"
+          }
+        }
+      }
+    },
+    "绑定 D1 / KV / R2": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ربط D1 / KV / R2"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D1 / KV / R2 binden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bind D1 / KV / R2"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincular D1 / KV / R2"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lier D1 / KV / R2"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D1 / KV / R2 をバインド"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D1 / KV / R2 바인딩"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincular D1 / KV / R2"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincular D1 / KV / R2"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D1 / KV / R2 bağla"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "綁定 D1 / KV / R2"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "綁定 D1 / KV / R2"
+          }
+        }
+      }
+    },
+    "可绑定既有 D1 数据库 / KV 命名空间 / R2 存储桶；队列、Durable Object 等其它资源仍为只读，请用 Wrangler 或 Dashboard。": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اربط قاعدة بيانات D1 أو مساحة أسماء KV أو حاوية R2 موجودة. تبقى الموارد الأخرى مثل Queues وDurable Objects للقراءة فقط — استخدم Wrangler أو لوحة التحكم."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Binde eine vorhandene D1-Datenbank, einen KV-Namespace oder einen R2-Bucket ein. Andere Ressourcen wie Queues und Durable Objects bleiben schreibgeschützt – nutze Wrangler oder das Dashboard."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bind an existing D1 database, KV namespace or R2 bucket. Other resources like Queues and Durable Objects stay read-only — use Wrangler or the Dashboard."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincula una base de datos D1, un espacio de nombres KV o un bucket R2 existente. Otros recursos como Queues y Durable Objects siguen siendo de solo lectura: usa Wrangler o el Dashboard."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liez une base de données D1, un espace de noms KV ou un bucket R2 existant. Les autres ressources comme les Queues et Durable Objects restent en lecture seule — utilisez Wrangler ou le Dashboard."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既存の D1 データベース / KV ネームスペース / R2 バケットをバインドできます。キューや Durable Object など他のリソースは読み取り専用で、Wrangler か Dashboard をご利用ください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기존 D1 데이터베이스 / KV 네임스페이스 / R2 버킷을 바인딩합니다. 큐, Durable Object 등 다른 리소스는 읽기 전용이며 Wrangler 또는 Dashboard를 사용하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincule um banco de dados D1, namespace KV ou bucket R2 existente. Outros recursos como Queues e Durable Objects permanecem somente leitura — use o Wrangler ou o Dashboard."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincule uma base de dados D1, namespace KV ou bucket R2 existente. Outros recursos como Queues e Durable Objects permanecem só de leitura — use o Wrangler ou o Dashboard."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut bir D1 veritabanını, KV ad alanını veya R2 bucket'ını bağlayın. Queues ve Durable Objects gibi diğer kaynaklar salt okunur kalır — Wrangler veya Dashboard kullanın."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可綁定既有 D1 資料庫 / KV 命名空間 / R2 儲存桶；佇列、Durable Object 等其它資源仍為唯讀，請用 Wrangler 或 Dashboard。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可綁定既有 D1 資料庫 / KV 命名空間 / R2 儲存桶；佇列、Durable Object 等其它資源仍為唯讀，請用 Wrangler 或 Dashboard。"
+          }
+        }
+      }
+    },
+    "%@ · 未找到该资源": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · لم يتم العثور على المورد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Ressource nicht gefunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Resource not found"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Recurso no encontrado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Ressource introuvable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · リソースが見つかりません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 리소스를 찾을 수 없음"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Recurso não encontrado"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Recurso não encontrado"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Kaynak bulunamadı"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 找不到此資源"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 找不到此資源"
+          }
+        }
+      }
+    },
+    "下拉刷新概览页后，这里会列出当前账号的资源": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسحب صفحة النظرة العامة للتحديث وستظهر هنا موارد هذا الحساب"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziehe die Übersicht zum Aktualisieren – dann erscheinen hier die Ressourcen dieses Kontos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull to refresh the overview and this account’s resources will appear here"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desliza para actualizar el resumen y los recursos de esta cuenta aparecerán aquí"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tirez pour actualiser l’aperçu : les ressources de ce compte s’afficheront ici"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "概要ページを下に引いて更新すると、現在のアカウントのリソースがここに表示されます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개요 화면을 당겨서 새로고침하면 현재 계정의 리소스가 여기에 표시됩니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puxe para atualizar a visão geral e os recursos desta conta aparecerão aqui"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puxe para atualizar a vista geral e os recursos desta conta aparecerão aqui"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genel bakışı yenilemek için çekin; bu hesabın kaynakları burada listelenir"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下拉重新整理概覽頁後，這裡會列出目前帳戶的資源"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下拉重新整理概覽頁後，這裡會列出目前帳號的資源"
+          }
+        }
+      }
+    },
+    "主键": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المفتاح الأساسي"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primärschlüssel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primary key"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clave primaria"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clé primaire"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主キー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 키"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chave primária"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chave primária"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birincil anahtar"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主鍵"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主鍵"
+          }
+        }
+      }
+    },
+    "事件": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حدث"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ereignis"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Event"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evento"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Événement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "イベント"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이벤트"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evento"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evento"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olay"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事件"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事件"
+          }
+        }
+      }
+    },
+    "全部级别": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كل المستويات"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Stufen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All levels"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos los niveles"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les niveaux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのレベル"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 수준"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os níveis"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos os níveis"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm düzeyler"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有級別"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有層級"
+          }
+        }
+      }
+    },
+    "分享 / 存储": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة / حفظ"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teilen / Sichern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share / Save"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartir / Guardar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager / Enregistrer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "共有 / 保存"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공유 / 저장"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartilhar / Salvar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partilhar / Guardar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paylaş / Kaydet"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享 / 儲存"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享 / 儲存"
+          }
+        }
+      }
+    },
+    "取消收藏此 SQL": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة هذا الاستعلام SQL من المفضلة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses SQL aus Favoriten entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove this SQL from favorites"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar este SQL de favoritos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retirer ce SQL des favoris"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この SQL をお気に入りから削除"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 SQL을 즐겨찾기에서 제거"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remover este SQL dos favoritos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remover este SQL dos favoritos"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu SQL’i favorilerden çıkar"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將此 SQL 移出收藏"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將此 SQL 移出收藏"
+          }
+        }
+      }
+    },
+    "告警": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التنبيهات"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warnungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alerts"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alertas"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alertes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アラート"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alertas"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alertas"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uyarılar"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警示"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警示"
+          }
+        }
+      }
+    },
+    "唯一约束": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قيد التفرّد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eindeutigkeitsbedingung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unique constraint"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restricción única"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrainte d’unicité"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一意制約"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고유 제약"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restrição de unicidade"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restrição de unicidade"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benzersizlik kısıtı"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "唯一約束"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "唯一性限制"
+          }
+        }
+      }
+    },
+    "图片数据无法解码": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر فك ترميز بيانات الصورة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Bilddaten konnten nicht dekodiert werden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The image data couldn’t be decoded"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudieron decodificar los datos de la imagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de décoder les données de l’image"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像データをデコードできませんでした"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미지 데이터를 디코딩할 수 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível decodificar os dados da imagem"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível descodificar os dados da imagem"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görsel verisi çözümlenemedi"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圖片數據無法解碼"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圖片資料無法解碼"
+          }
+        }
+      }
+    },
+    "在 App 内试运行模型需要 Workers AI 写权限（ai.write）。点上方按钮一键补齐授权，无需退出登录。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تتطلب تجربة النماذج داخل التطبيق صلاحية كتابة Workers AI (ai.write). اضغط الزر أعلاه لمنحها بخطوة واحدة دون تسجيل الخروج."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Testen von Modellen in der App erfordert Workers-AI-Schreibzugriff (ai.write). Tippe oben auf die Schaltfläche, um ihn in einem Schritt zu erteilen – ohne Abmeldung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trying out models in the app requires Workers AI write access (ai.write). Tap the button above to grant it in one step — no need to sign out."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probar modelos en la app requiere acceso de escritura de Workers AI (ai.write). Toca el botón de arriba para concederlo en un paso, sin cerrar sesión."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tester des modèles dans l’app nécessite l’accès en écriture Workers AI (ai.write). Touchez le bouton ci-dessus pour l’accorder en une étape, sans vous déconnecter."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 内でモデルを試すには Workers AI の書き込み権限（ai.write）が必要です。上のボタンでワンタップで付与できます。ログアウトは不要です。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱에서 모델을 시험 실행하려면 Workers AI 쓰기 권한(ai.write)이 필요합니다. 위 버튼을 눌러 한 번에 권한을 추가하세요. 로그아웃할 필요가 없습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testar modelos no app requer acesso de escrita do Workers AI (ai.write). Toque no botão acima para conceder em uma etapa, sem sair da conta."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testar modelos na app requer acesso de escrita do Workers AI (ai.write). Toque no botão acima para conceder num passo, sem terminar sessão."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modelleri uygulama içinde denemek için Workers AI yazma erişimi (ai.write) gerekir. Tek adımda vermek için yukarıdaki düğmeye dokunun; oturumu kapatmaya gerek yok."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 App 內試執行模型需要 Workers AI 寫入權限（ai.write）。點上方按鈕一鍵補齊授權，無需登出。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 App 內試執行模型需要 Workers AI 寫入權限（ai.write）。點上方按鈕一鍵補齊授權，無需登出。"
+          }
+        }
+      }
+    },
+    "域名待激活，检查域名服务器是否已指向 Cloudflare": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النطاق في انتظار التفعيل — تحقّق من أن خوادم الأسماء تشير إلى Cloudflare"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domain wartet auf Aktivierung – prüfe, ob die Nameserver auf Cloudflare zeigen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domain pending activation — check that its name servers point to Cloudflare"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dominio pendiente de activación: verifica que sus servidores de nombres apunten a Cloudflare"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domaine en attente d’activation : vérifiez que ses serveurs de noms pointent vers Cloudflare"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドメインは有効化待ちです。ネームサーバーが Cloudflare を指しているか確認してください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도메인이 활성화 대기 중입니다. 네임서버가 Cloudflare를 가리키는지 확인하세요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domínio aguardando ativação — verifique se os servidores de nomes apontam para a Cloudflare"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domínio a aguardar ativação — verifique se os servidores de nomes apontam para a Cloudflare"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alan adı etkinleştirilmeyi bekliyor — ad sunucularının Cloudflare’i gösterdiğini doğrulayın"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "域名待啟用，請檢查名稱伺服器是否已指向 Cloudflare"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "網域待啟用，請檢查名稱伺服器是否已指向 Cloudflare"
+          }
+        }
+      }
+    },
+    "域名未处于启用状态（%@）": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النطاق ليس في حالة نشطة (%@)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domain ist nicht aktiv (%@)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domain is not active (%@)"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El dominio no está activo (%@)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le domaine n’est pas actif (%@)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドメインが有効な状態ではありません（%@）"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도메인이 활성 상태가 아닙니다(%@)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O domínio não está ativo (%@)"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O domínio não está ativo (%@)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alan adı etkin durumda değil (%@)"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "域名未處於啟用狀態（%@）"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "網域未處於啟用狀態（%@）"
+          }
+        }
+      }
+    },
+    "复制全部": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخ الكل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy All"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar todo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout copier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてコピー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 복사"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar tudo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar tudo"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümünü kopyala"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部複製"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部複製"
+          }
+        }
+      }
+    },
+    "复制此行": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخ هذا السطر"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Zeile kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy this line"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar esta línea"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copier cette ligne"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この行をコピー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 줄 복사"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar esta linha"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar esta linha"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu satırı kopyala"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複製此行"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複製此行"
+          }
+        }
+      }
+    },
+    "完整内容": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المحتوى الكامل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vollständiger Inhalt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full Content"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenido completo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contenu complet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全文"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 내용"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conteúdo completo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conteúdo completo"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam içerik"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完整內容"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完整內容"
+          }
+        }
+      }
+    },
+    "定时表达式": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعبير cron"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cron-Ausdruck"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cron Expression"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expresión cron"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expression cron"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cron 式"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cron 표현식"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expressão cron"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expressão cron"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cron ifadesi"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "排程表達式"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "排程運算式"
+          }
+        }
+      }
+    },
+    "导出 CSV": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تصدير CSV"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV exportieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export CSV"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar CSV"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporter en CSV"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV を書き出す"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV 내보내기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar CSV"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar CSV"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV dışa aktar"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出 CSV"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出 CSV"
+          }
+        }
+      }
+    },
+    "导出为当前已加载的 %lld 行，需要更多请加 LIMIT / OFFSET 分批查询": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يصدّر الصفوف المحمَّلة حاليًا وعددها %lld. للمزيد، استعلم على دفعات باستخدام LIMIT / OFFSET"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportiert die aktuell geladenen %lld Zeilen. Für mehr Zeilen in Schritten mit LIMIT / OFFSET abfragen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exports the %lld rows currently loaded. For more, query in batches with LIMIT / OFFSET"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporta las %lld filas cargadas actualmente. Si necesitas más, consulta por lotes con LIMIT / OFFSET"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporte les %lld lignes actuellement chargées. Pour en obtenir davantage, interrogez par lots avec LIMIT / OFFSET"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在読み込まれている %lld 行を書き出します。さらに必要な場合は LIMIT / OFFSET で分割して取得してください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 불러온 %lld개 행을 내보냅니다. 더 필요하면 LIMIT / OFFSET으로 나눠 조회하세요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporta as %lld linhas carregadas no momento. Para mais, consulte em lotes com LIMIT / OFFSET"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exporta as %lld linhas atualmente carregadas. Para mais, consulte por lotes com LIMIT / OFFSET"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şu anda yüklü olan %lld satırı dışa aktarır. Daha fazlası için LIMIT / OFFSET ile parça parça sorgulayın"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出目前已載入的 %lld 行，需要更多請加 LIMIT / OFFSET 分批查詢"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出目前已載入的 %lld 列，需要更多請加 LIMIT / OFFSET 分批查詢"
+          }
+        }
+      }
+    },
+    "已固定": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المثبَّتة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Angeheftet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinned"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fijados"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Épinglés"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ピン留め済み"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고정됨"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixados"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fixados"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabitlenenler"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已固定"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已固定"
+          }
+        }
+      }
+    },
+    "已暂停 · 新增 %lld 条": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused · %lld new"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一時停止中 · 新着 %lld 件"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시정지됨 · 새 항목 %lld개"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已暫停 · 新增 %lld 筆"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已暫停 · 新增 %lld 條"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En pausa · %lld nuevos"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausado · %lld novos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Em pausa · %lld novos"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausiert · %lld neue"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En pause · %lld nouveaux"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موقوف مؤقتًا · %lld جديدة"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duraklatıldı · %lld yeni"
+          }
+        }
+      }
+    },
+    "异常": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استثناء"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausnahme"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exception"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excepción"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exception"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例外"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예외"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exceção"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exceção"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İstisna"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "異常"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例外狀況"
+          }
+        }
+      }
+    },
+    "当前账号下没有 Workers 脚本": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد برامج Workers في هذا الحساب"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Konto enthält keine Workers-Skripte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This account has no Worker scripts"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta cuenta no tiene scripts de Workers"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce compte ne contient aucun script Workers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアカウントには Workers スクリプトがありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 계정에는 Workers 스크립트가 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta conta não tem scripts do Workers"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta conta não tem scripts do Workers"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hesapta Workers betiği yok"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前帳戶下沒有 Workers 腳本"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前帳號下沒有 Workers 指令碼"
+          }
+        }
+      }
+    },
+    "恢复实时滚动": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume live scrolling"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リアルタイムスクロールを再開"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실시간 스크롤 재개"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復即時捲動"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復實時滾動"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reanudar desplazamiento en vivo"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar rolagem ao vivo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar deslocamento em direto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live-Scrollen fortsetzen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprendre le défilement en direct"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استئناف التمرير المباشر"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canlı kaydırmayı sürdür"
+          }
+        }
+      }
+    },
+    "手动创建": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُنشئ يدويًا"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manuell erstellt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manually created"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Creado manualmente"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créé manuellement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手動作成"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수동 생성"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criado manualmente"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criado manualmente"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elle oluşturuldu"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手動建立"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手動建立"
+          }
+        }
+      }
+    },
+    "按提示词生成一张图片。会消耗账号的 Workers AI 用量（每天 1 万 Neuron 免费额度）。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ينشئ صورة واحدة من موجّهك. يستهلك حصة Workers AI لحسابك (10٬000 Neuron مجانًا يوميًا)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erzeugt ein Bild aus deinem Prompt. Verbraucht das Workers-AI-Kontingent deines Kontos (10.000 Neuronen pro Tag kostenlos)."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generates one image from your prompt. Uses your account’s Workers AI quota (10,000 Neurons free per day)."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Genera una imagen a partir de tu prompt. Consume la cuota de Workers AI de tu cuenta (10 000 Neuronas gratis al día)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Génère une image à partir de votre prompt. Consomme le quota Workers AI de votre compte (10 000 neurones gratuits par jour)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プロンプトから画像を 1 枚生成します。アカウントの Workers AI 使用量（毎日 1 万 Neuron まで無料）を消費します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프롬프트로 이미지 한 장을 생성합니다. 계정의 Workers AI 사용량(하루 1만 Neuron 무료)을 사용합니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gera uma imagem a partir do seu prompt. Consome a cota de Workers AI da sua conta (10.000 Neurônios grátis por dia)."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gera uma imagem a partir do seu prompt. Consome a quota de Workers AI da sua conta (10 000 Neurónios grátis por dia)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Komutunuzdan bir görsel oluşturur. Hesabınızın Workers AI kotasını kullanır (günde 10.000 Neuron ücretsiz)."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按提示詞生成一張圖片。會消耗帳戶的 Workers AI 用量（每天 1 萬 Neuron 免費額度）。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "依提示詞產生一張圖片。會消耗帳號的 Workers AI 用量（每天 1 萬 Neuron 免費額度）。"
+          }
+        }
+      }
+    },
+    "按级别筛选": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التصفية حسب المستوى"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Stufe filtern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter by level"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtrar por nivel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtrer par niveau"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レベルで絞り込む"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수준별 필터"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtrar por nível"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtrar por nível"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzeye göre filtrele"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按級別篩選"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "依層級篩選"
+          }
+        }
+      }
+    },
+    "换个关键词或级别再看看，已接收的日志不会丢失": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جرّب كلمة مفتاحية أو مستوى آخر — السجلات المستلمة لن تُفقد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versuche einen anderen Suchbegriff oder eine andere Stufe – bereits empfangene Protokolle gehen nicht verloren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try another keyword or level — logs already received are not lost"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba con otra palabra clave o nivel; los registros ya recibidos no se pierden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayez un autre mot-clé ou niveau : les journaux déjà reçus ne sont pas perdus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のキーワードやレベルで試してください。受信済みのログは失われません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 검색어나 수준으로 확인해 보세요. 이미 수신한 로그는 사라지지 않습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tente outra palavra-chave ou nível — os logs já recebidos não são perdidos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimente outra palavra-chave ou nível — os registos já recebidos não se perdem"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Başka bir anahtar sözcük ya da düzey deneyin — alınan günlükler kaybolmaz"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "換個關鍵字或級別再看看，已接收的日誌不會遺失"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "換個關鍵字或層級再看看，已接收的記錄不會遺失"
+          }
+        }
+      }
+    },
+    "换个关键词试试": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جرّب كلمة مفتاحية أخرى"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versuche es mit einem anderen Suchbegriff"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try a different keyword"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba con otra palabra clave"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essayez un autre mot-clé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のキーワードで試してください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 검색어로 시도해 보세요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tente outra palavra-chave"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experimente outra palavra-chave"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farklı bir anahtar sözcük deneyin"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "換個關鍵字試試"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "換個關鍵字試試"
+          }
+        }
+      }
+    },
+    "描述你想生成的画面": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صِف الصورة التي تريد إنشاءها"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschreibe das gewünschte Bild"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe the image you want"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe la imagen que quieres generar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Décrivez l’image que vous souhaitez générer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成したい画像を説明してください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생성할 이미지를 설명하세요"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descreva a imagem que você quer gerar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descreva a imagem que pretende gerar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oluşturmak istediğiniz görseli anlatın"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "描述你想生成的畫面"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "描述你想生成的畫面"
+          }
+        }
+      }
+    },
+    "提示": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معلومة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinweis"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Información"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Information"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "情報"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정보"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informação"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Informação"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgi"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "提示"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "提示"
+          }
+        }
+      }
+    },
+    "搜索": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بحث"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "検索"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "검색"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesquisar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ara"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋"
+          }
+        }
+      }
+    },
+    "搜索域名、Workers、存储桶…": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البحث في النطاقات وWorkers والحاويات…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domains, Workers, Buckets suchen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search domains, Workers, buckets…"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar dominios, Workers, buckets…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher domaines, Workers, buckets…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドメイン、Workers、バケットを検索…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도메인, Workers, 버킷 검색…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar domínios, Workers, buckets…"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesquisar domínios, Workers, buckets…"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alan adı, Workers, bucket ara…"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋域名、Workers、儲存桶…"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋網域、Workers、儲存桶…"
+          }
+        }
+      }
+    },
+    "搜索日志": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البحث في السجلات"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolle durchsuchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search logs"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar registros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher dans les journaux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ログを検索"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그 검색"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar logs"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesquisar registos"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günlüklerde ara"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋日誌"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋記錄"
+          }
+        }
+      }
+    },
+    "搜索资源": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البحث في الموارد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressourcen suchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search resources"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar recursos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher des ressources"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リソースを検索"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "리소스 검색"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar recursos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pesquisar recursos"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaynak ara"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋資源"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋資源"
+          }
+        }
+      }
+    },
+    "收藏": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المفضلة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoriten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorites"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoritos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoris"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お気に入り"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "즐겨찾기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoritos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoritos"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoriler"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "收藏"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "收藏"
+          }
+        }
+      }
+    },
+    "收藏此 SQL": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة هذا الاستعلام SQL إلى المفضلة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses SQL zu Favoriten hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add this SQL to favorites"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar este SQL a favoritos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajouter ce SQL aux favoris"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この SQL をお気に入りに追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 SQL을 즐겨찾기에 추가"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar este SQL aos favoritos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar este SQL aos favoritos"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu SQL’i favorilere ekle"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將此 SQL 加入收藏"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "將此 SQL 加入收藏"
+          }
+        }
+      }
+    },
+    "日志详情": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تفاصيل السجل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolldetails"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log Details"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalles del registro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détails du journal"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ログの詳細"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그 상세"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalhes do log"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detalhes do registo"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günlük ayrıntıları"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日誌詳細資料"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記錄詳細資訊"
+          }
+        }
+      }
+    },
+    "暂无可搜索的资源": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد موارد قابلة للبحث بعد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine durchsuchbaren Ressourcen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No resources to search yet"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay recursos para buscar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune ressource à rechercher pour l’instant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "検索できるリソースがまだありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 검색할 리소스가 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não há recursos para buscar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não há recursos para pesquisar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz aranabilir kaynak yok"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚無可搜尋的資源"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚無可搜尋的資源"
+          }
+        }
+      }
+    },
+    "暂无告警，一切正常": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد تنبيهات، كل شيء على ما يرام"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Warnungen – alles in Ordnung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No alerts — everything looks good"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin alertas: todo está en orden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune alerte, tout va bien"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アラートはありません。すべて正常です"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림이 없습니다. 모두 정상입니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem alertas — está tudo certo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem alertas — está tudo bem"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uyarı yok, her şey yolunda"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前沒有警示，一切正常"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前沒有警示，一切正常"
+          }
+        }
+      }
+    },
+    "最近": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأخيرة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuletzt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recientes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récents"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recentes"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recentes"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son kullanılanlar"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
+          }
+        }
+      }
+    },
+    "查询结果 CSV": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV لنتائج الاستعلام"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV der Abfrageergebnisse"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Query results CSV"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV de resultados de la consulta"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV des résultats de la requête"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ結果 CSV"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "쿼리 결과 CSV"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV dos resultados da consulta"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV dos resultados da consulta"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sorgu sonuçları CSV"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查詢結果 CSV"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查詢結果 CSV"
+          }
+        }
+      }
+    },
+    "没有匹配的日志": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد سجلات مطابقة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passenden Protokolle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching logs"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay registros coincidentes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun journal correspondant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一致するログがありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일치하는 로그가 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum log correspondente"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registo correspondente"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eşleşen günlük yok"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的日誌"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的記錄"
+          }
+        }
+      }
+    },
+    "没有匹配的资源": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد موارد مطابقة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passenden Ressourcen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching resources"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay recursos coincidentes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune ressource correspondante"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一致するリソースがありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일치하는 리소스가 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum recurso correspondente"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum recurso correspondente"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eşleşen kaynak yok"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的資源"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有符合的資源"
+          }
+        }
+      }
+    },
+    "清除搜索": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسح البحث"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche löschen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar búsqueda"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer la recherche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "検索をクリア"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "검색 지우기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar busca"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar pesquisa"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aramayı temizle"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除搜尋"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除搜尋"
+          }
+        }
+      }
+    },
+    "清除筛选": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسح التصفية"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter zurücksetzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear filters"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quitar filtros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effacer les filtres"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フィルタをクリア"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "필터 지우기"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar filtros"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar filtros"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filtreleri temizle"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除篩選"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清除篩選"
+          }
+        }
+      }
+    },
+    "生成图片": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إنشاء صورة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bild generieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generate image"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generar imagen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Générer l’image"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "画像を生成"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미지 생성"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerar imagem"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerar imagem"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görsel oluştur"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成圖片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "產生圖片"
+          }
+        }
+      }
+    },
+    "生成的图片": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصورة المُنشأة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generiertes Bild"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generated image"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imagen generada"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Image générée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成された画像"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생성된 이미지"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imagem gerada"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imagem gerada"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oluşturulan görsel"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成的圖片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "產生的圖片"
+          }
+        }
+      }
+    },
+    "生成的图片过大，无法在 App 内预览": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصورة المُنشأة أكبر من أن تُعرَض داخل التطبيق"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das generierte Bild ist zu groß für die Vorschau in der App"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The generated image is too large to preview in the app"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La imagen generada es demasiado grande para previsualizarla en la app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’image générée est trop volumineuse pour être prévisualisée dans l’app"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成された画像が大きすぎるため、App 内でプレビューできません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생성된 이미지가 너무 커서 앱에서 미리 볼 수 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A imagem gerada é grande demais para ser visualizada no app"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A imagem gerada é demasiado grande para pré-visualizar na app"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oluşturulan görsel uygulamada önizlenemeyecek kadar büyük"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成的圖片過大，無法在 App 內預覽"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "產生的圖片過大，無法在 App 內預覽"
+          }
+        }
+      }
+    },
+    "索引": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الفهارس"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indizes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indexes"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índices"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Index"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "インデックス"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인덱스"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índices"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Índices"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dizinler"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "索引"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "索引"
+          }
+        }
+      }
+    },
+    "级别": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستوى"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stufe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nivel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レベル"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수준"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nível"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nível"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzey"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "級別"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "層級"
+          }
+        }
+      }
+    },
+    "警告": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحذير"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warnung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warning"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advertencia"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avertissement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警告"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "경고"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aviso"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aviso"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uyarı"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警告"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "警告"
+          }
+        }
+      }
+    },
+    "该模型返回的不是图片数据，暂不支持在 App 内试运行": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يعيد هذا النموذج بيانات صور، لذا لا يمكن تجربته داخل التطبيق حاليًا"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Modell liefert keine Bilddaten und kann daher noch nicht in der App getestet werden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This model doesn’t return image data, so it can’t be tested in the app yet"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este modelo no devuelve datos de imagen, por lo que aún no se puede probar en la app"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce modèle ne renvoie pas de données d’image ; il ne peut pas encore être testé dans l’app"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このモデルは画像データを返さないため、App 内での試し実行にはまだ対応していません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 모델은 이미지 데이터를 반환하지 않아 아직 앱에서 시험 실행할 수 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este modelo não retorna dados de imagem, então ainda não é possível testá-lo no app"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este modelo não devolve dados de imagem, pelo que ainda não é possível testá-lo na app"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu model görsel verisi döndürmediğinden uygulama içinde henüz denenemiyor"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此模型返回的不是圖片數據，暫不支援在 App 內試執行"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此模型回傳的不是圖片資料，暫不支援在 App 內試執行"
+          }
+        }
+      }
+    },
+    "请求地址": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عنوان الطلب"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anforderungs-URL"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Request URL"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL de la solicitud"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL de la requête"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リクエスト URL"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "요청 URL"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL da requisição"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "URL do pedido"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İstek URL’si"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請求網址"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請求網址"
+          }
+        }
+      }
+    },
+    "轻点查看详情，长按复制整行": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انقر لعرض التفاصيل، واضغط مطولاً لنسخ السطر بالكامل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen für Details, gedrückt halten, um die ganze Zeile zu kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap for details, touch and hold to copy the whole line"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para ver detalles; mantén pulsado para copiar toda la línea"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez pour les détails, maintenez pour copier toute la ligne"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップで詳細を表示、長押しで行全体をコピー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭하면 상세 정보, 길게 누르면 줄 전체 복사"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque para ver detalhes; toque e segure para copiar a linha inteira"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque para ver detalhes; toque sem soltar para copiar a linha inteira"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayrıntılar için dokunun, satırın tamamını kopyalamak için basılı tutun"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輕點查看詳細資料，長按複製整行"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輕點查看詳細資訊，長按複製整行"
+          }
+        }
+      }
+    },
+    "还没有部署 Worker": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يتم نشر أي Worker بعد"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch keine Worker bereitgestellt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Workers deployed yet"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay Workers desplegados"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun Worker déployé pour l’instant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worker がまだデプロイされていません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 배포된 Worker가 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum Worker implantado ainda"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não há Workers implementados"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz dağıtılmış Worker yok"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未部署 Worker"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未部署 Worker"
+          }
+        }
+      }
+    },
+    "长按可选中其中的片段单独复制": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط مطولاً لتحديد جزء من النص ونسخه"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte gedrückt, um einen Ausschnitt auszuwählen und zu kopieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold to select part of the text and copy it"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mantén pulsado para seleccionar un fragmento y copiarlo"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez et maintenez pour sélectionner un extrait et le copier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長押しすると一部だけを選択してコピーできます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "길게 눌러 일부만 선택해 복사할 수 있습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque e segure para selecionar um trecho e copiá-lo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque sem soltar para selecionar um excerto e copiá-lo"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir bölümü seçip kopyalamak için basılı tutun"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按可選取其中片段單獨複製"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "長按可選取其中片段單獨複製"
+          }
+        }
+      }
+    },
+    "隧道状态：%@": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حالة النفق: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunnelstatus: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunnel status: %@"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado del túnel: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "État du tunnel : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トンネルの状態：%@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "터널 상태: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status do túnel: %@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado do túnel: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tünel durumu: %@"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隧道狀態：%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通道狀態：%@"
           }
         }
       }

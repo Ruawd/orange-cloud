@@ -3,10 +3,14 @@
 //  Orange Cloud
 //
 //  Workers AI 模型目录（按任务类型分组，可搜索）。account 级，ai.read。
-//  点模型查看详情；文本生成（Text Generation）类模型可试运行（Playground），需 ai.read + ai.write。
+//  点模型查看详情；文本生成（Text Generation）与文生图（Text-to-Image）模型可试运行（Playground），
+//  需 ai.read + ai.write。文生图返回图片二进制，走 CFAPIClient.postRaw。
 //
 
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct WorkersAIView: View {
 
@@ -100,7 +104,7 @@ struct WorkersAIView: View {
     }
 }
 
-// MARK: - 模型详情 + 文本生成 Playground
+// MARK: - 模型详情 + 试运行 Playground（文本生成 / 文生图）
 
 private struct AIModelDetailSheet: View {
 
@@ -110,6 +114,7 @@ private struct AIModelDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AuthManager.self) private var auth
     @State private var playVM: AIPlaygroundViewModel
+    @State private var imageVM: AIImagePlaygroundViewModel
 
     init(session: SessionStore, model: AIModel) {
         self.session = session
@@ -119,13 +124,18 @@ private struct AIModelDetailSheet: View {
             accountId: session.selectedAccount?.id,
             model: model
         ))
+        _imageVM = State(initialValue: AIImagePlaygroundViewModel(
+            service: session.workersAIService,
+            accountId: session.selectedAccount?.id,
+            model: model
+        ))
     }
 
-    private var isTextGen: Bool { model.taskName == "Text Generation" }
     private var hasAIWrite: Bool { auth.hasScope("ai.write") }
 
     var body: some View {
         @Bindable var playVM = playVM
+        @Bindable var imageVM = imageVM
         NavigationStack {
             List {
                 Section {
@@ -141,20 +151,17 @@ private struct AIModelDetailSheet: View {
                 }
                 .glassRow()
 
-                if isTextGen {
+                if model.isTextGen {
                     if hasAIWrite {
                         playground(text: $playVM.prompt, vm: playVM)
                     } else {
-                        Section {
-                            if let sessionId = auth.currentSessionId {
-                                ReauthorizeButton(sessionId: sessionId, scopes: ["ai.write"])
-                            }
-                        } header: {
-                            Text("试运行")
-                        } footer: {
-                            Text("试运行文本生成模型需要 Workers AI 写权限（ai.write）。点上方按钮一键补齐授权，无需退出登录。")
-                        }
-                        .glassRow()
+                        reauthorizeSection
+                    }
+                } else if model.isImageGen {
+                    if hasAIWrite {
+                        imagePlayground(text: $imageVM.prompt, vm: imageVM)
+                    } else {
+                        reauthorizeSection
                     }
                 } else {
                     Section {} footer: {
@@ -170,6 +177,88 @@ private struct AIModelDetailSheet: View {
                 ToolbarItem(placement: .confirmationAction) { Button("完成") { dismiss() } }
             }
         }
+    }
+
+    @ViewBuilder
+    private var reauthorizeSection: some View {
+        Section {
+            if let sessionId = auth.currentSessionId {
+                ReauthorizeButton(sessionId: sessionId, scopes: ["ai.write"])
+            }
+        } header: {
+            Text("试运行")
+        } footer: {
+            Text("在 App 内试运行模型需要 Workers AI 写权限（ai.write）。点上方按钮一键补齐授权，无需退出登录。")
+        }
+        .glassRow()
+    }
+
+    // MARK: - 文生图 Playground
+
+    @ViewBuilder
+    private func imagePlayground(text: Binding<String>, vm: AIImagePlaygroundViewModel) -> some View {
+        Section {
+            TextField("描述你想生成的画面", text: text, axis: .vertical)
+                .lineLimit(3...8)
+            Button {
+                Task { await vm.run() }
+            } label: {
+                HStack {
+                    Spacer()
+                    if vm.isRunning {
+                        ProgressView()
+                    } else {
+                        Label("生成图片", systemImage: "photo").fontWeight(.semibold)
+                    }
+                    Spacer()
+                }
+            }
+            .disabled(!vm.canRun)
+        } header: {
+            Text("试运行")
+        } footer: {
+            Text("按提示词生成一张图片。会消耗账号的 Workers AI 用量（每天 1 万 Neuron 免费额度）。")
+        }
+        .glassRow()
+
+        if vm.isRunning || vm.error != nil || vm.imageData != nil {
+            Section {
+                if let error = vm.error {
+                    Text(error).font(.footnote).foregroundStyle(.red)
+                } else if vm.isRunning {
+                    HStack { Spacer(); ProgressView(); Spacer() }
+                } else {
+                    generatedImage(vm)
+                }
+            } header: {
+                Text("输出")
+            }
+            .glassRow()
+        }
+    }
+
+    @ViewBuilder
+    private func generatedImage(_ vm: AIImagePlaygroundViewModel) -> some View {
+        #if canImport(UIKit)
+        if let uiImage = vm.image {
+            let image = Image(uiImage: uiImage)
+            VStack(spacing: 10) {
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                ShareLink(
+                    item: image,
+                    preview: SharePreview("生成的图片", image: image)
+                ) {
+                    Label("分享 / 存储", systemImage: "square.and.arrow.up")
+                        .font(.callout)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+        #endif
     }
 
     @ViewBuilder

@@ -33,6 +33,17 @@ final class DashboardViewModel {
     /// 账户级数据集未授权（免费账号常态）：UI 显示「无账户级数据权限」而非重试，且停发后续账户级查询
     private(set) var accountAnalyticsUnavailable = false
 
+    // MARK: - 资源清单（命令搜索 / 跨类型置顶 / 告警中心共用）
+    // 域名与 Workers 直接读 SwiftData 缓存，这里只补拉「概览页原本不持有」的四类；
+    // 每类按 scope 门控惰性补拉，缺权限就留空数组（不报错、搜索里直接没有该类）。
+    private(set) var r2Buckets:    [R2Bucket] = []
+    private(set) var d1Databases:  [D1Database] = []
+    private(set) var kvNamespaces: [KVNamespace] = []
+    private(set) var tunnels:      [Tunnel] = []
+
+    private var inventoryLoadedForAccount: String?
+    private var inventoryTask: Task<Void, Never>?
+
     private var loadedZoneIds: Set<String> = []
     private var assetsLoadedForAccount: String?
     private var usageLoadedForAccount: String?
@@ -52,6 +63,8 @@ final class DashboardViewModel {
     private let zoneService: ZoneService
     private let workerService: WorkerService
     private let dnsService: DNSService
+    private let kvService: KVService
+    private let tunnelService: TunnelService
 
     init(
         analyticsService: AnalyticsService,
@@ -60,7 +73,9 @@ final class DashboardViewModel {
         d1Service: D1Service,
         zoneService: ZoneService,
         workerService: WorkerService,
-        dnsService: DNSService
+        dnsService: DNSService,
+        kvService: KVService,
+        tunnelService: TunnelService
     ) {
         self.analyticsService = analyticsService
         self.accountService = accountService
@@ -69,6 +84,62 @@ final class DashboardViewModel {
         self.zoneService = zoneService
         self.workerService = workerService
         self.dnsService = dnsService
+        self.kvService = kvService
+        self.tunnelService = tunnelService
+    }
+
+    /// 资源清单补拉（R2 / D1 / KV / Tunnel）。同一账号只拉一次，下拉刷新强制重拉；
+    /// 每类各自 scope 门控，失败或无权限保持空数组（搜索/告警里自然缺席，不弹错）。
+    /// 加载跑在 VM 持有的独立 Task：与 loadAssets 同理，手势取消不能波及它。
+    func loadInventory(
+        accountId: String,
+        canReadR2: Bool,
+        canReadD1: Bool,
+        canReadKV: Bool,
+        canReadTunnel: Bool,
+        force: Bool = false
+    ) async {
+        guard !accountId.isEmpty else { return }
+        guard force || inventoryLoadedForAccount != accountId else { return }
+        if let inventoryTask {
+            await inventoryTask.value
+            return
+        }
+        let task = Task { [weak self] in
+            guard let self else { return }
+            await self.performLoadInventory(
+                accountId: accountId,
+                canReadR2: canReadR2, canReadD1: canReadD1,
+                canReadKV: canReadKV, canReadTunnel: canReadTunnel
+            )
+        }
+        inventoryTask = task
+        defer { inventoryTask = nil }
+        await task.value
+    }
+
+    private func performLoadInventory(
+        accountId: String,
+        canReadR2: Bool,
+        canReadD1: Bool,
+        canReadKV: Bool,
+        canReadTunnel: Bool
+    ) async {
+        if canReadR2, let buckets = try? await r2Service.listBuckets(accountId: accountId) {
+            r2Buckets = buckets
+            r2BucketCount = buckets.count
+        }
+        if canReadD1, let databases = try? await d1Service.listDatabases(accountId: accountId) {
+            d1Databases = databases
+            d1DatabaseCount = databases.count
+        }
+        if canReadKV, let namespaces = try? await kvService.listNamespaces(accountId: accountId) {
+            kvNamespaces = namespaces
+        }
+        if canReadTunnel, let list = try? await tunnelService.listTunnels(accountId: accountId) {
+            tunnels = list
+        }
+        inventoryLoadedForAccount = accountId
     }
 
     /// 首屏资产统计：拉 Zone / Worker 列表同步进缓存（指标格直接从 @Query 读到数量），

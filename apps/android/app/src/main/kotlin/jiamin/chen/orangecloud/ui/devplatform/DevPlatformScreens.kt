@@ -1,5 +1,19 @@
 package jiamin.chen.orangecloud.ui.devplatform
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -394,54 +408,121 @@ fun AIRunScreen(onBack: () -> Unit, viewModel: AIRunViewModel = hiltViewModel())
                 }
 
                 when {
-                    state.isTextGen && state.canRun -> {
-                        Text(stringResource(R.string.dev_ai_playground), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = onSky)
-                        OutlinedTextField(
-                            value = state.prompt,
-                            onValueChange = viewModel::updatePrompt,
-                            label = { Text(stringResource(R.string.dev_ai_prompt)) },
-                            minLines = 3,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        Button(
-                            onClick = { viewModel.run() },
-                            enabled = state.prompt.isNotBlank() && !state.isRunning,
-                            colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            if (state.isRunning) {
-                                CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
-                                Spacer(Modifier.width(8.dp))
-                            } else {
-                                Icon(Icons.AutoMirrored.Outlined.Send, contentDescription = null, modifier = Modifier.width(18.dp))
-                                Spacer(Modifier.width(8.dp))
-                            }
-                            Text(stringResource(R.string.dev_ai_run))
-                        }
-                        Text(stringResource(R.string.dev_ai_run_note), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        state.error?.let {
-                            Text(it, color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
-                        }
-                        if (state.response.isNotBlank()) {
-                            Surface(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
-                                SelectionContainer {
-                                    Text(
-                                        state.response,
-                                        fontSize = 14.sp,
-                                        fontFamily = FontFamily.Monospace,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier.padding(16.dp),
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    state.isRunnable && state.canRun -> AIPlayground(state, viewModel::updatePrompt, viewModel::run, onSky)
 
-                    state.isTextGen ->
+                    state.isRunnable ->
                         Text(stringResource(R.string.dev_ai_needs_write), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
                     else ->
                         Text(stringResource(R.string.dev_ai_unsupported), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+    }
+}
+
+/** 试运行区：文本生成出文字，文生图出图片（同一套输入 + 运行按钮）。 */
+@Composable
+private fun ColumnScope.AIPlayground(
+    state: AIRunUiState,
+    onPromptChange: (String) -> Unit,
+    onRun: () -> Unit,
+    onSky: Color,
+) {
+    val isImage = state.isTextToImage
+    Text(
+        stringResource(if (isImage) R.string.dev_ai_image_playground else R.string.dev_ai_playground),
+        fontSize = 13.sp,
+        fontWeight = FontWeight.Bold,
+        color = onSky,
+    )
+    OutlinedTextField(
+        value = state.prompt,
+        onValueChange = onPromptChange,
+        label = { Text(stringResource(if (isImage) R.string.dev_ai_image_prompt else R.string.dev_ai_prompt)) },
+        minLines = 3,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    Button(
+        onClick = onRun,
+        enabled = state.prompt.isNotBlank() && !state.isRunning,
+        colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        if (state.isRunning) {
+            CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
+        } else {
+            Icon(Icons.AutoMirrored.Outlined.Send, contentDescription = null, modifier = Modifier.width(18.dp))
+        }
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(if (isImage) R.string.dev_ai_image_generate else R.string.dev_ai_run))
+    }
+    Text(
+        stringResource(if (isImage) R.string.dev_ai_image_run_note else R.string.dev_ai_run_note),
+        fontSize = 12.sp,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    state.errorRes?.let {
+        Text(stringResource(it), color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
+    }
+    state.error?.let {
+        Text(it, color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
+    }
+    if (state.response.isNotBlank()) {
+        Surface(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+            SelectionContainer {
+                Text(
+                    state.response,
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
+        }
+    }
+    state.image?.let { AIImageResult(it) }
+}
+
+/** 生成结果图片：后台线程降采样解码，失败给明确提示；下方提供分享入口。 */
+@Composable
+private fun AIImageResult(payload: AIImagePayload) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val chooserTitle = stringResource(R.string.dev_ai_image_share)
+    val failedMessage = stringResource(R.string.dev_ai_image_share_failed)
+    var shareError by remember(payload) { mutableStateOf(false) }
+
+    val bitmap by produceState<Bitmap?>(initialValue = null, payload) {
+        value = withContext(Dispatchers.Default) { decodeSampledBitmap(payload.bytes) }
+    }
+
+    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            val bmp = bitmap
+            if (bmp == null) {
+                Text(
+                    stringResource(R.string.dev_ai_image_decoding),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(8.dp),
+                )
+            } else {
+                Image(
+                    bitmap = bmp.asImageBitmap(),
+                    contentDescription = stringResource(R.string.dev_ai_image_result),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)),
+                )
+                TextButton(onClick = {
+                    scope.launch { shareError = !shareGeneratedImage(context, payload.bytes, chooserTitle) }
+                }) {
+                    Icon(Icons.Outlined.Share, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.dev_ai_image_share))
+                }
+                if (shareError) {
+                    Text(failedMessage, color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
                 }
             }
         }

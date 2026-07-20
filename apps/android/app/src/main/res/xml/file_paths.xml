@@ -4,4 +4,6 @@
     <cache-path name="r2_cache" path="r2/" />
     <!-- 诊断日志导出文件，作反馈邮件附件授权给邮件应用 -->
     <cache-path name="logs" path="logs/" />
+    <!-- D1 查询结果 CSV 导出，经系统分享给其它应用 -->
+    <cache-path name="exports" path="exports/" />
 </paths>

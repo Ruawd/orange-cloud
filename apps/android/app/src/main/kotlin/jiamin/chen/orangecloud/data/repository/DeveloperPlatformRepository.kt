@@ -1,5 +1,6 @@
 package jiamin.chen.orangecloud.data.repository
 
+import android.util.Base64
 import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.AIChatMessage
 import jiamin.chen.orangecloud.data.model.AIGateway
@@ -15,8 +16,23 @@ import jiamin.chen.orangecloud.data.model.DurableObjectNamespace
 import jiamin.chen.orangecloud.data.model.HyperdriveConfig
 import jiamin.chen.orangecloud.data.model.HyperdriveCreate
 import jiamin.chen.orangecloud.data.model.HyperdrivePatch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import javax.inject.Inject
 import javax.inject.Singleton
+
+/** 文生图请求体（ai run 端点对图像模型只吃 prompt）。 */
+@Serializable
+data class AIImageGenRequest(val prompt: String)
+
+/**
+ * 文生图端点返回了非图片内容（多为 CF 业务错误或该模型输出不是图像）。
+ * detail 是响应正文截断后的原文，供 UI 附在提示后面，绝不静默吞掉。
+ */
+class AINotImageException(val detail: String?) : Exception(detail)
 
 /**
  * 开发者平台只读模块（account 级）：Queues / AI Gateway / Durable Objects / Workers AI / Hyperdrive。
@@ -25,6 +41,7 @@ import javax.inject.Singleton
 @Singleton
 class DeveloperPlatformRepository @Inject constructor(
     private val api: CfApiClient,
+    private val json: Json,
 ) {
     suspend fun listQueues(accountId: String): List<CFQueue> =
         api.get("accounts/$accountId/queues")
@@ -74,5 +91,41 @@ class DeveloperPlatformRepository @Inject constructor(
             "accounts/$accountId/ai/run/$model", AITextGenRequest(messages),
         )
         return result.response ?: ""
+    }
+
+    /**
+     * 文生图试运行：与文本生成同一个 ai run 端点，但响应体是图片原始字节而非 JSON 信封。
+     * model 形如 "@cf/black-forest-labs/flux-1-schnell"，其中的斜杠就是真实 path 分隔符、
+     * "@" 在 path 段里合法，OkHttp 的 toHttpUrl 会原样保留，无需（也不能）再做百分号编码——
+     * 这点与 KV key 不同：KV key 是单个 path 段里的任意字节，才需要调用方预编码。
+     *
+     * 少数模型（flux 系）仍回 JSON 信封、图片放在 result.image 的 base64 字段，这里一并兼容。
+     * 两条路都不成立时抛 AINotImageException，由上层给出明确提示。
+     */
+    suspend fun runTextToImage(accountId: String, model: String, prompt: String): ByteArray {
+        val bytes = api.postRaw("accounts/$accountId/ai/run/$model", AIImageGenRequest(prompt))
+        if (looksLikeImage(bytes)) return bytes
+
+        val text = bytes.decodeToString()
+        val base64 = runCatching {
+            json.parseToJsonElement(text).jsonObject["result"]?.jsonObject?.get("image")?.jsonPrimitive?.contentOrNull
+        }.getOrNull()
+        if (!base64.isNullOrBlank()) {
+            val decoded = runCatching { Base64.decode(base64, Base64.DEFAULT) }.getOrNull()
+            if (decoded != null && decoded.isNotEmpty()) return decoded
+        }
+        throw AINotImageException(text.take(300).trim().ifBlank { null })
+    }
+
+    /** 按魔数判断是否图片（PNG / JPEG / GIF / WebP），避免把错误 JSON 当图片解码。 */
+    private fun looksLikeImage(bytes: ByteArray): Boolean {
+        if (bytes.size < 12) return false
+        fun at(index: Int) = bytes[index].toInt() and 0xFF
+        val png = at(0) == 0x89 && at(1) == 0x50 && at(2) == 0x4E && at(3) == 0x47
+        val jpeg = at(0) == 0xFF && at(1) == 0xD8 && at(2) == 0xFF
+        val gif = at(0) == 0x47 && at(1) == 0x49 && at(2) == 0x46
+        val webp = at(0) == 0x52 && at(1) == 0x49 && at(2) == 0x46 && at(3) == 0x46 &&
+            at(8) == 0x57 && at(9) == 0x45 && at(10) == 0x42 && at(11) == 0x50
+        return png || jpeg || gif || webp
     }
 }

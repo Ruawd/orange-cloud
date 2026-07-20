@@ -9,7 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.border
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -21,6 +27,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -60,13 +68,22 @@ fun WorkerCreateScreen(
 
     var name by rememberSaveable { mutableStateOf(viewModel.editScript.orEmpty()) }
     var compatDate by rememberSaveable { mutableStateOf(viewModel.defaultCompatibilityDate) }
-    // 新建预填示例代码；编辑时初始为空，等 /content/v2 读回后由 LaunchedEffect 填入
-    var code by rememberSaveable { mutableStateOf(if (isEdit) "" else SAMPLE_CODE) }
+    // 编辑器用 TextFieldState：正文不进 composition，长脚本按键不再整屏重组（issue #61 卡顿）
+    // 新建预填示例代码；编辑时初始为空，等 /content/v2 读回后填入
+    val codeState = rememberTextFieldState(if (isEdit) "" else SAMPLE_CODE)
 
-    // 源码读回后预填一次编辑器
+    // 源码读回后**只**预填一次：加 prefilled 标记，避免转屏重建时把用户已改的内容覆盖回线上源码
+    var prefilled by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(sourceState.code) {
-        sourceState.code?.let { code = it }
+        val src = sourceState.code
+        if (src != null && !prefilled) {
+            codeState.setTextAndPlaceCursorAtEnd(src)
+            prefilled = true
+        }
     }
+
+    // 只在「空 ↔ 非空」翻转时触发重组，不随每次按键重组
+    val codeNotBlank by remember { derivedStateOf { codeState.text.isNotBlank() } }
 
     val createdMsg = if (isEdit) stringResource(R.string.worker_edit_ok) else stringResource(R.string.worker_create_ok)
     LaunchedEffect(Unit) {
@@ -79,7 +96,7 @@ fun WorkerCreateScreen(
     }
 
     val nameValid = name.isBlank() || viewModel.isValidName(name)
-    val canSave = (isEdit || viewModel.isValidName(name)) && code.isNotBlank() &&
+    val canSave = (isEdit || viewModel.isValidName(name)) && codeNotBlank &&
         !isUploading && !sourceState.isLoading && !sourceState.uneditable
 
     SkyBackground(phase = phase) {
@@ -124,17 +141,23 @@ fun WorkerCreateScreen(
                         Text(stringResource(R.string.worker_edit_loading), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     sourceState.uneditable ->
                         Text(stringResource(R.string.worker_edit_multimodule), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    // maxLines 必须有限：外层是 verticalScroll（传下无限高约束），
+                    // 代码编辑器：BasicTextField + TextFieldState（正文不进 composition，长脚本按键流畅，issue #61）。
+                    // lineLimits 的 maxHeightInLines 必须有限：外层是 verticalScroll（传下无限高约束），
                     // 无上限时输入框会把全部源码撑成实际高度，长脚本超出 Compose Constraints 上限
-                    // （Can't represent a height of … in Constraints）而闪退。封顶后内容在框内自滚，
+                    // （Can't represent a height of … in Constraints）而闪退；封顶后内容在框内自滚，
                     // 与 iOS TextEditor 原生内滚同理（issue #55）。
-                    else -> OutlinedTextField(
-                        value = code,
-                        onValueChange = { code = it },
-                        textStyle = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                        minLines = 10,
-                        maxLines = 20,
-                        modifier = Modifier.fillMaxWidth(),
+                    else -> BasicTextField(
+                        state = codeState,
+                        textStyle = MaterialTheme.typography.bodySmall.copy(
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
+                        lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 10, maxHeightInLines = 20),
+                        cursorBrush = SolidColor(OcOrange),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                            .padding(12.dp),
                     )
                 }
                 Text(
@@ -144,7 +167,8 @@ fun WorkerCreateScreen(
                 )
                 if (!sourceState.uneditable) {
                     Button(
-                        onClick = { viewModel.submit(name, code, compatDate) },
+                        // 点击时才取正文，避免把整份源码读进 composition
+                        onClick = { viewModel.submit(name, codeState.text.toString(), compatDate) },
                         enabled = canSave,
                         colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
                         modifier = Modifier.fillMaxWidth(),

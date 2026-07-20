@@ -121,6 +121,12 @@ class CfApiClient @Inject constructor(
     suspend fun getRaw(path: String, query: List<Pair<String, String>> = emptyList()): ByteArray =
         executeRaw("GET", path, query, null, null)
 
+    /** JSON body POST，返回原始字节（Workers AI 文生图直接回图片二进制，不走 JSON 信封解码）。 */
+    suspend inline fun <reified B> postRaw(path: String, body: B): ByteArray {
+        val payload = json.encodeToString(serializer<B>(), body).encodeToByteArray()
+        return executeRaw("POST", path, emptyList(), payload, JSON_MEDIA_TYPE)
+    }
+
     /** 原始字节 PUT（R2 对象上传等），自带 Content-Type */
     suspend inline fun <reified T> putRaw(path: String, body: ByteArray, contentType: String): T =
         decodeResult(executeRaw("PUT", path, emptyList(), body, contentType), serializer<T>())

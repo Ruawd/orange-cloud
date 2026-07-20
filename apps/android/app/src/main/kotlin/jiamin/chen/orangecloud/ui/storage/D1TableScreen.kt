@@ -136,6 +136,9 @@ fun D1TableScreen(
                                 Text(stringResource(if (state.isLoading) R.string.common_loading else R.string.common_load_more))
                             }
                         }
+                        if (state.indexesLoaded) {
+                            IndexCard(state.indexes)
+                        }
                         Text(
                             stringResource(if (state.canWrite) R.string.d1_row_tap_edit else R.string.d1_row_readonly_hint),
                             color = onSky.copy(alpha = 0.7f),
@@ -163,6 +166,68 @@ fun D1TableScreen(
                 onSave = { changes -> viewModel.updateRow(rowid, changes) },
                 onDelete = { viewModel.deleteRow(rowid) },
             )
+        }
+    }
+}
+
+// MARK: - 表结构索引卡（PRAGMA index_list）
+
+/** 索引清单：索引名 + 唯一标记 + 来源（主键 / UNIQUE 约束 / CREATE INDEX）。 */
+@Composable
+private fun IndexCard(indexes: List<D1IndexInfo>) {
+    androidx.compose.material3.Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                stringResource(R.string.d1_index_section),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (indexes.isEmpty()) {
+                Text(
+                    stringResource(R.string.d1_index_empty),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                indexes.forEach { index ->
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            index.name,
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily.Monospace,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f),
+                        )
+                        if (index.unique) {
+                            Text(
+                                stringResource(R.string.d1_index_unique),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = OcOrange,
+                            )
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Text(
+                            stringResource(
+                                when (index.origin) {
+                                    "pk" -> R.string.d1_index_origin_pk
+                                    "u" -> R.string.d1_index_origin_unique
+                                    else -> R.string.d1_index_origin_create
+                                },
+                            ),
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
         }
     }
 }

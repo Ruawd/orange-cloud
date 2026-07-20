@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">Search everything from one place</string>
+    <string name="whatsnew_1_7_0_0_detail">The magnifier on the overview searches domains, Workers, R2 buckets, D1 databases, KV namespaces and tunnels at once — tap a result to go straight there. And any resource can now be starred to the overview.</string>
+    <string name="whatsnew_1_7_0_1_title">Alert center</string>
+    <string name="whatsnew_1_7_0_1_detail">The overview now gathers what needs attention — inactive domains, tunnels in a bad state and more — into a single card. Tap an item to jump right to it.</string>
+    <string name="whatsnew_1_7_0_2_title">Better live logs</string>
+    <string name="whatsnew_1_7_0_2_detail">Live Worker logs now support keyword search and level filtering; long-press to copy a whole line, tap to expand the full detail and select any part of it. Pause now only freezes the view — logs keep arriving, so nothing is missing when you resume.</string>
+    <string name="whatsnew_1_7_0_3_title">SQL history and favorites</string>
+    <string name="whatsnew_1_7_0_3_detail">D1 keeps your last 12 queries and lets you favorite the ones you reuse (saved per database). Results export to CSV in a tap, and table details now list indexes.</string>
+    <string name="whatsnew_1_7_0_4_title">Generate images with Workers AI</string>
+    <string name="whatsnew_1_7_0_4_detail">The model playground now covers text-to-image models — type a prompt, get a picture, then share or save it.</string>
+    <string name="whatsnew_1_7_0_5_title">Preview R2 objects</string>
+    <string name="whatsnew_1_7_0_5_detail">Tap an R2 object to preview it: images show inline, JSON is formatted automatically, and text can be searched with a match count. Oversized objects still suggest downloading instead.</string>
+    <string name="whatsnew_1_6_6_0_title">Quickly bind R2 buckets</string>
+    <string name="whatsnew_1_6_6_0_detail">Resource bindings now cover R2 — attach an existing bucket to a Worker, and unbind it just like D1 / KV.</string>
+    <string name="whatsnew_1_6_6_1_title">Smoother editing for long scripts</string>
+    <string name="whatsnew_1_6_6_1_detail">Rebuilt the Worker code editor’s input handling so typing stays smooth in long scripts.</string>
     <string name="whatsnew_1_6_5_0_title">One-tap workers.dev URL</string>
     <string name="whatsnew_1_6_5_0_detail">When a Worker’s workers.dev subdomain is on, its full URL now shows right there — tap to open.</string>
     <string name="whatsnew_1_6_5_1_title">Quickly bind D1 / KV</string>

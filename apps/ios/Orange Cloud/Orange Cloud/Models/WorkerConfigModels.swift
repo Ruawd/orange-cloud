@@ -148,8 +148,8 @@ nonisolated struct WorkerBinding: Codable, Identifiable, Hashable, Sendable {
 
     var isSecret:    Bool { type == "secret_text" || type == "secrets_store_secret" }
     var isPlainText: Bool { type == "plain_text" }
-    /// 本客户端可原地增删的资源绑定（D1 / KV）——其余类型仍只读
-    var isQuickManaged: Bool { type == "kv_namespace" || type == "d1" }
+    /// 本客户端可原地增删的资源绑定（D1 / KV / R2）——其余类型仍只读
+    var isQuickManaged: Bool { type == "kv_namespace" || type == "d1" || type == "r2_bucket" }
 
     /// 人类可读的绑定类型标签
     var typeLabel: String {
@@ -211,25 +211,32 @@ nonisolated struct WorkerSettings: Codable, Sendable {
 // MARK: - 上传 / 写入请求体
 
 /// 上传 / patch settings 时的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}；
-/// kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}。可选字段为 nil 时不编码（omitted）。
+/// kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}；r2_bucket 发 {type,name,bucket_name}
+/// （R2 按**桶名**引用，不是 ID）。可选字段为 nil 时不编码（omitted）。
 nonisolated struct WorkerBindingInput: Codable, Sendable {
     let type: String
     let name: String
     let text: String?
     let namespaceId: String?    // kv_namespace 绑定的命名空间 ID
     let id: String?             // d1 绑定的数据库 UUID
+    let bucketName: String?     // r2_bucket 绑定的桶名
 
-    init(type: String, name: String, text: String? = nil, namespaceId: String? = nil, id: String? = nil) {
+    init(
+        type: String, name: String, text: String? = nil,
+        namespaceId: String? = nil, id: String? = nil, bucketName: String? = nil
+    ) {
         self.type = type
         self.name = name
         self.text = text
         self.namespaceId = namespaceId
         self.id = id
+        self.bucketName = bucketName
     }
 
     enum CodingKeys: String, CodingKey {
         case type, name, text, id
         case namespaceId = "namespace_id"
+        case bucketName  = "bucket_name"
     }
 
     /// 绑定既有 KV 命名空间
@@ -240,6 +247,11 @@ nonisolated struct WorkerBindingInput: Codable, Sendable {
     /// 绑定既有 D1 数据库
     static func d1(name: String, databaseId: String) -> WorkerBindingInput {
         WorkerBindingInput(type: "d1", name: name, id: databaseId)
+    }
+
+    /// 绑定既有 R2 存储桶（按桶名）
+    static func r2(name: String, bucketName: String) -> WorkerBindingInput {
+        WorkerBindingInput(type: "r2_bucket", name: name, bucketName: bucketName)
     }
 }
 

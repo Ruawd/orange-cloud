@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">ابحث في كل شيء من مكان واحد</string>
+    <string name="whatsnew_1_7_0_0_detail">تبحث العدسة في صفحة النظرة العامة دفعة واحدة في النطاقات وWorkers وحاويات R2 وقواعد بيانات D1 ومساحات أسماء KV والأنفاق، وانقر على النتيجة للانتقال مباشرة. ويمكن الآن تثبيت أي مورد في الصفحة بنجمة.</string>
+    <string name="whatsnew_1_7_0_1_title">مركز التنبيهات</string>
+    <string name="whatsnew_1_7_0_1_detail">تجمع صفحة النظرة العامة الآن في بطاقة واحدة ما يحتاج انتباهك: النطاقات غير المفعّلة، والأنفاق ذات الحالة غير الطبيعية وغيرها. انقر على البند للانتقال إليه مباشرة.</string>
+    <string name="whatsnew_1_7_0_2_title">سجلات مباشرة أفضل</string>
+    <string name="whatsnew_1_7_0_2_detail">صارت سجلات Worker المباشرة تدعم البحث بالكلمات المفتاحية والتصفية حسب المستوى؛ اضغط مطوّلًا لنسخ السطر كاملًا، أو انقر لعرض التفاصيل كاملة وتحديد جزء منها. ولم يعد الإيقاف المؤقت سوى تجميد للعرض — تستمر السجلات في الوصول فلا يفوتك شيء عند المتابعة.</string>
+    <string name="whatsnew_1_7_0_3_title">سجل SQL والمفضلة</string>
+    <string name="whatsnew_1_7_0_3_detail">يحتفظ D1 بآخر 12 استعلامًا تلقائيًا، ويمكنك إضافة العبارات المتكررة إلى المفضلة (تُحفظ لكل قاعدة بيانات على حدة). صدّر النتائج إلى CSV بنقرة، وتعرض تفاصيل الجدول الآن الفهارس أيضًا.</string>
+    <string name="whatsnew_1_7_0_4_title">توليد الصور عبر Workers AI</string>
+    <string name="whatsnew_1_7_0_4_detail">صار تشغيل النماذج التجريبي يدعم نماذج تحويل النص إلى صورة: اكتب الوصف لتحصل على صورة، ثم شاركها أو احفظها.</string>
+    <string name="whatsnew_1_7_0_5_title">معاينة كائنات R2</string>
+    <string name="whatsnew_1_7_0_5_detail">انقر على كائن R2 لمعاينته فورًا: تظهر الصور مباشرة، ويُنسَّق JSON تلقائيًا، ويمكن البحث في النص مع عرض عدد المطابقات. أما الكائنات الكبيرة جدًا فيُقترح تنزيلها كما في السابق.</string>
+    <string name="whatsnew_1_6_6_0_title">ربط حاويات R2 بسرعة</string>
+    <string name="whatsnew_1_6_6_0_detail">صارت روابط الموارد تشمل R2: اربط حاوية موجودة بأحد Workers وألغِ الربط كما في D1 / KV.</string>
+    <string name="whatsnew_1_6_6_1_title">تحرير أسلَس للنصوص البرمجية الطويلة</string>
+    <string name="whatsnew_1_6_6_1_detail">أُعيد بناء معالجة الإدخال في محرّر شفرة Worker ليبقى الكتابة سلسة في النصوص الطويلة.</string>
     <string name="whatsnew_1_6_5_0_title">وصول مباشر إلى نطاق workers.dev الفرعي</string>
     <string name="whatsnew_1_6_5_0_detail">عند تفعيل نطاق workers.dev الفرعي لأحد Workers، يظهر عنوانه الكامل الآن — انقر لفتحه.</string>
     <string name="whatsnew_1_6_5_1_title">ربط D1 / KV بسرعة</string>

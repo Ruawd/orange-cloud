@@ -28,8 +28,14 @@ import WidgetKit
 struct DashboardView: View {
 
     @Environment(AuthManager.self) private var auth
+    @Environment(EntitlementStore.self) private var entitlements
 
     private let session: SessionStore
+
+    /// 命令搜索 / 告警中心选中的资源目的地：栈根用 `.navigationDestination(item:)` 承接。
+    /// 用 item 版而非 NavigationPath：本工程没有一处 `NavigationStack(path:)`，
+    /// 而 item 版同样能程序化 push（TunnelCreateView 已在用），改动面与风险都最小。
+    @State private var resourceRoute: DashboardResourceRoute?
 
     init(session: SessionStore) {
         self.session = session
@@ -41,7 +47,7 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationStack {
-            DashboardHomeView(session: session)
+            DashboardHomeView(session: session, resourceRoute: $resourceRoute)
                 .navigationDestination(for: CachedZone.self) { zone in
                     ZoneDetailView(zone: zone, session: session)
                 }
@@ -70,10 +76,55 @@ struct DashboardView: View {
                         canWriteDNS: auth.hasScope("dns.write")
                     )
                 }
+                // 命令搜索 / 告警中心 / 跨类型置顶的跳转（Worker 详情、R2 对象、D1 控制台、
+                // KV 键列表内部都还要继续 push）同样只挂栈根，值式
+                .navigationDestination(item: $resourceRoute) { route in
+                    resourceDestination(route)
+                }
                 // 域名详情子树（规则 hub / 负载均衡 / Snippets / Bulk Redirects）从本栈
                 // push 的域名卡进入，其路由也要挂在本栈根
                 .zoneRouteDestinations(session: session)
                 .id(session.selectedAccount?.id)
+        }
+        // 账号切换后旧账号的资源目的地不应留在栈上
+        .onChange(of: session.selectedAccount?.id) {
+            resourceRoute = nil
+        }
+    }
+
+    /// 免费层的 Pro 资源正常做法是在**派发前**就弹付费墙（DashboardHomeView.openResource），
+    /// 根本走不到这里；这层只是兜底，防止将来新加的入口漏挂闸门直接把详情页放进来。
+    @ViewBuilder
+    private func resourceDestination(_ route: DashboardResourceRoute) -> some View {
+        if let feature = route.proFeature, !entitlements.isPro {
+            ProLockedView(feature: feature)
+                .navigationBarTitleDisplayMode(.inline)
+        } else {
+            unlockedResourceDestination(route)
+        }
+    }
+
+    @ViewBuilder
+    private func unlockedResourceDestination(_ route: DashboardResourceRoute) -> some View {
+        switch route {
+        case .zone(let zone):
+            ZoneDetailView(zone: zone, session: session)
+        case .worker(let script):
+            WorkerDetailView(script: script, session: session)
+        case .bucket(let bucket):
+            R2ObjectListView(bucket: bucket, session: session)
+        case .database(let database):
+            D1QueryView(database: database, session: session)
+        case .namespace(let namespace):
+            KVKeyListView(namespace: namespace, session: session)
+        case .tunnel(let tunnel):
+            TunnelDetailView(
+                tunnel: tunnel,
+                accountId: currentAccountId,
+                session: session,
+                canWrite: auth.hasScope("argotunnel.write"),
+                canWriteDNS: auth.hasScope("dns.write")
+            )
         }
     }
 }
@@ -84,6 +135,7 @@ private struct DashboardHomeView: View {
 
     @Environment(SessionStore.self) private var session
     @Environment(AuthManager.self) private var auth
+    @Environment(EntitlementStore.self) private var entitlements
     @Environment(\.modelContext) private var modelContext
     // 域名 / Workers 缓存只取当前账号（父视图 .id(selectedAccount) 切换账号时重建以刷新谓词）；
     // DNS 记录缓存无 accountId 字段，按当前账号下的缓存域名在内存里过滤计数。
@@ -93,8 +145,17 @@ private struct DashboardHomeView: View {
 
     @State private var viewModel: DashboardViewModel
 
+    /// 命令搜索选中的目的地：先关 sheet、再在 onDismiss 里赋给栈根的 item navdest
+    @Binding private var resourceRoute: DashboardResourceRoute?
+    @State private var showSearch = false
+    @State private var pendingRoute: DashboardResourceRoute?
+    /// 免费层点 Pro 资源（R2 / D1 / KV / Tunnel）时弹的付费墙场景
+    @State private var paywallFeature: ProFeature?
+
     // 套餐预设与账单日按账户存储（AccountPrefsStore，开启 iCloud 同步后跨设备）
     private let prefsStore = AccountPrefsStore.shared
+    // 跨类型置顶（域名 / Workers / R2 / D1 / KV / Tunnel），按账号隔离
+    private let pinnedStore = PinnedResourceStore.shared
 
     private var currentAccountId: String {
         session.selectedAccount?.id ?? ""
@@ -134,7 +195,8 @@ private struct DashboardHomeView: View {
     @AppStorage(DayBoundary.storageKey, store: UserDefaults(suiteName: WidgetSnapshot.appGroupID))
     private var dayBoundaryRaw = DayBoundary.utc.rawValue
 
-    init(session: SessionStore) {
+    init(session: SessionStore, resourceRoute: Binding<DashboardResourceRoute?>) {
+        _resourceRoute = resourceRoute
         let accountId = session.selectedAccount?.id ?? ""
         _cachedZones = Query(
             filter: #Predicate<CachedZone> { $0.accountId == accountId },
@@ -150,7 +212,9 @@ private struct DashboardHomeView: View {
             d1Service: session.d1Service,
             zoneService: session.zoneService,
             workerService: session.workerService,
-            dnsService: session.dnsService
+            dnsService: session.dnsService,
+            kvService: session.kvService,
+            tunnelService: session.tunnelService
         ))
     }
 
@@ -174,10 +238,50 @@ private struct DashboardHomeView: View {
         return cachedRecords.filter { zoneIds.contains($0.zoneId) }.count
     }
 
-    /// 首页展示的域名：用户 pin 过的优先；一个没 pin 时兜底展示前 3 个
+    // MARK: - 跨类型置顶 / 搜索 / 告警的数据
+
+    private var zonesById: [String: CachedZone] {
+        Dictionary(cachedZones.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+    }
+
+    /// 当前账号固定的域名 id（统一置顶 store 为准；旧的 CachedZone.pinned 已一次性迁移进来）
+    private var pinnedZoneIds: [String] {
+        pinnedStore.pins(for: currentAccountId, type: .zone).map(\.resourceId)
+    }
+
+    /// 首页展示的域名：用户 pin 过的优先（按固定顺序）；一个没 pin 时兜底展示前 3 个
     private var displayZones: [CachedZone] {
-        let pinned = cachedZones.filter(\.pinned)
+        let byId = zonesById
+        let pinned = pinnedZoneIds.compactMap { byId[$0] }
         return pinned.isEmpty ? Array(cachedZones.prefix(3)) : pinned
+    }
+
+    /// 全账号可搜索资源（域名 / Workers 走 SwiftData 缓存，其余四类来自 VM 惰性补拉的清单）
+    private var resourceItems: [DashboardResourceItem] {
+        DashboardResourceCatalog.items(
+            zones: cachedZones,
+            workers: cachedWorkers,
+            buckets: viewModel.r2Buckets,
+            databases: viewModel.d1Databases,
+            namespaces: viewModel.kvNamespaces,
+            tunnels: viewModel.tunnels
+        )
+    }
+
+    /// 域名以外的固定项（域名仍在「域名」段展示，避免同一张卡出现两次）
+    private var pinnedNonZoneResources: [PinnedResource] {
+        pinnedStore.pins(for: currentAccountId).filter { $0.type != .zone }
+    }
+
+    private var alerts: [DashboardAlert] {
+        DashboardAlerts.build(
+            zones: cachedZones,
+            tunnels: viewModel.tunnels,
+            // 资产仍在加载时不下「一个 Worker 都没有」的结论（缓存此刻本来就是空的）
+            workerCount: (auth.hasScope("workers-scripts.read") && !viewModel.isLoadingAssets && !cachedZones.isEmpty)
+                ? cachedWorkers.count
+                : nil
+        )
     }
 
     var body: some View {
@@ -200,14 +304,23 @@ private struct DashboardHomeView: View {
                     }
                 }
                 .islandReveal(1)
-                usageSection
+                // 首屏还没有任何缓存、资产仍在加载时先不出告警卡（免得空数据被当成「一切正常」）
+                if !(cachedZones.isEmpty && viewModel.isLoadingAssets) {
+                    AlertCenterCard(alerts: alerts) { route in
+                        openResource(route)
+                    }
                     .islandReveal(2)
-                zonesSection
+                }
+                usageSection
                     .islandReveal(3)
-                networkSection
+                zonesSection
                     .islandReveal(4)
+                // 无固定项时整段不出现（islandReveal 挂在段内，避免空段占掉 VStack 间距）
+                pinnedResourcesSection
+                networkSection
+                    .islandReveal(6)
                 bulkRedirectsSection
-                    .islandReveal(5)
+                    .islandReveal(7)
             }
             .padding(OCLayout.pagePadding)
         }
@@ -217,9 +330,25 @@ private struct DashboardHomeView: View {
         // DashboardView 的栈根，不能挂回这里：iOS 17.0 上 navdest 注册在栈内容的嵌套
         // 子视图会在 push 时触发 AttributeGraph 无限循环整 App 冻结（见外壳注释）。
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("搜索资源", systemImage: "magnifyingglass") {
+                    showSearch = true
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 accountMenu
             }
+        }
+        // 搜索面板里选中资源后：先关 sheet，关闭完成再派发给栈根 navdest（不在 sheet 内 push）
+        .sheet(isPresented: $showSearch, onDismiss: dispatchPendingRoute) {
+            ResourceSearchView(
+                items: resourceItems,
+                accountId: currentAccountId,
+                onSelect: { route in
+                    pendingRoute = route
+                    showSearch = false
+                }
+            )
         }
         .task(id: session.accounts.count) {
             AccountSwitchTip.hasMultipleAccounts = session.accounts.count > 1 || auth.sessions.count > 1
@@ -236,6 +365,17 @@ private struct DashboardHomeView: View {
         }
         .task {
             await loadUsage()
+        }
+        .task {
+            await loadInventory()
+        }
+        // 旧的 CachedZone.pinned → 统一置顶 store 的一次性迁移：域名缓存到位后才迁（store 内按账号只做一次）
+        .task(id: cachedZones.count) {
+            pinnedStore.migrateZonePinsIfNeeded(
+                accountId: currentAccountId,
+                pinnedZoneIds: cachedZones.filter(\.pinned).map(\.id),
+                hasZoneData: !cachedZones.isEmpty
+            )
         }
         .onChange(of: accountPrefs.billingCycleDay) {
             Task { await loadUsage(force: true) }
@@ -255,6 +395,10 @@ private struct DashboardHomeView: View {
         .sheet(item: $usageDetail) { service in
             usageDetailSheet(service)
         }
+        // 免费层点 Pro 资源（搜索结果 / 告警 / 已固定）的付费墙
+        .sheet(item: $paywallFeature) { feature in
+            PaywallView(feature: feature)
+        }
     }
 
     /// 「需重新授权」引导：说明 + 一键重授权（同身份原地换令牌），成功摘标后自动重拉
@@ -272,12 +416,49 @@ private struct DashboardHomeView: View {
         .glassIsland(cornerRadius: OCLayout.chipRadius)
     }
 
-    /// 下拉刷新 / 顶部失败提示重试：强制重拉账号、资产、流量、用量
+    /// 下拉刷新 / 顶部失败提示重试：强制重拉账号、资产、流量、用量、资源清单
     private func refreshAll() async {
         await session.ensureAccounts()
         await loadAssets(force: true)
         await loadTraffic(force: true)
         await loadUsage(force: true)
+        await loadInventory(force: true)
+    }
+
+    /// sheet 关闭后再 push，避免「关面板」与「入栈」同帧打架
+    private func dispatchPendingRoute() {
+        guard let route = pendingRoute else { return }
+        pendingRoute = nil
+        openResource(route)
+    }
+
+    /// 打开一个资源（命令搜索 / 告警中心 / 已固定区共用的唯一出口）。
+    ///
+    /// 与 Android `OrangeCloudRoot.openResource` 同口径：**能搜到，点进去撞付费墙**——
+    /// 免费层点 R2 / D1 / KV / Tunnel 不入栈，改弹 PaywallView（复用 ProFeature 的场景文案，
+    /// 与存储 Tab 整页闸门、Tunnel 入口闸门是同一套）。域名 / Workers 免费，照常 push。
+    ///
+    /// 闸门只在「赋值 route 之前」判断，不动栈根的值式 navdest 结构（导航铁律）。
+    private func openResource(_ route: DashboardResourceRoute) {
+        if let feature = route.proFeature, !entitlements.isPro {
+            paywallFeature = feature
+        } else {
+            resourceRoute = route
+        }
+    }
+
+    /// 资源清单（R2 / D1 / KV / Tunnel）惰性补拉：**免费层也拉**，让搜索结果与告警覆盖全部资源
+    /// （点进去才撞付费墙，见 openResource）；各类仍按 scope 分别门控，缺权限就跳过该类。
+    private func loadInventory(force: Bool = false) async {
+        guard let accountId = session.selectedAccount?.id else { return }
+        await viewModel.loadInventory(
+            accountId: accountId,
+            canReadR2: auth.hasScope("workers-r2.read"),
+            canReadD1: auth.hasScope("d1.read"),
+            canReadKV: auth.hasScope("workers-kv-storage.read"),
+            canReadTunnel: auth.hasScope("argotunnel.read"),
+            force: force
+        )
     }
 
     /// 首屏资产统计：域名 / Workers / DNS 数量不等用户进入对应页面，进 Dashboard 就拉
@@ -1082,13 +1263,92 @@ private struct DashboardHomeView: View {
                 }
                 .glassIsland()
 
-                if cachedZones.first(where: \.pinned) == nil {
+                if pinnedZoneIds.isEmpty {
                     Label("在域名详情页点图钉，可固定想在首页看到的域名", systemImage: "pin")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                         .padding(.horizontal, 4)
                 }
             }
+        }
+    }
+
+    // MARK: - 已固定（域名以外：Workers / R2 / D1 / KV / Tunnel）
+
+    @ViewBuilder
+    private var pinnedResourcesSection: some View {
+        let pins = pinnedNonZoneResources
+        if !pins.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("已固定")
+                        .font(.title3.bold())
+                    Spacer()
+                    Button("搜索") { showSearch = true }
+                        .font(.subheadline)
+                        .foregroundStyle(Color.ocOrangeText)
+                }
+                pinnedIsland(pins)
+            }
+            .islandReveal(5)
+        }
+    }
+
+    private func pinnedIsland(_ pins: [PinnedResource]) -> some View {
+        // 标题 / 副标题一律现查（持久化里只有 type + id），资源改名后固定依然有效
+        let itemsById = Dictionary(resourceItems.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        return VStack(spacing: 0) {
+            ForEach(pins) { pin in
+                pinnedRow(pin, item: itemsById[pin.id])
+                if pin.id != pins.last?.id {
+                    Divider().padding(.leading, 56)
+                }
+            }
+        }
+        .glassIsland()
+    }
+
+    @ViewBuilder
+    private func pinnedRow(_ pin: PinnedResource, item: DashboardResourceItem?) -> some View {
+        if let item {
+            Button {
+                openResource(item.route)
+            } label: {
+                PinnedResourceRow(
+                    type: item.type,
+                    title: item.title,
+                    subtitle: "\(item.type.label) · \(item.subtitle)",
+                    resolved: true
+                )
+            }
+            .buttonStyle(.plain)
+            .contextMenu {
+                Button("取消固定", systemImage: "star.slash", role: .destructive) {
+                    pinnedStore.unpin(pin, accountId: currentAccountId)
+                }
+            }
+        } else {
+            // 资源查不到（已删除 / 该类清单未加载 / 缺权限）：显示标识本身，并给取消固定的出口
+            HStack(spacing: 0) {
+                PinnedResourceRow(
+                    type: pin.type,
+                    title: pin.resourceId,
+                    subtitle: String(localized: "\(pin.type.label) · 未找到该资源"),
+                    resolved: false
+                )
+                Button {
+                    pinnedStore.unpin(pin, accountId: currentAccountId)
+                } label: {
+                    Image(systemName: "star.slash")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 40, height: 40)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("取消固定")
+            }
+            .padding(.trailing, 4)
         }
     }
 
@@ -1367,6 +1627,42 @@ private struct DashboardZoneCard: View {
             }
             StatusDot(status: zone.status, size: 7)
                 .accessibilityHidden(true)   // 状态已在副标题文字中
+        }
+        .padding(.horizontal, OCLayout.islandPadding)
+        .padding(.vertical, 10)
+        .contentShape(Rectangle())
+    }
+}
+
+// MARK: - 已固定资源行（跨类型：Workers / R2 / D1 / KV / Tunnel）
+
+private struct PinnedResourceRow: View {
+
+    let type: PinnedResourceType
+    let title: String
+    let subtitle: String
+    /// 能否在当前数据源里解析到该资源（否则弱化显示，不给跳转）
+    let resolved: Bool
+
+    var body: some View {
+        HStack(spacing: 10) {
+            TintIcon(systemImage: type.symbolName, color: type.tint, size: 32)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(resolved ? Color.primary : Color.secondary)
+                    .lineLimit(1)
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 8)
+            if resolved {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
         }
         .padding(.horizontal, OCLayout.islandPadding)
         .padding(.vertical, 10)

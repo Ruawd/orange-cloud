@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import jiamin.chen.orangecloud.data.model.AccountUsage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -100,6 +101,23 @@ class AppPrefs @Inject constructor(
     suspend fun setUsageBillingDay(accountId: String, day: Int) {
         dataStore.edit { it[intPreferencesKey("pref_usage_bday_$accountId")] = day.coerceIn(1, 28) }
     }
+
+    /**
+     * Dashboard 置顶资源键集合（按账号分键——一身份多账号，账号级视图必须各自隔离）。
+     * 值形如 `ZONE|abc123`，**只存类型与 id**，标题由 UI 现查，资源改名后置顶不失效。
+     */
+    fun pinnedResources(accountId: String): Flow<Set<String>> =
+        dataStore.data.map { it[pinnedResourcesKey(accountId)] ?: emptySet() }
+
+    /** 置顶 / 取消置顶（幂等切换）。 */
+    suspend fun togglePinnedResource(accountId: String, key: String) {
+        dataStore.edit { prefs ->
+            val current = prefs[pinnedResourcesKey(accountId)] ?: emptySet()
+            prefs[pinnedResourcesKey(accountId)] = if (key in current) current - key else current + key
+        }
+    }
+
+    private fun pinnedResourcesKey(accountId: String) = stringSetPreferencesKey("pref_pinned_res_$accountId")
 
     /** 用量快照落盘（按账号，JSON），供下次冷启动/切回即时回显（对齐 iOS UsageCache）。 */
     suspend fun loadUsageCache(accountId: String): AccountUsage? {

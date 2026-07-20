@@ -2,11 +2,15 @@
 //  D1QueryView.swift
 //  Orange Cloud
 //
-//  D1 SQL 查询控制台：表入口（→ D1TableView 浏览/编辑）+ SQL 编辑器 + 结果卡片。
+//  D1 SQL 查询控制台：表入口（→ D1TableView 浏览/编辑）+ 最近/收藏 SQL + SQL 编辑器 + 结果卡片。
 //  入口：StorageView 的 D1 段。
+//
+//  最近执行与收藏按 databaseId 分键落盘（D1QueryHistoryStore），不同库互不串。
 //
 
 import SwiftUI
+import CoreTransferable
+import UniformTypeIdentifiers
 
 /// 待删除表的 sheet 载荷（String 非 Identifiable，包一层用于 .sheet(item:)）
 private struct DropTarget: Identifiable {
@@ -23,6 +27,7 @@ struct D1QueryView: View {
 
     @Environment(AuthManager.self) private var auth
     @State private var viewModel: D1QueryViewModel
+    private let store = D1QueryHistoryStore.shared
     @State private var showLimitReminder = false
     @State private var tableToDrop: DropTarget?
     @FocusState private var sqlFocused: Bool
@@ -44,6 +49,10 @@ struct D1QueryView: View {
             VStack(alignment: .leading, spacing: 16) {
                 tablesIsland
 
+                favoriteChips
+
+                historyChips
+
                 sqlEditor
 
                 if let error = viewModel.error {
@@ -60,7 +69,8 @@ struct D1QueryView: View {
                         total: viewModel.results.count,
                         originalRowCount: viewModel.originalRowCounts.indices.contains(index)
                             ? viewModel.originalRowCounts[index]
-                            : (result.results?.count ?? 0)
+                            : (result.results?.count ?? 0),
+                        runToken: viewModel.didRun
                     )
                 }
             }
@@ -78,7 +88,7 @@ struct D1QueryView: View {
                     if viewModel.needsLimitReminder {
                         showLimitReminder = true
                     } else {
-                        Task { await viewModel.run() }
+                        Task { await runSQL() }
                     }
                 } label: {
                     if viewModel.isRunning {
@@ -93,7 +103,7 @@ struct D1QueryView: View {
         .sensoryFeedback(.success, trigger: viewModel.didRun)
         .confirmationDialog("查询未带 LIMIT", isPresented: $showLimitReminder, titleVisibility: .visible) {
             Button("仍要执行") {
-                Task { await viewModel.run() }
+                Task { await runSQL() }
             }
             Button("取消", role: .cancel) {}
         } message: {
@@ -162,11 +172,102 @@ struct D1QueryView: View {
         }
     }
 
-    private var sqlEditor: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label("SQL", systemImage: "terminal")
+    // MARK: - 最近 / 收藏
+
+    private var databaseId: String { database.uuid }
+
+    /// 执行成功才入历史（失败语句不值得回填）
+    private func runSQL() async {
+        let statement = viewModel.sql
+        await viewModel.run()
+        if viewModel.error == nil {
+            store.record(statement, in: databaseId)
+        }
+    }
+
+    @ViewBuilder
+    private var favoriteChips: some View {
+        let items = store.favorites(for: databaseId)
+        if !items.isEmpty {
+            chipStrip(title: String(localized: "收藏"), icon: "star.fill", items: items)
+        }
+    }
+
+    @ViewBuilder
+    private var historyChips: some View {
+        let items = store.history(for: databaseId)
+        if !items.isEmpty {
+            chipStrip(title: String(localized: "最近"), icon: "clock.arrow.circlepath", items: items)
+        }
+    }
+
+    /// 一行横滑 chip：点按回填输入框
+    private func chipStrip(title: String, icon: String, items: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Label(title, systemImage: icon)
                 .font(.footnote.bold())
                 .foregroundStyle(.secondary)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(items, id: \.self) { item in
+                        Button {
+                            viewModel.sql = item
+                        } label: {
+                            Text(Self.chipLabel(item))
+                                .font(.caption.monospaced())
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 7)
+                                .glassIsland(cornerRadius: 10)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text(verbatim: Self.chipLabel(item)))
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+            // SQL 始终 LTR，避免在 RTL 语言下镜像
+            .environment(\.layoutDirection, .leftToRight)
+        }
+    }
+
+    /// chip 上的单行摘要：折掉换行与连续空白，超长截断
+    private static func chipLabel(_ sql: String) -> String {
+        let flattened = sql
+            .replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
+            .trimmingCharacters(in: .whitespaces)
+        return flattened.count > 42 ? String(flattened.prefix(42)) + "…" : flattened
+    }
+
+    private var isCurrentFavorite: Bool {
+        store.isFavorite(viewModel.sql, in: databaseId)
+    }
+
+    private var favoriteButton: some View {
+        Button {
+            store.toggleFavorite(viewModel.sql, in: databaseId)
+        } label: {
+            Image(systemName: isCurrentFavorite ? "star.fill" : "star")
+                .font(.footnote)
+                .foregroundStyle(isCurrentFavorite ? Color.ocOrange : Color.secondary)
+        }
+        .buttonStyle(.plain)
+        .disabled(viewModel.sql.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        .accessibilityLabel(Text(
+            isCurrentFavorite ? String(localized: "取消收藏此 SQL") : String(localized: "收藏此 SQL")
+        ))
+    }
+
+    private var sqlEditor: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Label("SQL", systemImage: "terminal")
+                    .font(.footnote.bold())
+                    .foregroundStyle(.secondary)
+                Spacer()
+                favoriteButton
+            }
             TextEditor(text: Binding(
                 get: { viewModel.sql },
                 set: { viewModel.sql = $0 }
@@ -200,10 +301,14 @@ private struct D1ResultCard: View {
     let total: Int
     /// 截断前的原始行数（ViewModel 只保留前 maxStoredRows 行驻留内存）
     let originalRowCount: Int
+    /// 每次成功执行翻转一次，作为 CSV 重新生成的信号（同一视图身份复用时区分新旧结果）
+    let runToken: Bool
 
     private static let maxRows = 100
     /// 单元格展示截断：完整大字段进 Text 会把 CoreText 排版拖上主线程
     private static let cellLimit = 256
+
+    @State private var csvDoc: D1CSVDocument?
 
     private var rows: [[String: JSONValue]] { result.results ?? [] }
 
@@ -214,10 +319,16 @@ private struct D1ResultCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if total > 1 {
-                Text("语句 \(index + 1)")
-                    .font(.footnote.bold())
-                    .foregroundStyle(.secondary)
+            if total > 1 || !rows.isEmpty {
+                HStack(spacing: 8) {
+                    if total > 1 {
+                        Text("语句 \(index + 1)")
+                            .font(.footnote.bold())
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if !rows.isEmpty { exportButton }
+                }
             }
 
             if rows.isEmpty {
@@ -254,6 +365,11 @@ private struct D1ResultCard: View {
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
+                if originalRowCount > rows.count {
+                    Text("导出为当前已加载的 \(rows.count) 行，需要更多请加 LIMIT / OFFSET 分批查询")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
             }
 
             if let meta = result.meta {
@@ -275,11 +391,84 @@ private struct D1ResultCard: View {
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .glassIsland()
+        .task(id: resultSignature) {
+            guard !rows.isEmpty else {
+                csvDoc = nil
+                return
+            }
+            csvDoc = D1CSVDocument(
+                filename: "d1-result-\(index + 1).csv",
+                text: D1CSV.text(columns: columns, rows: rows)
+            )
+        }
+    }
+
+    /// 导出当前结果集为 CSV（只导已驻留的行，不为导出再发一次无上限查询）。
+    /// CSV 文本在 .task 里生成一次并缓存，避免每次 body 求值都重新拼几百行字符串。
+    @ViewBuilder
+    private var exportButton: some View {
+        if let csvDoc {
+            ShareLink(item: csvDoc, preview: SharePreview("查询结果 CSV")) {
+                Label("导出 CSV", systemImage: "square.and.arrow.up")
+                    .font(.caption)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(Color.ocOrangeText)
+        }
+    }
+
+    /// 结果内容变化的近似签名：驱动 CSV 重新生成
+    private var resultSignature: String {
+        "\(index)|\(rows.count)|\(originalRowCount)|\(result.meta?.duration ?? -1)|\(runToken)"
     }
 
     private func cellDisplay(_ value: JSONValue?) -> String {
         guard let value else { return "NULL" }
         let text = value.displayText
         return text.count > Self.cellLimit ? String(text.prefix(Self.cellLimit)) + "…" : text
+    }
+}
+
+// MARK: - CSV 导出
+
+/// 结果集 → CSV 文本（RFC 4180）。含逗号 / 双引号 / 换行的字段用双引号包裹，
+/// 内部双引号写成两个。NULL 导出为空字段。数值/字节等一律出原值，不做本地化格式化。
+private nonisolated enum D1CSV {
+
+    static func text(columns: [String], rows: [[String: JSONValue]]) -> String {
+        var lines: [String] = [columns.map(field).joined(separator: ",")]
+        lines.reserveCapacity(rows.count + 1)
+        for row in rows {
+            lines.append(columns.map { field(rawText(row[$0])) }.joined(separator: ","))
+        }
+        return lines.joined(separator: "\r\n")
+    }
+
+    static func rawText(_ value: JSONValue?) -> String {
+        guard let value else { return "" }
+        if case .null = value { return "" }
+        return value.displayText
+    }
+
+    static func field(_ text: String) -> String {
+        let needsQuoting = text.contains(",") || text.contains("\"")
+            || text.contains("\n") || text.contains("\r")
+        guard needsQuoting else { return text }
+        return "\"" + text.replacingOccurrences(of: "\"", with: "\"\"") + "\""
+    }
+}
+
+/// ShareLink 载荷：导出为 .csv 文件
+private nonisolated struct D1CSVDocument: Transferable {
+
+    let filename: String
+    let text: String
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .commaSeparatedText) { document in
+            // BOM：Excel 打开非 BOM 的 UTF-8 CSV 会把中文识别成乱码
+            Data([0xEF, 0xBB, 0xBF]) + Data(document.text.utf8)
+        }
+        .suggestedFileName { $0.filename }
     }
 }

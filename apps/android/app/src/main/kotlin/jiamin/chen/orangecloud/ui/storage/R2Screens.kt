@@ -21,6 +21,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
@@ -175,6 +177,7 @@ fun R2ObjectListScreen(
     viewModel: R2ObjectListViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val previewState by viewModel.previewState.collectAsStateWithLifecycle()
     val phase = rememberSkyPhase()
     val onSky = phase.onSky
     val context = LocalContext.current
@@ -190,12 +193,18 @@ fun R2ObjectListScreen(
     val copiedMsg = stringResource(R.string.r2_copied)
     val movedMsg = stringResource(R.string.r2_moved)
     val verifyFailMsg = stringResource(R.string.r2_move_verify_fail)
+    val previewFailMsg = stringResource(R.string.r2_preview_unsupported)
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 R2Event.Uploaded -> snackbarHostState.showSnackbar(uploadedMsg)
-                R2Event.Deleted -> { detailObject = null; snackbarHostState.showSnackbar(deletedMsg) }
+                R2Event.Deleted -> {
+                    detailObject = null
+                    viewModel.clearPreview()
+                    snackbarHostState.showSnackbar(deletedMsg)
+                }
+                R2Event.PreviewUnsupported -> snackbarHostState.showSnackbar(previewFailMsg)
                 R2Event.Copied -> { copyMoveTarget = null; snackbarHostState.showSnackbar(copiedMsg) }
                 R2Event.Moved -> { copyMoveTarget = null; snackbarHostState.showSnackbar(movedMsg) }
                 R2Event.MoveVerifyFailed -> snackbarHostState.showSnackbar(verifyFailMsg)
@@ -332,16 +341,19 @@ fun R2ObjectListScreen(
     }
 
     detailObject?.let { obj ->
+        // 打开详情即尝试内联预览（VM 内部按类型 + 大小上限决定是否真的下载）
+        LaunchedEffect(obj.key) { viewModel.preview(obj) }
         ModalBottomSheet(
-            onDismissRequest = { detailObject = null },
+            onDismissRequest = { detailObject = null; viewModel.clearPreview() },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         ) {
             ObjectDetail(
                 obj = obj,
                 canWrite = state.canWrite,
                 isDownloading = state.isDownloading,
+                preview = if (previewState.key == obj.key) previewState else R2PreviewState(),
                 onOpen = { openObject(obj) },
-                onCopyMove = { detailObject = null; copyMoveTarget = obj },
+                onCopyMove = { detailObject = null; viewModel.clearPreview(); copyMoveTarget = obj },
                 onDelete = { viewModel.delete(obj.key) },
             )
         }
@@ -408,6 +420,7 @@ private fun ObjectDetail(
     obj: R2Object,
     canWrite: Boolean,
     isDownloading: Boolean,
+    preview: R2PreviewState,
     onOpen: () -> Unit,
     onCopyMove: () -> Unit,
     onDelete: () -> Unit,
@@ -416,6 +429,7 @@ private fun ObjectDetail(
     Column(
         Modifier
             .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 20.dp)
             .padding(bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -432,6 +446,10 @@ private fun ObjectDetail(
         obj.storageClass?.let { MetaRow(stringResource(R.string.r2_meta_class), it) }
         obj.etag?.let { MetaRow(stringResource(R.string.r2_meta_etag), it, mono = true) }
         obj.lastModified?.let { MetaRow(stringResource(R.string.r2_meta_modified), it, mono = true) }
+
+        Spacer(Modifier.height(4.dp))
+
+        R2PreviewPane(preview)
 
         Spacer(Modifier.height(4.dp))
 

@@ -13,11 +13,13 @@ import jiamin.chen.orangecloud.data.model.Account
 import jiamin.chen.orangecloud.data.model.AccountUsage
 import jiamin.chen.orangecloud.data.model.AnalyticsTimeRange
 import jiamin.chen.orangecloud.data.model.BillingCycle
+import jiamin.chen.orangecloud.data.model.Tunnel
 import jiamin.chen.orangecloud.data.model.Zone
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.AnalyticsRepository
+import jiamin.chen.orangecloud.data.repository.SecurityRepository
 import jiamin.chen.orangecloud.data.repository.StorageRepository
 import jiamin.chen.orangecloud.data.repository.WorkerRepository
 import jiamin.chen.orangecloud.data.repository.ZoneRepository
@@ -34,6 +36,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -63,6 +66,11 @@ data class DashboardUiState(
     val usageLoadFailed: Boolean = false,
     val accountAnalyticsUnavailable: Boolean = false,
     val hasAccountAnalytics: Boolean = false,
+    // 三合一 hub：跨类型资源目录 / 置顶 / 告警
+    val resources: List<DashboardResource> = emptyList(),
+    val pinned: List<DashboardResource> = emptyList(),
+    val catalogLoading: Boolean = false,
+    val alerts: List<DashboardAlert> = emptyList(),
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -75,11 +83,22 @@ class DashboardViewModel @Inject constructor(
     private val workerRepository: WorkerRepository,
     private val storageRepository: StorageRepository,
     private val analyticsRepository: AnalyticsRepository,
+    private val securityRepository: SecurityRepository,
     private val appPrefs: AppPrefs,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState(isLoading = true))
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
+
+    // 跨类型资源目录：按类型分桶，各来源独立回填后统一 publish（缺 scope 的类型直接缺席）
+    private val catalog = mutableMapOf<DashboardResourceType, List<DashboardResource>>()
+    private var pinnedKeys: List<String> = emptyList()
+    private var catalogJob: Job? = null
+    private var catalogLoadedFor: String? = null
+    // 告警输入：null = 未加载（不产生告警），避免冷启动空缓存误报
+    private var alertZones: List<Zone> = emptyList()
+    private var alertTunnels: List<Tunnel>? = null
+    private var alertWorkerCount: Int? = null
 
     // 用量：账号级会话缓存（切回同账号即时回显）+ 加载/不可用惰性标记
     private val usageCache = mutableMapOf<String, AccountUsage>()
@@ -93,7 +112,17 @@ class DashboardViewModel @Inject constructor(
         }
         viewModelScope.launch {
             accountStore.selectedAccountId.collect { id ->
-                // 切账号时清掉上一个账号的用量快照，避免旧数字在新账号加载期间残留
+                // 切账号时清掉上一个账号的用量快照与网络补拉来的资源，避免旧数据在新账号加载期间残留。
+                // 域名 / Worker 两桶不在这里清——它们由各自的 flatMapLatest 随账号切流覆写，
+                // 这里清会和那两个协程抢先后（清晚了反而把新账号刚落的数据抹掉）。
+                catalogLoadedFor = null
+                alertTunnels = null
+                alertWorkerCount = null
+                catalog.remove(DashboardResourceType.R2_BUCKET)
+                catalog.remove(DashboardResourceType.D1_DATABASE)
+                catalog.remove(DashboardResourceType.KV_NAMESPACE)
+                catalog.remove(DashboardResourceType.TUNNEL)
+                publishCatalog()
                 _uiState.update {
                     it.copy(
                         selectedAccountId = id,
@@ -128,6 +157,33 @@ class DashboardViewModel @Inject constructor(
                 .flatMapLatest { id -> if (id == null) flowOf(emptyList()) else zoneRepository.observeZones(id) }
                 .collect { zones ->
                     _uiState.update { it.copy(zoneCount = zones.size.toString(), recentZones = zones.take(4)) }
+                    alertZones = zones
+                    catalog[DashboardResourceType.ZONE] = zones.map { zone ->
+                        DashboardResource(DashboardResourceType.ZONE, zone.id, zone.name, zone.plan?.name ?: zone.status)
+                    }
+                    publishCatalog()
+                }
+        }
+        // Worker 目录：同样观察 Room 缓存（refresh 里的 refreshWorkers 写入后自动反映）。
+        viewModelScope.launch {
+            accountStore.selectedAccountId
+                .flatMapLatest { id -> if (id == null) flowOf(emptyList()) else workerRepository.observeWorkers(id) }
+                .collect { workers ->
+                    catalog[DashboardResourceType.WORKER] = workers.map { w ->
+                        DashboardResource(DashboardResourceType.WORKER, w.id, w.id, w.usageModel)
+                    }
+                    // 冷启动空缓存不能算「没有 Worker」，只有网络刷新过一次才让它参与告警
+                    if (alertWorkerCount != null || workers.isNotEmpty()) alertWorkerCount = workers.size
+                    publishCatalog()
+                }
+        }
+        // 置顶键集合：随账号切流（多账号隔离），只存 type|id，标题在 publishCatalog 里现查
+        viewModelScope.launch {
+            accountStore.selectedAccountId
+                .flatMapLatest { id -> if (id == null) flowOf(emptySet()) else appPrefs.pinnedResources(id) }
+                .collect { keys ->
+                    pinnedKeys = keys.toList()
+                    publishCatalog()
                 }
         }
         // 用量套餐设置：随账号切流，仅驱动菜单显示（改动由 setter 主动触发重载，避免切账号双刷）。
@@ -191,7 +247,9 @@ class DashboardViewModel @Inject constructor(
 
                 workers.await()
                 val workerList = workerRepository.observeWorkers(accountId).first()
+                alertWorkerCount = workerList.size   // 网络刷新过一次才让「无 Worker」参与告警
                 _uiState.update { it.copy(workerCount = workerList.size.toString()) }
+                publishCatalog()
                 buckets.await()?.let { count -> _uiState.update { st -> st.copy(bucketCount = count.toString()) } }
                 requests.await()?.let { req -> _uiState.update { st -> st.copy(requestsToday = req) } }
             } catch (e: Exception) {
@@ -201,6 +259,100 @@ class DashboardViewModel @Inject constructor(
             }
         }
         loadUsage()
+        ensureCatalog(force = true)
+    }
+
+    // MARK: - 跨类型资源目录（置顶 / 命令搜索 / 告警共用）
+
+    /**
+     * 补拉 R2 / D1 / KV / 隧道四类资源。
+     *
+     * 时机：**不参与首屏关键路径**。域名与 Worker 走 Room 缓存观察（零额外网络，首屏即有），
+     * 这四类需要各自一次 REST 往返，因此放进独立协程、先让出 300ms 给首屏的域名刷新与分析请求，
+     * 回来后合并进目录。搜索表打开时也会调一次（若首次补拉失败/尚未跑，这里兜底重试）。
+     * 缺 scope 的类型直接跳过（不报错、目录里缺席），单类失败也不拖累其它类。
+     */
+    fun ensureCatalog(force: Boolean = false) {
+        val loadedFor = catalogLoadedFor
+        if (!force && loadedFor != null && loadedFor == accountStore.selectedAccountId.value) return
+        catalogJob?.cancel()
+        catalogJob = viewModelScope.launch {
+            accountStore.ensureLoaded()
+            val accountId = accountStore.selectedAccountId.value ?: return@launch
+            delay(CATALOG_DEFER_MS)
+            _uiState.update { it.copy(catalogLoading = true) }
+            try {
+                val buckets = async {
+                    if (authRepository.hasScope(Scopes.R2_READ)) {
+                        runCatching { storageRepository.listBuckets(accountId) }.getOrNull()
+                    } else null
+                }
+                val databases = async {
+                    if (authRepository.hasScope(Scopes.D1_READ)) {
+                        runCatching { storageRepository.listDatabases(accountId) }.getOrNull()
+                    } else null
+                }
+                val namespaces = async {
+                    if (authRepository.hasScope(Scopes.KV_READ)) {
+                        runCatching { storageRepository.listNamespaces(accountId) }.getOrNull()
+                    } else null
+                }
+                val tunnels = async {
+                    if (authRepository.hasScope(Scopes.TUNNEL_READ)) {
+                        runCatching { securityRepository.listTunnels(accountId) }.getOrNull()
+                    } else null
+                }
+
+                buckets.await()?.let { list ->
+                    catalog[DashboardResourceType.R2_BUCKET] = list.map {
+                        DashboardResource(DashboardResourceType.R2_BUCKET, it.name, it.name, it.location)
+                    }
+                }
+                databases.await()?.let { list ->
+                    catalog[DashboardResourceType.D1_DATABASE] = list.map {
+                        DashboardResource(DashboardResourceType.D1_DATABASE, it.uuid, it.name, it.version)
+                    }
+                }
+                namespaces.await()?.let { list ->
+                    catalog[DashboardResourceType.KV_NAMESPACE] = list.map {
+                        DashboardResource(DashboardResourceType.KV_NAMESPACE, it.id, it.title, null)
+                    }
+                }
+                tunnels.await()?.let { list ->
+                    alertTunnels = list
+                    catalog[DashboardResourceType.TUNNEL] = list.map {
+                        DashboardResource(DashboardResourceType.TUNNEL, it.id, it.name, it.status)
+                    }
+                }
+                catalogLoadedFor = accountId
+                publishCatalog()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // 目录是增强能力，整体失败也不打扰用户
+            } finally {
+                _uiState.update { it.copy(catalogLoading = false) }
+            }
+        }
+    }
+
+    /** 置顶 / 取消置顶（按当前账号存，只写 type|id）。 */
+    fun togglePin(resource: DashboardResource) {
+        val accountId = accountStore.selectedAccountId.value ?: return
+        viewModelScope.launch { appPrefs.togglePinnedResource(accountId, resource.pinKey) }
+    }
+
+    /** 合并各类型资源 → 排序目录 → 解析置顶条目 → 重算告警，一次性推给 UI。 */
+    private fun publishCatalog() {
+        val all = DashboardResourceType.entries.flatMap { type ->
+            catalog[type].orEmpty().sortedBy { it.title.lowercase() }
+        }
+        val byKey = all.associateBy { it.pinKey }
+        val pinned = pinnedKeys
+            .mapNotNull { key -> byKey[key] ?: decodePinKey(key) }   // 查不到就用 id 兜底占位，仍可取消置顶
+            .sortedWith(compareBy<DashboardResource> { it.type.ordinal }.thenBy { it.title.lowercase() })
+        val alerts = buildAlerts(AlertInput(zones = alertZones, tunnels = alertTunnels, workerCount = alertWorkerCount))
+        _uiState.update { it.copy(resources = all, pinned = pinned, alerts = alerts) }
     }
 
     // MARK: - 用量模块
@@ -342,5 +494,10 @@ class DashboardViewModel @Inject constructor(
         n >= 1_000_000 -> "%.2fM".format(n / 1_000_000.0)
         n >= 1_000 -> "%.1fK".format(n / 1_000.0)
         else -> n.toString()
+    }
+
+    private companion object {
+        /** 目录补拉让出首屏的时间：够首屏的域名刷新/分析请求先抢占连接。 */
+        const val CATALOG_DEFER_MS = 300L
     }
 }

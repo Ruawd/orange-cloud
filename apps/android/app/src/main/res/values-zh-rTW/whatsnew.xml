@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">一處搜遍所有資源</string>
+    <string name="whatsnew_1_7_0_0_detail">總覽頁頂端的放大鏡可一次搜尋網域、Worker、R2 儲存桶、D1 資料庫、KV 命名空間與通道，點一下直達；任何資源都能加上星號固定到總覽頁。</string>
+    <string name="whatsnew_1_7_0_1_title">告警中心</string>
+    <string name="whatsnew_1_7_0_1_detail">總覽頁新增告警卡片，彙整需要留意的資源——未啟用的網域、狀態異常的通道等，點一下直達。</string>
+    <string name="whatsnew_1_7_0_2_title">即時日誌更好用</string>
+    <string name="whatsnew_1_7_0_2_detail">Worker 即時日誌支援關鍵字搜尋與等級篩選；長按複製整行，輕點展開完整詳情並選取片段。「暫停」現在只凍結畫面、日誌照常接收，恢復後能看到完整記錄。</string>
+    <string name="whatsnew_1_7_0_3_title">SQL 記錄與收藏</string>
+    <string name="whatsnew_1_7_0_3_detail">D1 查詢會自動記錄最近 12 筆，常用語句可收藏（依資料庫分別儲存）；查詢結果一鍵匯出 CSV，資料表詳情還能檢視索引。</string>
+    <string name="whatsnew_1_7_0_4_title">Workers AI 文字生圖</string>
+    <string name="whatsnew_1_7_0_4_detail">模型試執行新增文字生圖：輸入提示詞直接產生圖片，可分享或儲存。</string>
+    <string name="whatsnew_1_7_0_5_title">R2 物件預覽</string>
+    <string name="whatsnew_1_7_0_5_detail">點開 R2 物件即可預覽：圖片直接顯示，JSON 自動排版，文字可搜尋並顯示符合筆數；物件過大時會提示改用下載。</string>
+    <string name="whatsnew_1_6_6_0_title">快速綁定 R2 儲存桶</string>
+    <string name="whatsnew_1_6_6_0_detail">資源綁定新增 R2：可把現有儲存桶直接綁定到 Worker，與 D1 / KV 一樣支援一鍵解除。</string>
+    <string name="whatsnew_1_6_6_1_title">編輯長腳本更流暢</string>
+    <string name="whatsnew_1_6_6_1_detail">重寫了 Worker 程式碼編輯器的輸入處理，長腳本打字不再卡頓。</string>
     <string name="whatsnew_1_6_5_0_title">workers.dev 子網域直達</string>
     <string name="whatsnew_1_6_5_0_detail">Worker 開啟 workers.dev 子網域後，直接顯示完整存取網址，點一下即可開啟。</string>
     <string name="whatsnew_1_6_5_1_title">快速綁定 D1 / KV</string>

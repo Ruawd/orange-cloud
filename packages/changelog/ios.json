@@ -1,6 +1,179 @@
 [
   {
-    "version": "1.8.6",
+    "version": "1.9.0",
+    "date": "2026.07.20",
+    "channel": "App Store",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "magnifyingglass",
+        "title": {
+          "zh-Hans": "一处搜遍所有资源",
+          "en": "Search everything from one place",
+          "zh-Hant": "一處搜遍所有資源",
+          "zh-HK": "一處搜遍所有資源",
+          "ja": "すべてのリソースをまとめて検索",
+          "es-MX": "Busca todo desde un solo lugar",
+          "ko": "모든 리소스를 한 곳에서 검색",
+          "pt-BR": "Busque tudo em um só lugar",
+          "pt-PT": "Pesquise tudo num só lugar",
+          "de": "Alles an einer Stelle suchen",
+          "fr": "Tout chercher au même endroit",
+          "ar": "ابحث في كل شيء من مكان واحد",
+          "tr": "Her şeyi tek yerden arayın"
+        },
+        "detail": {
+          "zh-Hans": "概览页顶栏的放大镜可一次搜索域名、Worker、R2 存储桶、D1 数据库、KV 命名空间与隧道，点一下直达；任意资源都能星标固定到概览页。",
+          "en": "The magnifier on the overview searches domains, Workers, R2 buckets, D1 databases, KV namespaces and tunnels at once — tap a result to go straight there. And any resource can now be starred to the overview.",
+          "zh-Hant": "總覽頁頂端的放大鏡可一次搜尋網域、Worker、R2 儲存桶、D1 資料庫、KV 命名空間與通道，點一下直達；任何資源都能加上星號固定到總覽頁。",
+          "zh-HK": "概覽頁頂部的放大鏡可一次搜尋域名、Worker、R2 儲存桶、D1 資料庫、KV 命名空間與隧道，點一下直達；任何資源都可以加星固定到概覽頁。",
+          "ja": "概要ページの虫めがねから、ドメイン・Worker・R2 バケット・D1 データベース・KV ネームスペース・トンネルをまとめて検索でき、タップですぐ移動できます。どのリソースもスターを付けて概要ページに固定できます。",
+          "es-MX": "La lupa de la pantalla de resumen busca a la vez dominios, Workers, buckets R2, bases de datos D1, espacios de nombres KV y túneles; toca un resultado para ir directo. Además, ahora puedes fijar cualquier recurso al resumen con una estrella.",
+          "ko": "개요 화면 상단의 돋보기로 도메인, Worker, R2 버킷, D1 데이터베이스, KV 네임스페이스, 터널을 한 번에 검색하고 바로 이동할 수 있습니다. 이제 어떤 리소스든 별표로 개요 화면에 고정할 수 있습니다.",
+          "pt-BR": "A lupa na tela de visão geral busca de uma vez domínios, Workers, buckets R2, bancos D1, namespaces KV e túneis — toque para ir direto. E agora dá para fixar qualquer recurso na visão geral com uma estrela.",
+          "pt-PT": "A lupa no ecrã de descrição geral pesquisa de uma vez domínios, Workers, buckets R2, bases de dados D1, namespaces KV e túneis — toque para ir direto. E agora pode fixar qualquer recurso com uma estrela.",
+          "de": "Über die Lupe in der Übersicht durchsuchst du Domains, Workers, R2-Buckets, D1-Datenbanken, KV-Namespaces und Tunnel auf einmal – ein Tippen führt direkt hin. Und jede Ressource lässt sich per Stern an die Übersicht heften.",
+          "fr": "La loupe de l’aperçu recherche d’un coup les domaines, Workers, buckets R2, bases D1, espaces de noms KV et tunnels : touchez un résultat pour y aller. Et n’importe quelle ressource peut désormais être épinglée à l’aperçu.",
+          "ar": "تبحث العدسة في صفحة النظرة العامة دفعة واحدة في النطاقات وWorkers وحاويات R2 وقواعد بيانات D1 ومساحات أسماء KV والأنفاق، وانقر على النتيجة للانتقال مباشرة. ويمكن الآن تثبيت أي مورد في الصفحة بنجمة.",
+          "tr": "Genel bakıştaki büyüteç; alan adlarını, Worker’ları, R2 bucket’larını, D1 veritabanlarını, KV ad alanlarını ve tünelleri tek seferde arar, dokununca doğrudan açar. Artık her kaynağı yıldızlayıp genel bakışa sabitleyebilirsiniz."
+        }
+      },
+      {
+        "icon": "bell.badge",
+        "title": {
+          "zh-Hans": "告警中心",
+          "en": "Alert center",
+          "zh-Hant": "告警中心",
+          "zh-HK": "告警中心",
+          "ja": "アラートセンター",
+          "es-MX": "Centro de alertas",
+          "ko": "알림 센터",
+          "pt-BR": "Central de alertas",
+          "pt-PT": "Centro de alertas",
+          "de": "Warnungszentrale",
+          "fr": "Centre d’alertes",
+          "ar": "مركز التنبيهات",
+          "tr": "Uyarı merkezi"
+        },
+        "detail": {
+          "zh-Hans": "概览页新增告警卡片，汇总需要注意的资源——未启用的域名、状态异常的隧道等，点一下直达。",
+          "en": "The overview now gathers what needs attention — inactive domains, tunnels in a bad state and more — into a single card. Tap an item to jump right to it.",
+          "zh-Hant": "總覽頁新增告警卡片，彙整需要留意的資源——未啟用的網域、狀態異常的通道等，點一下直達。",
+          "zh-HK": "概覽頁新增告警卡片，彙整需要留意的資源——未啟用的域名、狀態異常的隧道等，點一下直達。",
+          "ja": "概要ページに、注意が必要なリソース（有効になっていないドメイン、状態が異常なトンネルなど）をまとめるカードを追加しました。タップするとその場所へ移動します。",
+          "es-MX": "La pantalla de resumen reúne en una tarjeta lo que necesita atención: dominios sin activar, túneles con estado anómalo y más. Toca uno para ir directo.",
+          "ko": "개요 화면에 주의가 필요한 리소스(활성화되지 않은 도메인, 상태가 비정상인 터널 등)를 모아 보여주는 카드가 추가되었습니다. 탭하면 바로 이동합니다.",
+          "pt-BR": "A visão geral agora reúne num cartão o que precisa de atenção: domínios não ativados, túneis com estado anormal e mais. Toque para ir direto.",
+          "pt-PT": "A descrição geral reúne agora num cartão o que precisa de atenção: domínios não ativados, túneis com estado anómalo e mais. Toque para ir direto.",
+          "de": "Die Übersicht bündelt jetzt in einer Karte, was Aufmerksamkeit braucht – nicht aktivierte Domains, Tunnel in auffälligem Zustand und mehr. Ein Tippen führt direkt hin.",
+          "fr": "L’aperçu regroupe désormais dans une carte ce qui mérite votre attention : domaines non activés, tunnels en état anormal, etc. Touchez pour y accéder.",
+          "ar": "تجمع صفحة النظرة العامة الآن في بطاقة واحدة ما يحتاج انتباهك: النطاقات غير المفعّلة، والأنفاق ذات الحالة غير الطبيعية وغيرها. انقر على البند للانتقال إليه مباشرة.",
+          "tr": "Genel bakış artık dikkat gerektirenleri tek kartta topluyor: etkinleştirilmemiş alan adları, durumu bozuk tüneller ve daha fazlası. Dokununca doğrudan açılır."
+        }
+      },
+      {
+        "icon": "text.magnifyingglass",
+        "title": {
+          "zh-Hans": "实时日志更好用",
+          "en": "Better live logs",
+          "zh-Hant": "即時日誌更好用",
+          "zh-HK": "實時日誌更好用",
+          "ja": "リアルタイムログが使いやすく",
+          "es-MX": "Registros en vivo mejorados",
+          "ko": "실시간 로그 개선",
+          "pt-BR": "Logs ao vivo melhores",
+          "pt-PT": "Registos em direto melhorados",
+          "de": "Bessere Live-Logs",
+          "fr": "Journaux en direct améliorés",
+          "ar": "سجلات مباشرة أفضل",
+          "tr": "Daha iyi canlı günlükler"
+        },
+        "detail": {
+          "zh-Hans": "Worker 实时日志支持关键词搜索与级别筛选；长按复制整行，轻点展开完整详情并选取片段。「暂停」现在只冻结画面、日志照常接收，恢复后能看到完整记录。",
+          "en": "Live Worker logs now support keyword search and level filtering; long-press to copy a whole line, tap to expand the full detail and select any part of it. Pause now only freezes the view — logs keep arriving, so nothing is missing when you resume.",
+          "zh-Hant": "Worker 即時日誌支援關鍵字搜尋與等級篩選；長按複製整行，輕點展開完整詳情並選取片段。「暫停」現在只凍結畫面、日誌照常接收，恢復後能看到完整記錄。",
+          "zh-HK": "Worker 實時日誌支援關鍵字搜尋與級別篩選；長按複製整行，輕點展開完整詳情並選取片段。「暫停」現在只凍結畫面、日誌照常接收，恢復後可看到完整記錄。",
+          "ja": "Worker のリアルタイムログでキーワード検索とレベル絞り込みができるようになりました。長押しで 1 行コピー、タップで詳細を開いて一部を選択できます。「一時停止」は表示を止めるだけになり、ログは受信し続けるため再開後もすべて確認できます。",
+          "es-MX": "Los registros en vivo de Worker ahora tienen búsqueda por palabra clave y filtro por nivel; mantén presionada una línea para copiarla o tócala para ver el detalle completo y seleccionar fragmentos. Pausar solo congela la vista: los registros siguen llegando y no se pierde nada.",
+          "ko": "Worker 실시간 로그에서 키워드 검색과 레벨 필터를 쓸 수 있습니다. 길게 눌러 한 줄을 복사하고, 탭하면 전체 내용을 펼쳐 일부만 선택할 수도 있습니다. 일시정지는 이제 화면만 멈추고 로그는 계속 수신되어 재개하면 빠짐없이 확인할 수 있습니다.",
+          "pt-BR": "Os logs ao vivo do Worker agora têm busca por palavra-chave e filtro por nível; segure para copiar a linha inteira ou toque para abrir o detalhe completo e selecionar trechos. Pausar apenas congela a tela — os logs continuam chegando e nada se perde.",
+          "pt-PT": "Os registos em direto do Worker têm agora pesquisa por palavra-chave e filtro por nível; toque sem soltar para copiar a linha ou toque para abrir o detalhe completo e selecionar excertos. Pausar apenas congela o ecrã — os registos continuam a chegar e nada se perde.",
+          "de": "Live-Logs eines Workers lassen sich jetzt nach Stichwort durchsuchen und nach Level filtern; langes Tippen kopiert die ganze Zeile, kurzes Tippen öffnet das vollständige Detail zum Markieren. Die Pause friert nur die Ansicht ein – Logs laufen weiter ein, beim Fortsetzen fehlt nichts.",
+          "fr": "Les journaux en direct d’un Worker acceptent désormais la recherche par mot-clé et le filtre par niveau ; appui long pour copier toute la ligne, appui simple pour ouvrir le détail complet et en sélectionner un extrait. La pause ne fige que l’affichage : les journaux continuent d’arriver, rien ne manque à la reprise.",
+          "ar": "صارت سجلات Worker المباشرة تدعم البحث بالكلمات المفتاحية والتصفية حسب المستوى؛ اضغط مطوّلًا لنسخ السطر كاملًا، أو انقر لعرض التفاصيل كاملة وتحديد جزء منها. ولم يعد الإيقاف المؤقت سوى تجميد للعرض — تستمر السجلات في الوصول فلا يفوتك شيء عند المتابعة.",
+          "tr": "Worker canlı günlüklerinde artık anahtar kelime araması ve seviye filtresi var; uzun basınca satırın tamamı kopyalanır, dokununca tüm ayrıntı açılır ve içinden seçim yapılabilir. Duraklatma yalnızca görüntüyü dondurur; günlükler gelmeye devam eder, devam ettiğinizde hiçbir şey eksik olmaz."
+        }
+      },
+      {
+        "icon": "clock.arrow.circlepath",
+        "title": {
+          "zh-Hans": "SQL 历史与收藏",
+          "en": "SQL history and favorites",
+          "zh-Hant": "SQL 記錄與收藏",
+          "zh-HK": "SQL 記錄與收藏",
+          "ja": "SQL の履歴とお気に入り",
+          "es-MX": "Historial y favoritos de SQL",
+          "ko": "SQL 기록과 즐겨찾기",
+          "pt-BR": "Histórico e favoritos de SQL",
+          "pt-PT": "Histórico e favoritos de SQL",
+          "de": "SQL-Verlauf und Favoriten",
+          "fr": "Historique et favoris SQL",
+          "ar": "سجل SQL والمفضلة",
+          "tr": "SQL geçmişi ve favoriler"
+        },
+        "detail": {
+          "zh-Hans": "D1 查询自动记录最近 12 条，常用语句可收藏（按数据库分别保存）；查询结果一键导出 CSV，表详情还能查看索引。",
+          "en": "D1 keeps your last 12 queries and lets you favorite the ones you reuse (saved per database). Results export to CSV in a tap, and table details now list indexes.",
+          "zh-Hant": "D1 查詢會自動記錄最近 12 筆，常用語句可收藏（依資料庫分別儲存）；查詢結果一鍵匯出 CSV，資料表詳情還能檢視索引。",
+          "zh-HK": "D1 查詢會自動記錄最近 12 條，常用語句可收藏（按資料庫分別儲存）；查詢結果一鍵匯出 CSV，資料表詳情還可查看索引。",
+          "ja": "D1 は直近 12 件のクエリを自動で記録し、よく使う文はお気に入りに登録できます（データベースごとに保存）。結果はワンタップで CSV に書き出せ、テーブル詳細ではインデックスも確認できます。",
+          "es-MX": "D1 guarda tus últimas 12 consultas y te deja marcar como favoritas las que más usas (por base de datos). Los resultados se exportan a CSV con un toque y el detalle de la tabla ya muestra los índices.",
+          "ko": "D1이 최근 12개의 쿼리를 자동으로 기록하고, 자주 쓰는 문장은 즐겨찾기에 담을 수 있습니다(데이터베이스별로 저장). 결과는 한 번에 CSV로 내보낼 수 있고, 테이블 상세에서 인덱스도 볼 수 있습니다.",
+          "pt-BR": "O D1 guarda suas últimas 12 consultas e deixa favoritar as que você mais usa (salvas por banco). Os resultados viram CSV com um toque e o detalhe da tabela agora mostra os índices.",
+          "pt-PT": "O D1 guarda as suas últimas 12 consultas e permite marcar como favoritas as mais usadas (guardadas por base de dados). Os resultados exportam para CSV com um toque e o detalhe da tabela mostra agora os índices.",
+          "de": "D1 merkt sich die letzten 12 Abfragen, häufig genutzte lassen sich als Favorit sichern (je Datenbank getrennt). Ergebnisse exportierst du mit einem Tippen als CSV, und die Tabellendetails zeigen jetzt auch Indizes.",
+          "fr": "D1 conserve vos 12 dernières requêtes et permet de mettre en favori celles que vous réutilisez (par base de données). Les résultats s’exportent en CSV d’un geste, et le détail d’une table affiche désormais les index.",
+          "ar": "يحتفظ D1 بآخر 12 استعلامًا تلقائيًا، ويمكنك إضافة العبارات المتكررة إلى المفضلة (تُحفظ لكل قاعدة بيانات على حدة). صدّر النتائج إلى CSV بنقرة، وتعرض تفاصيل الجدول الآن الفهارس أيضًا.",
+          "tr": "D1 son 12 sorgunuzu otomatik saklar, sık kullandıklarınızı favorilere ekleyebilirsiniz (her veritabanı için ayrı). Sonuçlar tek dokunuşla CSV olarak dışa aktarılır, tablo ayrıntılarında artık dizinler de görünür."
+        }
+      },
+      {
+        "icon": "photo.artframe",
+        "title": {
+          "zh-Hans": "Workers AI 文生图",
+          "en": "Generate images with Workers AI",
+          "zh-Hant": "Workers AI 文字生圖",
+          "zh-HK": "Workers AI 文字生圖",
+          "ja": "Workers AI で画像生成",
+          "es-MX": "Genera imágenes con Workers AI",
+          "ko": "Workers AI로 이미지 생성",
+          "pt-BR": "Gere imagens com Workers AI",
+          "pt-PT": "Gere imagens com Workers AI",
+          "de": "Bilder mit Workers AI erzeugen",
+          "fr": "Générer des images avec Workers AI",
+          "ar": "توليد الصور عبر Workers AI",
+          "tr": "Workers AI ile görsel üretin"
+        },
+        "detail": {
+          "zh-Hans": "模型试运行新增文生图：输入提示词直接出图，可分享保存。",
+          "en": "The model playground now covers text-to-image models — type a prompt, get a picture, then share or save it.",
+          "zh-Hant": "模型試執行新增文字生圖：輸入提示詞直接產生圖片，可分享或儲存。",
+          "zh-HK": "模型試執行新增文字生圖：輸入提示詞直接生成圖片，可分享或儲存。",
+          "ja": "モデルの試し実行が画像生成モデルに対応。プロンプトを入力するだけで画像ができ、共有や保存もできます。",
+          "es-MX": "La prueba de modelos ahora incluye los de texto a imagen: escribe un prompt, obtén la imagen y compártela o guárdala.",
+          "ko": "모델 시험 실행이 이미지 생성 모델을 지원합니다. 프롬프트를 입력하면 바로 이미지가 만들어지고, 공유하거나 저장할 수 있습니다.",
+          "pt-BR": "O teste de modelos agora inclui os de texto para imagem: escreva um prompt, receba a imagem e compartilhe ou salve.",
+          "pt-PT": "O teste de modelos inclui agora os de texto para imagem: escreva um prompt, receba a imagem e partilhe ou guarde.",
+          "de": "Der Modell-Testlauf unterstützt jetzt Text-zu-Bild-Modelle: Prompt eingeben, Bild erhalten, teilen oder sichern.",
+          "fr": "L’essai de modèles prend désormais en charge le texte-vers-image : saisissez une consigne, obtenez l’image, partagez-la ou enregistrez-la.",
+          "ar": "صار تشغيل النماذج التجريبي يدعم نماذج تحويل النص إلى صورة: اكتب الوصف لتحصل على صورة، ثم شاركها أو احفظها.",
+          "tr": "Model deneme çalıştırması artık metinden görsele modellerini de destekliyor: bir istem yazın, görseli alın, paylaşın veya kaydedin."
+        }
+      }
+    ]
+  },
+  {
+    "version": "1.8.7",
     "date": "2026.07.18",
     "channel": "App Store",
     "inApp": true,
@@ -69,6 +242,39 @@
           "fr": "Liez une base de données D1 ou un espace de noms KV existant à un Worker depuis la page des liaisons, et dissociez-les tout aussi facilement.",
           "ar": "اربط قاعدة بيانات D1 أو مساحة أسماء KV موجودة بأحد Workers مباشرة من صفحة الروابط، وألغِ الربط بالسهولة نفسها.",
           "tr": "Mevcut bir D1 veritabanını veya KV ad alanını bağlamalar sayfasından doğrudan bir Worker’a bağlayın; bağlantıyı kaldırmak da aynı kolaylıkta."
+        }
+      },
+      {
+        "icon": "shippingbox.fill",
+        "title": {
+          "zh-Hans": "快速绑定 R2 存储桶",
+          "en": "Quickly bind R2 buckets",
+          "zh-Hant": "快速綁定 R2 儲存桶",
+          "zh-HK": "快速綁定 R2 儲存桶",
+          "ja": "R2 バケットをすばやくバインド",
+          "es-MX": "Vincula buckets R2 rápidamente",
+          "ko": "R2 버킷 빠른 바인딩",
+          "pt-BR": "Vincule buckets R2 rapidamente",
+          "pt-PT": "Vincule buckets R2 rapidamente",
+          "de": "R2-Buckets schnell binden",
+          "fr": "Lier rapidement des buckets R2",
+          "ar": "ربط حاويات R2 بسرعة",
+          "tr": "R2 bucket’larını hızlıca bağla"
+        },
+        "detail": {
+          "zh-Hans": "资源绑定新增 R2：可把现有存储桶直接绑定到 Worker，与 D1 / KV 一样支持一键解除。",
+          "en": "Resource bindings now cover R2 — attach an existing bucket to a Worker, and unbind it just like D1 / KV.",
+          "zh-Hant": "資源綁定新增 R2：可把現有儲存桶直接綁定到 Worker，與 D1 / KV 一樣支援一鍵解除。",
+          "zh-HK": "資源綁定新增 R2：可把現有儲存桶直接綁定到 Worker，與 D1 / KV 一樣支援一鍵解除。",
+          "ja": "リソースバインディングに R2 を追加。既存のバケットを Worker にバインドでき、D1 / KV と同様に解除もできます。",
+          "es-MX": "Los vínculos de recursos ahora incluyen R2: conecta un bucket existente a un Worker y desvincúlalo igual que D1 / KV.",
+          "ko": "리소스 바인딩에 R2가 추가되었습니다. 기존 버킷을 Worker에 연결하고 D1 / KV처럼 해제할 수 있습니다.",
+          "pt-BR": "Os vínculos de recursos agora incluem R2: conecte um bucket existente a um Worker e desvincule como em D1 / KV.",
+          "pt-PT": "As ligações de recursos agora incluem R2: ligue um bucket existente a um Worker e desvincule como em D1 / KV.",
+          "de": "Ressourcenbindungen umfassen jetzt R2: Hänge einen vorhandenen Bucket an einen Worker und löse ihn wie bei D1 / KV wieder.",
+          "fr": "Les liaisons de ressources couvrent désormais R2 : rattachez un bucket existant à un Worker et dissociez-le comme D1 / KV.",
+          "ar": "صارت روابط الموارد تشمل R2: اربط حاوية موجودة بأحد Workers وألغِ الربط كما في D1 / KV.",
+          "tr": "Kaynak bağlamaları artık R2’yi de kapsıyor: mevcut bir bucket’ı Worker’a bağlayın, D1 / KV gibi kaldırın."
         }
       }
     ]

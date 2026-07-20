@@ -23,19 +23,25 @@ final class WorkerBindingsViewModel {
     // 快速绑定用的可选资源（打开绑定选择器时惰性加载）
     private(set) var d1Databases:  [D1Database] = []
     private(set) var kvNamespaces: [KVNamespace] = []
+    private(set) var r2Buckets:    [R2Bucket] = []
     private(set) var resourcesLoaded = false
     var loadingResources = false
 
     private let service:   WorkerService
     private let d1Service: D1Service
     private let kvService: KVService
+    private let r2Service: R2Service
     let accountId:  String
     let scriptName: String
 
-    init(service: WorkerService, d1Service: D1Service, kvService: KVService, accountId: String, scriptName: String) {
+    init(
+        service: WorkerService, d1Service: D1Service, kvService: KVService, r2Service: R2Service,
+        accountId: String, scriptName: String
+    ) {
         self.service    = service
         self.d1Service  = d1Service
         self.kvService  = kvService
+        self.r2Service  = r2Service
         self.accountId  = accountId
         self.scriptName = scriptName
     }
@@ -126,7 +132,7 @@ final class WorkerBindingsViewModel {
     // MARK: - 快速绑定 D1 / KV
 
     /// 打开绑定选择器时按需加载可选资源（各类型读权限缺失时静默跳过对应列表）
-    func loadResources(canReadD1: Bool, canReadKV: Bool) async {
+    func loadResources(canReadD1: Bool, canReadKV: Bool, canReadR2: Bool) async {
         guard !loadingResources else { return }
         loadingResources = true
         defer { loadingResources = false }
@@ -135,6 +141,9 @@ final class WorkerBindingsViewModel {
         }
         if canReadKV {
             kvNamespaces = (try? await kvService.listNamespaces(accountId: accountId)) ?? kvNamespaces
+        }
+        if canReadR2 {
+            r2Buckets = (try? await r2Service.listBuckets(accountId: accountId)) ?? r2Buckets
         }
         resourcesLoaded = true
     }

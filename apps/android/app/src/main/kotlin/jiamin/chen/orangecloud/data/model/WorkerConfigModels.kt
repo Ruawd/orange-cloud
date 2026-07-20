@@ -119,8 +119,8 @@ data class WorkerBinding(
     val isSecret: Boolean get() = type == "secret_text" || type == "secrets_store_secret"
     val isPlainText: Boolean get() = type == "plain_text"
 
-    /** 本客户端可原地增删的资源绑定（D1 / KV）——其余类型仍只读。 */
-    val isQuickManaged: Boolean get() = type == "kv_namespace" || type == "d1"
+    /** 本客户端可原地增删的资源绑定（D1 / KV / R2）——其余类型仍只读。 */
+    val isQuickManaged: Boolean get() = type == "kv_namespace" || type == "d1" || type == "r2_bucket"
 
     /** 回传时转为 inherit（按名保留旧绑定，密钥值我们读不到也能保住）。 */
     fun asInherit(): WorkerBindingInput = WorkerBindingInput(type = "inherit", name = name)
@@ -147,7 +147,8 @@ data class WorkerSettings(
 
 /**
  * PATCH settings 的单条绑定。inherit 只发 {type,name}；plain_text 发 {type,name,text}；
- * kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}。
+ * kv_namespace 发 {type,name,namespace_id}；d1 发 {type,name,id}；
+ * r2_bucket 发 {type,name,bucket_name}（R2 按**桶名**引用，不是 ID）。
  * Json explicitNulls=false，null 字段不编码（omitted）。
  */
 @Serializable
@@ -157,6 +158,7 @@ data class WorkerBindingInput(
     val text: String? = null,
     @SerialName("namespace_id") val namespaceId: String? = null, // kv_namespace
     val id: String? = null, // d1 数据库 UUID
+    @SerialName("bucket_name") val bucketName: String? = null, // r2_bucket 桶名
 ) {
     companion object {
         /** 绑定既有 KV 命名空间。 */
@@ -164,6 +166,9 @@ data class WorkerBindingInput(
 
         /** 绑定既有 D1 数据库。 */
         fun d1(name: String, databaseId: String) = WorkerBindingInput(type = "d1", name = name, id = databaseId)
+
+        /** 绑定既有 R2 存储桶（按桶名）。 */
+        fun r2(name: String, bucketName: String) = WorkerBindingInput(type = "r2_bucket", name = name, bucketName = bucketName)
     }
 }
 

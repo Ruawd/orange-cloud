@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">Pesquise tudo num só lugar</string>
+    <string name="whatsnew_1_7_0_0_detail">A lupa no ecrã de descrição geral pesquisa de uma vez domínios, Workers, buckets R2, bases de dados D1, namespaces KV e túneis — toque para ir direto. E agora pode fixar qualquer recurso com uma estrela.</string>
+    <string name="whatsnew_1_7_0_1_title">Centro de alertas</string>
+    <string name="whatsnew_1_7_0_1_detail">A descrição geral reúne agora num cartão o que precisa de atenção: domínios não ativados, túneis com estado anómalo e mais. Toque para ir direto.</string>
+    <string name="whatsnew_1_7_0_2_title">Registos em direto melhorados</string>
+    <string name="whatsnew_1_7_0_2_detail">Os registos em direto do Worker têm agora pesquisa por palavra-chave e filtro por nível; toque sem soltar para copiar a linha ou toque para abrir o detalhe completo e selecionar excertos. Pausar apenas congela o ecrã — os registos continuam a chegar e nada se perde.</string>
+    <string name="whatsnew_1_7_0_3_title">Histórico e favoritos de SQL</string>
+    <string name="whatsnew_1_7_0_3_detail">O D1 guarda as suas últimas 12 consultas e permite marcar como favoritas as mais usadas (guardadas por base de dados). Os resultados exportam para CSV com um toque e o detalhe da tabela mostra agora os índices.</string>
+    <string name="whatsnew_1_7_0_4_title">Gere imagens com Workers AI</string>
+    <string name="whatsnew_1_7_0_4_detail">O teste de modelos inclui agora os de texto para imagem: escreva um prompt, receba a imagem e partilhe ou guarde.</string>
+    <string name="whatsnew_1_7_0_5_title">Pré-visualização de objetos R2</string>
+    <string name="whatsnew_1_7_0_5_detail">Toque num objeto R2 para pré-visualizar: as imagens aparecem de imediato, o JSON é formatado automaticamente e o texto pode ser pesquisado com contagem de ocorrências. Objetos demasiado grandes continuam a sugerir a transferência.</string>
+    <string name="whatsnew_1_6_6_0_title">Vincule buckets R2 rapidamente</string>
+    <string name="whatsnew_1_6_6_0_detail">As ligações de recursos agora incluem R2: ligue um bucket existente a um Worker e desvincule como em D1 / KV.</string>
+    <string name="whatsnew_1_6_6_1_title">Edição mais fluida de scripts longos</string>
+    <string name="whatsnew_1_6_6_1_detail">Refizemos o tratamento de entrada do editor de código do Worker para escrever sem bloqueios em scripts longos.</string>
     <string name="whatsnew_1_6_5_0_title">Acesso direto ao subdomínio workers.dev</string>
     <string name="whatsnew_1_6_5_0_detail">Quando o subdomínio workers.dev de um Worker está ativo, o URL completo aparece ali — toque para abrir.</string>
     <string name="whatsnew_1_6_5_1_title">Vincule D1 / KV rapidamente</string>

@@ -218,6 +218,11 @@ nonisolated struct AIModel: Codable, Identifiable, Sendable {
     /// 模型短名（去掉 @cf/ 前缀的最后一段）
     var shortName: String { (name ?? id).split(separator: "/").last.map(String.init) ?? (name ?? id) }
     var taskName:  String { task?.name ?? "" }
+
+    /// 文本生成类模型（chat / instruct）
+    var isTextGen:  Bool { taskName == "Text Generation" }
+    /// 文生图类模型（Cloudflare 目录里 task name 为 `Text-to-Image`）
+    var isImageGen: Bool { taskName == "Text-to-Image" }
 }
 
 nonisolated struct AITask: Codable, Sendable {
@@ -230,6 +235,16 @@ nonisolated struct AITask: Codable, Sendable {
 nonisolated struct AIChatMessage: Codable, Sendable {
     let role:    String
     let content: String
+}
+
+/// 文生图请求体（各模型通用的最小集：只发 prompt，其余走模型默认值）
+nonisolated struct AIImageGenRequest: Codable, Sendable {
+    let prompt: String
+}
+
+/// 部分文生图模型不返回二进制，而是返回 CF 标准信封 + base64 图片（如 flux 系列）
+nonisolated struct AIImageGenResult: Codable, Sendable {
+    let image: String?
 }
 
 /// 单轮对话请求体（instruct / chat 类模型通用）

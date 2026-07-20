@@ -44,6 +44,13 @@ struct ZoneDetailView: View {
         ))
     }
 
+    /// 跨资源类型的置顶存储（域名的固定状态以它为准，CachedZone.pinned 仅作镜像）
+    private let pinnedStore = PinnedResourceStore.shared
+
+    private var isPinned: Bool {
+        pinnedStore.isPinned(PinnedResource(type: .zone, resourceId: zone.id), accountId: zone.accountId)
+    }
+
     private var canReadSettings: Bool { auth.hasScope("zone-settings.read") }
     private var canEditSettings: Bool { auth.hasScope("zone-settings.write") }
     private var canPurge: Bool { auth.hasScope("cache.purge") }
@@ -289,10 +296,16 @@ struct ZoneDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(zone.pinned ? String(localized: "取消固定") : String(localized: "固定到首页"),
-                       systemImage: zone.pinned ? "pin.fill" : "pin") {
+                // 置顶以 PinnedResourceStore 为准（跨资源类型统一）；同时把旧的
+                // CachedZone.pinned 字段镜像写回，老数据/其它入口读它时不至于分裂。
+                Button(isPinned ? String(localized: "取消固定") : String(localized: "固定到首页"),
+                       systemImage: isPinned ? "pin.fill" : "pin") {
+                    let nowPinned = pinnedStore.toggle(
+                        PinnedResource(type: .zone, resourceId: zone.id),
+                        accountId: zone.accountId
+                    )
                     withAnimation(.smooth) {
-                        zone.pinned.toggle()
+                        zone.pinned = nowPinned
                     }
                     SafeCache.perform("pin 状态保存") { try modelContext.save() }
                 }

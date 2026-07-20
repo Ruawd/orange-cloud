@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">すべてのリソースをまとめて検索</string>
+    <string name="whatsnew_1_7_0_0_detail">概要ページの虫めがねから、ドメイン・Worker・R2 バケット・D1 データベース・KV ネームスペース・トンネルをまとめて検索でき、タップですぐ移動できます。どのリソースもスターを付けて概要ページに固定できます。</string>
+    <string name="whatsnew_1_7_0_1_title">アラートセンター</string>
+    <string name="whatsnew_1_7_0_1_detail">概要ページに、注意が必要なリソース（有効になっていないドメイン、状態が異常なトンネルなど）をまとめるカードを追加しました。タップするとその場所へ移動します。</string>
+    <string name="whatsnew_1_7_0_2_title">リアルタイムログが使いやすく</string>
+    <string name="whatsnew_1_7_0_2_detail">Worker のリアルタイムログでキーワード検索とレベル絞り込みができるようになりました。長押しで 1 行コピー、タップで詳細を開いて一部を選択できます。「一時停止」は表示を止めるだけになり、ログは受信し続けるため再開後もすべて確認できます。</string>
+    <string name="whatsnew_1_7_0_3_title">SQL の履歴とお気に入り</string>
+    <string name="whatsnew_1_7_0_3_detail">D1 は直近 12 件のクエリを自動で記録し、よく使う文はお気に入りに登録できます（データベースごとに保存）。結果はワンタップで CSV に書き出せ、テーブル詳細ではインデックスも確認できます。</string>
+    <string name="whatsnew_1_7_0_4_title">Workers AI で画像生成</string>
+    <string name="whatsnew_1_7_0_4_detail">モデルの試し実行が画像生成モデルに対応。プロンプトを入力するだけで画像ができ、共有や保存もできます。</string>
+    <string name="whatsnew_1_7_0_5_title">R2 オブジェクトのプレビュー</string>
+    <string name="whatsnew_1_7_0_5_detail">R2 のオブジェクトをタップするとその場でプレビューできます。画像はそのまま表示、JSON は自動で整形、テキストは検索して一致件数も表示します。大きすぎるオブジェクトはこれまでどおりダウンロードをおすすめします。</string>
+    <string name="whatsnew_1_6_6_0_title">R2 バケットをすばやくバインド</string>
+    <string name="whatsnew_1_6_6_0_detail">リソースバインディングに R2 を追加。既存のバケットを Worker にバインドでき、D1 / KV と同様に解除もできます。</string>
+    <string name="whatsnew_1_6_6_1_title">長いスクリプトの編集が滑らかに</string>
+    <string name="whatsnew_1_6_6_1_detail">Worker コードエディタの入力処理を作り直し、長いスクリプトでも入力が滑らかになりました。</string>
     <string name="whatsnew_1_6_5_0_title">workers.dev サブドメインに直接アクセス</string>
     <string name="whatsnew_1_6_5_0_detail">Worker の workers.dev サブドメインを有効にすると、完全な URL が表示され、タップして開けます。</string>
     <string name="whatsnew_1_6_5_1_title">D1 / KV をすばやくバインド</string>

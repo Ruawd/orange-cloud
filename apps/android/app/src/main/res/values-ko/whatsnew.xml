@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">모든 리소스를 한 곳에서 검색</string>
+    <string name="whatsnew_1_7_0_0_detail">개요 화면 상단의 돋보기로 도메인, Worker, R2 버킷, D1 데이터베이스, KV 네임스페이스, 터널을 한 번에 검색하고 바로 이동할 수 있습니다. 이제 어떤 리소스든 별표로 개요 화면에 고정할 수 있습니다.</string>
+    <string name="whatsnew_1_7_0_1_title">알림 센터</string>
+    <string name="whatsnew_1_7_0_1_detail">개요 화면에 주의가 필요한 리소스(활성화되지 않은 도메인, 상태가 비정상인 터널 등)를 모아 보여주는 카드가 추가되었습니다. 탭하면 바로 이동합니다.</string>
+    <string name="whatsnew_1_7_0_2_title">실시간 로그 개선</string>
+    <string name="whatsnew_1_7_0_2_detail">Worker 실시간 로그에서 키워드 검색과 레벨 필터를 쓸 수 있습니다. 길게 눌러 한 줄을 복사하고, 탭하면 전체 내용을 펼쳐 일부만 선택할 수도 있습니다. 일시정지는 이제 화면만 멈추고 로그는 계속 수신되어 재개하면 빠짐없이 확인할 수 있습니다.</string>
+    <string name="whatsnew_1_7_0_3_title">SQL 기록과 즐겨찾기</string>
+    <string name="whatsnew_1_7_0_3_detail">D1이 최근 12개의 쿼리를 자동으로 기록하고, 자주 쓰는 문장은 즐겨찾기에 담을 수 있습니다(데이터베이스별로 저장). 결과는 한 번에 CSV로 내보낼 수 있고, 테이블 상세에서 인덱스도 볼 수 있습니다.</string>
+    <string name="whatsnew_1_7_0_4_title">Workers AI로 이미지 생성</string>
+    <string name="whatsnew_1_7_0_4_detail">모델 시험 실행이 이미지 생성 모델을 지원합니다. 프롬프트를 입력하면 바로 이미지가 만들어지고, 공유하거나 저장할 수 있습니다.</string>
+    <string name="whatsnew_1_7_0_5_title">R2 오브젝트 미리보기</string>
+    <string name="whatsnew_1_7_0_5_detail">R2 오브젝트를 탭하면 바로 미리 볼 수 있습니다. 이미지는 그대로 표시되고 JSON은 자동으로 정렬되며, 텍스트는 검색과 일치 개수 표시를 지원합니다. 너무 큰 오브젝트는 다운로드를 안내합니다.</string>
+    <string name="whatsnew_1_6_6_0_title">R2 버킷 빠른 바인딩</string>
+    <string name="whatsnew_1_6_6_0_detail">리소스 바인딩에 R2가 추가되었습니다. 기존 버킷을 Worker에 연결하고 D1 / KV처럼 해제할 수 있습니다.</string>
+    <string name="whatsnew_1_6_6_1_title">긴 스크립트 편집이 더 부드럽게</string>
+    <string name="whatsnew_1_6_6_1_detail">Worker 코드 편집기의 입력 처리를 재구성해 긴 스크립트에서도 입력이 부드럽습니다.</string>
     <string name="whatsnew_1_6_5_0_title">workers.dev 서브도메인 바로 열기</string>
     <string name="whatsnew_1_6_5_0_detail">Worker의 workers.dev 서브도메인을 켜면 전체 주소가 바로 표시되며, 탭하면 열립니다.</string>
     <string name="whatsnew_1_6_5_1_title">D1 / KV 빠른 바인딩</string>

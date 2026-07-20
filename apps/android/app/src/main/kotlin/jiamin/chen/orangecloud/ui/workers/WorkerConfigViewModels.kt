@@ -8,6 +8,7 @@ import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
 import jiamin.chen.orangecloud.data.model.D1Database
 import jiamin.chen.orangecloud.data.model.KVNamespace
+import jiamin.chen.orangecloud.data.model.R2Bucket
 import jiamin.chen.orangecloud.data.model.ScopedWorkerRoute
 import jiamin.chen.orangecloud.data.model.WorkerBinding
 import jiamin.chen.orangecloud.data.model.WorkerBindingInput
@@ -39,15 +40,17 @@ data class WorkerBindingsUiState(
     val canWrite: Boolean = false,
     val canReadD1: Boolean = false,
     val canReadKV: Boolean = false,
+    val canReadR2: Boolean = false,
     // 快速绑定用可选资源（打开绑定选择器时惰性加载）
     val d1Databases: List<D1Database> = emptyList(),
     val kvNamespaces: List<KVNamespace> = emptyList(),
+    val r2Buckets: List<R2Bucket> = emptyList(),
     val loadingResources: Boolean = false,
     val boundNames: Set<String> = emptySet(),
     val error: String? = null,
 ) {
     /** 能读到至少一类资源、且可写脚本，才提供快速绑定入口。 */
-    val canBind: Boolean get() = canWrite && (canReadD1 || canReadKV)
+    val canBind: Boolean get() = canWrite && (canReadD1 || canReadKV || canReadR2)
 }
 
 /**
@@ -67,10 +70,13 @@ class WorkerBindingsViewModel @Inject constructor(
     private val canWrite = authRepository.hasScope(Scopes.WORKERS_WRITE)
     private val canReadD1 = authRepository.hasScope(Scopes.D1_READ)
     private val canReadKV = authRepository.hasScope(Scopes.KV_READ)
+    private val canReadR2 = authRepository.hasScope(Scopes.R2_READ)
     private var settings: WorkerSettings? = null
     private var resourcesLoaded = false
 
-    private val _uiState = MutableStateFlow(WorkerBindingsUiState(canWrite = canWrite, canReadD1 = canReadD1, canReadKV = canReadKV))
+    private val _uiState = MutableStateFlow(
+        WorkerBindingsUiState(canWrite = canWrite, canReadD1 = canReadD1, canReadKV = canReadKV, canReadR2 = canReadR2)
+    )
     val uiState: StateFlow<WorkerBindingsUiState> = _uiState.asStateFlow()
 
     init { load() }
@@ -183,7 +189,8 @@ class WorkerBindingsViewModel @Inject constructor(
                 val accountId = accountId()
                 val d1 = if (canReadD1) runCatching { storageRepository.listDatabases(accountId) }.getOrDefault(emptyList()) else emptyList()
                 val kv = if (canReadKV) runCatching { storageRepository.listNamespaces(accountId) }.getOrDefault(emptyList()) else emptyList()
-                _uiState.update { it.copy(d1Databases = d1, kvNamespaces = kv) }
+                val r2 = if (canReadR2) runCatching { storageRepository.listBuckets(accountId) }.getOrDefault(emptyList()) else emptyList()
+                _uiState.update { it.copy(d1Databases = d1, kvNamespaces = kv, r2Buckets = r2) }
                 resourcesLoaded = true
             } finally {
                 _uiState.update { it.copy(loadingResources = false) }

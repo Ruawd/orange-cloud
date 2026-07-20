@@ -1,5 +1,6 @@
 package jiamin.chen.orangecloud.ui.storage
 
+import android.content.Intent
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,16 +16,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.TableRows
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -36,16 +43,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jiamin.chen.orangecloud.R
@@ -56,6 +67,10 @@ import jiamin.chen.orangecloud.core.design.rememberSkyPhase
 import jiamin.chen.orangecloud.core.design.theme.OcOrange
 import jiamin.chen.orangecloud.data.model.D1Database
 import jiamin.chen.orangecloud.data.model.tailDisplayText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,13 +174,47 @@ fun D1QueryScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val droppedMsg = stringResource(R.string.d1_table_dropped)
     val errMsg = stringResource(R.string.error_generic)
+    val favTooLongMsg = stringResource(R.string.d1_favorite_too_long)
+    val favFullMsg = stringResource(R.string.d1_favorite_full, D1QueryPrefs.MAX_FAVORITES)
+    val exportFailedMsg = stringResource(R.string.d1_export_failed)
+    val exportShareTitle = stringResource(R.string.d1_export_share)
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
                 D1QueryEvent.TableDropped -> { toDropTable = null; snackbarHostState.showSnackbar(droppedMsg) }
+                D1QueryEvent.FavoriteTooLong -> snackbarHostState.showSnackbar(favTooLongMsg)
+                D1QueryEvent.FavoriteFull -> snackbarHostState.showSnackbar(favFullMsg)
                 is D1QueryEvent.Error -> snackbarHostState.showSnackbar(event.message ?: errMsg)
             }
+        }
+    }
+
+    /** 导出**当前已加载**的结果集为 CSV，经 FileProvider 走系统分享。不会重新发查询。 */
+    fun exportCsv(columns: List<String>, rows: List<Map<String, kotlinx.serialization.json.JsonElement>>) {
+        scope.launch {
+            val uri = withContext(Dispatchers.IO) {
+                runCatching {
+                    val dir = File(context.cacheDir, "exports").apply { mkdirs() }
+                    val base = sanitizeFileName(viewModel.databaseName, "d1")
+                    val file = File(dir, "$base-query.csv")
+                    file.writeText(buildCsv(columns, rows))
+                    FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                }.getOrNull()
+            }
+            if (uri == null) {
+                snackbarHostState.showSnackbar(exportFailedMsg)
+                return@launch
+            }
+            val send = Intent(Intent.ACTION_SEND).apply {
+                type = "text/csv"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            runCatching { context.startActivity(Intent.createChooser(send, exportShareTitle)) }
+                .onFailure { snackbarHostState.showSnackbar(exportFailedMsg) }
         }
     }
 
@@ -213,6 +262,14 @@ fun D1QueryScreen(
                     Spacer(Modifier.height(4.dp))
                 }
 
+                // 收藏 / 最近执行：横滑 chip，点击回填到 SQL 框（均已落盘，按库分键）
+                if (state.favorites.isNotEmpty()) {
+                    SqlChipRow(stringResource(R.string.d1_favorites), state.favorites, onSky) { sql = it }
+                }
+                if (state.history.isNotEmpty()) {
+                    SqlChipRow(stringResource(R.string.d1_history), state.history, onSky) { sql = it }
+                }
+
                 OutlinedTextField(
                     value = sql,
                     onValueChange = { sql = it },
@@ -220,23 +277,57 @@ fun D1QueryScreen(
                     textStyle = MaterialTheme.typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
                     modifier = Modifier.fillMaxWidth().height(140.dp),
                 )
-                Button(
-                    onClick = { viewModel.run(sql) },
-                    enabled = !state.isRunning && sql.isNotBlank(),
-                    colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    if (state.isRunning) {
-                        CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
-                        Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = { viewModel.run(sql) },
+                        enabled = !state.isRunning && sql.isNotBlank(),
+                        colors = ButtonDefaults.buttonColors(containerColor = OcOrange, contentColor = Color.White),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        if (state.isRunning) {
+                            CircularProgressIndicator(Modifier.height(18.dp).width(18.dp), strokeWidth = 2.dp, color = Color.White)
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        Text(stringResource(R.string.d1_run))
                     }
-                    Text(stringResource(R.string.d1_run))
+                    val isFavorite = state.favorites.contains(sql.trim())
+                    IconButton(onClick = { viewModel.toggleFavorite(sql) }, enabled = sql.isNotBlank()) {
+                        Icon(
+                            if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                            contentDescription = stringResource(
+                                if (isFavorite) R.string.d1_favorite_remove else R.string.d1_favorite_add,
+                            ),
+                            tint = OcOrange,
+                        )
+                    }
                 }
                 state.error?.let {
                     Text(it, color = Color(0xFFE5484D), fontSize = 13.sp, fontFamily = FontFamily.Monospace)
                 }
                 if (state.columns.isNotEmpty()) {
-                    ResultsTable(state.columns, state.results.firstOrNull()?.results.orEmpty())
+                    val rows = state.results.firstOrNull()?.results.orEmpty()
+                    ResultsTable(state.columns, rows)
+                    OutlinedButton(
+                        onClick = { exportCsv(state.columns, rows) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(
+                            Icons.Outlined.Share,
+                            contentDescription = null,
+                            modifier = Modifier.height(18.dp).width(18.dp),
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.d1_export_csv))
+                    }
+                    Text(
+                        stringResource(R.string.d1_export_hint),
+                        color = onSky.copy(alpha = 0.7f),
+                        fontSize = 12.sp,
+                    )
                 } else if (state.results.isNotEmpty() && state.error == null) {
                     val meta = state.results.first().meta
                     Text(
@@ -258,6 +349,44 @@ fun D1QueryScreen(
             onConfirm = { viewModel.dropTable(table) },
             onDismiss = { toDropTable = null },
         )
+    }
+}
+
+/** 一行可横滑的 SQL chip（收藏 / 最近执行）。点击回填到编辑框。 */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SqlChipRow(
+    label: String,
+    items: List<String>,
+    onSky: Color,
+    onPick: (String) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(
+            label,
+            color = onSky.copy(alpha = 0.85f),
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items.forEach { entry ->
+                AssistChip(
+                    onClick = { onPick(entry) },
+                    label = {
+                        Text(
+                            entry.replace('\n', ' ').take(48),
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily.Monospace,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    },
+                )
+            }
+        }
     }
 }
 

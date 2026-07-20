@@ -49,6 +49,7 @@ import jiamin.chen.orangecloud.R
 import jiamin.chen.orangecloud.core.design.SkyBackground
 import jiamin.chen.orangecloud.core.design.SkyPhase
 import jiamin.chen.orangecloud.ui.analytics.ZoneAnalyticsScreen
+import jiamin.chen.orangecloud.ui.dashboard.DashboardResourceType
 import jiamin.chen.orangecloud.ui.dashboard.DashboardScreen
 import jiamin.chen.orangecloud.ui.dns.DnsListScreen
 import jiamin.chen.orangecloud.ui.network.TunnelDetailScreen
@@ -333,6 +334,25 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
         route?.let { navController.navigate(it) }
     }
 
+    // Dashboard 置顶 / 命令搜索 / 告警的统一跳转：六类资源 → 已有 Dest（不另造路由体系）。
+    // title 用于 zone/D1/KV/隧道 这些「路由带展示名」的页面，取自当前目录的现查名称。
+    val openResource: (DashboardResourceType, String, String) -> Unit = { type, id, title ->
+        val route = when (type) {
+            DashboardResourceType.ZONE -> Dest.zoneDetail(id, title)
+            DashboardResourceType.WORKER -> Dest.worker(id)
+            DashboardResourceType.R2_BUCKET -> Dest.r2Objects(id)
+            DashboardResourceType.D1_DATABASE -> Dest.d1Query(id, title)
+            DashboardResourceType.KV_NAMESPACE -> Dest.kvKeys(id, title)
+            DashboardResourceType.TUNNEL -> Dest.tunnelDetail(id, title)
+        }
+        // 存储三类的下钻页平时只能从「存储」Tab（整页 Pro 闸门）进入，
+        // 这里直达会绕过闸门，故非 Pro 直接送付费墙；隧道详情路由自带 ProGate。
+        val needsPro = type == DashboardResourceType.R2_BUCKET ||
+            type == DashboardResourceType.D1_DATABASE ||
+            type == DashboardResourceType.KV_NAMESPACE
+        navController.navigate(if (needsPro && !isPro) Dest.PAYWALL else route)
+    }
+
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             TopDestination.entries.forEach { dest ->
@@ -367,6 +387,7 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                     onAddAccount = onAddAccount,
                     onOpenRedirects = { navController.navigate(Dest.REDIRECTS) },
                     onOpenZeroTrust = { navController.navigate(Dest.ZERO_TRUST) },
+                    onOpenResource = openResource,
                 )
             }
             composable(Dest.ZERO_TRUST) {

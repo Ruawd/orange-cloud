@@ -20,15 +20,16 @@ struct WorkerSecretsView: View {
     init(accountId: String, scriptName: String, session: SessionStore) {
         _viewModel = State(initialValue: WorkerBindingsViewModel(
             service: session.workerService, d1Service: session.d1Service, kvService: session.kvService,
-            accountId: accountId, scriptName: scriptName
+            r2Service: session.r2Service, accountId: accountId, scriptName: scriptName
         ))
     }
 
     private var canWrite:   Bool { auth.hasScope("workers-scripts.write") }
     private var canReadD1:  Bool { auth.hasScope("d1.read") }
     private var canReadKV:  Bool { auth.hasScope("workers-kv-storage.read") }
+    private var canReadR2:  Bool { auth.hasScope("workers-r2.read") }
     /// 能读到至少一类资源才提供快速绑定入口
-    private var canBind:    Bool { canWrite && (canReadD1 || canReadKV) }
+    private var canBind:    Bool { canWrite && (canReadD1 || canReadKV || canReadR2) }
 
     var body: some View {
         Group {
@@ -95,7 +96,7 @@ struct WorkerSecretsView: View {
             case .bulkImport:
                 WorkerBulkImportSheet(viewModel: viewModel)
             case .bindResource:
-                WorkerBindResourceSheet(viewModel: viewModel, canReadD1: canReadD1, canReadKV: canReadKV)
+                WorkerBindResourceSheet(viewModel: viewModel, canReadD1: canReadD1, canReadKV: canReadKV, canReadR2: canReadR2)
             default:
                 WorkerValueEditorSheet(kind: kind, viewModel: viewModel)
             }
@@ -230,14 +231,14 @@ struct WorkerSecretsView: View {
                 Button {
                     sheet = .bindResource
                 } label: {
-                    Label("绑定 D1 / KV", systemImage: "plus")
+                    Label("绑定 D1 / KV / R2", systemImage: "plus")
                 }
             }
         } header: {
             Text("资源绑定")
         } footer: {
             Text(canBind
-                 ? String(localized: "可绑定既有 D1 数据库 / KV 命名空间；R2 等其它资源仍为只读，请用 Wrangler 或 Dashboard。")
+                 ? String(localized: "可绑定既有 D1 数据库 / KV 命名空间 / R2 存储桶；队列、Durable Object 等其它资源仍为只读，请用 Wrangler 或 Dashboard。")
                  : String(localized: "KV / D1 / R2 等资源绑定在此查看，编辑请用 Wrangler 或 Dashboard。"))
         }
         .glassRow()
@@ -517,7 +518,7 @@ private struct WorkerBulkImportSheet: View {
     }
 }
 
-// MARK: - 快速绑定 D1 / KV
+// MARK: - 快速绑定 D1 / KV / R2
 
 /// 绑定既有 D1 数据库 / KV 命名空间：选类型 → 选资源 → 填绑定变量名 → PATCH settings（其余绑定 inherit）
 private struct WorkerBindResourceSheet: View {
@@ -525,6 +526,7 @@ private struct WorkerBindResourceSheet: View {
     let viewModel: WorkerBindingsViewModel
     let canReadD1: Bool
     let canReadKV: Bool
+    let canReadR2: Bool
 
     @Environment(\.dismiss) private var dismiss
     @State private var kind: ResourceKind = .kv
@@ -533,9 +535,15 @@ private struct WorkerBindResourceSheet: View {
     @State private var nameEditedManually = false
 
     private enum ResourceKind: String, CaseIterable, Identifiable {
-        case kv, d1
+        case kv, d1, r2
         var id: String { rawValue }
-        var label: String { self == .kv ? "KV" : "D1" }
+        var label: String {
+            switch self {
+            case .kv: "KV"
+            case .d1: "D1"
+            case .r2: "R2"
+            }
+        }
     }
 
     /// 仅展示有读权限的类型
@@ -543,14 +551,43 @@ private struct WorkerBindResourceSheet: View {
         var kinds: [ResourceKind] = []
         if canReadKV { kinds.append(.kv) }
         if canReadD1 { kinds.append(.d1) }
+        if canReadR2 { kinds.append(.r2) }
         return kinds
     }
 
-    /// 当前类型下可选资源：(id, 显示名)
+    /// 当前类型下可选资源：(id, 显示名)。R2 按桶名引用，故 id 即桶名。
     private var options: [(id: String, title: String)] {
         switch kind {
         case .kv: viewModel.kvNamespaces.map { ($0.id, $0.title) }
         case .d1: viewModel.d1Databases.map { ($0.uuid, $0.name) }
+        case .r2: viewModel.r2Buckets.map { ($0.name, $0.name) }
+        }
+    }
+
+    /// 无可选资源时的空态文案
+    private var emptyText: String {
+        switch kind {
+        case .kv: String(localized: "该账号暂无 KV 命名空间")
+        case .d1: String(localized: "该账号暂无 D1 数据库")
+        case .r2: String(localized: "该账号暂无 R2 存储桶")
+        }
+    }
+
+    /// 资源选择器行标题
+    private var pickerLabel: String {
+        switch kind {
+        case .kv: String(localized: "命名空间")
+        case .d1: String(localized: "数据库")
+        case .r2: String(localized: "存储桶")
+        }
+    }
+
+    /// 资源选择区段头
+    private var sectionHeader: String {
+        switch kind {
+        case .kv: String(localized: "KV 命名空间")
+        case .d1: String(localized: "D1 数据库")
+        case .r2: String(localized: "R2 存储桶")
         }
     }
 
@@ -584,10 +621,9 @@ private struct WorkerBindResourceSheet: View {
                     if viewModel.loadingResources && options.isEmpty {
                         HStack { ProgressView(); Text("加载中…").foregroundStyle(.secondary) }
                     } else if options.isEmpty {
-                        Text(kind == .kv ? String(localized: "该账号暂无 KV 命名空间") : String(localized: "该账号暂无 D1 数据库"))
-                            .font(.callout).foregroundStyle(.secondary)
+                        Text(emptyText).font(.callout).foregroundStyle(.secondary)
                     } else {
-                        Picker(kind == .kv ? String(localized: "命名空间") : String(localized: "数据库"), selection: $selectedId) {
+                        Picker(pickerLabel, selection: $selectedId) {
                             Text("请选择").tag("")
                             ForEach(options, id: \.id) { option in
                                 Text(option.title).tag(option.id)
@@ -595,7 +631,7 @@ private struct WorkerBindResourceSheet: View {
                         }
                     }
                 } header: {
-                    Text(kind == .kv ? String(localized: "KV 命名空间") : String(localized: "D1 数据库"))
+                    Text(sectionHeader)
                 }
 
                 Section {
@@ -618,7 +654,7 @@ private struct WorkerBindResourceSheet: View {
                     Section { Text(error).font(.footnote).foregroundStyle(.red) }
                 }
             }
-            .navigationTitle("绑定 D1 / KV")
+            .navigationTitle("绑定 D1 / KV / R2")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -636,7 +672,7 @@ private struct WorkerBindResourceSheet: View {
             .interactiveDismissDisabled(viewModel.isSaving)
             .task {
                 kind = availableKinds.first ?? .kv
-                await viewModel.loadResources(canReadD1: canReadD1, canReadKV: canReadKV)
+                await viewModel.loadResources(canReadD1: canReadD1, canReadKV: canReadKV, canReadR2: canReadR2)
             }
             .onChange(of: selectedId) { _, newValue in
                 // 未手动改过名字时，用所选资源名推导一个合法默认绑定名
@@ -650,9 +686,11 @@ private struct WorkerBindResourceSheet: View {
 
     private func save() async {
         viewModel.error = nil
-        let resource: WorkerBindingInput = kind == .kv
-            ? .kv(name: name, namespaceId: selectedId)
-            : .d1(name: name, databaseId: selectedId)
+        let resource: WorkerBindingInput = switch kind {
+        case .kv: .kv(name: name, namespaceId: selectedId)
+        case .d1: .d1(name: name, databaseId: selectedId)
+        case .r2: .r2(name: name, bucketName: selectedId)   // R2 按桶名引用
+        }
         if await viewModel.bindResource(resource) { dismiss() }
     }
 

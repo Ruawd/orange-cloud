@@ -5,6 +5,24 @@ import jiamin.chen.orangecloud.R
 // ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。
 internal val whatsNewReleases: List<WhatsNewRelease> = listOf(
     WhatsNewRelease(
+        version = "1.7.0",
+        items = listOf(
+            WhatsNewItem(R.string.whatsnew_1_7_0_0_title, R.string.whatsnew_1_7_0_0_detail),
+            WhatsNewItem(R.string.whatsnew_1_7_0_1_title, R.string.whatsnew_1_7_0_1_detail),
+            WhatsNewItem(R.string.whatsnew_1_7_0_2_title, R.string.whatsnew_1_7_0_2_detail),
+            WhatsNewItem(R.string.whatsnew_1_7_0_3_title, R.string.whatsnew_1_7_0_3_detail),
+            WhatsNewItem(R.string.whatsnew_1_7_0_4_title, R.string.whatsnew_1_7_0_4_detail),
+            WhatsNewItem(R.string.whatsnew_1_7_0_5_title, R.string.whatsnew_1_7_0_5_detail),
+        ),
+    ),
+    WhatsNewRelease(
+        version = "1.6.6",
+        items = listOf(
+            WhatsNewItem(R.string.whatsnew_1_6_6_0_title, R.string.whatsnew_1_6_6_0_detail),
+            WhatsNewItem(R.string.whatsnew_1_6_6_1_title, R.string.whatsnew_1_6_6_1_detail),
+        ),
+    ),
+    WhatsNewRelease(
         version = "1.6.5",
         items = listOf(
             WhatsNewItem(R.string.whatsnew_1_6_5_0_title, R.string.whatsnew_1_6_5_0_detail),

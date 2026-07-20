@@ -28,8 +28,10 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.VerifiedUser
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -69,6 +71,7 @@ fun DashboardScreen(
     onAddAccount: () -> Unit,
     onOpenRedirects: () -> Unit = {},
     onOpenZeroTrust: () -> Unit = {},
+    onOpenResource: (DashboardResourceType, String, String) -> Unit = { _, _, _ -> },
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -76,6 +79,8 @@ fun DashboardScreen(
     val onSky = phase.onSky
     val cs = MaterialTheme.colorScheme
     var menuOpen by remember { mutableStateOf(false) }
+    var searchOpen by remember { mutableStateOf(false) }
+    val openResource: (DashboardResource) -> Unit = { res -> onOpenResource(res.type, res.id, res.title) }
 
     SkyBackground(phase = phase) {
         Box(Modifier.fillMaxSize()) {
@@ -92,6 +97,15 @@ fun DashboardScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(Modifier.weight(1f))
+                    // 命令搜索入口：打开时兜底触发一次目录补拉（首屏那次若失败/未跑完，这里补上）
+                    IconButton(onClick = { searchOpen = true; viewModel.ensureCatalog() }) {
+                        Icon(
+                            Icons.Outlined.Search,
+                            contentDescription = stringResource(R.string.hub_search),
+                            tint = onSky,
+                        )
+                    }
+                    Spacer(Modifier.width(4.dp))
                     Box(
                         Modifier.size(40.dp).clickable { menuOpen = true },
                         contentAlignment = Alignment.Center,
@@ -136,6 +150,9 @@ fun DashboardScreen(
                     }
                 }
 
+                // 已固定（跨资源类型置顶，横滑 chip）
+                PinnedResourceRow(pinned = state.pinned, onSky = onSky, onOpen = openResource)
+
                 // 用量模块（账号级 Workers/R2/D1/KV 用量，环形仪表 + 点开明细）
                 Spacer(Modifier.height(26.dp))
                 DashboardUsageSection(
@@ -151,6 +168,9 @@ fun DashboardScreen(
                     onSetR2Paid = { viewModel.setUsageR2Paid(it) },
                     onSetBillingDay = { viewModel.setUsageBillingDay(it) },
                 )
+
+                // 告警中心（域名未激活 / 隧道异常 / 无 Worker，全部正常显示「暂无告警」）
+                AlertCenterCard(alerts = state.alerts, onSky = onSky, onOpen = openResource)
 
                 // 最近访问
                 Row(
@@ -197,6 +217,17 @@ fun DashboardScreen(
                     QuickAction(Icons.Outlined.Link, stringResource(R.string.redirect_title), onOpenRedirects)
                     QuickAction(Icons.Outlined.VerifiedUser, stringResource(R.string.zt_title), onOpenZeroTrust)
                 }
+            }
+
+            if (searchOpen) {
+                ResourceSearchSheet(
+                    resources = state.resources,
+                    pinnedKeys = remember(state.pinned) { state.pinned.map { it.pinKey }.toSet() },
+                    loading = state.catalogLoading,
+                    onOpen = { res -> searchOpen = false; openResource(res) },
+                    onTogglePin = { res -> viewModel.togglePin(res) },
+                    onDismiss = { searchOpen = false },
+                )
             }
 
             if (menuOpen) {

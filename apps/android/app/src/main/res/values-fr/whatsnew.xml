@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_0_0_title">Tout chercher au même endroit</string>
+    <string name="whatsnew_1_7_0_0_detail">La loupe de l’aperçu recherche d’un coup les domaines, Workers, buckets R2, bases D1, espaces de noms KV et tunnels : touchez un résultat pour y aller. Et n’importe quelle ressource peut désormais être épinglée à l’aperçu.</string>
+    <string name="whatsnew_1_7_0_1_title">Centre d’alertes</string>
+    <string name="whatsnew_1_7_0_1_detail">L’aperçu regroupe désormais dans une carte ce qui mérite votre attention : domaines non activés, tunnels en état anormal, etc. Touchez pour y accéder.</string>
+    <string name="whatsnew_1_7_0_2_title">Journaux en direct améliorés</string>
+    <string name="whatsnew_1_7_0_2_detail">Les journaux en direct d’un Worker acceptent désormais la recherche par mot-clé et le filtre par niveau ; appui long pour copier toute la ligne, appui simple pour ouvrir le détail complet et en sélectionner un extrait. La pause ne fige que l’affichage : les journaux continuent d’arriver, rien ne manque à la reprise.</string>
+    <string name="whatsnew_1_7_0_3_title">Historique et favoris SQL</string>
+    <string name="whatsnew_1_7_0_3_detail">D1 conserve vos 12 dernières requêtes et permet de mettre en favori celles que vous réutilisez (par base de données). Les résultats s’exportent en CSV d’un geste, et le détail d’une table affiche désormais les index.</string>
+    <string name="whatsnew_1_7_0_4_title">Générer des images avec Workers AI</string>
+    <string name="whatsnew_1_7_0_4_detail">L’essai de modèles prend désormais en charge le texte-vers-image : saisissez une consigne, obtenez l’image, partagez-la ou enregistrez-la.</string>
+    <string name="whatsnew_1_7_0_5_title">Aperçu des objets R2</string>
+    <string name="whatsnew_1_7_0_5_detail">Touchez un objet R2 pour l’aperçu : les images s’affichent, le JSON est mis en forme automatiquement et le texte se recherche avec le nombre de correspondances. Les objets trop volumineux invitent toujours à un téléchargement.</string>
+    <string name="whatsnew_1_6_6_0_title">Lier rapidement des buckets R2</string>
+    <string name="whatsnew_1_6_6_0_detail">Les liaisons de ressources couvrent désormais R2 : rattachez un bucket existant à un Worker et dissociez-le comme D1 / KV.</string>
+    <string name="whatsnew_1_6_6_1_title">Édition plus fluide des longs scripts</string>
+    <string name="whatsnew_1_6_6_1_detail">Le traitement de la saisie de l’éditeur de code Worker a été refait pour rester fluide dans les longs scripts.</string>
     <string name="whatsnew_1_6_5_0_title">Accès direct au sous-domaine workers.dev</string>
     <string name="whatsnew_1_6_5_0_detail">Lorsque le sous-domaine workers.dev d’un Worker est activé, son URL complète s’affiche : touchez pour l’ouvrir.</string>
     <string name="whatsnew_1_6_5_1_title">Lier rapidement D1 / KV</string>

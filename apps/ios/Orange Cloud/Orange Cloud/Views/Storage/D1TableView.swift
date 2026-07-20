@@ -15,6 +15,7 @@ struct D1TableView: View {
 
     @Environment(AuthManager.self) private var auth
     @State private var viewModel: D1TableViewModel
+    @State private var indexVM: D1IndexListViewModel
     @State private var editingRow: [String: JSONValue]?
     @State private var showDenied = false
 
@@ -22,6 +23,12 @@ struct D1TableView: View {
         self.database = database
         self.tableName = tableName
         _viewModel = State(initialValue: D1TableViewModel(
+            service: session.d1Service,
+            accountId: session.selectedAccount?.id ?? "",
+            databaseId: database.uuid,
+            tableName: tableName
+        ))
+        _indexVM = State(initialValue: D1IndexListViewModel(
             service: session.d1Service,
             accountId: session.selectedAccount?.id ?? "",
             databaseId: database.uuid,
@@ -54,6 +61,8 @@ struct D1TableView: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                         .padding(.horizontal, 4)
+
+                    indexCard
                 }
                 .padding()
             }
@@ -62,6 +71,7 @@ struct D1TableView: View {
         .navigationTitle(tableName)
         .navigationBarTitleDisplayMode(.inline)
         .task { await viewModel.load() }
+        .task { await indexVM.load() }
         .refreshable { await viewModel.load() }
         .sheet(item: .init(
             get: { editingRow.map { EditingRowBox(row: $0) } },
@@ -83,6 +93,48 @@ struct D1TableView: View {
             Text(viewModel.error ?? "")
         }
         .sensoryFeedback(.success, trigger: viewModel.didSave)
+    }
+
+    // MARK: - 索引卡（PRAGMA index_list，只读补充信息）
+
+    @ViewBuilder
+    private var indexCard: some View {
+        if indexVM.loaded && !indexVM.indexes.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("索引", systemImage: "list.bullet.indent")
+                    .font(.footnote.bold())
+                    .foregroundStyle(.secondary)
+                VStack(spacing: 6) {
+                    ForEach(indexVM.indexes) { index in
+                        indexRow(index)
+                        if index.id != indexVM.indexes.last?.id {
+                            Divider()
+                        }
+                    }
+                }
+                .padding(OCLayout.islandPadding)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .glassIsland(cornerRadius: OCLayout.chipRadius)
+            }
+        }
+    }
+
+    private func indexRow(_ index: D1IndexInfo) -> some View {
+        HStack(spacing: 8) {
+            Text(index.name)
+                .font(.caption.monospaced())
+                .lineLimit(1)
+                .truncationMode(.middle)
+            Spacer(minLength: 8)
+            if index.isUnique {
+                Text(verbatim: "UNIQUE")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(Color.ocOrangeText)
+            }
+            Text(index.originLabel)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
     }
 
     // MARK: - 网格骨架（表头 + 数据行的占位条）

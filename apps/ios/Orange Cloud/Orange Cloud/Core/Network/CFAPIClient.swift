@@ -59,6 +59,15 @@ actor CFAPIClient {
         try await performRequest(method: "GET", path: path, queryItems: queryItems, body: nil, contentType: nil)
     }
 
+    /// JSON 请求体、原始响应体的 POST（Workers AI 文生图等 2xx 直接返回二进制、不走 CF 信封的端点）。
+    /// 非 2xx 仍由 performRequest 统一抛 APIError（含 CF 业务错误信息）。
+    func postRaw<B: Codable & Sendable>(_ path: String, body: B) async throws -> Data {
+        let encoded = try JSONEncoder().encode(body)
+        return try await performRequest(
+            method: "POST", path: path, queryItems: [], body: encoded, contentType: "application/json"
+        ).0
+    }
+
     /// 原始字节 PUT（R2 对象上传等），自带 Content-Type
     func putRaw<T: Codable & Sendable>(_ path: String, body: Data, contentType: String) async throws -> T {
         let (data, _) = try await performRequest(

@@ -1,9 +1,11 @@
 package jiamin.chen.orangecloud.ui.devplatform
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jiamin.chen.orangecloud.R
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
 import jiamin.chen.orangecloud.data.model.AIChatMessage
@@ -19,6 +21,7 @@ import jiamin.chen.orangecloud.data.model.HyperdriveConfig
 import jiamin.chen.orangecloud.data.model.HyperdriveCreate
 import jiamin.chen.orangecloud.data.model.HyperdriveCreateOrigin
 import jiamin.chen.orangecloud.data.model.HyperdrivePatch
+import jiamin.chen.orangecloud.data.repository.AINotImageException
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.DeveloperPlatformRepository
 import jiamin.chen.orangecloud.ui.storage.StorageListViewModel
@@ -182,7 +185,10 @@ class WorkersAIViewModel @Inject constructor(
     init { load() }
 }
 
-// MARK: - Workers AI 文本生成试运行
+// MARK: - Workers AI 试运行（文本生成 / 文生图）
+
+/** 生成的图片原始字节。刻意不用 data class：每次生成都是新实例，StateFlow 靠引用变化推送。 */
+class AIImagePayload(val bytes: ByteArray)
 
 data class AIRunUiState(
     val model: String = "",
@@ -191,11 +197,20 @@ data class AIRunUiState(
     val canRun: Boolean = false,
     val prompt: String = "",
     val response: String = "",
+    val image: AIImagePayload? = null,
     val isRunning: Boolean = false,
     val error: String? = null,
+    /** 需本地化的错误（如「返回的不是图片」），与 error 可叠加展示。 */
+    @StringRes val errorRes: Int? = null,
 ) {
-    /** 仅文本生成模型可在 App 内试运行（输入/输出契约与 iOS 一致）。 */
+    /** 文本生成模型（task name = Text Generation）。 */
     val isTextGen: Boolean get() = task.contains("Text Generation", ignoreCase = true)
+
+    /** 文生图模型（task name = Text-to-Image）。 */
+    val isTextToImage: Boolean get() = task.contains("Text-to-Image", ignoreCase = true)
+
+    /** 能在 App 内试运行的模型类型。 */
+    val isRunnable: Boolean get() = isTextGen || isTextToImage
 }
 
 @HiltViewModel
@@ -221,16 +236,24 @@ class AIRunViewModel @Inject constructor(
     fun updatePrompt(text: String) = _uiState.update { it.copy(prompt = text) }
 
     fun run() {
-        val prompt = _uiState.value.prompt
-        if (prompt.isBlank() || _uiState.value.isRunning) return
-        _uiState.update { it.copy(isRunning = true, error = null, response = "") }
+        val snapshot = _uiState.value
+        val prompt = snapshot.prompt
+        if (prompt.isBlank() || snapshot.isRunning) return
+        _uiState.update { it.copy(isRunning = true, error = null, errorRes = null, response = "", image = null) }
         viewModelScope.launch {
             try {
                 accountStore.ensureLoaded()
                 val accountId = accountStore.selectedAccountId.value ?: error("no account")
-                val messages = listOf(AIChatMessage(role = "user", content = prompt))
-                val response = repository.runTextGeneration(accountId, model, messages)
-                _uiState.update { it.copy(response = response) }
+                if (snapshot.isTextToImage) {
+                    val bytes = repository.runTextToImage(accountId, model, prompt)
+                    _uiState.update { it.copy(image = AIImagePayload(bytes)) }
+                } else {
+                    val messages = listOf(AIChatMessage(role = "user", content = prompt))
+                    val response = repository.runTextGeneration(accountId, model, messages)
+                    _uiState.update { it.copy(response = response) }
+                }
+            } catch (e: AINotImageException) {
+                _uiState.update { it.copy(errorRes = R.string.dev_ai_image_not_image, error = e.detail) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message ?: "error") }
             } finally {

@@ -16,9 +16,11 @@ import jiamin.chen.orangecloud.data.model.R2Object
 import jiamin.chen.orangecloud.data.model.D1Column
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.StorageRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -240,6 +242,8 @@ sealed interface R2Event {
     data object Copied : R2Event
     data object Moved : R2Event
     data object MoveVerifyFailed : R2Event
+    /** 预览失败/类型不支持：不静默，弹 snackbar 提示改用下载。 */
+    data object PreviewUnsupported : R2Event
     data class Error(val message: String?) : R2Event
 }
 
@@ -284,8 +288,75 @@ class R2ObjectListViewModel @Inject constructor(
     private val eventChannel = Channel<R2Event>(Channel.BUFFERED)
     val events: Flow<R2Event> = eventChannel.receiveAsFlow()
 
+    /** 详情页内联预览（图片 / JSON / 文本），与下载并打开互不干扰。 */
+    private val _previewState = MutableStateFlow(R2PreviewState())
+    val previewState: StateFlow<R2PreviewState> = _previewState.asStateFlow()
+
     init {
         if (hasScope) loadFirst()
+    }
+
+    /**
+     * 内联预览：先按 contentType（扩展名兜底）判类型，再按大小上限决定要不要下载——
+     * 超限直接给提示，绝不把大对象整个读进内存。图片走降采样解码，文本按 UTF-8 解码后可选 JSON 美化。
+     */
+    fun preview(obj: R2Object) {
+        val current = _previewState.value
+        if (current.key == obj.key && (current.isLoading || current.content != null)) return
+
+        val contentType = obj.httpMetadata?.contentType
+        val isImage = isImageKey(obj.key, contentType)
+        val isText = !isImage && isTextKey(obj.key, contentType)
+        if (!isImage && !isText) {
+            _previewState.value = R2PreviewState(key = obj.key, content = R2Preview.Unsupported)
+            viewModelScope.launch { eventChannel.send(R2Event.PreviewUnsupported) }
+            return
+        }
+
+        val limit = if (isImage) R2_IMAGE_PREVIEW_MAX_BYTES else R2_TEXT_PREVIEW_MAX_BYTES
+        val size = obj.size
+        if (size != null && size > limit) {
+            _previewState.value = R2PreviewState(key = obj.key, content = R2Preview.TooLarge(size))
+            return
+        }
+
+        _previewState.value = R2PreviewState(key = obj.key, isLoading = true)
+        viewModelScope.launch {
+            accountStore.ensureLoaded()
+            val accountId = accountStore.selectedAccountId.value
+            val bytes = if (accountId == null) {
+                null
+            } else {
+                runCatching { storageRepository.getObjectBytes(accountId, bucket, obj.key) }.getOrNull()
+            }
+            val content: R2Preview = when {
+                bytes == null -> R2Preview.Failed
+                // size 缺失时的兜底：实际字节仍超限就不做解码
+                bytes.size > limit -> R2Preview.TooLarge(bytes.size.toLong())
+                else -> {
+                    val data: ByteArray = bytes
+                    withContext(Dispatchers.Default) {
+                        if (isImage) {
+                            decodeSampledBitmap(data)?.let { R2Preview.ImageContent(it) } ?: R2Preview.Unsupported
+                        } else {
+                            decodeTextPreview(data, preferJson = isJsonKey(obj.key, contentType))
+                        }
+                    }
+                }
+            }
+            // 期间用户可能换了对象，只写回仍属当前 key 的结果
+            if (_previewState.value.key == obj.key) {
+                _previewState.value = R2PreviewState(key = obj.key, content = content)
+            }
+            if (content is R2Preview.Unsupported || content is R2Preview.Failed) {
+                eventChannel.send(R2Event.PreviewUnsupported)
+            }
+        }
+    }
+
+    /** 关闭详情时清空预览（释放位图引用）。 */
+    fun clearPreview() {
+        _previewState.value = R2PreviewState()
     }
 
     fun loadFirst() {
@@ -426,6 +497,10 @@ class R2ObjectListViewModel @Inject constructor(
 
 sealed interface D1QueryEvent {
     data object TableDropped : D1QueryEvent
+    /** SQL 超长，未加入收藏。 */
+    data object FavoriteTooLong : D1QueryEvent
+    /** 收藏已满。 */
+    data object FavoriteFull : D1QueryEvent
     data class Error(val message: String?) : D1QueryEvent
 }
 
@@ -439,6 +514,10 @@ data class D1QueryUiState(
     val tablesLoaded: Boolean = false,
     val canWrite: Boolean = false,
     val droppingTable: String? = null,
+    /** 最近成功执行过的 SQL（落盘，按库分键），新的在前。 */
+    val history: List<String> = emptyList(),
+    /** 收藏的 SQL（落盘，按库分键）。 */
+    val favorites: List<String> = emptyList(),
 )
 
 @HiltViewModel
@@ -446,6 +525,7 @@ class D1QueryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val accountStore: AccountStore,
     private val storageRepository: StorageRepository,
+    private val queryPrefs: D1QueryPrefs,
     authRepository: AuthRepository,
 ) : ViewModel() {
 
@@ -463,6 +543,25 @@ class D1QueryViewModel @Inject constructor(
 
     init {
         if (hasScope) loadTables()
+        viewModelScope.launch {
+            queryPrefs.history(databaseId).collect { list -> _uiState.update { it.copy(history = list) } }
+        }
+        viewModelScope.launch {
+            queryPrefs.favorites(databaseId).collect { list -> _uiState.update { it.copy(favorites = list) } }
+        }
+    }
+
+    /** 收藏 / 取消收藏当前 SQL（落盘）。超长或已满时提示原因。 */
+    fun toggleFavorite(sql: String) {
+        val entry = sql.trim()
+        if (entry.isEmpty()) return
+        viewModelScope.launch {
+            when (queryPrefs.toggleFavorite(databaseId, entry)) {
+                D1FavoriteResult.TOO_LONG -> eventChannel.send(D1QueryEvent.FavoriteTooLong)
+                D1FavoriteResult.FULL -> eventChannel.send(D1QueryEvent.FavoriteFull)
+                D1FavoriteResult.ADDED, D1FavoriteResult.REMOVED -> Unit
+            }
+        }
     }
 
     /** 用户表清单（排除 sqlite_* 与 D1 内部 _cf_* 表），对齐 iOS D1QueryViewModel.loadTables。 */
@@ -492,6 +591,8 @@ class D1QueryViewModel @Inject constructor(
                 val results = storageRepository.query(accountId, databaseId, sql.trim())
                 val columns = results.firstOrNull()?.results?.firstOrNull()?.keys?.toList().orEmpty()
                 _uiState.update { it.copy(results = results, columns = columns) }
+                // 仅成功执行才进历史
+                queryPrefs.addHistory(databaseId, sql)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message ?: "error", results = emptyList(), columns = emptyList()) }
             } finally {
@@ -534,6 +635,9 @@ sealed interface D1RowEvent {
 
 data class D1TableUiState(
     val columns: List<D1Column> = emptyList(),
+    /** PRAGMA index_list 读出的索引（失败/无索引即空列表，不阻塞行数据）。 */
+    val indexes: List<D1IndexInfo> = emptyList(),
+    val indexesLoaded: Boolean = false,
     val rows: List<Map<String, JsonElement>> = emptyList(),
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
@@ -597,6 +701,7 @@ class D1TableViewModel @Inject constructor(
                 offset = 0
                 val (rows, more) = fetchPage(accountId, 0)
                 _uiState.update { it.copy(columns = columns, rows = rows, hasMore = more) }
+                loadIndexes(accountId)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message ?: "error") }
             } finally {
@@ -620,6 +725,27 @@ class D1TableViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
+    }
+
+    /**
+     * 索引清单：PRAGMA index_list（表名走 quoted 转义防注入）。
+     * 属于附加信息，失败只置 loaded 不报错，不影响行数据。
+     */
+    private suspend fun loadIndexes(accountId: String) {
+        val indexes = runCatching {
+            storageRepository.query(accountId, databaseId, "PRAGMA index_list($quotedTable)")
+                .firstOrNull()?.results.orEmpty()
+                .mapNotNull { row ->
+                    val name = (row["name"] as? JsonPrimitive)?.content ?: return@mapNotNull null
+                    D1IndexInfo(
+                        name = name,
+                        unique = ((row["unique"] as? JsonPrimitive)?.content ?: "0") != "0",
+                        origin = (row["origin"] as? JsonPrimitive)?.content.orEmpty(),
+                        partial = ((row["partial"] as? JsonPrimitive)?.content ?: "0") != "0",
+                    )
+                }
+        }.getOrDefault(emptyList())
+        _uiState.update { it.copy(indexes = indexes, indexesLoaded = true) }
     }
 
     /** 多取 1 行判断是否还有下一页（对齐 iOS fetchPage）。 */
