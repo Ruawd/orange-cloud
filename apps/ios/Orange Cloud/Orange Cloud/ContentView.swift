@@ -56,6 +56,7 @@ private struct SessionRootView: View {
             .environment(session)
             .whatsNewSheet()
             .telemetryConsentPrompt()
+            .ratingPrompt()
     }
 }
 

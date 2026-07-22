@@ -10,7 +10,7 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
-        WhatsNewRelease(version: "1.9.0", items: [
+        WhatsNewRelease(version: "1.9.1", items: [
             WhatsNewItem(
                 icon:   "magnifyingglass",
                 title:  String(localized: "一处搜遍所有资源", table: "WhatsNew"),

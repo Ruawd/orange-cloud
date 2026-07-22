@@ -144,6 +144,7 @@ struct TelemetryConsentModifier: ViewModifier {
                 try? await Task.sleep(for: .seconds(2))
                 guard !WhatsNewGate.presentedThisLaunch,
                       telemetry.consent == .unasked else { return }
+                WhatsNewGate.presentedThisLaunch = true   // 占位：评分邀请等打扰本次让路
                 showAsk = true
             }
             .alert("加入体验者计划？", isPresented: $showAsk) {
