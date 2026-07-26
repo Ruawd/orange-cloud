@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">記住你的預設帳戶</string>
+    <string name="whatsnew_1_7_1_0_detail">有多個 Cloudflare 帳戶時，App 會記住你上次選的那一個，下次打開直接進入它，不再固定回到列表裡的第一個。</string>
+    <string name="whatsnew_1_7_1_1_title">修正帳戶切換菜單</string>
+    <string name="whatsnew_1_7_1_1_detail">帳戶較多時，切換菜單現在可以上下滑動並完整顯示所有帳戶，「新增帳戶」也不會再被擠出畫面。</string>
     <string name="whatsnew_1_7_0_0_title">一處搜遍所有資源</string>
     <string name="whatsnew_1_7_0_0_detail">概覽頁頂部的放大鏡可一次搜尋域名、Worker、R2 儲存桶、D1 資料庫、KV 命名空間與隧道，點一下直達；任何資源都可以加星固定到概覽頁。</string>
     <string name="whatsnew_1_7_0_1_title">告警中心</string>

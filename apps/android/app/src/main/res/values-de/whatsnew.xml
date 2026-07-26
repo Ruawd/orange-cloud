@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">Merkt sich dein Standardkonto</string>
+    <string name="whatsnew_1_7_1_0_detail">Bei mehreren Cloudflare-Konten merkt sich die App das zuletzt gewählte Konto und startet direkt damit – statt immer auf das erste Konto der Liste zurückzufallen.</string>
+    <string name="whatsnew_1_7_1_1_title">Korrekturen am Kontowechsel-Menü</string>
+    <string name="whatsnew_1_7_1_1_detail">Bei vielen Konten lässt sich das Menü jetzt scrollen und zeigt alle Konten; „Konto hinzufügen“ wird nicht mehr aus dem Bild geschoben.</string>
     <string name="whatsnew_1_7_0_0_title">Alles an einer Stelle suchen</string>
     <string name="whatsnew_1_7_0_0_detail">Über die Lupe in der Übersicht durchsuchst du Domains, Workers, R2-Buckets, D1-Datenbanken, KV-Namespaces und Tunnel auf einmal – ein Tippen führt direkt hin. Und jede Ressource lässt sich per Stern an die Übersicht heften.</string>
     <string name="whatsnew_1_7_0_1_title">Warnungszentrale</string>

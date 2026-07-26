@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">记住你的默认账号</string>
+    <string name="whatsnew_1_7_1_0_detail">有多个 Cloudflare 账号时，App 会记住你上次选中的那一个，下次打开直接进入它，不再固定回到列表里的第一个。</string>
+    <string name="whatsnew_1_7_1_1_title">修复账号切换菜单</string>
+    <string name="whatsnew_1_7_1_1_detail">账号较多时，切换菜单现在可以上下滑动并完整显示所有账号，「添加账号」也不会再被挤出屏幕。</string>
     <string name="whatsnew_1_7_0_0_title">一处搜遍所有资源</string>
     <string name="whatsnew_1_7_0_0_detail">概览页顶栏的放大镜可一次搜索域名、Worker、R2 存储桶、D1 数据库、KV 命名空间与隧道，点一下直达；任意资源都能星标固定到概览页。</string>
     <string name="whatsnew_1_7_0_1_title">告警中心</string>

@@ -543,6 +543,13 @@ final class AuthManager {
         }
     }
 
+    // MARK: - 身份级偏好键
+
+    /// 该身份「默认进入的账号」的 UserDefaults 键（SessionStore 读写，身份移除时清）
+    nonisolated static func defaultAccountKey(_ sessionId: UUID) -> String {
+        "defaultAccountId_\(sessionId.uuidString)"
+    }
+
     // MARK: - 退出单个身份
 
     func logout(sessionId: UUID, revoke: Bool = true) async {
@@ -576,6 +583,8 @@ final class AuthManager {
         TokenStore.clear(sessionId: id)
         AuthDiagnostics.clearBaseline(id)
         sessionsNeedingReauth.remove(id)
+        // 该身份记住的默认账号一并清掉，重新登录不带上一轮的选择
+        UserDefaults.standard.removeObject(forKey: Self.defaultAccountKey(id))
         sessions.removeAll { $0.id == id }
         AppLog.auth.notice("session removed=\(id.uuidString) remaining=\(sessions.count)")
         if currentSessionId == id {

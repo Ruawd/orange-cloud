@@ -2,6 +2,7 @@ package jiamin.chen.orangecloud.data.repository
 
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.di.ApplicationScope
+import jiamin.chen.orangecloud.core.system.AppPrefs
 import jiamin.chen.orangecloud.data.model.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +26,9 @@ import javax.inject.Singleton
 @Singleton
 class AccountStore @Inject constructor(
     private val accountRepository: AccountRepository,
-    authRepository: AuthRepository,
-    @ApplicationScope externalScope: CoroutineScope,
+    private val authRepository: AuthRepository,
+    private val appPrefs: AppPrefs,
+    @ApplicationScope private val externalScope: CoroutineScope,
 ) {
     private val _accounts = MutableStateFlow<List<Account>>(emptyList())
     val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
@@ -82,14 +84,22 @@ class AccountStore @Inject constructor(
     fun select(accountId: String) {
         if (_accounts.value.any { it.id == accountId }) {
             _selectedAccountId.value = accountId
+            // 记住这个身份的默认账号，下次冷启动直接进它（issue #71）
+            val sessionId = authRepository.state.value.currentSessionId
+            if (sessionId != null) {
+                externalScope.launch { appPrefs.setDefaultAccountId(sessionId, accountId) }
+            }
         }
     }
 
-    private fun applyAccounts(list: List<Account>) {
+    private suspend fun applyAccounts(list: List<Account>) {
         _accounts.value = list
         val current = _selectedAccountId.value
         if (current == null || list.none { it.id == current }) {
-            _selectedAccountId.value = list.firstOrNull()?.id
+            // 优先用用户上次选定的默认账号，落空（首次登录 / 账号已被移除）才回退列表第一个
+            val sessionId = authRepository.state.value.currentSessionId
+            val preferred = sessionId?.let { id -> appPrefs.defaultAccountId(id) }
+            _selectedAccountId.value = list.firstOrNull { it.id == preferred }?.id ?: list.firstOrNull()?.id
         }
         loaded = list.isNotEmpty()
     }

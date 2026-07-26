@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">Remembers your default account</string>
+    <string name="whatsnew_1_7_1_0_detail">With more than one Cloudflare account, the app now remembers the one you picked last and opens straight into it, instead of always falling back to the first in the list.</string>
+    <string name="whatsnew_1_7_1_1_title">Account switcher fixes</string>
+    <string name="whatsnew_1_7_1_1_detail">With a long list of accounts, the switcher now scrolls and shows every account, and “Add account” stays pinned at the bottom instead of being pushed off screen.</string>
     <string name="whatsnew_1_7_0_0_title">Search everything from one place</string>
     <string name="whatsnew_1_7_0_0_detail">The magnifier on the overview searches domains, Workers, R2 buckets, D1 databases, KV namespaces and tunnels at once — tap a result to go straight there. And any resource can now be starred to the overview.</string>
     <string name="whatsnew_1_7_0_1_title">Alert center</string>

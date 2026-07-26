@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">기본 계정을 기억합니다</string>
+    <string name="whatsnew_1_7_1_0_detail">Cloudflare 계정이 여러 개일 때 마지막으로 선택한 계정을 기억해, 다음에 열면 바로 그 계정으로 시작합니다. 더 이상 목록의 첫 번째 계정으로 돌아가지 않습니다.</string>
+    <string name="whatsnew_1_7_1_1_title">계정 전환 메뉴 수정</string>
+    <string name="whatsnew_1_7_1_1_detail">계정이 많아도 전환 메뉴를 위아래로 스크롤해 모든 계정을 볼 수 있고, ‘계정 추가’도 화면 밖으로 밀려나지 않습니다.</string>
     <string name="whatsnew_1_7_0_0_title">모든 리소스를 한 곳에서 검색</string>
     <string name="whatsnew_1_7_0_0_detail">개요 화면 상단의 돋보기로 도메인, Worker, R2 버킷, D1 데이터베이스, KV 네임스페이스, 터널을 한 번에 검색하고 바로 이동할 수 있습니다. 이제 어떤 리소스든 별표로 개요 화면에 고정할 수 있습니다.</string>
     <string name="whatsnew_1_7_0_1_title">알림 센터</string>

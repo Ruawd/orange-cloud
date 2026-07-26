@@ -3,7 +3,7 @@
 //  Orange Cloud
 //
 //  登录后的会话容器：持有 CFAPIClient 与各 Service，管理账号选择。
-//  P0 单账号场景默认选中第一个账号。
+//  默认选中该身份上次选定的账号（没有记录才退回第一个）。
 //
 
 import Foundation
@@ -50,6 +50,10 @@ final class SessionStore {
             // Widget 自取用量数据需要知道当前账户
             UserDefaults(suiteName: WidgetSnapshot.appGroupID)?
                 .set(selectedAccount?.id, forKey: "currentAccountId")
+            // 记住本身份默认进入的账号，下次冷启动直接进它（issue #71）
+            if let sessionId, let id = selectedAccount?.id {
+                UserDefaults.standard.set(id, forKey: AuthManager.defaultAccountKey(sessionId))
+            }
         }
     }
     var isLoadingAccounts = false
@@ -96,7 +100,7 @@ final class SessionStore {
         self.zoneRulesetService        = ZoneRulesetService(client: client)
     }
 
-    /// 幂等加载账号列表，首个账号设为当前账号
+    /// 幂等加载账号列表，选中上次选定的账号（没有则首个）
     func ensureAccounts() async {
         guard accounts.isEmpty, !isLoadingAccounts else { return }
         isLoadingAccounts = true
@@ -104,7 +108,11 @@ final class SessionStore {
         do {
             accounts = try await accountService.listAccounts()
             if selectedAccount == nil {
-                selectedAccount = accounts.first
+                // 优先用用户上次选定的默认账号，落空（首次登录 / 账号已被移除）才回退首个
+                let preferred = sessionId.flatMap {
+                    UserDefaults.standard.string(forKey: AuthManager.defaultAccountKey($0))
+                }
+                selectedAccount = accounts.first { $0.id == preferred } ?? accounts.first
             }
             // 登录身份的展示名同步为真实账号名（设置页与 Dashboard 一致）
             if let name = accounts.first?.name, let sessionId {

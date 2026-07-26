@@ -10,6 +10,13 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "1.9.2", items: [
+            WhatsNewItem(
+                icon:   "person.crop.circle.badge.checkmark",
+                title:  String(localized: "记住你的默认账号", table: "WhatsNew"),
+                detail: String(localized: "有多个 Cloudflare 账号时，App 会记住你上次选中的那一个，下次打开直接进入它，不再固定回到列表里的第一个。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.9.1", items: [
             WhatsNewItem(
                 icon:   "magnifyingglass",

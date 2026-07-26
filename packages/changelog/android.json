@@ -1,5 +1,79 @@
 [
   {
+    "version": "1.7.1",
+    "date": "2026.07.25",
+    "channel": "Google Play",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "person.crop.circle.badge.checkmark",
+        "title": {
+          "zh-Hans": "记住你的默认账号",
+          "en": "Remembers your default account",
+          "zh-Hant": "記住你的預設帳戶",
+          "zh-HK": "記住你的預設帳戶",
+          "ja": "既定のアカウントを記憶",
+          "es-MX": "Recuerda tu cuenta predeterminada",
+          "ko": "기본 계정을 기억합니다",
+          "pt-BR": "Lembra sua conta padrão",
+          "pt-PT": "Memoriza a sua conta predefinida",
+          "de": "Merkt sich dein Standardkonto",
+          "fr": "Retient votre compte par défaut",
+          "ar": "يتذكّر حسابك الافتراضي",
+          "tr": "Varsayılan hesabınızı hatırlar"
+        },
+        "detail": {
+          "zh-Hans": "有多个 Cloudflare 账号时，App 会记住你上次选中的那一个，下次打开直接进入它，不再固定回到列表里的第一个。",
+          "en": "With more than one Cloudflare account, the app now remembers the one you picked last and opens straight into it, instead of always falling back to the first in the list.",
+          "zh-Hant": "有多個 Cloudflare 帳戶時，App 會記住你上次選的那一個，下次打開直接進入它，不再固定回到清單裡的第一個。",
+          "zh-HK": "有多個 Cloudflare 帳戶時，App 會記住你上次選的那一個，下次打開直接進入它，不再固定回到列表裡的第一個。",
+          "ja": "Cloudflare アカウントが複数ある場合、最後に選んだアカウントを記憶し、次に開いたときはそのアカウントで始まります。常に一覧の先頭に戻ることはありません。",
+          "es-MX": "Si tienes varias cuentas de Cloudflare, la app recuerda la última que elegiste y abre directamente en ella, en lugar de volver siempre a la primera de la lista.",
+          "ko": "Cloudflare 계정이 여러 개일 때 마지막으로 선택한 계정을 기억해, 다음에 열면 바로 그 계정으로 시작합니다. 더 이상 목록의 첫 번째 계정으로 돌아가지 않습니다.",
+          "pt-BR": "Com mais de uma conta Cloudflare, o app passa a lembrar a última que você escolheu e abre direto nela, em vez de sempre voltar para a primeira da lista.",
+          "pt-PT": "Com mais do que uma conta Cloudflare, a app passa a memorizar a última que escolheu e abre diretamente nela, em vez de voltar sempre à primeira da lista.",
+          "de": "Bei mehreren Cloudflare-Konten merkt sich die App das zuletzt gewählte Konto und startet direkt damit – statt immer auf das erste Konto der Liste zurückzufallen.",
+          "fr": "Avec plusieurs comptes Cloudflare, l’app retient celui que vous avez choisi en dernier et s’ouvre directement dessus, au lieu de revenir toujours au premier de la liste.",
+          "ar": "عند وجود أكثر من حساب Cloudflare، يتذكّر التطبيق الحساب الذي اخترته آخر مرة ويفتح عليه مباشرة بدلاً من العودة دائمًا إلى أول حساب في القائمة.",
+          "tr": "Birden fazla Cloudflare hesabı varsa uygulama en son seçtiğiniz hesabı hatırlar ve doğrudan onunla açılır; artık her seferinde listedeki ilk hesaba dönmez."
+        }
+      },
+      {
+        "icon": "wrench.and.screwdriver.fill",
+        "title": {
+          "zh-Hans": "修复账号切换菜单",
+          "en": "Account switcher fixes",
+          "zh-Hant": "修正帳戶切換選單",
+          "zh-HK": "修正帳戶切換菜單",
+          "ja": "アカウント切り替えメニューの修正",
+          "es-MX": "Correcciones en el menú de cuentas",
+          "ko": "계정 전환 메뉴 수정",
+          "pt-BR": "Correções no menu de contas",
+          "pt-PT": "Correções no menu de contas",
+          "de": "Korrekturen am Kontowechsel-Menü",
+          "fr": "Corrections du menu des comptes",
+          "ar": "إصلاحات قائمة تبديل الحسابات",
+          "tr": "Hesap değiştirme menüsü düzeltmeleri"
+        },
+        "detail": {
+          "zh-Hans": "账号较多时，切换菜单现在可以上下滑动并完整显示所有账号，「添加账号」也不会再被挤出屏幕。",
+          "en": "With a long list of accounts, the switcher now scrolls and shows every account, and “Add account” stays pinned at the bottom instead of being pushed off screen.",
+          "zh-Hant": "帳戶較多時，切換選單現在可以上下滑動並完整顯示所有帳戶，「新增帳戶」也不會再被擠出畫面。",
+          "zh-HK": "帳戶較多時，切換菜單現在可以上下滑動並完整顯示所有帳戶，「新增帳戶」也不會再被擠出畫面。",
+          "ja": "アカウントが多い場合でも、切り替えメニューを上下にスクロールしてすべてのアカウントを表示できるようになりました。「アカウントを追加」も画面外に押し出されません。",
+          "es-MX": "Cuando tienes muchas cuentas, el menú ahora se desplaza y muestra todas, y «Agregar cuenta» ya no queda fuera de la pantalla.",
+          "ko": "계정이 많아도 전환 메뉴를 위아래로 스크롤해 모든 계정을 볼 수 있고, ‘계정 추가’도 화면 밖으로 밀려나지 않습니다.",
+          "pt-BR": "Com muitas contas, o menu agora rola e mostra todas elas, e “Adicionar conta” não fica mais fora da tela.",
+          "pt-PT": "Com muitas contas, o menu agora desloca-se e mostra todas, e “Adicionar conta” já não fica fora do ecrã.",
+          "de": "Bei vielen Konten lässt sich das Menü jetzt scrollen und zeigt alle Konten; „Konto hinzufügen“ wird nicht mehr aus dem Bild geschoben.",
+          "fr": "Avec de nombreux comptes, le menu défile désormais et affiche tous les comptes ; « Ajouter un compte » n’est plus repoussé hors de l’écran.",
+          "ar": "عند وجود حسابات كثيرة، يمكن الآن تمرير القائمة لأعلى وأسفل لعرض جميع الحسابات، ولم يعد زر «إضافة حساب» يُدفع خارج الشاشة.",
+          "tr": "Çok sayıda hesap olduğunda menü artık kaydırılabiliyor ve tüm hesapları gösteriyor; “Hesap ekle” de ekranın dışına itilmiyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.7.0",
     "date": "2026.07.20",
     "channel": "Google Play",

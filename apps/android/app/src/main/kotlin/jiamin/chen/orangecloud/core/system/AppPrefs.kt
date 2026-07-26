@@ -73,6 +73,22 @@ class AppPrefs @Inject constructor(
         dataStore.edit { it[KEY_NOTIF_WORKER] = enabled }
     }
 
+    /**
+     * 某个登录身份下默认进入的 Cloudflare 账号（按身份分键）。
+     * 用户切一次账号就记住它，下次冷启动直接进这个账号而不是列表第一个（issue #71）。
+     */
+    suspend fun defaultAccountId(sessionId: String): String? {
+        if (sessionId.isEmpty()) return null
+        return dataStore.data.first()[defaultAccountKey(sessionId)]?.takeIf { it.isNotEmpty() }
+    }
+
+    suspend fun setDefaultAccountId(sessionId: String, accountId: String) {
+        if (sessionId.isEmpty() || accountId.isEmpty()) return
+        dataStore.edit { it[defaultAccountKey(sessionId)] = accountId }
+    }
+
+    private fun defaultAccountKey(sessionId: String) = stringPreferencesKey("pref_default_account_$sessionId")
+
     /** 某个资源列表的排序偏好（key 如 "workers" / "pages"）。 */
     fun listSort(key: String): Flow<ResourceSort> =
         dataStore.data.map { ResourceSort.from(it[intPreferencesKey("pref_sort_$key")] ?: 0) }

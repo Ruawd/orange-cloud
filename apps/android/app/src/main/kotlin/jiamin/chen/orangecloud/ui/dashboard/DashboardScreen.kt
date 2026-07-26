@@ -304,47 +304,56 @@ private fun AccountMenu(
             shadowElevation = 6.dp,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 96.dp, end = 12.dp)
-                .width(264.dp),
+                // bottom padding 把菜单高度封在屏幕内——否则账号一多就被底部裁掉（issue #71）
+                .padding(top = 96.dp, end = 12.dp, bottom = 24.dp)
+                .width(276.dp),
         ) {
             Column(Modifier.padding(8.dp)) {
-                if (sessions.size > 1) {
+                // 身份 + 账号列表内滚动（高度已被上面的 padding 封顶），
+                // 「添加账号」留在滚动区外固定在底部，账号再多也点得到
+                Column(
+                    Modifier
+                        .weight(1f, fill = false)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    if (sessions.size > 1) {
+                        Text(
+                            stringResource(R.string.dash_switch_identity),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = cs.onSurfaceVariant,
+                            modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 6.dp),
+                        )
+                        sessions.forEach { session ->
+                            Row(
+                                Modifier.fillMaxWidth().clickable { onPickSession(session.id) }.padding(10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                ZoneAvatar(session.label, size = 38.dp)
+                                Spacer(Modifier.width(12.dp))
+                                Text(session.label, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = cs.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                                if (session.id == currentSessionId) Icon(Icons.Outlined.Check, contentDescription = null, tint = cs.primary, modifier = Modifier.size(18.dp))
+                            }
+                        }
+                        Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp).height(1.dp).background(cs.outlineVariant))
+                    }
                     Text(
-                        stringResource(R.string.dash_switch_identity),
+                        stringResource(R.string.dash_switch_account),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = cs.onSurfaceVariant,
                         modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 6.dp),
                     )
-                    sessions.forEach { session ->
+                    accounts.forEach { account ->
                         Row(
-                            Modifier.fillMaxWidth().clickable { onPickSession(session.id) }.padding(10.dp),
+                            Modifier.fillMaxWidth().clickable { onPick(account.id) }.padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            ZoneAvatar(session.label, size = 38.dp)
+                            ZoneAvatar(account.name, size = 38.dp)
                             Spacer(Modifier.width(12.dp))
-                            Text(session.label, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = cs.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                            if (session.id == currentSessionId) Icon(Icons.Outlined.Check, contentDescription = null, tint = cs.primary, modifier = Modifier.size(18.dp))
+                            Text(account.name, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = cs.onSurface, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                            if (account.id == currentId) Icon(Icons.Outlined.Check, contentDescription = null, tint = cs.primary, modifier = Modifier.size(18.dp))
                         }
-                    }
-                    Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp).height(1.dp).background(cs.outlineVariant))
-                }
-                Text(
-                    stringResource(R.string.dash_switch_account),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = cs.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 12.dp, top = 8.dp, bottom = 6.dp),
-                )
-                accounts.forEach { account ->
-                    Row(
-                        Modifier.fillMaxWidth().clickable { onPick(account.id) }.padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        ZoneAvatar(account.name, size = 38.dp)
-                        Spacer(Modifier.width(12.dp))
-                        Text(account.name, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = cs.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                        if (account.id == currentId) Icon(Icons.Outlined.Check, contentDescription = null, tint = cs.primary, modifier = Modifier.size(18.dp))
                     }
                 }
                 Box(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp).height(1.dp).background(cs.outlineVariant))

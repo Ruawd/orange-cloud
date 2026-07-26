@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">يتذكّر حسابك الافتراضي</string>
+    <string name="whatsnew_1_7_1_0_detail">عند وجود أكثر من حساب Cloudflare، يتذكّر التطبيق الحساب الذي اخترته آخر مرة ويفتح عليه مباشرة بدلاً من العودة دائمًا إلى أول حساب في القائمة.</string>
+    <string name="whatsnew_1_7_1_1_title">إصلاحات قائمة تبديل الحسابات</string>
+    <string name="whatsnew_1_7_1_1_detail">عند وجود حسابات كثيرة، يمكن الآن تمرير القائمة لأعلى وأسفل لعرض جميع الحسابات، ولم يعد زر «إضافة حساب» يُدفع خارج الشاشة.</string>
     <string name="whatsnew_1_7_0_0_title">ابحث في كل شيء من مكان واحد</string>
     <string name="whatsnew_1_7_0_0_detail">تبحث العدسة في صفحة النظرة العامة دفعة واحدة في النطاقات وWorkers وحاويات R2 وقواعد بيانات D1 ومساحات أسماء KV والأنفاق، وانقر على النتيجة للانتقال مباشرة. ويمكن الآن تثبيت أي مورد في الصفحة بنجمة.</string>
     <string name="whatsnew_1_7_0_1_title">مركز التنبيهات</string>

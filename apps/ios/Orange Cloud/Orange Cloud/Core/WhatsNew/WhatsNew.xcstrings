@@ -6537,6 +6537,82 @@
         }
       }
     },
+    "有多个 Cloudflare 账号时，App 会记住你上次选中的那一个，下次打开直接进入它，不再固定回到列表里的第一个。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With more than one Cloudflare account, the app now remembers the one you picked last and opens straight into it, instead of always falling back to the first in the list."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有多個 Cloudflare 帳戶時，App 會記住你上次選的那一個，下次打開直接進入它，不再固定回到清單裡的第一個。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有多個 Cloudflare 帳戶時，App 會記住你上次選的那一個，下次打開直接進入它，不再固定回到列表裡的第一個。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare アカウントが複数ある場合、最後に選んだアカウントを記憶し、次に開いたときはそのアカウントで始まります。常に一覧の先頭に戻ることはありません。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si tienes varias cuentas de Cloudflare, la app recuerda la última que elegiste y abre directamente en ella, en lugar de volver siempre a la primera de la lista."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare 계정이 여러 개일 때 마지막으로 선택한 계정을 기억해, 다음에 열면 바로 그 계정으로 시작합니다. 더 이상 목록의 첫 번째 계정으로 돌아가지 않습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Com mais de uma conta Cloudflare, o app passa a lembrar a última que você escolheu e abre direto nela, em vez de sempre voltar para a primeira da lista."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Com mais do que uma conta Cloudflare, a app passa a memorizar a última que escolheu e abre diretamente nela, em vez de voltar sempre à primeira da lista."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bei mehreren Cloudflare-Konten merkt sich die App das zuletzt gewählte Konto und startet direkt damit – statt immer auf das erste Konto der Liste zurückzufallen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec plusieurs comptes Cloudflare, l’app retient celui que vous avez choisi en dernier et s’ouvre directement dessus, au lieu de revenir toujours au premier de la liste."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عند وجود أكثر من حساب Cloudflare، يتذكّر التطبيق الحساب الذي اخترته آخر مرة ويفتح عليه مباشرة بدلاً من العودة دائمًا إلى أول حساب في القائمة."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birden fazla Cloudflare hesabı varsa uygulama en son seçtiğiniz hesabı hatırlar ve doğrudan onunla açılır; artık her seferinde listedeki ilk hesaba dönmez."
+          }
+        }
+      }
+    },
     "查看与增删 Cron 触发器，让 Worker 按计划自动运行。": {
       "localizations": {
         "en": {
@@ -8661,6 +8737,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kural Merkezi"
+          }
+        }
+      }
+    },
+    "记住你的默认账号": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remembers your default account"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記住你的預設帳戶"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記住你的預設帳戶"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既定のアカウントを記憶"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recuerda tu cuenta predeterminada"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 계정을 기억합니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lembra sua conta padrão"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memoriza a sua conta predefinida"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Merkt sich dein Standardkonto"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retient votre compte par défaut"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتذكّر حسابك الافتراضي"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varsayılan hesabınızı hatırlar"
           }
         }
       }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">Memoriza a sua conta predefinida</string>
+    <string name="whatsnew_1_7_1_0_detail">Com mais do que uma conta Cloudflare, a app passa a memorizar a última que escolheu e abre diretamente nela, em vez de voltar sempre à primeira da lista.</string>
+    <string name="whatsnew_1_7_1_1_title">Correções no menu de contas</string>
+    <string name="whatsnew_1_7_1_1_detail">Com muitas contas, o menu agora desloca-se e mostra todas, e “Adicionar conta” já não fica fora do ecrã.</string>
     <string name="whatsnew_1_7_0_0_title">Pesquise tudo num só lugar</string>
     <string name="whatsnew_1_7_0_0_detail">A lupa no ecrã de descrição geral pesquisa de uma vez domínios, Workers, buckets R2, bases de dados D1, namespaces KV e túneis — toque para ir direto. E agora pode fixar qualquer recurso com uma estrela.</string>
     <string name="whatsnew_1_7_0_1_title">Centro de alertas</string>

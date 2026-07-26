@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">Retient votre compte par défaut</string>
+    <string name="whatsnew_1_7_1_0_detail">Avec plusieurs comptes Cloudflare, l’app retient celui que vous avez choisi en dernier et s’ouvre directement dessus, au lieu de revenir toujours au premier de la liste.</string>
+    <string name="whatsnew_1_7_1_1_title">Corrections du menu des comptes</string>
+    <string name="whatsnew_1_7_1_1_detail">Avec de nombreux comptes, le menu défile désormais et affiche tous les comptes ; « Ajouter un compte » n’est plus repoussé hors de l’écran.</string>
     <string name="whatsnew_1_7_0_0_title">Tout chercher au même endroit</string>
     <string name="whatsnew_1_7_0_0_detail">La loupe de l’aperçu recherche d’un coup les domaines, Workers, buckets R2, bases D1, espaces de noms KV et tunnels : touchez un résultat pour y aller. Et n’importe quelle ressource peut désormais être épinglée à l’aperçu.</string>
     <string name="whatsnew_1_7_0_1_title">Centre d’alertes</string>

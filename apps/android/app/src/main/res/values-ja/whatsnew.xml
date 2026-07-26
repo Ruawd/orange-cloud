@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_1_0_title">既定のアカウントを記憶</string>
+    <string name="whatsnew_1_7_1_0_detail">Cloudflare アカウントが複数ある場合、最後に選んだアカウントを記憶し、次に開いたときはそのアカウントで始まります。常に一覧の先頭に戻ることはありません。</string>
+    <string name="whatsnew_1_7_1_1_title">アカウント切り替えメニューの修正</string>
+    <string name="whatsnew_1_7_1_1_detail">アカウントが多い場合でも、切り替えメニューを上下にスクロールしてすべてのアカウントを表示できるようになりました。「アカウントを追加」も画面外に押し出されません。</string>
     <string name="whatsnew_1_7_0_0_title">すべてのリソースをまとめて検索</string>
     <string name="whatsnew_1_7_0_0_detail">概要ページの虫めがねから、ドメイン・Worker・R2 バケット・D1 データベース・KV ネームスペース・トンネルをまとめて検索でき、タップですぐ移動できます。どのリソースもスターを付けて概要ページに固定できます。</string>
     <string name="whatsnew_1_7_0_1_title">アラートセンター</string>
