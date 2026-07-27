@@ -23,7 +23,7 @@ datastore = "1.1.7"
 security = "1.1.0-beta01"
 
 browser = "1.8.0"
-billing = "7.1.1"
+billing = "9.1.0"
 workManager = "2.10.1"
 coil = "2.7.0"
 glance = "1.1.1"
@@ -73,7 +73,7 @@ androidx-security-crypto = { group = "androidx.security", name = "security-crypt
 
 # 平台特色
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }

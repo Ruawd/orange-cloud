@@ -1,17 +1,56 @@
-# fastlane 商店元数据（Android / Google Play）
+fastlane documentation
+----
 
-## 用法
+# Installation
 
-```bash
-brew install fastlane          # 或 gem install fastlane
-cd apps/android
-export SUPPLY_JSON_KEY="…service-account.json"
-fastlane metadata   # 只推商店文案 + 版本说明 + 截图，不传二进制
-fastlane deploy track:internal   # 传 AAB + 元数据 + 截图到指定轨道（internal/alpha/beta/production）
+Make sure you have the latest version of the Xcode command line tools installed:
+
+```sh
+xcode-select --install
 ```
 
-## 注意
+For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
-- 元数据在 `metadata/android/<locale>/`，版本说明在 `changelogs/<versionCode>.txt`。
-- 截图已就绪（`phoneScreenshots`）；icon / featureGraphic 暂缺，放好 `metadata/android/<locale>/images/` 后把 `Fastfile` 里的 `skip_upload_images` 改 `false`。
-- `deploy` 传到 `production` 轨道后会自动回调官网 `/api/play/release`，翻出该版本更新历史（Play 无发布 webhook，故主动通知），需环境变量 `PLAY_RELEASE_SECRET`（与 Worker secret 同值）。
+# Available Actions
+
+## Android
+
+### android listings
+
+```sh
+[bundle exec] fastlane android listings
+```
+
+只推商店文案 + 图标/特征图/截图。不碰版本说明、不碰轨道、不传二进制（validate:true 可干跑）
+
+### android release_notes
+
+```sh
+[bundle exec] fastlane android release_notes
+```
+
+把 changelogs/<versionCode>.txt 挂到指定轨道的 release。默认 production + draft（不会自动上线）
+
+### android metadata_check
+
+```sh
+[bundle exec] fastlane android metadata_check
+```
+
+干跑：商店文案 + 版本说明全量送 Play 校验但不落库（validate_only）
+
+### android deploy
+
+```sh
+[bundle exec] fastlane android deploy
+```
+
+上传 AAB + 元数据 + 截图到指定轨道。track: internal(默认)/alpha(封闭测试)/beta/production
+
+----
+
+This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
+
+More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
+
+The documentation of _fastlane_ can be found on [docs.fastlane.tools](https://docs.fastlane.tools).

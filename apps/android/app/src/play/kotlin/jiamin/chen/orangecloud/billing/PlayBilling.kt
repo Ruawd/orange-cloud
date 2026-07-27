@@ -24,7 +24,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * play 风味：Play Billing v7。连接后查询既有购买回填 isPro；isPro = 活跃订阅 ∨ 持有买断。
+ * play 风味：Play Billing v9。连接后查询既有购买回填 isPro；isPro = 活跃订阅 ∨ 持有买断。
  * 商品 ID：jiamin.chen.orange_cloud.pro.monthly/.yearly（SUBS）、.lifetime（INAPP）。
  */
 @Singleton
@@ -103,8 +103,8 @@ class PlayBillingGateway @Inject constructor(
                     .build(),
             ),
         ).build()
-        billingClient.queryProductDetailsAsync(query) { _, productDetailsList ->
-            val pd = productDetailsList.firstOrNull() ?: return@queryProductDetailsAsync
+        billingClient.queryProductDetailsAsync(query) { _, result ->
+            val pd = result.productDetailsList.firstOrNull() ?: return@queryProductDetailsAsync
             val offerToken = pd.subscriptionOfferDetails?.firstOrNull()?.offerToken
             val paramsBuilder = BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(pd)
             if (offerToken != null) paramsBuilder.setOfferToken(offerToken)

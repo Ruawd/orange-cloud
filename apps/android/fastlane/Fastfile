@@ -2,16 +2,52 @@ default_platform(:android)
 
 # Orange Cloud Android — Google Play 上传（fastlane supply）。
 # 元数据在 fastlane/metadata/android/<locale>/，版本说明在 changelogs/<versionCode>.txt。
-# 截图 / 图标 / 特征图需自行放 metadata/android/<locale>/images/ 后把 skip_upload_images 改 false。
+# 图标 / 特征图 / 截图在 metadata/android/<locale>/images/（en-US、ja-JP、zh-CN、zh-HK、zh-TW 五语有图，
+# 其余语言留空由 Play 回落到默认语言）。
 platform :android do
 
-  # 截图已就绪（phoneScreenshots）；icon/featureGraphic 暂缺，故仍 skip_upload_images。
-  desc "只上传商店文案 + 版本说明 + 截图（不传二进制）。改文案后用这个最快"
-  lane :metadata do
+  # 从 build.gradle.kts 读 versionCode——不传二进制时 supply 无法自行推断
+  # 版本说明该挂哪个版本，必须显式给。
+  def play_version_code
+    File.read("../app/build.gradle.kts")[/versionCode\s*=\s*(\d+)/, 1]
+  end
+
+  desc "只推商店文案 + 图标/特征图/截图。不碰版本说明、不碰轨道、不传二进制（validate:true 可干跑）"
+  lane :listings do |options|
     upload_to_play_store(
+      validate_only: options[:validate] == true,
       skip_upload_apk: true,
       skip_upload_aab: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+    )
+  end
+
+  desc "把 changelogs/<versionCode>.txt 挂到指定轨道的 release。默认 production + draft（不会自动上线）"
+  lane :release_notes do |options|
+    upload_to_play_store(
+      validate_only: options[:validate] == true,
+      track: options[:track] || "production",
+      version_code: (options[:version_code] || play_version_code).to_i,
+      release_status: options[:release_status] || "draft",
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
       skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  desc "干跑：商店文案 + 版本说明全量送 Play 校验但不落库（validate_only）"
+  lane :metadata_check do |options|
+    upload_to_play_store(
+      validate_only: true,
+      version_code: (options[:version_code] || play_version_code).to_i,
+      track: options[:track] || "production",
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_images: false,
       skip_upload_screenshots: false,
     )
   end
@@ -22,7 +58,7 @@ platform :android do
     upload_to_play_store(
       track: track,
       aab: "app/build/outputs/bundle/playRelease/app-play-release.aab",
-      skip_upload_images: true,
+      skip_upload_images: false,
       skip_upload_screenshots: false,
     )
     # 上架生产轨后回调官网，翻出该版本的更新历史（Play 无发布 webhook，故主动通知）。

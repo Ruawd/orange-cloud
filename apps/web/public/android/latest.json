@@ -1,7 +1,7 @@
 {
-  "versionCode": 17,
-  "versionName": "1.6.4",
+  "versionCode": 21,
+  "versionName": "1.7.1",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "修复：账号用量在冷启动时误显「需要流量分析权限」的问题；Worker 新建/编辑/删除已归入 Pro 会员。"
+  "note": "新增：多账号时记住你上次选中的账号，下次打开直接进入，不再固定回第一个。修复：账号切换菜单可上下滚动、完整显示所有账号，「添加账号」不再被挤出屏幕。"
 }

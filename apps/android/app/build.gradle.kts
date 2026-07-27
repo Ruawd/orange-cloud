@@ -186,7 +186,7 @@ dependencies {
 
     // 平台特色
     implementation(libs.androidx.browser)        // Custom Tabs（OAuth）
-    "playImplementation"(libs.billing.ktx)        // Play Billing 仅 play 风味
+    "playImplementation"(libs.billing)        // Play Billing 仅 play 风味
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.coil.compose)
     implementation(libs.androidx.glance.appwidget)   // 桌面小组件（Glance）
