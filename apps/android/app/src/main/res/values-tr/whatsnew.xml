@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">Tek dokunuşla Cloudflare’i duraklatın</string>
+    <string name="whatsnew_1_7_2_0_detail">Alan adı ayarlarına “Cloudflare’i duraklat” anahtarı eklendi. Duraklatıldığında trafik Cloudflare üzerinden geçmez; WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare’de sürer. Sürdürmek de tek dokunuş ve her ikisi de yaklaşık 5 dakikada etkili olur.</string>
     <string name="whatsnew_1_7_1_0_title">Varsayılan hesabınızı hatırlar</string>
     <string name="whatsnew_1_7_1_0_detail">Birden fazla Cloudflare hesabı varsa uygulama en son seçtiğiniz hesabı hatırlar ve doğrudan onunla açılır; artık her seferinde listedeki ilk hesaba dönmez.</string>
     <string name="whatsnew_1_7_1_1_title">Hesap değiştirme menüsü düzeltmeleri</string>

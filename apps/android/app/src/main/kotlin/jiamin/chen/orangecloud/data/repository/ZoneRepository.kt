@@ -5,6 +5,7 @@ import jiamin.chen.orangecloud.data.local.ZoneDao
 import jiamin.chen.orangecloud.data.local.toEntity
 import jiamin.chen.orangecloud.data.local.toZone
 import jiamin.chen.orangecloud.data.model.CreateZoneRequest
+import jiamin.chen.orangecloud.data.model.PauseZoneRequest
 import jiamin.chen.orangecloud.data.model.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -39,6 +40,25 @@ class ZoneRepository @Inject constructor(
             "zones",
             CreateZoneRequest(name = name, account = CreateZoneRequest.AccountRef(accountId)),
         )
+        zoneDao.insertAll(listOf(zone.toEntity(accountId, json)))
+        return zone
+    }
+
+    /**
+     * 暂停 / 恢复 Cloudflare 代理（Dashboard 的「Pause Cloudflare on Site」）。
+     * 暂停后 DNS 仍由 Cloudflare 解析，但流量不再经过 Cloudflare——WAF、缓存、
+     * 源站 IP 隐藏一并失效；生效约需 5 分钟。需要 zone.write。
+     * 成功后单条回写缓存，列表/详情的 Flow 即时翻牌。
+     */
+    suspend fun setPaused(accountId: String, zoneId: String, paused: Boolean): Zone {
+        val zone = api.patch<Zone, PauseZoneRequest>("zones/$zoneId", PauseZoneRequest(paused))
+        zoneDao.insertAll(listOf(zone.toEntity(accountId, json)))
+        return zone
+    }
+
+    /** 单个域名拉最新（含暂停态）并回写缓存。 */
+    suspend fun refreshZone(accountId: String, zoneId: String): Zone {
+        val zone = api.get<Zone>("zones/$zoneId")
         zoneDao.insertAll(listOf(zone.toEntity(accountId, json)))
         return zone
     }

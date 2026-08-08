@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">إيقاف Cloudflare مؤقتًا بنقرة واحدة</string>
+    <string name="whatsnew_1_7_2_0_detail">أضفنا مفتاح «إيقاف Cloudflare مؤقتًا» في إعدادات النطاق. أثناء الإيقاف المؤقت لا تمر حركة المرور عبر Cloudflare، فيتوقف جدار حماية تطبيقات الويب والتخزين المؤقت وإخفاء عنوان IP للخادم الأصلي، بينما يستمر Cloudflare في تحليل DNS. والاستئناف بنقرة واحدة أيضًا، ويستغرق كلاهما نحو 5 دقائق.</string>
     <string name="whatsnew_1_7_1_0_title">يتذكّر حسابك الافتراضي</string>
     <string name="whatsnew_1_7_1_0_detail">عند وجود أكثر من حساب Cloudflare، يتذكّر التطبيق الحساب الذي اخترته آخر مرة ويفتح عليه مباشرة بدلاً من العودة دائمًا إلى أول حساب في القائمة.</string>
     <string name="whatsnew_1_7_1_1_title">إصلاحات قائمة تبديل الحسابات</string>

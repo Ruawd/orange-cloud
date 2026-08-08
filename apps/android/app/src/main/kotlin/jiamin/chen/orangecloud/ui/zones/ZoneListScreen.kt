@@ -166,7 +166,7 @@ private fun ZoneRow(zone: Zone, onClick: () -> Unit) {
                 }
             }
             Spacer(Modifier.width(10.dp))
-            StatusDot(statusColor(zone.status))
+            StatusDot(statusColor(zone.displayStatus))
             Icon(
                 Icons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = null,

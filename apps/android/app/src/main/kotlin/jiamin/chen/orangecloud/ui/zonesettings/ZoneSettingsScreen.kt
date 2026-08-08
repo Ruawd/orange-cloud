@@ -60,6 +60,8 @@ fun ZoneSettingsScreen(
     val onSky = phase.onSky
     val snackbarHostState = remember { SnackbarHostState() }
     var confirmPurge by remember { mutableStateOf(false) }
+    // 非空即待确认的暂停操作：true = 暂停，false = 恢复
+    var confirmPause by remember { mutableStateOf<Boolean?>(null) }
     var purgeUrlOpen by remember { mutableStateOf(false) }
     val purgedMsg = stringResource(R.string.zs_purged)
     val genericErr = stringResource(R.string.error_generic)
@@ -86,16 +88,26 @@ fun ZoneSettingsScreen(
                     backDescription = stringResource(R.string.common_back),
                     refreshDescription = stringResource(R.string.common_refresh),
                 )
-                if (state.missingScope) {
-                    SkyEmptyState(
-                        Icons.Outlined.Settings,
-                        stringResource(R.string.scope_missing), onSky, stringResource(R.string.common_refresh),
-                    ) { viewModel.load() }
-                } else {
-                    Column(
-                        modifier = Modifier.fillMaxSize().padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    // 暂停只依赖 zone.write，缺 zone-settings.read 时本页也保留它
+                    ToggleCard(
+                        title = stringResource(R.string.zs_pause),
+                        subtitle = stringResource(R.string.zs_pause_desc),
+                        checked = state.paused,
+                        enabled = state.canPause && !state.isTogglingPause,
+                        onChange = { on -> confirmPause = on },
+                    )
+                    if (state.missingScope) {
+                        Box(Modifier.weight(1f)) {
+                            SkyEmptyState(
+                                Icons.Outlined.Settings,
+                                stringResource(R.string.scope_missing), onSky, stringResource(R.string.common_refresh),
+                            ) { viewModel.load() }
+                        }
+                    } else {
                         ToggleCard(
                             title = stringResource(R.string.zs_dev_mode),
                             subtitle = stringResource(R.string.zs_dev_mode_desc),
@@ -148,6 +160,32 @@ fun ZoneSettingsScreen(
                 }
             },
             dismissButton = { TextButton(onClick = { confirmPurge = false }) { Text(stringResource(R.string.dns_cancel)) } },
+        )
+    }
+
+    confirmPause?.let { willPause ->
+        AlertDialog(
+            onDismissRequest = { confirmPause = null },
+            title = {
+                Text(stringResource(if (willPause) R.string.zs_pause_confirm_title else R.string.zs_resume_confirm_title))
+            },
+            text = {
+                Text(
+                    stringResource(
+                        if (willPause) R.string.zs_pause_confirm_msg else R.string.zs_resume_confirm_msg,
+                        state.zoneName,
+                    ),
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { confirmPause = null; viewModel.setPaused(willPause) }) {
+                    Text(
+                        stringResource(if (willPause) R.string.zs_pause_confirm else R.string.zs_resume_confirm),
+                        color = if (willPause) Color(0xFFE5484D) else Color.Unspecified,
+                    )
+                }
+            },
+            dismissButton = { TextButton(onClick = { confirmPause = null }) { Text(stringResource(R.string.dns_cancel)) } },
         )
     }
 

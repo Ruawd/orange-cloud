@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">Mettre Cloudflare en pause en un geste</string>
+    <string name="whatsnew_1_7_2_0_detail">L’écran des réglages du domaine propose désormais l’interrupteur « Mettre Cloudflare en pause ». En pause, le trafic ne passe plus par Cloudflare : WAF, mise en cache et masquage de l’IP d’origine cessent de fonctionner, tandis que le DNS reste résolu par Cloudflare. La réactivation est tout aussi simple, et comptez environ 5 minutes dans les deux cas.</string>
     <string name="whatsnew_1_7_1_0_title">Retient votre compte par défaut</string>
     <string name="whatsnew_1_7_1_0_detail">Avec plusieurs comptes Cloudflare, l’app retient celui que vous avez choisi en dernier et s’ouvre directement dessus, au lieu de revenir toujours au premier de la liste.</string>
     <string name="whatsnew_1_7_1_1_title">Corrections du menu des comptes</string>

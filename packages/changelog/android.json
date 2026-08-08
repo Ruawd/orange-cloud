@@ -1,5 +1,46 @@
 [
   {
+    "version": "1.7.2",
+    "date": "2026.08.08",
+    "channel": "Google Play",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "pause.circle",
+        "title": {
+          "zh-Hans": "一键暂停 Cloudflare",
+          "en": "Pause Cloudflare in one tap",
+          "zh-Hant": "一鍵暫停 Cloudflare",
+          "zh-HK": "一鍵暫停 Cloudflare",
+          "ja": "ワンタップで Cloudflare を一時停止",
+          "es-MX": "Pausa Cloudflare con un toque",
+          "ko": "한 번의 탭으로 Cloudflare 일시 중지",
+          "pt-BR": "Pause o Cloudflare com um toque",
+          "pt-PT": "Pause o Cloudflare com um toque",
+          "de": "Cloudflare mit einem Tipp pausieren",
+          "fr": "Mettre Cloudflare en pause en un geste",
+          "ar": "إيقاف Cloudflare مؤقتًا بنقرة واحدة",
+          "tr": "Tek dokunuşla Cloudflare’i duraklatın"
+        },
+        "detail": {
+          "zh-Hans": "域名设置页新增「暂停 Cloudflare」开关。暂停后流量不再经过 Cloudflare——WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析；恢复同样一键完成，两者约 5 分钟生效。",
+          "en": "Zone settings now has a “Pause Cloudflare” switch. While paused, traffic no longer passes through Cloudflare — WAF, caching and origin IP masking stop working, while DNS is still resolved by Cloudflare. Resuming is one tap too, and either change takes about 5 minutes.",
+          "zh-Hant": "網域設定頁新增「暫停 Cloudflare」開關。暫停後流量不再經過 Cloudflare——WAF、快取加速與來源伺服器 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析；恢復同樣一鍵完成，兩者約 5 分鐘生效。",
+          "zh-HK": "域名設定頁新增「暫停 Cloudflare」開關。暫停後流量不再經過 Cloudflare——WAF、緩存加速與源站 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析；恢復同樣一鍵完成，兩者約 5 分鐘生效。",
+          "ja": "ドメイン設定に「Cloudflare を一時停止」スイッチを追加しました。一時停止中はトラフィックが Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿が無効になります（DNS の解決は Cloudflare が継続）。再開もワンタップで、どちらも反映まで約 5 分です。",
+          "es-MX": "La pantalla de ajustes del dominio ahora incluye el interruptor «Pausar Cloudflare». En pausa, el tráfico deja de pasar por Cloudflare: el WAF, la caché y el ocultamiento de la IP de origen dejan de funcionar, aunque el DNS lo sigue resolviendo Cloudflare. Reanudar es igual de simple y ambos cambios tardan unos 5 minutos.",
+          "ko": "도메인 설정에 'Cloudflare 일시 중지' 스위치가 생겼습니다. 일시 중지하면 트래픽이 Cloudflare를 거치지 않아 WAF, 캐시 가속, 원본 IP 숨김이 중단되며 DNS는 계속 Cloudflare가 확인합니다. 다시 시작도 한 번의 탭이고, 두 경우 모두 약 5분 뒤 적용됩니다.",
+          "pt-BR": "A tela de configurações do domínio agora tem a chave “Pausar o Cloudflare”. Em pausa, o tráfego deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem param de funcionar, e o DNS continua sendo resolvido pelo Cloudflare. Retomar é igualmente simples e ambos levam cerca de 5 minutos.",
+          "pt-PT": "O ecrã de definições do domínio passa a ter o interruptor “Pausar o Cloudflare”. Em pausa, o tráfego deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem deixam de funcionar e o DNS continua a ser resolvido pelo Cloudflare. Retomar é igualmente simples e ambos demoram cerca de 5 minutos.",
+          "de": "In den Domain-Einstellungen gibt es jetzt den Schalter „Cloudflare pausieren“. Pausiert läuft der Traffic nicht mehr über Cloudflare – WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Fortsetzen geht genauso schnell, und beides greift nach etwa 5 Minuten.",
+          "fr": "L’écran des réglages du domaine propose désormais l’interrupteur « Mettre Cloudflare en pause ». En pause, le trafic ne passe plus par Cloudflare : WAF, mise en cache et masquage de l’IP d’origine cessent de fonctionner, tandis que le DNS reste résolu par Cloudflare. La réactivation est tout aussi simple, et comptez environ 5 minutes dans les deux cas.",
+          "ar": "أضفنا مفتاح «إيقاف Cloudflare مؤقتًا» في إعدادات النطاق. أثناء الإيقاف المؤقت لا تمر حركة المرور عبر Cloudflare، فيتوقف جدار حماية تطبيقات الويب والتخزين المؤقت وإخفاء عنوان IP للخادم الأصلي، بينما يستمر Cloudflare في تحليل DNS. والاستئناف بنقرة واحدة أيضًا، ويستغرق كلاهما نحو 5 دقائق.",
+          "tr": "Alan adı ayarlarına “Cloudflare’i duraklat” anahtarı eklendi. Duraklatıldığında trafik Cloudflare üzerinden geçmez; WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare’de sürer. Sürdürmek de tek dokunuş ve her ikisi de yaklaşık 5 dakikada etkili olur."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.7.1",
     "date": "2026.07.25",
     "channel": "Google Play",

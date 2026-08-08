@@ -103,7 +103,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 										comingLabel={t("badge.comingLabel")}
 										coming={APP_STORE_COMING}
 									/>
-									{/* Android：大陆 → 官网下载 APK；其余 → Google Play（暂置灰即将上线）。客户端按 /api/geo 判定。 */}
+									{/* Android：大陆 → 官网下载 APK + Google Play；其余 → 仅 Google Play。客户端按 /api/geo 判定。 */}
 									<AndroidBadge locale={locale} strings={buy.download} />
 								</div>
 								<p className="mt-3 text-[13px] t-tertiary">{t("hero.note")}</p>

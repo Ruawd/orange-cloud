@@ -57,4 +57,18 @@ struct ZoneService {
         }
         return zone
     }
+
+    /// 暂停 / 恢复 Cloudflare 代理（Dashboard 的「Pause Cloudflare on Site」）。
+    /// 暂停后 DNS 仍由 Cloudflare 解析，但流量不再经过 Cloudflare——WAF、缓存、
+    /// 源站 IP 隐藏一并失效；生效约需 5 分钟。需要 zone.write。
+    func setPaused(zoneId: String, paused: Bool) async throws -> Zone {
+        let response: CFAPIResponse<Zone> = try await client.patch(
+            "zones/\(zoneId)",
+            body: PauseZoneRequest(paused: paused)
+        )
+        guard response.success, let zone = response.result else {
+            throw response.toAPIError()
+        }
+        return zone
+    }
 }

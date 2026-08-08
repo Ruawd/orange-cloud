@@ -10,6 +10,18 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "1.9.3", items: [
+            WhatsNewItem(
+                icon:   "pause.circle",
+                title:  String(localized: "一键暂停 Cloudflare", table: "WhatsNew"),
+                detail: String(localized: "域名详情的「操作」里新增「暂停 Cloudflare」开关。暂停后流量不再经过 Cloudflare——WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析；恢复同样一键完成，两者约 5 分钟生效。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "speedometer",
+                title:  String(localized: "概览页更跟手", table: "WhatsNew"),
+                detail: String(localized: "从概览页打开 Pro 功能的订阅说明时，整页不再跟着重算，弹出与收起都不会顿挫。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.9.2", items: [
             WhatsNewItem(
                 icon:   "person.crop.circle.badge.checkmark",

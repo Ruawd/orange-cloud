@@ -217,6 +217,14 @@
     <string name="zs_purge_confirm_msg">Cela efface tout le contenu en cache de ce domaine au niveau du edge Cloudflare et peut brièvement augmenter la charge d’origine.</string>
     <string name="zs_purge_url">Purger par URL</string>
     <string name="zs_purge_url_hint">Une URL complète par ligne, jusqu’à %1$d. ex. https://%2$s/style.css</string>
+    <string name="zs_pause">Mettre Cloudflare en pause</string>
+    <string name="zs_pause_desc">Le trafic contourne Cloudflare, seule la résolution DNS reste active</string>
+    <string name="zs_pause_confirm_title">Mettre Cloudflare en pause ?</string>
+    <string name="zs_pause_confirm_msg">Une fois en pause, le trafic de %1$s ne passe plus par Cloudflare : WAF, mise en cache et masquage de l’IP d’origine cessent de fonctionner, tandis que le DNS reste résolu par Cloudflare. Effectif au bout d’environ 5 minutes.</string>
+    <string name="zs_pause_confirm">Mettre en pause</string>
+    <string name="zs_resume_confirm_title">Réactiver Cloudflare ?</string>
+    <string name="zs_resume_confirm_msg">Une fois réactivé, le trafic de %1$s repasse par le proxy Cloudflare : la mise en cache et la protection de sécurité redeviennent actives. Effectif au bout d’environ 5 minutes.</string>
+    <string name="zs_resume_confirm">Réactiver</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">Mode de chiffrement</string>
     <string name="ssl_mode_off">Désactivé</string>

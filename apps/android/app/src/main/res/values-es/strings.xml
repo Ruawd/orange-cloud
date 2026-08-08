@@ -570,6 +570,14 @@
     <string name="perm_ip_rules_desc">Ver y gestionar reglas de acceso por IP / ASN / país</string>
     <string name="zs_purge_url">Purgar por URL</string>
     <string name="zs_purge_url_hint">Una URL completa por línea, hasta %1$d. Ej.: https://%2$s/style.css</string>
+    <string name="zs_pause">Pausar Cloudflare</string>
+    <string name="zs_pause_desc">El tráfico omite Cloudflare; solo se mantiene la resolución DNS</string>
+    <string name="zs_pause_confirm_title">¿Pausar Cloudflare?</string>
+    <string name="zs_pause_confirm_msg">Al pausar, el tráfico de %1$s dejará de pasar por Cloudflare: el WAF, la caché y el ocultamiento de la IP de origen dejarán de funcionar; el DNS lo seguirá resolviendo Cloudflare. Tarda unos 5 minutos en aplicarse.</string>
+    <string name="zs_pause_confirm">Pausar</string>
+    <string name="zs_resume_confirm_title">¿Reanudar Cloudflare?</string>
+    <string name="zs_resume_confirm_msg">Al reanudar, el tráfico de %1$s vuelve a pasar por el proxy de Cloudflare y se restablecen la caché y la protección de seguridad. Tarda unos 5 minutos en aplicarse.</string>
+    <string name="zs_resume_confirm">Reanudar</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">Modo de cifrado</string>
     <string name="ssl_mode_off">Desactivado</string>

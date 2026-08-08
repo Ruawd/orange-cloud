@@ -7790,6 +7790,7 @@
         }
       }
     },
+    "BINDING_NAME": {},
     "Bot 分数": {
       "localizations": {
         "ar": {
@@ -34353,6 +34354,7 @@
       }
     },
     "其它绑定（只读）": {
+      "extractionState": "stale",
       "localizations": {
         "ar": {
           "stringUnit": {
@@ -47583,6 +47585,7 @@
       }
     },
     "向左滑动查看实时日志 · 点按查看详情": {
+      "extractionState": "stale",
       "localizations": {
         "ar": {
           "stringUnit": {
@@ -71317,6 +71320,82 @@
         }
       }
     },
+    "恢复 Cloudflare？": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استئناف Cloudflare؟"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare fortsetzen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume Cloudflare?"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Reanudar Cloudflare?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réactiver Cloudflare ?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare を再開しますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare를 다시 시작할까요?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar o Cloudflare?"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar o Cloudflare?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare sürdürülsün mü?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復 Cloudflare？"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復 Cloudflare？"
+          }
+        }
+      }
+    },
     "恢复 NULL": {
       "localizations": {
         "ar": {
@@ -71389,6 +71468,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "恢復 NULL"
+          }
+        }
+      }
+    },
+    "恢复后，%@ 的流量重新经由 Cloudflare 代理，缓存与安全防护随之生效。生效约需 5 分钟。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد الاستئناف، تعود حركة المرور إلى %@ عبر وكيل Cloudflare، ويعود التخزين المؤقت والحماية الأمنية إلى العمل. يستغرق السريان نحو 5 دقائق."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Fortsetzen läuft der Traffic von %@ wieder über Cloudflare, Caching und Sicherheitsschutz greifen erneut. Die Änderung greift nach etwa 5 Minuten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once resumed, traffic to %@ is proxied through Cloudflare again, and caching and security protection take effect with it. Takes about 5 minutes to take effect."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al reanudar, el tráfico de %@ vuelve a pasar por el proxy de Cloudflare y se restablecen la caché y la protección de seguridad. Tarda unos 5 minutos en aplicarse."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une fois réactivé, le trafic de %@ repasse par le proxy Cloudflare : la mise en cache et la protection de sécurité redeviennent actives. Effectif au bout d’environ 5 minutes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再開すると、%@ のトラフィックは再び Cloudflare を経由し、キャッシュとセキュリティ保護が有効になります。反映まで約 5 分かかります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시작하면 %@의 트래픽이 다시 Cloudflare를 통해 프록시되고 캐시와 보안 보호가 함께 적용됩니다. 적용까지 약 5분이 걸립니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao retomar, o tráfego de %@ volta a passar pelo proxy do Cloudflare, e o cache e a proteção de segurança voltam a valer. Leva cerca de 5 minutos para entrar em vigor."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao retomar, o tráfego de %@ volta a passar pelo proxy do Cloudflare, repondo a cache e a proteção de segurança. Demora cerca de 5 minutos a fazer efeito."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürdürdüğünüzde %@ trafiği yeniden Cloudflare proxy’si üzerinden geçer; önbellek ve güvenlik koruması yeniden devreye girer. Etkili olması yaklaşık 5 dakika sürer."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復後，%@ 的流量重新經由 Cloudflare 代理，快取與安全防護隨之生效。約需 5 分鐘生效。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢復後，%@ 的流量重新經由 Cloudflare 代理，緩存與安全防護隨之生效。約需 5 分鐘生效。"
           }
         }
       }
@@ -84466,6 +84621,234 @@
           "stringUnit": {
             "state": "translated",
             "value": "暫停"
+          }
+        }
+      }
+    },
+    "暂停 Cloudflare": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إيقاف Cloudflare مؤقتًا"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare pausieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause Cloudflare"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar Cloudflare"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre Cloudflare en pause"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare を一時停止"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare 일시 중지"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar o Cloudflare"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar o Cloudflare"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare’i duraklat"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停 Cloudflare"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停 Cloudflare"
+          }
+        }
+      }
+    },
+    "暂停 Cloudflare？": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إيقاف Cloudflare مؤقتًا؟"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare pausieren?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause Cloudflare?"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Pausar Cloudflare?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre Cloudflare en pause ?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare を一時停止しますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare를 일시 중지할까요?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar o Cloudflare?"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar o Cloudflare?"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare duraklatılsın mı?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停 Cloudflare？"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停 Cloudflare？"
+          }
+        }
+      }
+    },
+    "暂停后，%@ 的流量不再经过 Cloudflare：WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析。生效约需 5 分钟。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد الإيقاف المؤقت، لن تمر حركة المرور إلى %@ عبر Cloudflare: سيتوقف جدار حماية تطبيقات الويب والتخزين المؤقت وإخفاء عنوان IP للخادم الأصلي، بينما يستمر Cloudflare في تحليل DNS. يستغرق السريان نحو 5 دقائق."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach dem Pausieren läuft der Traffic von %@ nicht mehr über Cloudflare: WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Die Änderung greift nach etwa 5 Minuten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once paused, traffic to %@ no longer passes through Cloudflare: WAF, caching, and origin IP masking all stop working, while DNS is still resolved by Cloudflare. Takes about 5 minutes to take effect."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al pausar, el tráfico de %@ dejará de pasar por Cloudflare: el WAF, la caché y el ocultamiento de la IP de origen dejarán de funcionar; el DNS lo seguirá resolviendo Cloudflare. Tarda unos 5 minutos en aplicarse."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une fois en pause, le trafic de %@ ne passe plus par Cloudflare : WAF, mise en cache et masquage de l’IP d’origine cessent de fonctionner, tandis que le DNS reste résolu par Cloudflare. Effectif au bout d’environ 5 minutes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一時停止すると、%@ のトラフィックは Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿がすべて無効になります。DNS の解決は Cloudflare が引き続き行います。反映まで約 5 分かかります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시 중지하면 %@의 트래픽이 더 이상 Cloudflare를 거치지 않습니다. WAF, 캐시 가속, 원본 IP 숨김이 모두 중단되며 DNS는 계속 Cloudflare가 확인합니다. 적용까지 약 5분이 걸립니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao pausar, o tráfego de %@ deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem param de funcionar; o DNS continua sendo resolvido pelo Cloudflare. Leva cerca de 5 minutos para entrar em vigor."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ao pausar, o tráfego de %@ deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem deixam de funcionar; o DNS continua a ser resolvido pelo Cloudflare. Demora cerca de 5 minutos a fazer efeito."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duraklattığınızda %@ trafiği artık Cloudflare üzerinden geçmez: WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare tarafında sürer. Etkili olması yaklaşık 5 dakika sürer."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停後，%@ 的流量不再經過 Cloudflare：WAF、快取加速與來源伺服器 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析。約需 5 分鐘生效。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫停後，%@ 的流量不再經過 Cloudflare：WAF、緩存加速與源站 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析。約需 5 分鐘生效。"
           }
         }
       }
@@ -103112,6 +103495,82 @@
         }
       }
     },
+    "流量绕过 Cloudflare，仅保留 DNS 解析": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تتجاوز حركة المرور Cloudflare، ويبقى تحليل DNS فقط"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traffic umgeht Cloudflare, nur die DNS-Auflösung bleibt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traffic bypasses Cloudflare; only DNS resolution remains"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El tráfico omite Cloudflare; solo se mantiene la resolución DNS"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le trafic contourne Cloudflare, seule la résolution DNS reste active"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トラフィックは Cloudflare を経由せず、DNS 解決のみ残ります"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "트래픽이 Cloudflare를 우회하고 DNS 확인만 유지됩니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O tráfego ignora o Cloudflare; só a resolução DNS continua"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O tráfego ignora o Cloudflare; apenas a resolução DNS se mantém"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trafik Cloudflare’i atlar, yalnızca DNS çözümlemesi kalır"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "流量繞過 Cloudflare，僅保留 DNS 解析"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "流量繞過 Cloudflare，僅保留 DNS 解析"
+          }
+        }
+      }
+    },
     "测试推送": {
       "localizations": {
         "ar": {
@@ -114209,6 +114668,158 @@
           "stringUnit": {
             "state": "translated",
             "value": "確認開啟"
+          }
+        }
+      }
+    },
+    "确认恢复": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استئناف"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortsetzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reanudar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réactiver"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再開する"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시작"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retomar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sürdür"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認恢復"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認恢復"
+          }
+        }
+      }
+    },
+    "确认暂停": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إيقاف مؤقت"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mettre en pause"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一時停止する"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시 중지"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pausar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duraklat"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認暫停"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認暫停"
           }
         }
       }
@@ -148977,6 +149588,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "Duraklatıldı · %lld yeni"
+          }
+        }
+      }
+    },
+    "已暂停 Cloudflare，流量当前不经过代理": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُوقف Cloudflare مؤقتًا، ولا تمر حركة المرور عبر الوكيل حاليًا"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare ist pausiert, der Traffic läuft derzeit nicht über den Proxy"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare is paused; traffic currently bypasses the proxy"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare está en pausa; el tráfico no pasa por el proxy"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare est en pause, le trafic ne passe pas par le proxy"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare は一時停止中で、トラフィックはプロキシを経由していません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare가 일시 중지되어 트래픽이 프록시를 거치지 않습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare pausado; o tráfego não passa pelo proxy"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare em pausa; o tráfego não passa pelo proxy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare duraklatıldı, trafik şu anda proxy üzerinden geçmiyor"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已暫停 Cloudflare，流量目前不經過代理"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已暫停 Cloudflare，流量目前不經過代理"
           }
         }
       }

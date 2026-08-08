@@ -38,16 +38,22 @@ enum DashboardAlerts {
     ) -> [DashboardAlert] {
         var alerts: [DashboardAlert] = []
 
-        // ① 未激活 / 已暂停的域名
-        for zone in zones where zone.status != "active" {
+        // ① 未激活 / 已暂停的域名（暂停是用户主动操作，单独给一条可读的说明）
+        for zone in zones where zone.displayStatus != "active" {
             let pendingLike = zone.status == "pending" || zone.status == "initializing"
+            let detail: String
+            if zone.paused {
+                detail = String(localized: "已暂停 Cloudflare，流量当前不经过代理")
+            } else if pendingLike {
+                detail = String(localized: "域名待激活，检查域名服务器是否已指向 Cloudflare")
+            } else {
+                detail = String(localized: "域名未处于启用状态（\(zone.status)）")
+            }
             alerts.append(DashboardAlert(
                 id: "zone|\(zone.id)",
                 severity: pendingLike ? .warn : .critical,
                 title: zone.name,
-                detail: pendingLike
-                    ? String(localized: "域名待激活，检查域名服务器是否已指向 Cloudflare")
-                    : String(localized: "域名未处于启用状态（\(zone.status)）"),
+                detail: detail,
                 route: .zone(zone)
             ))
         }

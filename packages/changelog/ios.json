@@ -1,5 +1,79 @@
 [
   {
+    "version": "1.9.3",
+    "date": "2026.08.08",
+    "channel": "App Store",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "pause.circle",
+        "title": {
+          "zh-Hans": "一键暂停 Cloudflare",
+          "en": "Pause Cloudflare in one tap",
+          "zh-Hant": "一鍵暫停 Cloudflare",
+          "zh-HK": "一鍵暫停 Cloudflare",
+          "ja": "ワンタップで Cloudflare を一時停止",
+          "es-MX": "Pausa Cloudflare con un toque",
+          "ko": "한 번의 탭으로 Cloudflare 일시 중지",
+          "pt-BR": "Pause o Cloudflare com um toque",
+          "pt-PT": "Pause o Cloudflare com um toque",
+          "de": "Cloudflare mit einem Tipp pausieren",
+          "fr": "Mettre Cloudflare en pause en un geste",
+          "ar": "إيقاف Cloudflare مؤقتًا بنقرة واحدة",
+          "tr": "Tek dokunuşla Cloudflare’i duraklatın"
+        },
+        "detail": {
+          "zh-Hans": "域名详情的「操作」里新增「暂停 Cloudflare」开关。暂停后流量不再经过 Cloudflare——WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析；恢复同样一键完成，两者约 5 分钟生效。",
+          "en": "Actions in the zone details now has a “Pause Cloudflare” switch. While paused, traffic no longer passes through Cloudflare — WAF, caching and origin IP masking stop working, while DNS is still resolved by Cloudflare. Resuming is one tap too, and either change takes about 5 minutes.",
+          "zh-Hant": "網域詳情的「操作」中新增「暫停 Cloudflare」開關。暫停後流量不再經過 Cloudflare——WAF、快取加速與來源伺服器 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析；恢復同樣一鍵完成，兩者約 5 分鐘生效。",
+          "zh-HK": "域名詳情的「操作」中新增「暫停 Cloudflare」開關。暫停後流量不再經過 Cloudflare——WAF、緩存加速與源站 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析；恢復同樣一鍵完成，兩者約 5 分鐘生效。",
+          "ja": "ドメイン詳細の「操作」に「Cloudflare を一時停止」スイッチを追加しました。一時停止中はトラフィックが Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿が無効になります（DNS の解決は Cloudflare が継続）。再開もワンタップで、どちらも反映まで約 5 分です。",
+          "es-MX": "La sección Acciones de los detalles del dominio ahora incluye el interruptor «Pausar Cloudflare». En pausa, el tráfico deja de pasar por Cloudflare: el WAF, la caché y el ocultamiento de la IP de origen dejan de funcionar, aunque el DNS lo sigue resolviendo Cloudflare. Reanudar es igual de simple y ambos cambios tardan unos 5 minutos.",
+          "ko": "도메인 상세의 ‘작업’에 'Cloudflare 일시 중지' 스위치가 생겼습니다. 일시 중지하면 트래픽이 Cloudflare를 거치지 않아 WAF, 캐시 가속, 원본 IP 숨김이 중단되며 DNS는 계속 Cloudflare가 확인합니다. 다시 시작도 한 번의 탭이고, 두 경우 모두 약 5분 뒤 적용됩니다.",
+          "pt-BR": "A seção Ações nos detalhes do domínio agora tem a chave “Pausar o Cloudflare”. Em pausa, o tráfego deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem param de funcionar, e o DNS continua sendo resolvido pelo Cloudflare. Retomar é igualmente simples e ambos levam cerca de 5 minutos.",
+          "pt-PT": "A secção Ações nos detalhes do domínio passa a ter o interruptor “Pausar o Cloudflare”. Em pausa, o tráfego deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem deixam de funcionar e o DNS continua a ser resolvido pelo Cloudflare. Retomar é igualmente simples e ambos demoram cerca de 5 minutos.",
+          "de": "In den Domain-Details unter „Aktionen“ gibt es jetzt den Schalter „Cloudflare pausieren“. Pausiert läuft der Traffic nicht mehr über Cloudflare – WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Fortsetzen geht genauso schnell, und beides greift nach etwa 5 Minuten.",
+          "fr": "La section Actions des détails du domaine propose désormais l’interrupteur « Mettre Cloudflare en pause ». En pause, le trafic ne passe plus par Cloudflare : WAF, mise en cache et masquage de l’IP d’origine cessent de fonctionner, tandis que le DNS reste résolu par Cloudflare. La réactivation est tout aussi simple, et comptez environ 5 minutes dans les deux cas.",
+          "ar": "أضفنا مفتاح «إيقاف Cloudflare مؤقتًا» ضمن «الإجراءات» في تفاصيل النطاق. أثناء الإيقاف المؤقت لا تمر حركة المرور عبر Cloudflare، فيتوقف جدار حماية تطبيقات الويب والتخزين المؤقت وإخفاء عنوان IP للخادم الأصلي، بينما يستمر Cloudflare في تحليل DNS. والاستئناف بنقرة واحدة أيضًا، ويستغرق كلاهما نحو 5 دقائق.",
+          "tr": "Alan adı ayrıntılarındaki İşlemler bölümüne “Cloudflare’i duraklat” anahtarı eklendi. Duraklatıldığında trafik Cloudflare üzerinden geçmez; WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare’de sürer. Sürdürmek de tek dokunuş ve her ikisi de yaklaşık 5 dakikada etkili olur."
+        }
+      },
+      {
+        "icon": "speedometer",
+        "title": {
+          "zh-Hans": "概览页更跟手",
+          "en": "Smoother Overview",
+          "zh-Hant": "總覽頁更順手",
+          "zh-HK": "概覽頁更順手",
+          "ja": "概要画面がなめらかに",
+          "es-MX": "Resumen más fluido",
+          "ko": "개요 화면이 더 부드럽게",
+          "pt-BR": "Visão geral mais fluida",
+          "pt-PT": "Vista geral mais fluida",
+          "de": "Flüssigere Übersicht",
+          "fr": "Aperçu plus fluide",
+          "ar": "صفحة النظرة العامة أكثر سلاسة",
+          "tr": "Genel bakış daha akıcı"
+        },
+        "detail": {
+          "zh-Hans": "从概览页打开 Pro 功能的订阅说明时，整页不再跟着重算，弹出与收起都不会顿挫。",
+          "en": "Opening the subscription details for a Pro feature from Overview no longer re-renders the whole page, so it appears and dismisses without stutter.",
+          "zh-Hant": "從總覽頁打開 Pro 功能的訂閱說明時，整頁不再跟著重算，彈出與收起都不會頓挫。",
+          "zh-HK": "從概覽頁打開 Pro 功能的訂閱說明時，整頁不再跟著重算，彈出與收起都不會頓挫。",
+          "ja": "概要画面から Pro 機能のサブスクリプション説明を開いても画面全体が再描画されなくなり、表示も閉じる動作も引っかかりません。",
+          "es-MX": "Abrir los detalles de suscripción de una función Pro desde el resumen ya no vuelve a dibujar toda la pantalla, así que aparece y se cierra sin tirones.",
+          "ko": "개요 화면에서 Pro 기능의 구독 안내를 열어도 화면 전체가 다시 그려지지 않아, 나타나고 닫힐 때 끊김이 없습니다.",
+          "pt-BR": "Abrir os detalhes de assinatura de um recurso Pro pela visão geral não recalcula mais a tela inteira, então ele aparece e fecha sem travadas.",
+          "pt-PT": "Abrir os detalhes de subscrição de uma funcionalidade Pro a partir da vista geral já não recalcula o ecrã inteiro, pelo que surge e fecha sem solavancos.",
+          "de": "Wird aus der Übersicht die Abo-Info einer Pro-Funktion geöffnet, wird nicht mehr die ganze Seite neu berechnet – Ein- und Ausblenden laufen ruckelfrei.",
+          "fr": "L’ouverture des informations d’abonnement d’une fonction Pro depuis l’aperçu ne recalcule plus toute la page : l’affichage et la fermeture se font sans à-coups.",
+          "ar": "لم يعد فتح تفاصيل الاشتراك لميزة Pro من صفحة النظرة العامة يعيد رسم الصفحة بأكملها، فيظهر ويُغلق بسلاسة.",
+          "tr": "Genel bakıştan bir Pro özelliğinin abonelik bilgisi açıldığında artık tüm sayfa yeniden hesaplanmıyor; açılış ve kapanış takılmadan gerçekleşiyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.9.2",
     "date": "2026.07.25",
     "channel": "App Store",

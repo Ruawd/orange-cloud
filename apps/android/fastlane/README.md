@@ -45,7 +45,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane android deploy
 ```
 
-上传 AAB + 元数据 + 截图到指定轨道。track: internal(默认)/alpha(封闭测试)/beta/production
+上传 AAB + 元数据到指定轨道。track: internal(默认)/alpha(封闭测试)/beta/production；images:true 才连图一起传
 
 ----
 

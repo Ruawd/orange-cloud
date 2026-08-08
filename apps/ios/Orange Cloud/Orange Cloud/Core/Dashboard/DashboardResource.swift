@@ -86,7 +86,7 @@ enum DashboardResourceCatalog {
             items.append(DashboardResourceItem(
                 pin: PinnedResource(type: .zone, resourceId: zone.id),
                 title: zone.name,
-                subtitle: "\(planShort(zone.planName)) · \(zoneStatusText(zone.status))",
+                subtitle: "\(planShort(zone.planName)) · \(zoneStatusText(zone.displayStatus))",
                 route: .zone(zone)
             ))
         }

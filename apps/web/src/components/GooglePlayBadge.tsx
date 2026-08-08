@@ -1,5 +1,5 @@
 export const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=jiamin.chen.orangecloud";
-export const GOOGLE_PLAY_COMING = true;
+export const GOOGLE_PLAY_COMING = false;
 
 const PLAY_LOCALES = ["en", "zh-Hans", "zh-Hant", "zh-HK", "ja", "es-MX", "ko", "pt-BR", "pt-PT", "de", "fr", "ar", "tr"];
 

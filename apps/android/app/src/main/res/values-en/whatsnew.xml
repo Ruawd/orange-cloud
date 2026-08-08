@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">Pause Cloudflare in one tap</string>
+    <string name="whatsnew_1_7_2_0_detail">Zone settings now has a “Pause Cloudflare” switch. While paused, traffic no longer passes through Cloudflare — WAF, caching and origin IP masking stop working, while DNS is still resolved by Cloudflare. Resuming is one tap too, and either change takes about 5 minutes.</string>
     <string name="whatsnew_1_7_1_0_title">Remembers your default account</string>
     <string name="whatsnew_1_7_1_0_detail">With more than one Cloudflare account, the app now remembers the one you picked last and opens straight into it, instead of always falling back to the first in the list.</string>
     <string name="whatsnew_1_7_1_1_title">Account switcher fixes</string>

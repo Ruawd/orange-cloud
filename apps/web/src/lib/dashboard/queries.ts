@@ -455,7 +455,7 @@ async function getExpiringSoon(db: D1Database, f: Filters): Promise<ExpiringRow[
 		 FROM subscriptions
 		 WHERE status = 'active' AND is_lifetime = 0
 		   AND expires_date IS NOT NULL AND expires_date > ?${sql}
-		 ORDER BY expires_date ASC LIMIT 12`,
+		 ORDER BY expires_date ASC LIMIT 50`,
 		[Date.now(), ...params],
 	);
 }

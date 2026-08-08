@@ -217,6 +217,14 @@
     <string name="zs_purge_confirm_msg">Bu, bu alan adının Cloudflare uç noktasındaki tüm önbelleğini temizler ve kaynak yükünü kısa süre artırabilir.</string>
     <string name="zs_purge_url">URL’ye göre temizle</string>
     <string name="zs_purge_url_hint">Her satıra bir tam URL, en fazla %1$d. örn. https://%2$s/style.css</string>
+    <string name="zs_pause">Cloudflare’i duraklat</string>
+    <string name="zs_pause_desc">Trafik Cloudflare’i atlar, yalnızca DNS çözümlemesi kalır</string>
+    <string name="zs_pause_confirm_title">Cloudflare duraklatılsın mı?</string>
+    <string name="zs_pause_confirm_msg">Duraklattığınızda %1$s trafiği artık Cloudflare üzerinden geçmez: WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare tarafında sürer. Etkili olması yaklaşık 5 dakika sürer.</string>
+    <string name="zs_pause_confirm">Duraklat</string>
+    <string name="zs_resume_confirm_title">Cloudflare sürdürülsün mü?</string>
+    <string name="zs_resume_confirm_msg">Sürdürdüğünüzde %1$s trafiği yeniden Cloudflare proxy’si üzerinden geçer; önbellek ve güvenlik koruması yeniden devreye girer. Etkili olması yaklaşık 5 dakika sürer.</string>
+    <string name="zs_resume_confirm">Sürdür</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">Şifreleme modu</string>
     <string name="ssl_mode_off">Kapalı</string>

@@ -149,8 +149,12 @@ private struct DashboardHomeView: View {
     @Binding private var resourceRoute: DashboardResourceRoute?
     @State private var showSearch = false
     @State private var pendingRoute: DashboardResourceRoute?
-    /// 免费层点 Pro 资源（R2 / D1 / KV / Tunnel）时弹的付费墙场景
-    @State private var paywallFeature: ProFeature?
+    /// 免费层点 Pro 资源（R2 / D1 / KV / Tunnel）时弹的付费墙场景。
+    /// 状态放 @Observable 而非本视图 @State：本视图 body 极重（问候区 TimelineView、
+    /// 宫格、每个域名的迷你图、置顶清单的全量资源字典），@State 翻转会让整页在
+    /// sheet 呈现动画的起帧同帧重算，iPhone 11 级设备上是可感知的顿挫（issue #69）；
+    /// 隔离后只有 PaywallSheetHost 重算。
+    @State private var paywallPresenter = DashboardPaywallPresenter()
 
     // 套餐预设与账单日按账户存储（AccountPrefsStore，开启 iCloud 同步后跨设备）
     private let prefsStore = AccountPrefsStore.shared
@@ -395,10 +399,9 @@ private struct DashboardHomeView: View {
         .sheet(item: $usageDetail) { service in
             usageDetailSheet(service)
         }
-        // 免费层点 Pro 资源（搜索结果 / 告警 / 已固定）的付费墙
-        .sheet(item: $paywallFeature) { feature in
-            PaywallView(feature: feature)
-        }
+        // 免费层点 Pro 资源（搜索结果 / 告警 / 已固定）的付费墙：
+        // sheet 挂在透明宿主上，触发 / 收起都不重算本视图 body（见 paywallPresenter 注释）
+        .background { PaywallSheetHost(presenter: paywallPresenter) }
     }
 
     /// 「需重新授权」引导：说明 + 一键重授权（同身份原地换令牌），成功摘标后自动重拉
@@ -441,7 +444,7 @@ private struct DashboardHomeView: View {
     /// 闸门只在「赋值 route 之前」判断，不动栈根的值式 navdest 结构（导航铁律）。
     private func openResource(_ route: DashboardResourceRoute) {
         if let feature = route.proFeature, !entitlements.isPro {
-            paywallFeature = feature
+            paywallPresenter.feature = feature
         } else {
             resourceRoute = route
         }
@@ -1580,7 +1583,7 @@ private struct DashboardZoneCard: View {
     let points: [TrafficDataPoint]?
 
     private var statusText: String {
-        switch zone.status {
+        switch zone.displayStatus {
         case "active":                  String(localized: "已启用")
         case "pending", "initializing": String(localized: "待激活")
         default:                        String(localized: "已暂停")
@@ -1625,7 +1628,7 @@ private struct DashboardZoneCard: View {
                         .accessibilityLabel("24 小时请求")
                 }
             }
-            StatusDot(status: zone.status, size: 7)
+            StatusDot(status: zone.displayStatus, size: 7)
                 .accessibilityHidden(true)   // 状态已在副标题文字中
         }
         .padding(.horizontal, OCLayout.islandPadding)
@@ -1698,5 +1701,28 @@ private struct StatIsland: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(OCLayout.islandPadding)
         .glassIsland(cornerRadius: OCLayout.chipRadius)
+    }
+}
+
+// MARK: - 付费墙弹层隔离宿主（issue #69）
+
+/// 付费墙场景的独立状态载体：@Observable 按属性追踪，DashboardHomeView 只写不读，
+/// 触发 / 收起弹层都不会牵连整个概览页 body 重算（那是弹层起帧顿挫的来源）。
+@Observable
+private final class DashboardPaywallPresenter {
+    var feature: ProFeature?
+}
+
+/// 透明叶子视图，唯一读取 presenter.feature 的地方——sheet 起落只重算它自己
+private struct PaywallSheetHost: View {
+
+    @Bindable var presenter: DashboardPaywallPresenter
+
+    var body: some View {
+        Color.clear
+            .allowsHitTesting(false)
+            .sheet(item: $presenter.feature) { feature in
+                PaywallView(feature: feature)
+            }
     }
 }

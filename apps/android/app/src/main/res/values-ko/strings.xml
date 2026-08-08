@@ -569,6 +569,14 @@
     <string name="perm_ip_rules_desc">IP / ASN / 국가 접근 규칙 보기 및 관리</string>
     <string name="zs_purge_url">URL 단위 제거</string>
     <string name="zs_purge_url_hint">한 줄에 전체 URL 하나, 최대 %1$d개. 예: https://%2$s/style.css</string>
+    <string name="zs_pause">Cloudflare 일시 중지</string>
+    <string name="zs_pause_desc">트래픽이 Cloudflare를 우회하고 DNS 확인만 유지됩니다</string>
+    <string name="zs_pause_confirm_title">Cloudflare를 일시 중지할까요?</string>
+    <string name="zs_pause_confirm_msg">일시 중지하면 %1$s의 트래픽이 더 이상 Cloudflare를 거치지 않습니다. WAF, 캐시 가속, 원본 IP 숨김이 모두 중단되며 DNS는 계속 Cloudflare가 확인합니다. 적용까지 약 5분이 걸립니다.</string>
+    <string name="zs_pause_confirm">일시 중지</string>
+    <string name="zs_resume_confirm_title">Cloudflare를 다시 시작할까요?</string>
+    <string name="zs_resume_confirm_msg">다시 시작하면 %1$s의 트래픽이 다시 Cloudflare를 통해 프록시되고 캐시와 보안 보호가 함께 적용됩니다. 적용까지 약 5분이 걸립니다.</string>
+    <string name="zs_resume_confirm">다시 시작</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">암호화 모드</string>
     <string name="ssl_mode_off">끄기</string>

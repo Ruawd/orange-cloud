@@ -274,6 +274,14 @@
     <string name="zs_purge_confirm_msg">将清除该域名在 Cloudflare 边缘的全部缓存，可能短时增加源站负载。</string>
     <string name="zs_purge_url">按 URL 清缓存</string>
     <string name="zs_purge_url_hint">每行一个完整 URL，单次最多 %1$d 个。例如 https://%2$s/style.css</string>
+    <string name="zs_pause">暂停 Cloudflare</string>
+    <string name="zs_pause_desc">流量绕过 Cloudflare，仅保留 DNS 解析</string>
+    <string name="zs_pause_confirm_title">暂停 Cloudflare？</string>
+    <string name="zs_pause_confirm_msg">暂停后，%1$s 的流量不再经过 Cloudflare：WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析。生效约需 5 分钟。</string>
+    <string name="zs_pause_confirm">确认暂停</string>
+    <string name="zs_resume_confirm_title">恢复 Cloudflare？</string>
+    <string name="zs_resume_confirm_msg">恢复后，%1$s 的流量重新经由 Cloudflare 代理，缓存与安全防护随之生效。生效约需 5 分钟。</string>
+    <string name="zs_resume_confirm">确认恢复</string>
 
     <!-- 域名安全 · SSL/TLS 加密设置 -->
     <string name="ssl_title">SSL/TLS</string>

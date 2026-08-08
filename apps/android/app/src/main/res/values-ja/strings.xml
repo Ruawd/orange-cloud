@@ -569,6 +569,14 @@
     <string name="perm_ip_rules_desc">IP / ASN / 国・地域のアクセスルールを確認・管理</string>
     <string name="zs_purge_url">URL 単位で削除</string>
     <string name="zs_purge_url_hint">1 行に 1 つの完全な URL、最大 %1$d 件。例: https://%2$s/style.css</string>
+    <string name="zs_pause">Cloudflare を一時停止</string>
+    <string name="zs_pause_desc">トラフィックは Cloudflare を経由せず、DNS 解決のみ残ります</string>
+    <string name="zs_pause_confirm_title">Cloudflare を一時停止しますか？</string>
+    <string name="zs_pause_confirm_msg">一時停止すると、%1$s のトラフィックは Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿がすべて無効になります。DNS の解決は Cloudflare が引き続き行います。反映まで約 5 分かかります。</string>
+    <string name="zs_pause_confirm">一時停止する</string>
+    <string name="zs_resume_confirm_title">Cloudflare を再開しますか？</string>
+    <string name="zs_resume_confirm_msg">再開すると、%1$s のトラフィックは再び Cloudflare を経由し、キャッシュとセキュリティ保護が有効になります。反映まで約 5 分かかります。</string>
+    <string name="zs_resume_confirm">再開する</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">暗号化モード</string>
     <string name="ssl_mode_off">オフ</string>

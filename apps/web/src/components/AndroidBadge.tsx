@@ -6,7 +6,7 @@ import GooglePlayBadge from "./GooglePlayBadge";
 import DirectDownloadBadge from "./DirectDownloadBadge";
 
 // Android 下载徽章，按访客地区：中国大陆 → 官网下载 APK + Google Play（部分用户偏好 Play）；
-// 其余 → 仅 Google Play（暂置灰即将上线）。首页 ISR 缓存页，故客户端挂载后读 /api/geo；默认先显示 Play。
+// 其余 → 仅 Google Play。首页 ISR 缓存页，故客户端挂载后读 /api/geo；默认先显示 Play。
 export default function AndroidBadge({
 	locale,
 	strings,
@@ -38,7 +38,6 @@ export default function AndroidBadge({
 			locale={locale}
 			alt={strings.playAlt}
 			comingLabel={strings.playComing}
-			coming
 			className={className}
 		/>
 	);

@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [ZoneEntity::class, DnsRecordEntity::class, WorkerEntity::class, PushMessageEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 abstract class OrangeCloudDatabase : RoomDatabase() {

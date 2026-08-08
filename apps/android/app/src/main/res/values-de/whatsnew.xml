@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">Cloudflare mit einem Tipp pausieren</string>
+    <string name="whatsnew_1_7_2_0_detail">In den Domain-Einstellungen gibt es jetzt den Schalter „Cloudflare pausieren“. Pausiert läuft der Traffic nicht mehr über Cloudflare – WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Fortsetzen geht genauso schnell, und beides greift nach etwa 5 Minuten.</string>
     <string name="whatsnew_1_7_1_0_title">Merkt sich dein Standardkonto</string>
     <string name="whatsnew_1_7_1_0_detail">Bei mehreren Cloudflare-Konten merkt sich die App das zuletzt gewählte Konto und startet direkt damit – statt immer auf das erste Konto der Liste zurückzufallen.</string>
     <string name="whatsnew_1_7_1_1_title">Korrekturen am Kontowechsel-Menü</string>

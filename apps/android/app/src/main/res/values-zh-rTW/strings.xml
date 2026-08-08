@@ -569,6 +569,14 @@
     <string name="perm_ip_rules_desc">檢視與管理 IP / ASN / 國家或地區存取規則</string>
     <string name="zs_purge_url">依 URL 清快取</string>
     <string name="zs_purge_url_hint">每行一個完整 URL，單次最多 %1$d 個。例如 https://%2$s/style.css</string>
+    <string name="zs_pause">暫停 Cloudflare</string>
+    <string name="zs_pause_desc">流量繞過 Cloudflare，僅保留 DNS 解析</string>
+    <string name="zs_pause_confirm_title">暫停 Cloudflare？</string>
+    <string name="zs_pause_confirm_msg">暫停後，%1$s 的流量不再經過 Cloudflare：WAF、快取加速與來源伺服器 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析。約需 5 分鐘生效。</string>
+    <string name="zs_pause_confirm">確認暫停</string>
+    <string name="zs_resume_confirm_title">恢復 Cloudflare？</string>
+    <string name="zs_resume_confirm_msg">恢復後，%1$s 的流量重新經由 Cloudflare 代理，快取與安全防護隨之生效。約需 5 分鐘生效。</string>
+    <string name="zs_resume_confirm">確認恢復</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">加密模式</string>
     <string name="ssl_mode_off">關閉</string>

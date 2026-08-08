@@ -217,6 +217,14 @@
     <string name="zs_purge_confirm_msg">Dies leert alle zwischengespeicherten Inhalte dieser Domain am Cloudflare-Edge und kann die Ursprungslast kurz erhöhen.</string>
     <string name="zs_purge_url">Per URL leeren</string>
     <string name="zs_purge_url_hint">Eine vollständige URL pro Zeile, bis zu %1$d. z. B. https://%2$s/style.css</string>
+    <string name="zs_pause">Cloudflare pausieren</string>
+    <string name="zs_pause_desc">Traffic umgeht Cloudflare, nur die DNS-Auflösung bleibt</string>
+    <string name="zs_pause_confirm_title">Cloudflare pausieren?</string>
+    <string name="zs_pause_confirm_msg">Nach dem Pausieren läuft der Traffic von %1$s nicht mehr über Cloudflare: WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Die Änderung greift nach etwa 5 Minuten.</string>
+    <string name="zs_pause_confirm">Pausieren</string>
+    <string name="zs_resume_confirm_title">Cloudflare fortsetzen?</string>
+    <string name="zs_resume_confirm_msg">Nach dem Fortsetzen läuft der Traffic von %1$s wieder über Cloudflare, Caching und Sicherheitsschutz greifen erneut. Die Änderung greift nach etwa 5 Minuten.</string>
+    <string name="zs_resume_confirm">Fortsetzen</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">Verschlüsselungsmodus</string>
     <string name="ssl_mode_off">Aus</string>

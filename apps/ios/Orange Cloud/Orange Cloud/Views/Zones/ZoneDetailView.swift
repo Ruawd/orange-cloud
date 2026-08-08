@@ -40,7 +40,10 @@ struct ZoneDetailView: View {
             analyticsService: session.analyticsService, zoneId: zoneId
         ))
         _actionsViewModel = State(initialValue: ZoneActionsViewModel(
-            service: session.zoneSettingsService, zoneId: zoneId
+            service: session.zoneSettingsService,
+            zoneService: session.zoneService,
+            zoneId: zoneId,
+            paused: zone.paused
         ))
     }
 
@@ -54,6 +57,8 @@ struct ZoneDetailView: View {
     private var canReadSettings: Bool { auth.hasScope("zone-settings.read") }
     private var canEditSettings: Bool { auth.hasScope("zone-settings.write") }
     private var canPurge: Bool { auth.hasScope("cache.purge") }
+    /// 暂停 / 恢复走 zone 本身，权限与 zone-settings 那条链路无关
+    private var canEditZone: Bool { auth.hasScope("zone.write") }
 
     /// DNS 记录数：本地已同步过记录用实时缓存计数；否则用 Dashboard/入页回写的
     /// total_count（CachedZone.dnsRecordCount），避免首进详情页默认显示 0 条。
@@ -61,8 +66,14 @@ struct ZoneDetailView: View {
         records.isEmpty ? (zone.dnsRecordCount ?? 0) : records.count
     }
 
+    /// hero 卡状态：暂停优先于 status（暂停时 API 的 status 仍是 active），
+    /// 且以 ViewModel 的实时值为准，切换后立刻翻牌
+    private var displayStatus: String {
+        actionsViewModel.paused ? "paused" : zone.status
+    }
+
     private var statusText: String {
-        switch zone.status {
+        switch displayStatus {
         case "active":                  String(localized: "已启用")
         case "pending", "initializing": String(localized: "待激活")
         default:                        String(localized: "已暂停")
@@ -210,6 +221,9 @@ struct ZoneDetailView: View {
                         tint: .red,
                         isOn: actionsViewModel.underAttack,
                         isBusy: actionsViewModel.isTogglingUnderAttack,
+                        canEdit: canEditSettings,
+                        isLoaded: actionsViewModel.settingsLoaded,
+                        deniedScope: canReadSettings ? "zone-settings.write" : "zone-settings.read",
                         requestToggle: { on in pendingAction = .underAttack(on) }
                     )
 
@@ -220,7 +234,25 @@ struct ZoneDetailView: View {
                         tint: .blue,
                         isOn: actionsViewModel.devMode,
                         isBusy: actionsViewModel.isTogglingDevMode,
+                        canEdit: canEditSettings,
+                        isLoaded: actionsViewModel.settingsLoaded,
+                        deniedScope: canReadSettings ? "zone-settings.write" : "zone-settings.read",
                         requestToggle: { on in pendingAction = .devMode(on) }
+                    )
+
+                    // 暂停态一直可读（zone.read 是登录基础权限），故 isLoaded 恒 true：
+                    // 无 zone.write 时行内显示当前开/关而非锁，符合「能看不能改」的一致语义。
+                    settingToggleRow(
+                        title: String(localized: "暂停 Cloudflare"),
+                        subtitle: String(localized: "流量绕过 Cloudflare，仅保留 DNS 解析"),
+                        icon: "pause.circle",
+                        tint: .gray,
+                        isOn: actionsViewModel.paused,
+                        isBusy: actionsViewModel.isTogglingPause,
+                        canEdit: canEditZone,
+                        isLoaded: true,
+                        deniedScope: "zone.write",
+                        requestToggle: { on in pendingAction = .pause(on) }
                     )
 
                     Button {
@@ -320,6 +352,11 @@ struct ZoneDetailView: View {
             }
         }
         .task {
+            // 暂停态只需 zone.read（登录必备），与上面的 settings 权限无关：
+            // 进页用 API 校准一次，纠正列表缓存里过期的暂停态
+            await syncPausedFromAPI()
+        }
+        .task {
             // 该 zone 尚未统计过记录数（前 50 个之外 / Dashboard 未加载完就进来）：
             // 入页轻量拉一次 total_count 回写缓存，首屏不显示 0 条
             if zone.dnsRecordCount == nil, records.isEmpty, auth.hasScope("dns.read"),
@@ -335,6 +372,7 @@ struct ZoneDetailView: View {
             if canReadSettings {
                 await actionsViewModel.loadSettings()
             }
+            await syncPausedFromAPI()
         }
         .confirmationDialog(
             pendingAction?.title ?? "",
@@ -350,6 +388,10 @@ struct ZoneDetailView: View {
                     switch action {
                     case .underAttack(let on): await actionsViewModel.setUnderAttack(on)
                     case .devMode(let on):     await actionsViewModel.setDevMode(on)
+                    case .pause(let on):
+                        if await actionsViewModel.setPaused(on) {
+                            writeBackPaused(actionsViewModel.paused)
+                        }
                     }
                 }
             }
@@ -402,8 +444,24 @@ struct ZoneDetailView: View {
         }
     }
 
+    // MARK: - 暂停态与缓存同步
+
+    /// 从 API 校准暂停态并回写缓存（列表/首页读的是同一份 CachedZone）
+    private func syncPausedFromAPI() async {
+        guard let paused = await actionsViewModel.refreshPaused() else { return }
+        writeBackPaused(paused)
+    }
+
+    private func writeBackPaused(_ paused: Bool) {
+        guard zone.paused != paused else { return }
+        zone.paused = paused
+        SafeCache.perform("暂停状态保存") { try modelContext.save() }
+    }
+
     // MARK: - 设置开关行
 
+    /// canEdit / isLoaded / deniedScope 由调用方给：Under Attack 与开发模式走
+    /// zone-settings.*，暂停走 zone.write，两条权限链路不共用。
     private func settingToggleRow(
         title: String,
         subtitle: String,
@@ -411,6 +469,9 @@ struct ZoneDetailView: View {
         tint: Color,
         isOn: Bool,
         isBusy: Bool,
+        canEdit: Bool,
+        isLoaded: Bool,
+        deniedScope: String,
         requestToggle: @escaping (Bool) -> Void
     ) -> some View {
         HStack(spacing: 12) {
@@ -424,7 +485,7 @@ struct ZoneDetailView: View {
             Spacer()
             if isBusy {
                 ProgressView()
-            } else if canEditSettings && actionsViewModel.settingsLoaded {
+            } else if canEdit && isLoaded {
                 Toggle("", isOn: Binding(
                     get: { isOn },
                     set: { on in requestToggle(on) }
@@ -433,10 +494,10 @@ struct ZoneDetailView: View {
                 .accessibilityLabel(title)
             } else {
                 Button {
-                    deniedScopeHint = canReadSettings ? "zone-settings.write" : "zone-settings.read"
+                    deniedScopeHint = deniedScope
                     showActionDenied = true
                 } label: {
-                    if actionsViewModel.settingsLoaded {
+                    if isLoaded {
                         // 只读授权：显示当前状态
                         Text(isOn ? String(localized: "开") : String(localized: "关"))
                             .font(.subheadline)
@@ -450,7 +511,7 @@ struct ZoneDetailView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(title)
-                .accessibilityValue(actionsViewModel.settingsLoaded ? (isOn ? String(localized: "开") : String(localized: "关")) : "")
+                .accessibilityValue(isLoaded ? (isOn ? String(localized: "开") : String(localized: "关")) : "")
                 .accessibilityHint("需要额外授权才能修改")
             }
         }
@@ -467,11 +528,11 @@ struct ZoneDetailView: View {
                 .minimumScaleFactor(0.7)
             HStack(spacing: 8) {
                 HStack(spacing: 5) {
-                    StatusDot(status: zone.status, size: 7)
+                    StatusDot(status: displayStatus, size: 7)
                         .accessibilityHidden(true)
                     Text(statusText)
                         .font(.footnote.weight(.medium))
-                        .foregroundStyle(zone.status == "active" ? Color.green : Color.secondary)
+                        .foregroundStyle(displayStatus == "active" ? Color.green : Color.secondary)
                 }
                 .accessibilityElement(children: .combine)
                 PlanBadge(planName: zone.planName)
@@ -508,11 +569,14 @@ struct ZoneDetailView: View {
 private nonisolated enum PendingZoneAction: Identifiable {
     case underAttack(Bool)
     case devMode(Bool)
+    /// true = 暂停 Cloudflare，false = 恢复
+    case pause(Bool)
 
     var id: String {
         switch self {
         case .underAttack(let on): "underAttack-\(on)"
         case .devMode(let on):     "devMode-\(on)"
+        case .pause(let on):       "pause-\(on)"
         }
     }
 
@@ -522,6 +586,8 @@ private nonisolated enum PendingZoneAction: Identifiable {
         case .underAttack(false): String(localized: "关闭 Under Attack 模式？")
         case .devMode(true):      String(localized: "开启开发模式？")
         case .devMode(false):     String(localized: "关闭开发模式？")
+        case .pause(true):        String(localized: "暂停 Cloudflare？")
+        case .pause(false):       String(localized: "恢复 Cloudflare？")
         }
     }
 
@@ -529,6 +595,8 @@ private nonisolated enum PendingZoneAction: Identifiable {
         switch self {
         case .underAttack(true), .devMode(true):   String(localized: "确认开启")
         case .underAttack(false), .devMode(false): String(localized: "确认关闭")
+        case .pause(true):                         String(localized: "确认暂停")
+        case .pause(false):                        String(localized: "确认恢复")
         }
     }
 
@@ -542,6 +610,10 @@ private nonisolated enum PendingZoneAction: Identifiable {
             String(localized: "开启后，\(zoneName) 将临时绕过 Cloudflare 缓存，源站负载会上升；3 小时后自动关闭。")
         case .devMode(false):
             String(localized: "关闭后，\(zoneName) 立即恢复缓存加速。")
+        case .pause(true):
+            String(localized: "暂停后，\(zoneName) 的流量不再经过 Cloudflare：WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析。生效约需 5 分钟。")
+        case .pause(false):
+            String(localized: "恢复后，\(zoneName) 的流量重新经由 Cloudflare 代理，缓存与安全防护随之生效。生效约需 5 分钟。")
         }
     }
 }

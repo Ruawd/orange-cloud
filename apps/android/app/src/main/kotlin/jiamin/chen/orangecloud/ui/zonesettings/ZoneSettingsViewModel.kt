@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.data.repository.AccountStore
+import jiamin.chen.orangecloud.data.repository.ZoneRepository
 import jiamin.chen.orangecloud.data.repository.ZoneSettingsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,17 +30,23 @@ data class ZoneSettingsUiState(
     val zoneName: String = "",
     val developmentMode: Boolean = false,
     val underAttack: Boolean = false,
+    /** 是否暂停 Cloudflare 代理。与上面两个开关不同源：读写的是域名本身。 */
+    val paused: Boolean = false,
     val isLoading: Boolean = false,
     val isPurging: Boolean = false,
+    val isTogglingPause: Boolean = false,
     val missingScope: Boolean = false,
     val canWrite: Boolean = false,
     val canPurge: Boolean = false,
+    val canPause: Boolean = false,
 )
 
 @HiltViewModel
 class ZoneSettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: ZoneSettingsRepository,
+    private val zoneRepository: ZoneRepository,
+    private val accountStore: AccountStore,
     authRepository: AuthRepository,
 ) : ViewModel() {
 
@@ -46,6 +55,10 @@ class ZoneSettingsViewModel @Inject constructor(
     private val canWrite = authRepository.hasScope(Scopes.ZONE_SETTINGS_WRITE)
     private val canPurge = authRepository.hasScope(Scopes.CACHE_PURGE)
 
+    // 暂停走域名本身（zone.read/.write），与 zone-settings.* 那条链路的权限无关：
+    // 没有 zone-settings.read 时本页只剩这一个开关，也要照常可用
+    private val canPause = authRepository.hasScope(Scopes.ZONE_WRITE)
+
     private val _uiState = MutableStateFlow(
         ZoneSettingsUiState(
             zoneName = savedStateHandle.get<String>("zoneName").orEmpty(),
@@ -53,6 +66,7 @@ class ZoneSettingsViewModel @Inject constructor(
             missingScope = !hasRead,
             canWrite = canWrite,
             canPurge = canPurge,
+            canPause = canPause,
         ),
     )
     val uiState: StateFlow<ZoneSettingsUiState> = _uiState.asStateFlow()
@@ -62,6 +76,42 @@ class ZoneSettingsViewModel @Inject constructor(
 
     init {
         if (hasRead) load()
+        // 暂停态读缓存（Room 单一可信源），再拉一次网络校准
+        viewModelScope.launch {
+            zoneRepository.observeZone(zoneId).filterNotNull().collect { zone ->
+                _uiState.update {
+                    it.copy(
+                        paused = zone.isPaused,
+                        zoneName = it.zoneName.ifBlank { zone.name },
+                    )
+                }
+            }
+        }
+        viewModelScope.launch {
+            val accountId = accountStore.selectedAccountId.value ?: return@launch
+            runCatching { zoneRepository.refreshZone(accountId, zoneId) }
+        }
+    }
+
+    /**
+     * 暂停 / 恢复 Cloudflare 代理。影响面大（WAF、缓存、源站 IP 隐藏一并失效），
+     * 由界面先弹确认对话框，这里只负责下发。
+     */
+    fun setPaused(on: Boolean) {
+        if (!canPause || _uiState.value.isTogglingPause) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isTogglingPause = true) }
+            try {
+                accountStore.ensureLoaded()
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                val zone = zoneRepository.setPaused(accountId, zoneId, on)
+                _uiState.update { it.copy(paused = zone.isPaused) }
+            } catch (e: Exception) {
+                eventChannel.send(ZoneSettingsEvent.Error(e.message))
+            } finally {
+                _uiState.update { it.copy(isTogglingPause = false) }
+            }
+        }
     }
 
     fun load() {

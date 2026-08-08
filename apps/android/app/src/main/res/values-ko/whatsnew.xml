@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">한 번의 탭으로 Cloudflare 일시 중지</string>
+    <string name="whatsnew_1_7_2_0_detail">도메인 설정에 \'Cloudflare 일시 중지\' 스위치가 생겼습니다. 일시 중지하면 트래픽이 Cloudflare를 거치지 않아 WAF, 캐시 가속, 원본 IP 숨김이 중단되며 DNS는 계속 Cloudflare가 확인합니다. 다시 시작도 한 번의 탭이고, 두 경우 모두 약 5분 뒤 적용됩니다.</string>
     <string name="whatsnew_1_7_1_0_title">기본 계정을 기억합니다</string>
     <string name="whatsnew_1_7_1_0_detail">Cloudflare 계정이 여러 개일 때 마지막으로 선택한 계정을 기억해, 다음에 열면 바로 그 계정으로 시작합니다. 더 이상 목록의 첫 번째 계정으로 돌아가지 않습니다.</string>
     <string name="whatsnew_1_7_1_1_title">계정 전환 메뉴 수정</string>

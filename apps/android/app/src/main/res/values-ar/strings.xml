@@ -217,6 +217,14 @@
     <string name="zs_purge_confirm_msg">يمسح هذا كل المحتوى المخزن مؤقتًا لهذا النطاق على حافة Cloudflare وقد يزيد حمل الأصل لفترة وجيزة.</string>
     <string name="zs_purge_url">مسح حسب URL</string>
     <string name="zs_purge_url_hint">عنوان URL كامل في كل سطر، حتى %1$d. مثل https://%2$s/style.css</string>
+    <string name="zs_pause">إيقاف Cloudflare مؤقتًا</string>
+    <string name="zs_pause_desc">تتجاوز حركة المرور Cloudflare، ويبقى تحليل DNS فقط</string>
+    <string name="zs_pause_confirm_title">إيقاف Cloudflare مؤقتًا؟</string>
+    <string name="zs_pause_confirm_msg">بعد الإيقاف المؤقت، لن تمر حركة المرور إلى %1$s عبر Cloudflare: سيتوقف جدار حماية تطبيقات الويب والتخزين المؤقت وإخفاء عنوان IP للخادم الأصلي، بينما يستمر Cloudflare في تحليل DNS. يستغرق السريان نحو 5 دقائق.</string>
+    <string name="zs_pause_confirm">إيقاف مؤقت</string>
+    <string name="zs_resume_confirm_title">استئناف Cloudflare؟</string>
+    <string name="zs_resume_confirm_msg">بعد الاستئناف، تعود حركة المرور إلى %1$s عبر وكيل Cloudflare، ويعود التخزين المؤقت والحماية الأمنية إلى العمل. يستغرق السريان نحو 5 دقائق.</string>
+    <string name="zs_resume_confirm">استئناف</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">وضع التشفير</string>
     <string name="ssl_mode_off">إيقاف</string>

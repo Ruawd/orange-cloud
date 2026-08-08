@@ -16,12 +16,26 @@ data class Account(
 data class Zone(
     val id: String,
     val name: String,
-    val status: String, // "active" | "pending" | "paused" 等
+    val status: String, // "active" | "pending" | "initializing" | "moved" 等
+    /**
+     * 是否暂停 Cloudflare 代理（Dashboard 的「Pause Cloudflare on Site」）。
+     * 与 status 正交：暂停时 status 多半仍是 active，展示态一律读 displayStatus。
+     */
+    val paused: Boolean? = null,
     val plan: ZonePlan? = null,
     @SerialName("name_servers") val nameServers: List<String>? = null,
 ) {
-    val isActive: Boolean get() = status == "active"
+    val isPaused: Boolean get() = paused == true
+
+    val isActive: Boolean get() = status == "active" && !isPaused
+
+    /** 对外展示用状态：暂停优先于 status。 */
+    val displayStatus: String get() = if (isPaused) "paused" else status
 }
+
+/** PATCH /zones/{id} 请求体：暂停 / 恢复 Cloudflare 代理。 */
+@Serializable
+data class PauseZoneRequest(val paused: Boolean)
 
 @Serializable
 data class ZonePlan(val name: String)

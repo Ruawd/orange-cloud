@@ -16,6 +16,7 @@ data class ZoneEntity(
     val accountId: String,
     val name: String,
     val status: String,
+    val paused: Boolean = false,
     val planName: String?,
     val nameServersJson: String?,
 )
@@ -24,6 +25,7 @@ fun ZoneEntity.toZone(json: Json): Zone = Zone(
     id = id,
     name = name,
     status = status,
+    paused = paused,
     plan = planName?.let { ZonePlan(it) },
     nameServers = nameServersJson?.let {
         runCatching { json.decodeFromString(ListSerializer(String.serializer()), it) }.getOrNull()
@@ -35,6 +37,7 @@ fun Zone.toEntity(accountId: String, json: Json): ZoneEntity = ZoneEntity(
     accountId = accountId,
     name = name,
     status = status,
+    paused = isPaused,
     planName = plan?.name,
     nameServersJson = nameServers?.let { json.encodeToString(ListSerializer(String.serializer()), it) },
 )

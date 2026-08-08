@@ -61,9 +61,14 @@ enum AppNotifications {
             guard let zones = try? await zoneService.listZones(accountId: accountId) else { continue }
             let byId = Dictionary(uniqueKeysWithValues: zones.map { ($0.id, $0) })
             for entry in cached where entry.accountId == accountId {
-                if let fresh = byId[entry.id], fresh.status != entry.status {
-                    changes.append((entry.name, entry.status, fresh.status))
-                    entry.update(from: fresh)
+                // 比对展示态：暂停与 status 正交（暂停时 status 仍是 active），
+                // 在别处暂停/恢复了域名也要能推送到
+                if let fresh = byId[entry.id] {
+                    let freshStatus = (fresh.paused ?? false) ? "paused" : fresh.status
+                    if freshStatus != entry.displayStatus {
+                        changes.append((entry.name, entry.displayStatus, freshStatus))
+                        entry.update(from: fresh)
+                    }
                 }
             }
         }

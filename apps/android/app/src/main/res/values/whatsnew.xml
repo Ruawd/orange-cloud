@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">一键暂停 Cloudflare</string>
+    <string name="whatsnew_1_7_2_0_detail">域名设置页新增「暂停 Cloudflare」开关。暂停后流量不再经过 Cloudflare——WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析；恢复同样一键完成，两者约 5 分钟生效。</string>
     <string name="whatsnew_1_7_1_0_title">记住你的默认账号</string>
     <string name="whatsnew_1_7_1_0_detail">有多个 Cloudflare 账号时，App 会记住你上次选中的那一个，下次打开直接进入它，不再固定回到列表里的第一个。</string>
     <string name="whatsnew_1_7_1_1_title">修复账号切换菜单</string>

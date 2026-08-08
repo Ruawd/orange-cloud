@@ -2,7 +2,11 @@
 //  ZoneActionsViewModel.swift
 //  Orange Cloud
 //
-//  Zone 详情页「操作」区：Under Attack / 开发模式开关 + 缓存清理。
+//  Zone 详情页「操作」区：Under Attack / 开发模式 / 暂停 Cloudflare 开关 + 缓存清理。
+//
+//  注意暂停态与另两个开关的数据源不同：Under Attack / 开发模式读写 zone settings
+//  （zone-settings.read/.write），暂停读写 zone 本身（zone.read / zone.write），
+//  两条链路的权限与加载态各自独立，别合并。
 //
 
 import Foundation
@@ -15,19 +19,25 @@ final class ZoneActionsViewModel {
     private(set) var underAttack = false
     private(set) var devMode = false
     private(set) var settingsLoaded = false
+    /// 是否暂停 Cloudflare 代理。初值取自本地缓存，进页后再用 API 校准。
+    private(set) var paused: Bool
 
     var isTogglingUnderAttack = false
     var isTogglingDevMode = false
+    var isTogglingPause = false
     var isPurging = false
     var didPurge = false       // sensoryFeedback / 提示触发器
     var error: String?
 
     private let service: ZoneSettingsService
+    private let zoneService: ZoneService
     private let zoneId: String
 
-    init(service: ZoneSettingsService, zoneId: String) {
+    init(service: ZoneSettingsService, zoneService: ZoneService, zoneId: String, paused: Bool = false) {
         self.service = service
+        self.zoneService = zoneService
         self.zoneId = zoneId
+        self.paused = paused
     }
 
     func loadSettings() async {
@@ -72,6 +82,33 @@ final class ZoneActionsViewModel {
             self.error = error.localizedDescription
         }
         isTogglingDevMode = false
+    }
+
+    /// 校准暂停态（只需 zone.read，与 loadSettings 的 zone-settings.read 无关）。
+    /// 返回最新值，调用方据此回写本地缓存；读失败保持缓存值不动。
+    @discardableResult
+    func refreshPaused() async -> Bool? {
+        guard let zone = try? await zoneService.getZone(zoneId: zoneId) else { return nil }
+        paused = zone.paused ?? false
+        return paused
+    }
+
+    /// 暂停 / 恢复 Cloudflare 代理。返回是否成功，供调用方回写缓存。
+    @discardableResult
+    func setPaused(_ on: Bool) async -> Bool {
+        guard !isTogglingPause else { return false }
+        isTogglingPause = true
+        error = nil
+        defer { isTogglingPause = false }
+        do {
+            let zone = try await zoneService.setPaused(zoneId: zoneId, paused: on)
+            // 少数情况下响应不带 paused，按请求值兜底
+            paused = zone.paused ?? on
+            return true
+        } catch {
+            self.error = error.localizedDescription
+            return false
+        }
     }
 
     func purgeCache() async {

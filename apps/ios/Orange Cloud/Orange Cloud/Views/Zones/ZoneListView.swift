@@ -301,7 +301,7 @@ private struct ZoneSidebarRow: View {
                 PlanBadge(planName: zone.planName)
             }
             Spacer()
-            StatusDot(status: zone.status, size: 7)
+            StatusDot(status: zone.displayStatus, size: 7)
         }
         .padding(.vertical, 2)
     }
@@ -334,7 +334,7 @@ struct ZoneCard: View {
 
             Spacer()
 
-            StatusDot(status: zone.status)
+            StatusDot(status: zone.displayStatus)
             Image(systemName: "chevron.right")
                 .font(.caption)
                 .foregroundStyle(.tertiary)

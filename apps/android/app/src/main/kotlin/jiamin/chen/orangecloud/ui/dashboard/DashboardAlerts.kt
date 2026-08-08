@@ -57,8 +57,8 @@ fun buildAlerts(input: AlertInput, limit: Int = MAX_ALERTS): List<DashboardAlert
             kind = AlertKind.ZONE_INACTIVE,
             severity = AlertSeverity.WARN,
             name = zone.name,
-            detail = zone.status,
-            target = DashboardResource(DashboardResourceType.ZONE, zone.id, zone.name, zone.status),
+            detail = zone.displayStatus,
+            target = DashboardResource(DashboardResourceType.ZONE, zone.id, zone.name, zone.displayStatus),
         )
     }
 

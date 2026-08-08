@@ -261,7 +261,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 				`SELECT original_transaction_id, product_id, status, auto_renew_status, is_lifetime,
 				        expires_date, price_millis, currency, purchase_date
 				 FROM subscriptions WHERE ${NOT_SANDBOX}
-				 ORDER BY updated_at DESC LIMIT 12`,
+				 ORDER BY updated_at DESC LIMIT 50`,
 			)
 			.all<SubRow>(),
 		buildTrend(db, range, now),

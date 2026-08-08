@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">Pausa Cloudflare con un toque</string>
+    <string name="whatsnew_1_7_2_0_detail">La pantalla de ajustes del dominio ahora incluye el interruptor «Pausar Cloudflare». En pausa, el tráfico deja de pasar por Cloudflare: el WAF, la caché y el ocultamiento de la IP de origen dejan de funcionar, aunque el DNS lo sigue resolviendo Cloudflare. Reanudar es igual de simple y ambos cambios tardan unos 5 minutos.</string>
     <string name="whatsnew_1_7_1_0_title">Recuerda tu cuenta predeterminada</string>
     <string name="whatsnew_1_7_1_0_detail">Si tienes varias cuentas de Cloudflare, la app recuerda la última que elegiste y abre directamente en ella, en lugar de volver siempre a la primera de la lista.</string>
     <string name="whatsnew_1_7_1_1_title">Correcciones en el menú de cuentas</string>

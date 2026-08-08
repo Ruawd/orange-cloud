@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_1_7_2_0_title">ワンタップで Cloudflare を一時停止</string>
+    <string name="whatsnew_1_7_2_0_detail">ドメイン設定に「Cloudflare を一時停止」スイッチを追加しました。一時停止中はトラフィックが Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿が無効になります（DNS の解決は Cloudflare が継続）。再開もワンタップで、どちらも反映まで約 5 分です。</string>
     <string name="whatsnew_1_7_1_0_title">既定のアカウントを記憶</string>
     <string name="whatsnew_1_7_1_0_detail">Cloudflare アカウントが複数ある場合、最後に選んだアカウントを記憶し、次に開いたときはそのアカウントで始まります。常に一覧の先頭に戻ることはありません。</string>
     <string name="whatsnew_1_7_1_1_title">アカウント切り替えメニューの修正</string>

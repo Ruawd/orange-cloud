@@ -25,6 +25,9 @@ final class CachedZone {
     // DNS 记录总数（Dashboard 轻量 total_count 回写 / 详情页兜底拉取），nil = 尚未统计。
     // 可选新增字段走轻量迁移；detail 页首屏优先读它，避免默认显示 0 条。
     var dnsRecordCount: Int?
+    // 是否暂停 Cloudflare 代理。API 里与 status 正交（暂停时 status 仍是 active），
+    // 展示状态一律读 displayStatus，别直接读 status。默认值走轻量迁移。
+    var paused: Bool = false
 
     init(from zone: Zone, accountId: String) {
         self.id          = zone.id
@@ -34,6 +37,7 @@ final class CachedZone {
         self.nameServers = zone.nameServers ?? []
         self.accountId   = accountId
         self.updatedAt   = Date()
+        self.paused      = zone.paused ?? false
     }
 
     func update(from zone: Zone) {
@@ -41,8 +45,12 @@ final class CachedZone {
         status      = zone.status
         planName    = zone.plan?.name ?? "—"
         nameServers = zone.nameServers ?? []
+        paused      = zone.paused ?? false
         updatedAt   = Date()
     }
+
+    /// 对外展示用状态：暂停优先于 status（Cloudflare 暂停时 status 仍报 active）
+    var displayStatus: String { paused ? "paused" : status }
 }
 
 @Model

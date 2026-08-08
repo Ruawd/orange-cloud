@@ -593,6 +593,14 @@
     <string name="perm_ip_rules_desc">View and manage IP / ASN / country access rules</string>
     <string name="zs_purge_url">Purge by URL</string>
     <string name="zs_purge_url_hint">One full URL per line, up to %1$d. e.g. https://%2$s/style.css</string>
+    <string name="zs_pause">Pause Cloudflare</string>
+    <string name="zs_pause_desc">Traffic bypasses Cloudflare; only DNS resolution remains</string>
+    <string name="zs_pause_confirm_title">Pause Cloudflare?</string>
+    <string name="zs_pause_confirm_msg">Once paused, traffic to %1$s no longer passes through Cloudflare: WAF, caching, and origin IP masking all stop working, while DNS is still resolved by Cloudflare. Takes about 5 minutes to take effect.</string>
+    <string name="zs_pause_confirm">Pause</string>
+    <string name="zs_resume_confirm_title">Resume Cloudflare?</string>
+    <string name="zs_resume_confirm_msg">Once resumed, traffic to %1$s is proxied through Cloudflare again, and caching and security protection take effect with it. Takes about 5 minutes to take effect.</string>
+    <string name="zs_resume_confirm">Resume</string>
     <string name="ssl_title">SSL/TLS</string>
     <string name="ssl_mode">Encryption mode</string>
     <string name="ssl_mode_off">Off</string>

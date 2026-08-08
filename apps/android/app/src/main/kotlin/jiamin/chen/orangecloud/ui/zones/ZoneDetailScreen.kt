@@ -158,9 +158,9 @@ private fun HeroCard(zone: Zone) {
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                StatusDot(zoneStatusColor(zone.status), size = 7.dp)
+                StatusDot(zoneStatusColor(zone.displayStatus), size = 7.dp)
                 Text(
-                    stringResource(zoneStatusLabel(zone.status)),
+                    stringResource(zoneStatusLabel(zone.displayStatus)),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                     color = if (zone.isActive) OcSuccess else MaterialTheme.colorScheme.onSurfaceVariant,
