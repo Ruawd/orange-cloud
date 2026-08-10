@@ -52,6 +52,8 @@ export interface TxnRow {
 	transaction_id: string;
 	currency: string | null;
 	price_millis: number | null;
+	/** 'apple' | 'play'（历史行默认 apple） */
+	platform: string | null;
 	revoked: boolean;
 }
 
@@ -65,6 +67,7 @@ export interface SubRow {
 	price_millis: number | null;
 	currency: string | null;
 	purchase_date: number | null;
+	platform: string | null;
 }
 
 export interface AdminStats {
@@ -87,6 +90,9 @@ const STATUS_META: Record<string, { label: string; color: string; order: number 
 	expired: { label: "已过期 Expired", color: "var(--sys-gray)", order: 3 },
 	refunded: { label: "已退款 Refunded", color: "var(--sys-red)", order: 4 },
 	revoked: { label: "已撤销 Revoked", color: "var(--sys-red)", order: 5 },
+	// Google Play 特有的两种状态（暂停 / 待付款），Apple 侧不会出现
+	paused: { label: "已暂停 Paused", color: "var(--sys-gray)", order: 6 },
+	pending: { label: "待处理 Pending", color: "var(--sys-yellow)", order: 7 },
 };
 
 interface CurSum {
@@ -251,7 +257,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		db
 			.prepare(
 				`SELECT purchase_date, notification_type, product_id, transaction_id, currency, price_millis,
-				        (revocation_date IS NOT NULL) AS revoked
+				        platform, (revocation_date IS NOT NULL) AS revoked
 				 FROM transactions WHERE ${NOT_SANDBOX}
 				 ORDER BY COALESCE(purchase_date, created_at) DESC LIMIT 14`,
 			)
@@ -259,7 +265,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		db
 			.prepare(
 				`SELECT original_transaction_id, product_id, status, auto_renew_status, is_lifetime,
-				        expires_date, price_millis, currency, purchase_date
+				        expires_date, price_millis, currency, purchase_date, platform
 				 FROM subscriptions WHERE ${NOT_SANDBOX}
 				 ORDER BY updated_at DESC LIMIT 50`,
 			)
@@ -306,6 +312,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		transaction_id: r.transaction_id,
 		currency: r.currency,
 		price_millis: r.price_millis,
+		platform: r.platform ?? "apple",
 		revoked: Boolean(r.revoked),
 	}));
 

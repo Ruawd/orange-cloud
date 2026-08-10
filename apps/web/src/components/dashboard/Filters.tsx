@@ -2,7 +2,13 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
-import { PRODUCT_LABEL, PRODUCT_ORDER, RANGE_OPTIONS } from "@/lib/dashboard/types";
+import {
+	PLATFORM_LABEL,
+	PLATFORM_ORDER,
+	PRODUCT_LABEL,
+	PRODUCT_ORDER,
+	RANGE_OPTIONS,
+} from "@/lib/dashboard/types";
 
 interface Option {
 	value: string;
@@ -12,6 +18,11 @@ interface Option {
 const PRODUCT_OPTIONS: Option[] = [
 	{ value: "all", label: "全部" },
 	...PRODUCT_ORDER.map((id) => ({ value: id, label: PRODUCT_LABEL[id] })),
+];
+
+const PLATFORM_OPTIONS: Option[] = [
+	{ value: "all", label: "全部" },
+	...PLATFORM_ORDER.map((id) => ({ value: id, label: PLATFORM_LABEL[id] })),
 ];
 
 // Changing any filter resets the per-list page cursors.
@@ -26,6 +37,7 @@ export function Filters() {
 	const current = {
 		days: params.get("days") ?? "all",
 		product: params.get("product") ?? "all",
+		platform: params.get("platform") ?? "all",
 	};
 
 	function setParam(key: string, value: string, defaultValue: string) {
@@ -54,6 +66,12 @@ export function Filters() {
 				options={PRODUCT_OPTIONS}
 				value={current.product}
 				onSelect={(v) => setParam("product", v, "all")}
+			/>
+			<Segmented
+				label="平台"
+				options={PLATFORM_OPTIONS}
+				value={current.platform}
+				onSelect={(v) => setParam("platform", v, "all")}
 			/>
 		</div>
 	);

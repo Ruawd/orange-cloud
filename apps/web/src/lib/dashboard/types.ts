@@ -5,6 +5,21 @@ export interface Filters {
 	productId: string | null;
 	/** Trailing window in days, or null for all time. */
 	days: number | null;
+	/** Single store scope ("apple" / "play"), or null for both. */
+	platform: string | null;
+}
+
+/** 账本里的平台维度（migrations/0007 起），按展示顺序。 */
+export const PLATFORM_ORDER = ["apple", "play"] as const;
+
+export const PLATFORM_LABEL: Record<string, string> = {
+	apple: "App Store",
+	play: "Google Play",
+};
+
+export function platformLabel(id?: string | null): string {
+	if (!id) return "—";
+	return PLATFORM_LABEL[id] ?? id;
 }
 
 /** The dashboard only ever shows Production data; Sandbox is filtered out. */
@@ -49,6 +64,30 @@ export const NOTIFICATION_LABEL: Record<string, string> = {
 	REVOKE: "权益撤销",
 	PRICE_INCREASE: "涨价",
 	RENEWAL_EXTENDED: "续订延长",
+
+	// Google Play RTDN（数字枚举已在入库时翻成串，见 lib/play/types.ts）
+	SUBSCRIPTION_PURCHASED: "订阅开始",
+	SUBSCRIPTION_RENEWED: "续订成功",
+	SUBSCRIPTION_RECOVERED: "保留期恢复",
+	SUBSCRIPTION_RESTARTED: "订阅重启",
+	SUBSCRIPTION_CANCELED: "关闭自动续订",
+	SUBSCRIPTION_ON_HOLD: "进入账号保留期",
+	SUBSCRIPTION_IN_GRACE_PERIOD: "进入宽限期",
+	SUBSCRIPTION_PAUSED: "订阅暂停",
+	SUBSCRIPTION_PAUSE_SCHEDULE_CHANGED: "暂停计划变更",
+	SUBSCRIPTION_DEFERRED: "续订延长",
+	SUBSCRIPTION_REVOKED: "权益撤销",
+	SUBSCRIPTION_EXPIRED: "订阅过期",
+	SUBSCRIPTION_PRICE_CHANGE_CONFIRMED: "涨价已确认",
+	SUBSCRIPTION_PRICE_CHANGE_UPDATED: "价格变更更新",
+	SUBSCRIPTION_ITEMS_CHANGED: "套餐内容变更",
+	SUBSCRIPTION_CANCELLATION_SCHEDULED: "已排期取消",
+	SUBSCRIPTION_PENDING_PURCHASE_CANCELED: "待处理购买取消",
+	SUBSCRIPTION_PRICE_STEP_UP_CONSENT_UPDATED: "涨价同意期变更",
+	ONE_TIME_PRODUCT_PURCHASED: "一次性购买",
+	ONE_TIME_PRODUCT_CANCELED: "一次性购买取消",
+	VOIDED_PURCHASE: "退款",
+	PLAY_TEST: "测试通知",
 };
 
 export function notificationLabel(type?: string | null): string {
@@ -75,6 +114,12 @@ export const SUBTYPE_LABEL: Record<string, string> = {
 	ACCEPTED: "已接受",
 	PENDING: "待处理",
 	UNREPORTED: "未上报",
+
+	// Google Play 退款通知的 subtype（productType_refundType 组合）
+	SUBSCRIPTION_FULL_REFUND: "订阅全额退款",
+	SUBSCRIPTION_PARTIAL_REFUND: "订阅部分退款",
+	ONE_TIME_FULL_REFUND: "买断全额退款",
+	ONE_TIME_PARTIAL_REFUND: "买断部分退款",
 };
 
 /** Returns a labeled subtype, or null when there is no subtype. */
@@ -123,18 +168,38 @@ export function revocationReasonLabel(reason?: number | null): string | null {
 
 export type BadgeTone = "muted" | "accent" | "positive" | "negative" | "info";
 
+const POSITIVE_TYPES = new Set([
+	// Apple
+	"SUBSCRIBED",
+	"DID_RENEW",
+	"ONE_TIME_CHARGE",
+	// Play
+	"SUBSCRIPTION_PURCHASED",
+	"SUBSCRIPTION_RENEWED",
+	"SUBSCRIPTION_RECOVERED",
+	"SUBSCRIPTION_RESTARTED",
+	"ONE_TIME_PRODUCT_PURCHASED",
+]);
+
+const NEGATIVE_TYPES = new Set([
+	// Apple
+	"REVOKE",
+	"EXPIRED",
+	"DID_FAIL_TO_RENEW",
+	// Play
+	"VOIDED_PURCHASE",
+	"SUBSCRIPTION_REVOKED",
+	"SUBSCRIPTION_EXPIRED",
+	"SUBSCRIPTION_ON_HOLD",
+	"ONE_TIME_PRODUCT_CANCELED",
+	"SUBSCRIPTION_PENDING_PURCHASE_CANCELED",
+]);
+
 /** Shared tone for a notification type, used by tables and the detail modal. */
 export function notificationTone(type: string): BadgeTone {
 	if (type === "REFUND_DECLINED" || type === "REFUND_REVERSED") return "info";
-	if (
-		type.startsWith("REFUND") ||
-		type === "REVOKE" ||
-		type === "EXPIRED" ||
-		type === "DID_FAIL_TO_RENEW"
-	) {
-		return "negative";
-	}
-	if (type === "SUBSCRIBED" || type === "DID_RENEW" || type === "ONE_TIME_CHARGE") return "positive";
+	if (type.startsWith("REFUND") || NEGATIVE_TYPES.has(type)) return "negative";
+	if (POSITIVE_TYPES.has(type)) return "positive";
 	return "info";
 }
 
@@ -161,7 +226,13 @@ export function parseFilters(sp: RawSearchParams): Filters {
 	const match = RANGE_OPTIONS.find((o) => o.value === daysRaw);
 	const days = match ? match.days : null;
 
-	return { productId, days };
+	const platformRaw = getParam(sp, "platform");
+	const platform =
+		platformRaw && (PLATFORM_ORDER as readonly string[]).includes(platformRaw)
+			? platformRaw
+			: null;
+
+	return { productId, days, platform };
 }
 
 /** Parse a 1-based page number from a search param (defaults to 1). */

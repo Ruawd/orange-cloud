@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { TimeText } from "@/components/dashboard/prefs";
-import { Badge } from "@/components/dashboard/ui";
+import { Badge, PlatformBadge } from "@/components/dashboard/ui";
 import { formatMoney } from "@/lib/dashboard/format";
 import type { NotificationRow } from "@/lib/dashboard/queries";
 import {
@@ -34,6 +34,9 @@ export function NotificationRows({ rows }: { rows: NotificationRow[] }) {
 							<TimeText ms={n.received_at} />
 						</td>
 						<td className="px-5 py-2.5 whitespace-nowrap">
+							<PlatformBadge platform={n.platform} />
+						</td>
+						<td className="px-5 py-2.5 whitespace-nowrap">
 							<Badge tone={notificationTone(n.notification_type)}>
 								{notificationLabel(n.notification_type)}
 							</Badge>
@@ -42,7 +45,13 @@ export function NotificationRows({ rows }: { rows: NotificationRow[] }) {
 							{sub ? <Badge tone="muted">{sub}</Badge> : <span className="text-muted">—</span>}
 						</td>
 						<td className="px-5 py-2.5 font-mono text-[11px] whitespace-nowrap text-muted">
-							{n.original_transaction_id ?? "—"}
+							{/* Play 的 purchaseToken 很长（几百字符），截断显示、hover 看全量 */}
+							<span
+								className="inline-block max-w-56 truncate align-bottom"
+								title={n.original_transaction_id ?? undefined}
+							>
+								{n.original_transaction_id ?? "—"}
+							</span>
 						</td>
 						<td className="px-5 py-2.5 text-right whitespace-nowrap tabular-nums">
 							{n.txn?.price_millis != null ? (
@@ -105,6 +114,7 @@ function NotificationModal({
 				<div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
 					<div className="min-w-0">
 						<div className="flex flex-wrap items-center gap-1.5">
+							<PlatformBadge platform={n.platform} />
 							<Badge tone={notificationTone(n.notification_type)}>
 								{notificationLabel(n.notification_type)}
 							</Badge>
@@ -197,9 +207,10 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 
 function IdRow({ label, id }: { label: string; id: string | null }) {
 	return (
-		<div className="flex items-center justify-between gap-3 text-[11px]">
-			<span className="text-muted">{label}</span>
-			<span className="font-mono text-muted">{id ?? "—"}</span>
+		<div className="flex items-start justify-between gap-3 text-[11px]">
+			<span className="shrink-0 text-muted">{label}</span>
+			{/* Play 的 purchaseToken 是长串，允许换行以免撑破弹窗 */}
+			<span className="max-w-[70%] font-mono break-all text-muted">{id ?? "—"}</span>
 		</div>
 	);
 }

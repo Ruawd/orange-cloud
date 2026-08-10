@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { TimeText } from "@/components/dashboard/prefs";
-import { Badge, Card, CardHead, EmptyState } from "@/components/dashboard/ui";
+import { Badge, Card, CardHead, EmptyState, PlatformBadge } from "@/components/dashboard/ui";
 import { formatMoney, formatRelativeFuture } from "@/lib/dashboard/format";
 import type { ExpiringRow, NotificationRow, Page, TransactionRow } from "@/lib/dashboard/queries";
 import { offerTypeLabel, productLabel, txTypeLabel } from "@/lib/dashboard/types";
@@ -107,6 +107,7 @@ export function NotificationsTable({ data, query }: { data: Page<NotificationRow
 							<thead>
 								<tr className="border-b border-border text-left text-xs text-muted">
 									<Th>时间</Th>
+									<Th>平台</Th>
 									<Th>类型</Th>
 									<Th>子类型</Th>
 									<Th>原始交易 ID</Th>
@@ -149,6 +150,7 @@ export function TransactionsTable({ data, query }: { data: Page<TransactionRow>;
 							<thead>
 								<tr className="border-b border-border text-left text-xs text-muted">
 									<Th>时间</Th>
+									<Th>平台</Th>
 									<Th>交易 ID</Th>
 									<Th>类型</Th>
 									<Th>产品</Th>
@@ -166,6 +168,9 @@ export function TransactionsTable({ data, query }: { data: Page<TransactionRow>;
 										<tr key={t.transaction_id} className="border-b border-border/50 last:border-0">
 											<Td className="text-muted">
 												<TimeText ms={t.purchase_date} />
+											</Td>
+											<Td>
+												<PlatformBadge platform={t.platform} />
 											</Td>
 											<Td>
 												<MonoId id={t.transaction_id} />
@@ -236,6 +241,7 @@ export function ExpiringSoonTable({ rows }: { rows: ExpiringRow[] }) {
 							<tr className="border-b border-border text-left text-xs text-muted">
 								<Th>到期</Th>
 								<Th>剩余</Th>
+								<Th>平台</Th>
 								<Th>产品</Th>
 								<Th className="text-right">金额</Th>
 								<Th>自动续订</Th>
@@ -251,6 +257,9 @@ export function ExpiringSoonTable({ rows }: { rows: ExpiringRow[] }) {
 										<TimeText ms={s.expires_date} />
 									</Td>
 									<Td>{formatRelativeFuture(s.expires_date)}</Td>
+									<Td>
+										<PlatformBadge platform={s.platform} />
+									</Td>
 									<Td>{productLabel(s.product_id)}</Td>
 									<Td className="text-right tabular-nums">
 										{formatMoney(s.price_millis, s.currency ?? "USD")}

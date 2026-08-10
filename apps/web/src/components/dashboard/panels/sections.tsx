@@ -16,6 +16,7 @@ import {
 	StatusBreakdownCard,
 } from "./Charts";
 import { KpiStats, RevenueCard } from "./Kpis";
+import { PlatformSplitCard } from "./PlatformSplit";
 import { ExpiringSoonTable, NotificationsTable, TransactionsTable } from "./Tables";
 
 // Async server components — each awaits only its own slice of data and is
@@ -27,6 +28,7 @@ export async function OverviewSection({ filters }: { filters: Filters }) {
 		<>
 			<KpiStats overview={overview} />
 			<RevenueCard overview={overview} fx={fx} />
+			<PlatformSplitCard platforms={overview.platforms} fx={fx} />
 		</>
 	);
 }

@@ -63,6 +63,12 @@ export function EnvBadge({ env }: { env: string | null }) {
 	return <Badge tone={env === "Production" ? "accent" : "muted"}>{env}</Badge>;
 }
 
+/** 平台徽章（App Store / Google Play）。历史行无 platform，按 Apple 计。 */
+export function PlatformBadge({ platform }: { platform: string | null }) {
+	const isPlay = platform === "play";
+	return <Badge tone={isPlay ? "info" : "muted"}>{isPlay ? "Google Play" : "App Store"}</Badge>;
+}
+
 export function Legend({ items }: { items: { label: string; color: string }[] }) {
 	return (
 		<ul className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
