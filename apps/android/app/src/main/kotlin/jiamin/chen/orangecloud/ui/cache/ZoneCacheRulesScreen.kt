@@ -38,6 +38,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -325,6 +327,21 @@ private fun CacheRuleForm(
             modifier = Modifier.fillMaxWidth(),
         )
 
+        // 常用字段速插。cf.bot_management.* 与 ip.src.asnum 是 2026-07-16 才对缓存规则开放的。
+        Row(
+            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            CACHE_FIELD_CHIPS.forEach { (labelRes, token) ->
+                AssistChip(
+                    onClick = {
+                        expression = if (expression.isBlank()) token else "$expression $token"
+                    },
+                    label = { Text(stringResource(labelRes), fontSize = 12.sp) },
+                )
+            }
+        }
+
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.cache_field_eligible), fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(Modifier.weight(1f))
@@ -415,3 +432,16 @@ private fun TtlModeField(label: String, mode: TtlMode, onSelect: (TtlMode) -> Un
         }
     }
 }
+
+/** 表达式常用字段：显示名 → Wireshark 语法 token。 */
+private val CACHE_FIELD_CHIPS: List<Pair<Int, String>> = listOf(
+    R.string.cache_chip_path to "http.request.uri.path",
+    R.string.cache_chip_host to "http.host",
+    R.string.cache_chip_query to "http.request.uri.query",
+    R.string.cache_chip_method to "http.request.method",
+    R.string.cache_chip_cookie to "http.cookie",
+    R.string.cache_chip_country to "ip.src.country",
+    R.string.cache_chip_bot_score to "cf.bot_management.score",
+    R.string.cache_chip_verified_bot to "cf.bot_management.verified_bot",
+    R.string.cache_chip_asn to "ip.src.asnum",
+)

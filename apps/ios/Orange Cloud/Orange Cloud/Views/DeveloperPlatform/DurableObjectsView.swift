@@ -115,6 +115,7 @@ private struct DurableObjectInstancesSheet: View {
                 )
                 vm = model
                 await model.load()
+                await model.loadMemory()
             }
         }
     }
@@ -131,6 +132,21 @@ private struct DurableObjectInstancesSheet: View {
             }
         } else {
             List {
+                // 内存按 isolate 计，不是按单个对象——口径要写清楚，否则会被误读
+                if let memory = vm.memory {
+                    Section {
+                        LabeledContent("P50", value: Int64(memory.p50).ocBytes)
+                        LabeledContent("P90", value: Int64(memory.p90).ocBytes)
+                        LabeledContent("P99", value: Int64(memory.p99).ocBytes)
+                        LabeledContent("P999", value: Int64(memory.p999).ocBytes)
+                    } header: {
+                        Text("内存用量（24 小时）")
+                    } footer: {
+                        Text("V8 isolate 的内存，不是单个对象的。一个 isolate 可能同时承载同类的多个对象与外围 Worker 代码，每个 isolate 上限 128 MB。")
+                    }
+                    .glassRow()
+                }
+
                 Section {
                     ForEach(vm.instances) { obj in
                         HStack {

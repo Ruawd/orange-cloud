@@ -144,6 +144,8 @@ private struct TunnelRow: View {
                     Text(tunnel.statusText)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    // 连接数来自列表响应内嵌的 connections，CF 将于 2026-10-05 移除该字段。
+                    // 届时此处自然隐藏，仅保留状态点——不为列表每行单发一次连接请求（N+1）。
                     if let count = tunnel.connections?.count, count > 0 {
                         Text("· \(count) 个连接")
                             .font(.caption)
@@ -220,7 +222,10 @@ struct TunnelDetailView: View {
         .daybreakList()
         .navigationTitle(tunnel.name)
         .navigationBarTitleDisplayMode(.inline)
-        .task { if isRemote { await viewModel.loadConfiguration() } }
+        .task {
+            if isRemote { await viewModel.loadConfiguration() }
+            await viewModel.loadConnections()
+        }
         .sheet(item: $hostnameEdit) { edit in
             switch edit {
             case .new:
@@ -369,8 +374,8 @@ struct TunnelDetailView: View {
 
     private var connectionsSection: some View {
         Section("活跃连接") {
-            if let connections = tunnel.connections, !connections.isEmpty {
-                ForEach(Array(connections.enumerated()), id: \.offset) { _, connection in
+            if !viewModel.connections.isEmpty {
+                ForEach(Array(viewModel.connections.enumerated()), id: \.offset) { _, connection in
                     HStack(spacing: 12) {
                         TintIcon(systemImage: "antenna.radiowaves.left.and.right", color: .green, size: 28)
                         VStack(alignment: .leading, spacing: 2) {
@@ -389,6 +394,8 @@ struct TunnelDetailView: View {
                         }
                     }
                 }
+            } else if viewModel.isLoadingConnections {
+                ProgressView()
             } else {
                 Text("没有活跃连接")
                     .foregroundStyle(.secondary)

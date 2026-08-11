@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">AI クローラーをスイッチひとつでブロック</string>
+    <string name="whatsnew_2_0_0_0_detail">ドメイン詳細に「AI クローラー」の項目が加わりました。ブロックしない／広告ページのみ／サイト全体の 3 段階から選べます。AI コンテンツ関連の 2 つの設定も同じ画面に移り、ダッシュボードを開く必要はありません。</string>
+    <string name="whatsnew_2_0_0_1_title">オリジンが落ちたら Cloudflare が直接通知</string>
+    <string name="whatsnew_2_0_0_1_detail">ドメイン詳細にスタンドアロンのヘルスチェックが加わりました。オリジンごとの状態と失敗理由を確認でき、スワイプで一時停止や削除ができます。「オリジン異常時に通知」をオンにすると、状態が変わった時点で Cloudflare が直接通知するので、アプリを開いていなくても届きます。</string>
+    <string name="whatsnew_2_0_0_2_title">ドメインの有効期限がひと目で</string>
+    <string name="whatsnew_2_0_0_2_detail">概要ページに「ドメイン登録」が加わりました。Cloudflare で登録したドメインの有効期限・自動更新・移管ロックが一覧で並び、期限が近いものは目立つように表示されます。</string>
+    <string name="whatsnew_2_0_0_3_title">リクエストが Cloudflare 内で何を通ったかを可視化</string>
+    <string name="whatsnew_2_0_0_3_detail">概要ページに「リクエスト追跡」が加わりました。URL を入力すると、そのリクエストがリダイレクト・WAF・キャッシュルール・Worker のどれに順番に当たり、各ステップが実際に効いたかまで表示されます。ルール調整で当て推量は不要です。</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC と DNS の詳細設定</string>
+    <string name="whatsnew_2_0_0_4_detail">ドメイン詳細に DNS 設定が加わりました。DNSSEC をワンタップで切り替え、レジストラ側に貼り付ける DS レコードをコピーできます。CNAME フラット化とネームサーバーの種類も変更できます。</string>
+    <string name="whatsnew_2_0_0_5_title">Worker のビルド失敗をお知らせ</string>
+    <string name="whatsnew_2_0_0_5_detail">Worker 詳細にビルド履歴が加わりました。各ビルドの状態・所要時間・トリガー元を確認できます。気になる Worker を監視対象にしておくと、ビルド失敗時に通知が届きます。</string>
+    <string name="whatsnew_2_0_0_6_title">モジュールの追加と細部の磨き込み</string>
+    <string name="whatsnew_2_0_0_6_detail">R2 データカタログ、マネージドヘッダー、URL セキュリティスキャン、Email 抑制リストを追加しました。監査ログはどの項目からでも、そのリソースの変更履歴全体を辿れます。キャッシュルールの式にはよく使うフィールド（ボットスコアや送信元 ASN を含む）のクイック挿入を追加。Durable Objects にはメモリのパーセンタイルが加わりました。トンネル詳細でアクティブな接続が表示されない問題も修正しています。</string>
     <string name="whatsnew_1_7_2_0_title">ワンタップで Cloudflare を一時停止</string>
     <string name="whatsnew_1_7_2_0_detail">ドメイン設定に「Cloudflare を一時停止」スイッチを追加しました。一時停止中はトラフィックが Cloudflare を経由しなくなり、WAF・キャッシュ・オリジン IP の秘匿が無効になります（DNS の解決は Cloudflare が継続）。再開もワンタップで、どちらも反映まで約 5 分です。</string>
     <string name="whatsnew_1_7_1_0_title">既定のアカウントを記憶</string>

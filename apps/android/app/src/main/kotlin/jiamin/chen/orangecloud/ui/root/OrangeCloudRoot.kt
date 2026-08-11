@@ -34,6 +34,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jiamin.chen.orangecloud.core.util.launchCustomTab
+import jiamin.chen.orangecloud.ui.dnssettings.DnsSettingsScreen
+import jiamin.chen.orangecloud.ui.managedheaders.ManagedHeadersScreen
+import jiamin.chen.orangecloud.ui.registrar.RegistrarScreen
+import jiamin.chen.orangecloud.ui.builds.WorkerBuildsScreen
+import jiamin.chen.orangecloud.ui.tracer.RequestTracerScreen
+import jiamin.chen.orangecloud.ui.urlscanner.URLScannerScreen
+import jiamin.chen.orangecloud.ui.healthcheck.HealthCheckScreen
 import jiamin.chen.orangecloud.ui.login.LoginViewModel
 import jiamin.chen.orangecloud.ui.paywall.PaywallScreen
 import jiamin.chen.orangecloud.ui.paywall.ProGateViewModel
@@ -183,6 +190,9 @@ private object Dest {
     const val SETTINGS = "settings"
     const val IDENTITY_ROUTE = "identity/{sessionId}"
     const val TUNNELS = "tunnels"
+    const val REGISTRAR = "registrar"
+    const val TRACER = "tracer"
+    const val URL_SCANNER = "urlscanner"
     const val TUNNEL_DETAIL_ROUTE = "tunnel/{tunnelId}?tunnelName={tunnelName}"
     const val STATUS = "status"
     const val AUDIT = "audit"
@@ -220,6 +230,9 @@ private object Dest {
     const val RATE_LIMIT_ROUTE = "ratelimit/{zoneId}?zoneName={zoneName}"
     const val EMAIL_ROUTE = "email/{zoneId}?zoneName={zoneName}"
     const val LOAD_BALANCER_ROUTE = "loadbalancer/{zoneId}?zoneName={zoneName}"
+    const val HEALTHCHECK_ROUTE = "healthcheck/{zoneId}?zoneName={zoneName}"
+    const val DNS_SETTINGS_ROUTE = "dnssettings/{zoneId}?zoneName={zoneName}"
+    const val MANAGED_HEADERS_ROUTE = "managedheaders/{zoneId}?zoneName={zoneName}"
     const val LB_POOLS = "lb/pools"
     const val LB_MONITORS = "lb/monitors"
     const val WORKER_ROUTE = "worker/{scriptName}"
@@ -228,6 +241,7 @@ private object Dest {
     const val WORKER_TRIGGERS_ROUTE = "worker/{scriptName}/triggers"
     const val WORKER_DOMAINS_ROUTE = "worker/{scriptName}/domains"
     const val WORKER_DEPLOYMENTS_ROUTE = "worker/{scriptName}/deployments"
+    const val WORKER_BUILDS_ROUTE = "worker/{scriptName}/builds"
     const val TAIL_ROUTE = "tail/{scriptName}"
     private fun zoneScoped(prefix: String, zoneId: String, zoneName: String) =
         "$prefix/$zoneId?zoneName=${Uri.encode(zoneName)}"
@@ -246,6 +260,9 @@ private object Dest {
     fun rateLimit(zoneId: String, zoneName: String) = zoneScoped("ratelimit", zoneId, zoneName)
     fun email(zoneId: String, zoneName: String) = zoneScoped("email", zoneId, zoneName)
     fun loadBalancer(zoneId: String, zoneName: String) = zoneScoped("loadbalancer", zoneId, zoneName)
+    fun healthCheck(zoneId: String, zoneName: String) = zoneScoped("healthcheck", zoneId, zoneName)
+    fun dnsSettings(zoneId: String, zoneName: String) = zoneScoped("dnssettings", zoneId, zoneName)
+    fun managedHeaders(zoneId: String, zoneName: String) = zoneScoped("managedheaders", zoneId, zoneName)
     fun snippetEdit(zoneId: String, zoneName: String, name: String) =
         "snippetEdit/$zoneId?zoneName=${Uri.encode(zoneName)}&name=${Uri.encode(name)}"
     fun redirectItems(listId: String, listName: String): String = "redirects/$listId?listName=${Uri.encode(listName)}"
@@ -260,6 +277,7 @@ private object Dest {
     fun workerTriggers(scriptName: String): String = "worker/${Uri.encode(scriptName)}/triggers"
     fun workerDomains(scriptName: String): String = "worker/${Uri.encode(scriptName)}/domains"
     fun workerDeployments(scriptName: String): String = "worker/${Uri.encode(scriptName)}/deployments"
+    fun workerBuilds(scriptName: String): String = "worker/${Uri.encode(scriptName)}/builds"
     fun tail(scriptName: String): String = "tail/${Uri.encode(scriptName)}"
     fun r2Objects(bucket: String): String = "r2/objects/${Uri.encode(bucket)}"
     fun r2Settings(bucket: String): String = "r2/settings/${Uri.encode(bucket)}"
@@ -330,6 +348,9 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
             ZoneTool.RATE_LIMIT -> Dest.rateLimit(zoneId, zoneName)
             ZoneTool.EMAIL_ROUTING -> Dest.email(zoneId, zoneName)
             ZoneTool.LOAD_BALANCER -> Dest.loadBalancer(zoneId, zoneName)
+            ZoneTool.HEALTH_CHECK -> Dest.healthCheck(zoneId, zoneName)
+            ZoneTool.DNS_SETTINGS -> Dest.dnsSettings(zoneId, zoneName)
+            ZoneTool.MANAGED_HEADERS -> Dest.managedHeaders(zoneId, zoneName)
         }
         route?.let { navController.navigate(it) }
     }
@@ -376,6 +397,9 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
             composable(Dest.DASHBOARD) {
                 DashboardScreen(
                     onOpenTunnels = { navController.navigate(Dest.TUNNELS) },
+                    onOpenRegistrar = { navController.navigate(Dest.REGISTRAR) },
+                    onOpenTracer = { navController.navigate(Dest.TRACER) },
+                    onOpenUrlScanner = { navController.navigate(Dest.URL_SCANNER) },
                     onOpenZones = {
                         navController.navigate(Dest.ZONES) {
                             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
@@ -436,6 +460,15 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
             }
             composable(Dest.PAYWALL) {
                 PaywallScreen()
+            }
+            composable(Dest.URL_SCANNER) {
+                URLScannerScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Dest.TRACER) {
+                RequestTracerScreen(onBack = { navController.popBackStack() })
+            }
+            composable(Dest.REGISTRAR) {
+                RegistrarScreen(onBack = { navController.popBackStack() })
             }
             composable(Dest.TUNNELS) {
                 ProGate {
@@ -518,6 +551,24 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                 arguments = zoneArgs(),
             ) {
                 EmailRoutingScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.HEALTHCHECK_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                HealthCheckScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.DNS_SETTINGS_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                DnsSettingsScreen(onBack = { navController.popBackStack() })
+            }
+            composable(
+                route = Dest.MANAGED_HEADERS_ROUTE,
+                arguments = zoneArgs(),
+            ) {
+                ManagedHeadersScreen(onBack = { navController.popBackStack() })
             }
             composable(
                 route = Dest.LOAD_BALANCER_ROUTE,
@@ -710,6 +761,7 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                     onOpenTriggers = { navController.navigate(Dest.workerTriggers(scriptName)) },
                     onOpenDomains = { navController.navigate(Dest.workerDomains(scriptName)) },
                     onOpenDeployments = { navController.navigate(Dest.workerDeployments(scriptName)) },
+                    onOpenBuilds = { navController.navigate(Dest.workerBuilds(scriptName)) },
                     onEditCode = { navController.navigate(Dest.workerEdit(scriptName)) },
                     // 查看详情免费；删除按 isPro 拦到付费墙（编辑/新建走各自路由的 ProGate）
                     isPro = isPro,
@@ -739,6 +791,12 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                 arguments = listOf(navArgument("scriptName") { type = NavType.StringType }),
             ) {
                 ProGate { WorkerDeploymentsScreen(onBack = { navController.popBackStack() }) }
+            }
+            composable(
+                route = Dest.WORKER_BUILDS_ROUTE,
+                arguments = listOf(navArgument("scriptName") { type = NavType.StringType }),
+            ) {
+                WorkerBuildsScreen(onBack = { navController.popBackStack() })
             }
             composable(
                 route = Dest.TAIL_ROUTE,

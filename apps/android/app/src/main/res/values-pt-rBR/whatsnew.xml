@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">Bloqueie rastreadores de IA com um botão</string>
+    <string name="whatsnew_2_0_0_0_detail">Os detalhes do domínio agora têm uma linha de rastreadores de IA com três modos: sem bloqueio, só páginas com anúncios ou o site todo. As duas configurações de conteúdo de IA foram para a mesma tela, então o painel não é mais necessário.</string>
+    <string name="whatsnew_2_0_0_1_title">O Cloudflare te avisa quando a origem cai</string>
+    <string name="whatsnew_2_0_0_1_detail">Os detalhes do domínio agora listam verificações de integridade independentes: status e motivo da falha por origem, deslize para pausar ou excluir. Ative o alerta de origem e o Cloudflare envia assim que o status mudar, com o app aberto ou não.</string>
+    <string name="whatsnew_2_0_0_2_title">Veja o vencimento do domínio num relance</string>
+    <string name="whatsnew_2_0_0_2_detail">A visão geral ganha uma seção de registrador: para domínios registrados na Cloudflare você vê vencimento, renovação automática e bloqueio de transferência numa lista só, com os que vencem em breve destacados.</string>
+    <string name="whatsnew_2_0_0_3_title">Veja por onde uma requisição passa dentro da Cloudflare</string>
+    <string name="whatsnew_2_0_0_3_detail">A visão geral ganha Rastreamento de requisições: informe uma URL e veja, passo a passo, quais regras a requisição atinge — redirecionamentos, WAF, regras de cache, Workers — e se cada uma foi aplicada. Chega de adivinhar por que uma regra não pegou.</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC e configurações avançadas de DNS</string>
+    <string name="whatsnew_2_0_0_4_detail">Os detalhes do domínio ganham uma tela de configurações de DNS: ligue ou desligue o DNSSEC e copie o registro DS para colar no seu registrador, além de ajustar o achatamento de CNAME e o tipo de servidor de nomes.</string>
+    <string name="whatsnew_2_0_0_5_title">Avisamos quando um build do Worker falha</string>
+    <string name="whatsnew_2_0_0_5_detail">Os detalhes do Worker agora mostram o histórico de builds: status, duração e o que disparou cada um. Monitore os Workers que importam e você recebe um aviso quando um build falhar.</string>
+    <string name="whatsnew_2_0_0_6_title">Mais módulos e muito polimento</string>
+    <string name="whatsnew_2_0_0_6_detail">Adicionamos o R2 Data Catalog, cabeçalhos gerenciados, varredura de segurança de URL e a lista de supressão de Email. Toque em qualquer entrada do log de auditoria para ver todo o histórico de alterações daquele recurso; as expressões de regras de cache ganharam atalhos para campos comuns (incluindo pontuação de bot e ASN de origem); e os Durable Objects mostram percentis de memória. Também corrigimos os detalhes do túnel não listarem conexões ativas.</string>
     <string name="whatsnew_1_7_2_0_title">Pause o Cloudflare com um toque</string>
     <string name="whatsnew_1_7_2_0_detail">A tela de configurações do domínio agora tem a chave “Pausar o Cloudflare”. Em pausa, o tráfego deixa de passar pelo Cloudflare: WAF, cache e ocultação do IP de origem param de funcionar, e o DNS continua sendo resolvido pelo Cloudflare. Retomar é igualmente simples e ambos levam cerca de 5 minutos.</string>
     <string name="whatsnew_1_7_1_0_title">Lembra sua conta padrão</string>

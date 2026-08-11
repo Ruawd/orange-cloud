@@ -104,6 +104,15 @@ struct WorkerDetailView: View {
                 ) {
                     WorkerTriggersView(accountId: script.accountId, scriptName: script.id, session: session)
                 }
+                PermissionGatedNavigationLink(
+                    label: String(localized: "构建"),
+                    systemImage: "hammer.circle",
+                    requiredScope: "workers-ci.read",
+                    tint: .teal,
+                    showsChevron: true
+                ) {
+                    WorkerBuildsView(scriptName: script.id, session: session)
+                }
                 ProGatedNavigationLink(
                     label: String(localized: "部署历史"),
                     systemImage: "clock.arrow.circlepath",

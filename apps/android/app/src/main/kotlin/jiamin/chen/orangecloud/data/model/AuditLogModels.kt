@@ -63,7 +63,14 @@ data class AuditLogResource(
 )
 
 @Serializable
-data class AuditResultInfo(val cursor: String? = null)
+data class AuditResultInfo(
+    val cursor: String? = null,
+    /**
+     * 仅资源变更历史返回：exact / approximate / unavailable。
+     * approximate 表示没拿到资源 URI、靠其它字段近似匹配，结果可能混入无关条目——必须告诉用户。
+     */
+    @SerialName("history_status") val historyStatus: String? = null,
+)
 
 @Serializable
 data class AuditLogPage(

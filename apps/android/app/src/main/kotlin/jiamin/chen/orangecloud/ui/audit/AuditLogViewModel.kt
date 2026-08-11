@@ -24,6 +24,13 @@ data class AuditLogUiState(
     val hasError: Boolean = false,
     val missingScope: Boolean = false,
     val hasMore: Boolean = false,
+    /** 正在查看变更历史的那条日志（null 表示未打开）。 */
+    val historyOf: AuditLogEntry? = null,
+    val history: List<AuditLogEntry> = emptyList(),
+    val isLoadingHistory: Boolean = false,
+    /** exact / approximate / unavailable —— 识别质量，approximate 时必须提醒用户可能混入无关条目。 */
+    val historyStatus: String? = null,
+    val historyError: Boolean = false,
 )
 
 @HiltViewModel
@@ -63,6 +70,37 @@ class AuditLogViewModel @Inject constructor(
             fetchPage(reset = false)
             _uiState.update { it.copy(isLoadingMore = false) }
         }
+    }
+
+    /** 打开某条日志对应资源的变更历史（用与列表相同的 30 天窗口）。 */
+    fun openHistory(entry: AuditLogEntry) {
+        val entryId = entry.id ?: return
+        val actionTime = entry.timestampMillis?.let(Instant::ofEpochMilli) ?: return
+        _uiState.update {
+            it.copy(historyOf = entry, history = emptyList(), historyStatus = null,
+                historyError = false, isLoadingHistory = true)
+        }
+        viewModelScope.launch {
+            try {
+                val accountId = accountStore.selectedAccountId.value ?: error("no account")
+                val before = Instant.now()
+                val since = before.minus(30, ChronoUnit.DAYS)
+                val page = repository.resourceHistory(accountId, entryId, actionTime, since, before)
+                _uiState.update {
+                    it.copy(
+                        history = page.result.orEmpty(),
+                        historyStatus = page.resultInfo?.historyStatus,
+                        isLoadingHistory = false,
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(historyError = true, isLoadingHistory = false) }
+            }
+        }
+    }
+
+    fun closeHistory() {
+        _uiState.update { it.copy(historyOf = null, history = emptyList(), historyStatus = null) }
     }
 
     private suspend fun fetchPage(reset: Boolean) {

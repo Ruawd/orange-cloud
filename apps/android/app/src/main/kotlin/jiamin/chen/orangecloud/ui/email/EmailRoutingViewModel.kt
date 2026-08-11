@@ -8,6 +8,7 @@ import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
 import jiamin.chen.orangecloud.data.model.EmailDestinationAddress
 import jiamin.chen.orangecloud.data.model.EmailRoutingRule
+import jiamin.chen.orangecloud.data.model.EmailSuppression
 import jiamin.chen.orangecloud.data.model.EmailRoutingRuleInput
 import jiamin.chen.orangecloud.data.model.EmailRoutingSettings
 import jiamin.chen.orangecloud.data.repository.AccountStore
@@ -38,6 +39,9 @@ data class EmailRoutingUiState(
     val isSaving: Boolean = false,
     val missingScope: Boolean = false,
     val canWrite: Boolean = false,
+    // 抑制列表：独立 scope，读不到不连累主加载
+    val suppressions: List<EmailSuppression> = emptyList(),
+    val suppressionsAvailable: Boolean = false,
 )
 
 @HiltViewModel
@@ -84,7 +88,15 @@ class EmailRoutingViewModel @Inject constructor(
                         runCatching { repository.addresses(acct) }.getOrDefault(emptyList())
                     } ?: emptyList()
                 } else emptyList()
-                _uiState.update { it.copy(settings = settings, rules = rules, addresses = addresses) }
+                // 抑制列表独立 scope，未授权时静默跳过，不连累主加载
+                val suppressions = runCatching { repository.suppressions(zoneId) }.getOrNull()
+                _uiState.update {
+                    it.copy(
+                        settings = settings, rules = rules, addresses = addresses,
+                        suppressions = suppressions.orEmpty(),
+                        suppressionsAvailable = suppressions != null,
+                    )
+                }
             } catch (e: Exception) {
                 eventChannel.send(EmailEvent.Error(e.message))
             } finally {
@@ -168,4 +180,16 @@ class EmailRoutingViewModel @Inject constructor(
             }
         }
     }
+    /** 解除抑制。成功后本地移除，不必整页重载。 */
+    fun removeSuppression(item: EmailSuppression) {
+        if (!canWrite) return
+        viewModelScope.launch {
+            runCatching { repository.deleteSuppression(zoneId, item.id) }
+                .onSuccess {
+                    _uiState.update { s -> s.copy(suppressions = s.suppressions.filterNot { it.id == item.id }) }
+                }
+                .onFailure { eventChannel.send(EmailEvent.Error(it.message)) }
+        }
+    }
+
 }

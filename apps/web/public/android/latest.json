@@ -1,7 +1,7 @@
 {
-  "versionCode": 22,
-  "versionName": "1.7.2",
+  "versionCode": 23,
+  "versionName": "2.0.0",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "新增「暂停 Cloudflare」：在域名设置页一键暂停或恢复代理。暂停后流量绕过 Cloudflare，WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析，约 5 分钟生效。"
+  "note": "本次为 2.0 大版本：AI 爬虫管控、独立健康检查与源站推送、域名注册商、请求追踪、DNS 进阶设置、Worker 构建记录与失败提醒，另新增 R2 数据目录、托管头、URL 扫描与 Email 抑制。"
 }

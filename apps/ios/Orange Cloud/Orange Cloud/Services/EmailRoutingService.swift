@@ -111,4 +111,35 @@ struct EmailRoutingService {
     func deleteAddress(accountId: String, addressId: String) async throws {
         try await client.delete("accounts/\(accountId)/email/routing/addresses/\(addressId)")
     }
+
+    // MARK: - 抑制列表（email-routing-suppression.read / .write）
+
+    /// 被抑制的收件地址。响应信封含 success/errors，与常规一致（另有 page/per_page 平级字段，忽略即可）。
+    func suppressions(zoneId: String) async throws -> [EmailSuppression] {
+        let response: CFAPIResponseArray<EmailSuppression> = try await client.get(
+            "zones/\(zoneId)/email/routing/suppression",
+            queryItems: [URLQueryItem(name: "per_page", value: "100")]
+        )
+        guard response.success else {
+            throw response.toAPIError()
+        }
+        return response.result ?? []
+    }
+
+    /// 手动抑制一个地址（此后不再向它转发）
+    func addSuppression(zoneId: String, email: String) async throws {
+        let response: CFAPIResponse<EmailSuppression> = try await client.post(
+            "zones/\(zoneId)/email/routing/suppression",
+            body: EmailSuppressionCreate(email: email)
+        )
+        guard response.success else {
+            throw response.toAPIError()
+        }
+    }
+
+    /// 解除抑制
+    func deleteSuppression(zoneId: String, id: String) async throws {
+        try await client.delete("zones/\(zoneId)/email/routing/suppression/\(id)")
+    }
+
 }

@@ -74,4 +74,32 @@ final class AuditLogViewModel {
         }
         isLoadingMore = false
     }
+    // MARK: - 资源变更历史
+
+    private(set) var history: [IdentifiedAuditEntry] = []
+    /// exact / approximate / unavailable，用于给用户交代结果可信度
+    private(set) var historyStatus: String?
+    var isLoadingHistory = false
+
+    /// 拉某条日志所对应资源的变更序列。
+    /// 时间窗沿用列表的 since/before —— 接口要靠 action_time 定位源日志，窗口不一致会找不到。
+    func loadHistory(for entry: AuditLogEntry) async {
+        guard let entryId = entry.id, let actionTime = entry.timestamp,
+              let since, let before, !isLoadingHistory else { return }
+        isLoadingHistory = true
+        history = []
+        historyStatus = nil
+        do {
+            let page = try await service.resourceHistory(
+                accountId: accountId, entryId: entryId, actionTime: actionTime,
+                since: since, before: before
+            )
+            history = (page.result ?? []).map { IdentifiedAuditEntry(entry: $0) }
+            historyStatus = page.resultInfo?.historyStatus
+        } catch {
+            self.error = error.localizedDescription
+        }
+        isLoadingHistory = false
+    }
+
 }

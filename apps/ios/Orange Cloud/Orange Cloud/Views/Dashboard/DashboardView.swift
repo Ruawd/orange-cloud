@@ -55,6 +55,12 @@ struct DashboardView: View {
                 // 逐级 push 才在 iOS 17.0 正常（同 DeveloperHubView 的 DevHubRoute 做法）
                 .navigationDestination(for: DashboardRoute.self) { route in
                     switch route {
+                    case .registrar:
+                        RegistrarView(session: session)
+                    case .urlScanner:
+                        URLScannerView(session: session)
+                    case .requestTracer:
+                        RequestTracerView(session: session)
                     case .tunnels:
                         TunnelListView(session: session)
                     case .tunnelConnect(let tunnel):
@@ -1361,6 +1367,33 @@ private struct DashboardHomeView: View {
         VStack(spacing: 10) {
             // Tunnel 列表点行还要继续 push 详情/连接页：必须走值式 + 栈根 navdest，
             // eager NavigationLink(destination:) 的目的页内部再 push 在 iOS 17.0 会卡死。
+            PermissionGatedValueLink(
+                label: String(localized: "URL 扫描"),
+                systemImage: "magnifyingglass.circle",
+                requiredScope: "url-scanner.read",
+                tint: .cyan,
+                showsChevron: true,
+                value: DashboardRoute.urlScanner
+            )
+
+            PermissionGatedValueLink(
+                label: String(localized: "请求追踪"),
+                systemImage: "point.topleft.down.curvedto.point.bottomright.up",
+                requiredScope: "request-tracer.read",
+                tint: .indigo,
+                showsChevron: true,
+                value: DashboardRoute.requestTracer
+            )
+
+            PermissionGatedValueLink(
+                label: String(localized: "域名注册"),
+                systemImage: "checkmark.seal",
+                requiredScope: "registrar-domains.read",
+                tint: .orange,
+                showsChevron: true,
+                value: DashboardRoute.registrar
+            )
+
             ProGatedValueLink(
                 label: "Cloudflare Tunnel",
                 systemImage: "arrow.triangle.2.circlepath",
@@ -1417,6 +1450,9 @@ private struct DashboardHomeView: View {
 /// 概览页玻璃岛入口路由（走栈根 navdest，同 DevHubRoute）。本岛为非 List 容器，
 /// eager `NavigationLink(destination:)` 在 iOS 17.0 点击即冻结（叶子目的页也一样），一律值式。
 enum DashboardRoute: Hashable {
+    case registrar
+    case urlScanner
+    case requestTracer
     case tunnels
     case tunnelConnect(Tunnel)
     case accessApps

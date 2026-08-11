@@ -62,6 +62,22 @@ struct TunnelService {
         return token
     }
 
+    // MARK: - 活跃连接
+
+    /// 隧道的活跃连接。
+    ///
+    /// 专用端点，取代 list/get 响应里内嵌的 connections 数组（CF 将于 2026-10-05 移除该字段）。
+    /// result 是 Client 数组（一个 cloudflared 进程一项），此处摊平为连接列表供 UI 直接消费。
+    func connections(accountId: String, tunnelId: String) async throws -> [TunnelConnection] {
+        let response: CFAPIResponseArray<TunnelClient> = try await client.get(
+            "accounts/\(accountId)/cfd_tunnel/\(tunnelId)/connections"
+        )
+        guard response.success else {
+            throw response.toAPIError()
+        }
+        return (response.result ?? []).flattenedConnections
+    }
+
     /// 清理失活连接（删除隧道前先调用；活跃的 cloudflared 仍会重连）
     func deleteConnections(accountId: String, tunnelId: String) async throws {
         try await client.delete("accounts/\(accountId)/cfd_tunnel/\(tunnelId)/connections")

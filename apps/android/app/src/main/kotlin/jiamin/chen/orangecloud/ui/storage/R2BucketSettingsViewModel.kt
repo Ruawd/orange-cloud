@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.data.model.R2Catalog
+import jiamin.chen.orangecloud.data.model.R2CatalogNamespace
+import jiamin.chen.orangecloud.data.repository.R2CatalogRepository
 import jiamin.chen.orangecloud.data.model.R2BucketUsage
 import jiamin.chen.orangecloud.data.model.R2CorsRule
 import jiamin.chen.orangecloud.data.model.R2CustomDomain
@@ -41,7 +44,16 @@ data class R2BucketSettingsUiState(
     val isTogglingPublic: Boolean = false,
     val missingScope: Boolean = false,
     val canWrite: Boolean = false,
-)
+    // R2 数据目录（Iceberg）。启用是计费动作，界面先弹确认再调这里。
+    val catalog: R2Catalog? = null,
+    val catalogNamespaces: List<R2CatalogNamespace> = emptyList(),
+    val catalogLoaded: Boolean = false,
+    val isCatalogMutating: Boolean = false,
+    val canReadCatalog: Boolean = false,
+    val canWriteCatalog: Boolean = false,
+) {
+    val catalogEnabled: Boolean get() = catalog?.isActive == true
+}
 
 /** R2 桶设置：公开访问 (r2.dev) + 自定义域 + CORS（对应 iOS R2BucketSettingsView）。 */
 @HiltViewModel
@@ -49,12 +61,16 @@ class R2BucketSettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val accountStore: AccountStore,
     private val storageRepository: StorageRepository,
+    private val catalogRepository: R2CatalogRepository,
     authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val bucket: String = checkNotNull(savedStateHandle["bucket"])
     private val hasRead = authRepository.hasScope(Scopes.R2_READ)
     private val canWrite = authRepository.hasScope(Scopes.R2_WRITE)
+    // 数据目录是另一条权限链路（r2-catalog.*），与 workers-r2.* 无关
+    private val canReadCatalog = authRepository.hasScope(Scopes.R2_CATALOG_READ)
+    private val canWriteCatalog = authRepository.hasScope(Scopes.R2_CATALOG_WRITE)
 
     private val _uiState = MutableStateFlow(
         R2BucketSettingsUiState(
@@ -62,6 +78,8 @@ class R2BucketSettingsViewModel @Inject constructor(
             isLoading = hasRead,
             missingScope = !hasRead,
             canWrite = canWrite,
+            canReadCatalog = canReadCatalog,
+            canWriteCatalog = canWriteCatalog,
         ),
     )
     val uiState: StateFlow<R2BucketSettingsUiState> = _uiState.asStateFlow()
@@ -71,6 +89,7 @@ class R2BucketSettingsViewModel @Inject constructor(
 
     init {
         if (hasRead) load()
+        if (canReadCatalog) loadCatalog()
     }
 
     fun load() {
@@ -142,4 +161,44 @@ class R2BucketSettingsViewModel @Inject constructor(
             }
         }
     }
+
+    /** 读数据目录。未启用时接口 404，按「未启用」处理而非报错。 */
+    fun loadCatalog() {
+        if (!canReadCatalog) return
+        viewModelScope.launch {
+            accountStore.ensureLoaded()
+            val accountId = accountStore.selectedAccountId.value ?: return@launch
+            val catalog = runCatching { catalogRepository.catalog(accountId, bucket) }.getOrNull()
+            // 命名空间只在已启用时才有意义；失败不连累目录状态显示
+            val namespaces = if (catalog?.isActive == true) {
+                runCatching { catalogRepository.namespaces(accountId, bucket) }.getOrDefault(emptyList())
+            } else {
+                emptyList()
+            }
+            _uiState.update {
+                it.copy(catalog = catalog, catalogNamespaces = namespaces, catalogLoaded = true)
+            }
+        }
+    }
+
+    fun setCatalogEnabled(enabled: Boolean) {
+        if (!canWriteCatalog || _uiState.value.isCatalogMutating) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isCatalogMutating = true) }
+            val accountId = accountStore.selectedAccountId.value
+            if (accountId != null) {
+                runCatching {
+                    if (enabled) {
+                        catalogRepository.enable(accountId, bucket)
+                    } else {
+                        catalogRepository.disable(accountId, bucket)
+                    }
+                }
+                    .onSuccess { loadCatalog() }
+                    .onFailure { eventChannel.send(BucketSettingsEvent.Error(it.message)) }
+            }
+            _uiState.update { it.copy(isCatalogMutating = false) }
+        }
+    }
+
 }

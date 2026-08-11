@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">一個開關擋住 AI 爬蟲</string>
+    <string name="whatsnew_2_0_0_0_detail">網域詳情頁新增「AI 爬蟲」一欄，三檔任選：不攔截、只攔廣告頁、全站攔截。AI 內容相關的兩個設定也移到同一頁，不必再開主控台。</string>
+    <string name="whatsnew_2_0_0_1_title">來源伺服器掉線，Cloudflare 直接推給你</string>
+    <string name="whatsnew_2_0_0_1_detail">網域詳情頁新增獨立健康檢查：查看每個來源伺服器的狀態與失敗原因，左滑暫停、右滑刪除。開啟「來源異常時通知我」後，由 Cloudflare 在狀態變化時直接推播，App 不必開著。</string>
+    <string name="whatsnew_2_0_0_2_title">網域到期日一眼看到</string>
+    <string name="whatsnew_2_0_0_2_detail">總覽頁新增「網域註冊商」：在 Cloudflare 註冊的網域，到期日、自動續約與移轉鎖狀態列在一起，快到期的會標示出來。</string>
+    <string name="whatsnew_2_0_0_3_title">看清一筆請求在 Cloudflare 裡走過什麼</string>
+    <string name="whatsnew_2_0_0_3_detail">總覽頁新增「請求追蹤」：填一個網址就能看到這筆請求依序命中了哪些規則——重新導向、WAF、快取規則、Worker，每一步是否生效都寫清楚，調規則不必再靠猜。</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC 與 DNS 進階設定</string>
+    <string name="whatsnew_2_0_0_4_detail">網域詳情頁新增 DNS 設定：一鍵開關 DNSSEC 並複製要填到註冊商那邊的 DS 記錄，另可調整 CNAME 扁平化方式與名稱伺服器類型。</string>
+    <string name="whatsnew_2_0_0_5_title">Worker 建置失敗會提醒你</string>
+    <string name="whatsnew_2_0_0_5_detail">Worker 詳情頁新增建置記錄：每次建置的狀態、耗時與觸發來源都能看到。挑幾個在意的 Worker 開啟監看，建置失敗時就會收到通知。</string>
+    <string name="whatsnew_2_0_0_6_title">更多模組，以及一處處打磨</string>
+    <string name="whatsnew_2_0_0_6_detail">新增 R2 資料目錄、託管請求標頭、URL 安全掃描與 Email 抑制清單。審計日誌點進任一筆即可查看同一資源的完整變更歷史；快取規則運算式加了常用欄位速插（含 Bot 分數與來源 ASN）；Durable Objects 增加記憶體分位數。並修正通道詳情頁不顯示使用中連線的問題。</string>
     <string name="whatsnew_1_7_2_0_title">一鍵暫停 Cloudflare</string>
     <string name="whatsnew_1_7_2_0_detail">網域設定頁新增「暫停 Cloudflare」開關。暫停後流量不再經過 Cloudflare——WAF、快取加速與來源伺服器 IP 隱藏都會失效，DNS 仍由 Cloudflare 解析；恢復同樣一鍵完成，兩者約 5 分鐘生效。</string>
     <string name="whatsnew_1_7_1_0_title">記住你的預設帳戶</string>

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AuditLogListView: View {
 
+    @State private var historyTarget: IdentifiedAuditEntry?
+
     let session: SessionStore
 
     @State private var vm: AuditLogViewModel?
@@ -49,7 +51,14 @@ struct AuditLogListView: View {
             List {
                 Section {
                     ForEach(vm.entries) { item in
-                        AuditLogRow(entry: item.entry)
+                        // 点行看该资源的完整变更序列（v2 的 history 端点）
+                        Button {
+                            historyTarget = item
+                            Task { await vm.loadHistory(for: item.entry) }
+                        } label: {
+                            AuditLogRow(entry: item.entry)
+                        }
+                        .buttonStyle(.plain)
                     }
                 } footer: {
                     Text("仅显示当前账号最近 30 天的操作记录。")
@@ -70,6 +79,12 @@ struct AuditLogListView: View {
             }
             .daybreakList()
             .refreshable { await vm.load() }
+            .sheet(item: $historyTarget) { item in
+                NavigationStack {
+                    AuditHistoryView(source: item.entry, vm: vm)
+                }
+                .presentationDetents([.medium, .large])
+            }
         }
     }
 }
@@ -141,3 +156,50 @@ private extension String {
         return t.isEmpty ? nil : t
     }
 }
+
+// MARK: - 资源变更历史
+
+private struct AuditHistoryView: View {
+
+    let source: AuditLogEntry
+    let vm: AuditLogViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        List {
+            Section {
+                if vm.isLoadingHistory {
+                    ProgressView().frame(maxWidth: .infinity)
+                } else if vm.history.isEmpty {
+                    Text(vm.historyStatus == "unavailable"
+                         ? String(localized: "这条记录没有携带足够信息来定位资源，因此查不到它的变更历史。")
+                         : String(localized: "没有查到这个资源的其它变更。"))
+                        .font(.footnote).foregroundStyle(.secondary)
+                } else {
+                    ForEach(vm.history) { item in
+                        AuditLogRow(entry: item.entry)
+                    }
+                }
+            } header: {
+                Text("变更历史")
+            } footer: {
+                // 识别质量必须如实说明——approximate 时结果可能混入无关条目
+                if vm.historyStatus == "approximate" {
+                    Text("这条记录没有资源地址，只能按其它字段近似匹配，列表里可能混入无关变更。")
+                } else if !vm.history.isEmpty {
+                    Text("同一资源在所选时间窗内的全部变更，最新在上。")
+                }
+            }
+            .glassRow()
+        }
+        .daybreakList()
+        .navigationTitle(source.resource?.type ?? String(localized: "变更历史"))
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("完成") { dismiss() }
+            }
+        }
+    }
+}
+

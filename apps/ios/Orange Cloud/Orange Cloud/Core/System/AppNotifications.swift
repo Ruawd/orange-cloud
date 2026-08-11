@@ -39,6 +39,13 @@ enum AppNotifications {
         if defaults.bool(forKey: "notifyZoneStatus") {
             await checkZoneStatusChanges(zoneService: ZoneService(client: client))
         }
+        if defaults.bool(forKey: "notifyBuildFailures"),
+           authManager.hasScope("workers-ci.read") {
+            await checkBuildFailures(
+                buildService: WorkerBuildService(client: client),
+                accountService: AccountService(client: client)
+            )
+        }
         if defaults.bool(forKey: "notifyWorkerErrors"),
            authManager.hasScope("account-analytics.read") {
             await checkWorkerErrors(
@@ -111,6 +118,70 @@ enum AppNotifications {
             body: String(localized: "过去 1 小时共 \(errors.formatted()) 次调用错误，点击查看详情"),
             id: "worker-errors"
         )
+    }
+
+    /// 构建失败：Cloudflare **没有** Workers Builds 的告警类型（69 个 alert_type 里无对应项），
+    /// 所以走不了服务端 webhook，只能在后台刷新窗口里自己比对。
+    /// 已通知过的 build_uuid 落盘去重，避免同一次失败反复提醒。
+    private static func checkBuildFailures(
+        buildService: WorkerBuildService,
+        accountService: AccountService
+    ) async {
+        let defaults = UserDefaults.standard
+        // 用户在 Worker 详情页勾选要盯的脚本；没勾就不做任何请求
+        let watched = defaults.stringArray(forKey: watchedBuildScriptsKey) ?? []
+        guard !watched.isEmpty,
+              let account = try? await accountService.listAccounts().first else { return }
+
+        var notified = Set(defaults.stringArray(forKey: notifiedBuildsKey) ?? [])
+        var failures: [(script: String, uuid: String)] = []
+
+        // 后台时间预算有限，最多盯 5 个脚本
+        for script in watched.prefix(5) {
+            guard let builds = try? await buildService.builds(accountId: account.id, scriptId: script),
+                  let latest = builds.first else { continue }
+            guard latest.displayState == .failed, !notified.contains(latest.buildUuid) else { continue }
+            failures.append((script, latest.buildUuid))
+            notified.insert(latest.buildUuid)
+        }
+
+        guard !failures.isEmpty else { return }
+        // 去重集合只保留最近 200 条，避免无限膨胀
+        defaults.set(Array(notified.suffix(200)), forKey: notifiedBuildsKey)
+
+        if failures.count == 1, let failure = failures.first {
+            notify(
+                title: String(localized: "构建失败"),
+                body: String(localized: "\(failure.script) 的最新一次构建失败了"),
+                id: "build-failed-\(failure.uuid)"
+            )
+        } else {
+            notify(
+                title: String(localized: "构建失败"),
+                body: String(localized: "\(failures.count) 个 Worker 的最新构建失败了：\(failures.map(\.script).formatted())"),
+                id: "build-failed-multi"
+            )
+        }
+    }
+
+    // MARK: - 盯构建的脚本清单（Worker 详情页勾选）
+
+    static let watchedBuildScriptsKey = "watchedBuildScripts"
+    private static let notifiedBuildsKey = "notifiedBuildUuids"
+
+    static func isWatchingBuilds(_ scriptName: String) -> Bool {
+        (UserDefaults.standard.stringArray(forKey: watchedBuildScriptsKey) ?? []).contains(scriptName)
+    }
+
+    static func setWatchingBuilds(_ scriptName: String, _ on: Bool) {
+        var list = UserDefaults.standard.stringArray(forKey: watchedBuildScriptsKey) ?? []
+        if on {
+            guard !list.contains(scriptName) else { return }
+            list.append(scriptName)
+        } else {
+            list.removeAll { $0 == scriptName }
+        }
+        UserDefaults.standard.set(list, forKey: watchedBuildScriptsKey)
     }
 
     // MARK: - 发送

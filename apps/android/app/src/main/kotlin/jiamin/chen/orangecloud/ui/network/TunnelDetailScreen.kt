@@ -168,7 +168,7 @@ fun TunnelDetailScreen(
                             }
 
                             SectionCard(stringResource(R.string.tunnel_section_connections)) {
-                                val connections = tunnel.connections.orEmpty()
+                                val connections = state.connections
                                 if (connections.isEmpty()) {
                                     Text(stringResource(R.string.tunnel_no_connections), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 } else {

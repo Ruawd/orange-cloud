@@ -15,6 +15,7 @@ import jiamin.chen.orangecloud.data.model.AIModel
 import jiamin.chen.orangecloud.data.model.CFQueue
 import jiamin.chen.orangecloud.data.model.CFQueueSettingsPatch
 import jiamin.chen.orangecloud.data.model.CFQueueUpdate
+import jiamin.chen.orangecloud.data.model.DurableObjectMemory
 import jiamin.chen.orangecloud.data.model.DurableObjectNamespace
 import jiamin.chen.orangecloud.data.model.HyperdriveCachingPatch
 import jiamin.chen.orangecloud.data.model.HyperdriveConfig
@@ -122,12 +123,32 @@ class AIGatewayViewModel @Inject constructor(
 
 @HiltViewModel
 class DurableObjectsViewModel @Inject constructor(
-    accountStore: AccountStore,
+    private val accountStore: AccountStore,
     private val repository: DeveloperPlatformRepository,
     authRepository: AuthRepository,
 ) : StorageListViewModel<DurableObjectNamespace>(accountStore, authRepository.hasScope(Scopes.WORKERS_READ)) {
     override suspend fun fetch(accountId: String): List<DurableObjectNamespace> = repository.listDurableObjectNamespaces(accountId)
     init { load() }
+
+    /** 当前展开查看内存的 namespace id。 */
+    private val _expanded = MutableStateFlow<String?>(null)
+    val expanded: StateFlow<String?> = _expanded.asStateFlow()
+
+    /** namespaceId → 内存分位数；值为 null 表示查过但没数据（免费账号 authz / 该窗口无流量）。 */
+    private val _memory = MutableStateFlow<Map<String, DurableObjectMemory?>>(emptyMap())
+    val memory: StateFlow<Map<String, DurableObjectMemory?>> = _memory.asStateFlow()
+
+    fun toggleMemory(namespaceId: String) {
+        if (_expanded.value == namespaceId) { _expanded.value = null; return }
+        _expanded.value = namespaceId
+        if (_memory.value.containsKey(namespaceId)) return
+        viewModelScope.launch {
+            val accountId = accountStore.selectedAccountId.value ?: return@launch
+            // 账户级 GraphQL 在免费套餐会被 authz 挡，这里静默落到「无数据」而不是报错吓人
+            val result = runCatching { repository.durableObjectMemory(accountId, namespaceId) }.getOrNull()
+            _memory.update { it + (namespaceId to result) }
+        }
+    }
 }
 
 @HiltViewModel

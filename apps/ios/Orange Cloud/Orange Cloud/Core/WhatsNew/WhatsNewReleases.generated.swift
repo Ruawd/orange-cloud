@@ -10,6 +10,43 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "2.0.0", items: [
+            WhatsNewItem(
+                icon:   "brain",
+                title:  String(localized: "一个开关拦住 AI 爬虫", table: "WhatsNew"),
+                detail: String(localized: "域名详情页新增「AI 爬虫」一栏，三档任选：不拦截、只拦广告页、全站拦截。AI 内容相关的两个设置也挪到了同一页，不必再开控制台。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "waveform.path.ecg",
+                title:  String(localized: "源站掉线，Cloudflare 直接推给你", table: "WhatsNew"),
+                detail: String(localized: "域名详情页新增独立健康检查：查看每个源站的状态与失败原因，左滑暂停、右滑删除。打开「源站异常时通知我」后，由 Cloudflare 在状态变化时直接推送，App 不用开着。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "calendar.badge.clock",
+                title:  String(localized: "域名到期日一眼看到", table: "WhatsNew"),
+                detail: String(localized: "概览页新增「域名注册商」：在 Cloudflare 注册的域名，到期日、自动续费与转移锁状态都列在一起，快到期的会标出来。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "scope",
+                title:  String(localized: "看清一条请求在 Cloudflare 里走过什么", table: "WhatsNew"),
+                detail: String(localized: "概览页新增「请求追踪」：填一个网址就能看到这条请求依次命中了哪些规则——重定向、WAF、缓存规则、Worker，每一步是否生效都写清楚，调规则不用再靠猜。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "lock.shield",
+                title:  String(localized: "DNSSEC 与 DNS 进阶设置", table: "WhatsNew"),
+                detail: String(localized: "域名详情页新增 DNS 设置：一键开关 DNSSEC 并复制要填到注册商那边的 DS 记录，另可调整 CNAME 展平方式与域名服务器类型。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "hammer",
+                title:  String(localized: "Worker 构建失败会提醒你", table: "WhatsNew"),
+                detail: String(localized: "Worker 详情页新增构建记录：每次构建的状态、耗时与触发来源都能看到。挑几个关心的 Worker 开启监视，构建失败时会收到通知。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "square.grid.2x2",
+                title:  String(localized: "更多模块，以及一处处打磨", table: "WhatsNew"),
+                detail: String(localized: "新增 R2 数据目录、托管请求头、URL 安全扫描与 Email 抑制列表。审计日志点进任意一条即可查看同一资源的完整变更历史；缓存规则表达式加了常用字段速插（含 Bot 分数与来源 ASN）；Durable Objects 增加内存分位数。并修复隧道详情页不显示活跃连接的问题。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "1.9.3", items: [
             WhatsNewItem(
                 icon:   "pause.circle",

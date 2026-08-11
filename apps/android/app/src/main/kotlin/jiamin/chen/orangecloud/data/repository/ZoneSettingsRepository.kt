@@ -1,6 +1,8 @@
 package jiamin.chen.orangecloud.data.repository
 
 import jiamin.chen.orangecloud.core.network.CfApiClient
+import jiamin.chen.orangecloud.data.model.BotManagementConfig
+import jiamin.chen.orangecloud.data.model.BotManagementUpdate
 import jiamin.chen.orangecloud.data.model.PurgeFilesRequest
 import jiamin.chen.orangecloud.data.model.PurgeRequest
 import jiamin.chen.orangecloud.data.model.PurgeResult
@@ -21,6 +23,18 @@ class ZoneSettingsRepository @Inject constructor(
 
     suspend fun setSetting(zoneId: String, setting: String, value: String): String =
         api.patch<ZoneSetting, ZoneSettingUpdate>("zones/$zoneId/settings/$setting", ZoneSettingUpdate(value)).value
+
+    // MARK: - 机器人管控（bot-management.read/.write，全套餐可用）
+
+    suspend fun getBotManagement(zoneId: String): BotManagementConfig =
+        api.get("zones/$zoneId/bot_management")
+
+    /**
+     * 写机器人管控。PUT 是合并语义，[update] 只带一个非 null 项即可，
+     * 其余 null 项在 explicitNulls=false 下不会被序列化，因此不会误清其它设置。
+     */
+    suspend fun setBotManagement(zoneId: String, update: BotManagementUpdate): BotManagementConfig =
+        api.put("zones/$zoneId/bot_management", update)
 
     suspend fun purgeAllCache(zoneId: String) {
         api.post<PurgeResult, PurgeRequest>("zones/$zoneId/purge_cache", PurgeRequest(purgeEverything = true))

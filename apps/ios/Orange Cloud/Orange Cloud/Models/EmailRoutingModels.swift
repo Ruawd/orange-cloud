@@ -98,3 +98,41 @@ nonisolated struct EmailDestinationAddress: Codable, Sendable, Identifiable {
 nonisolated struct EmailDestinationCreate: Codable, Sendable {
     let email: String
 }
+
+// MARK: - 抑制列表（Suppression）
+
+/// 被抑制的收件地址：投递硬退信等原因后，Cloudflare 不再向其转发。
+/// GET/POST /zones/{zone_id}/email/routing/suppression
+///
+/// 与「路由规则」是两回事：规则决定往哪转，抑制决定不往哪转——
+/// 用户常见的困惑「规则明明配了却收不到」多半就是命中了这里。
+nonisolated struct EmailSuppression: Codable, Identifiable, Hashable, Sendable {
+    let id:        String
+    let email:     String?
+    /// hard_bounce 等
+    let reason:    String?
+    let createdAt: String?
+    /// 到期后自动解除；null 表示永久
+    let expiresAt: String?
+    let zones:     [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case id, email, reason, zones
+        case createdAt = "created_at"
+        case expiresAt = "expires_at"
+    }
+
+    var reasonText: String {
+        switch reason {
+        case "hard_bounce": String(localized: "硬退信")
+        case "soft_bounce": String(localized: "软退信")
+        case "complaint":   String(localized: "投诉")
+        case "manual":      String(localized: "手动添加")
+        default:            reason ?? String(localized: "未知")
+        }
+    }
+}
+
+nonisolated struct EmailSuppressionCreate: Codable, Sendable {
+    let email: String
+}

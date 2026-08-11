@@ -3,7 +3,13 @@
 //  Orange Cloud
 //
 //  Cloudflare Tunnel（cfd_tunnel）。GET /accounts/{id}/cfd_tunnel
-//  列表响应已内嵌活跃连接，无需单独拉取。
+//
+//  ⚠️ 活跃连接的取数方式已变更（CF 2026-07-09 公告）：
+//  list/get 响应内嵌的 connections 数组将于 **2026-10-05** 移除，
+//  改由专用端点 GET /cfd_tunnel/{id}/connections 提供。
+//  该端点返回的是 **Client 数组**（每个 client 内嵌 conns），与旧的扁平数组结构不同，
+//  故新增 TunnelClient 建模并用 flattenedConnections 摊平回 TunnelConnection。
+//  Tunnel.connections 仅作过渡期占位（字段消失后恒为 nil），勿再作为唯一数据源。
 //
 
 import Foundation
@@ -16,6 +22,8 @@ nonisolated struct Tunnel: Codable, Identifiable, Hashable, Sendable {
     let connsActiveAt: String?
     let tunType:       String?            // "cfd_tunnel" | "warp_connector" ...
     let remoteConfig:  Bool?
+    /// 过渡期字段：CF 将于 2026-10-05 从 list/get 响应移除。
+    /// 只用来在详情页首帧占位，真实数据以 TunnelService.connections(...) 为准。
     let connections:   [TunnelConnection]?
 
     enum CodingKeys: String, CodingKey {
@@ -43,13 +51,55 @@ nonisolated struct TunnelConnection: Codable, Hashable, Sendable {
     let originIp:      String?
     let openedAt:      String?
     let clientVersion: String?
+    /// 仅专用端点返回；旧的内嵌数组没有这两个字段。
+    let clientId:      String?
+    let uuid:          String?
 
     enum CodingKeys: String, CodingKey {
-        case id
+        case id, uuid
         case coloName      = "colo_name"
         case originIp      = "origin_ip"
         case openedAt      = "opened_at"
         case clientVersion = "client_version"
+        case clientId      = "client_id"
+    }
+}
+
+/// GET /accounts/{id}/cfd_tunnel/{id}/connections 的 result 元素。
+/// 一个 client 即一个 cloudflared 进程，其 conns 是它维持的各条连接。
+nonisolated struct TunnelClient: Codable, Hashable, Sendable {
+    let id:            String?
+    let arch:          String?
+    let version:       String?
+    let runAt:         String?
+    let configVersion: Int?
+    let features:      [String]?
+    let conns:         [TunnelConnection]?
+
+    enum CodingKeys: String, CodingKey {
+        case id, arch, version, features, conns
+        case runAt         = "run_at"
+        case configVersion = "config_version"
+    }
+}
+
+extension Array where Element == TunnelClient {
+    /// 摊平成 UI 直接消费的连接列表。
+    /// client_version 在 conns 里可能缺省，回退用 client 自身的 version 补齐。
+    var flattenedConnections: [TunnelConnection] {
+        flatMap { client in
+            (client.conns ?? []).map { conn in
+                TunnelConnection(
+                    id:            conn.id,
+                    coloName:      conn.coloName,
+                    originIp:      conn.originIp,
+                    openedAt:      conn.openedAt,
+                    clientVersion: conn.clientVersion ?? client.version,
+                    clientId:      conn.clientId ?? client.id,
+                    uuid:          conn.uuid
+                )
+            }
+        }
     }
 }
 

@@ -15,6 +15,9 @@ final class EmailRoutingViewModel {
     private(set) var settings:  EmailRoutingSettings?
     private(set) var rules:     [EmailRoutingRule] = []
     private(set) var addresses: [EmailDestinationAddress] = []
+    /// 抑制列表：独立 scope，读不到不连累主加载
+    private(set) var suppressions: [EmailSuppression] = []
+    private(set) var suppressionsAvailable = false
     var isLoading = false
     var isMutating = false
     var error: String?
@@ -49,6 +52,11 @@ final class EmailRoutingViewModel {
         // 地址是账号级、独立 scope，单独容错不连累主加载
         if let accountId {
             addresses = (try? await service.addresses(accountId: accountId)) ?? addresses
+        }
+        // 抑制列表同理：email-routing-suppression.read 未授权时静默跳过
+        if let list = try? await service.suppressions(zoneId: zoneId) {
+            suppressions = list
+            suppressionsAvailable = true
         }
         isLoading = false
     }
@@ -128,4 +136,13 @@ final class EmailRoutingViewModel {
         }
         isMutating = false
     }
+
+    /// 解除抑制。成功后本地移除，不必整页重载。
+    func removeSuppression(_ item: EmailSuppression) async {
+        await mutate {
+            try await service.deleteSuppression(zoneId: zoneId, id: item.id)
+        }
+        suppressions.removeAll { $0.id == item.id }
+    }
+
 }

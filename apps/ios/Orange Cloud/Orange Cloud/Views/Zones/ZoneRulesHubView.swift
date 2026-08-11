@@ -89,6 +89,14 @@ struct ZoneRulesHubView: View {
 
             Section("改写与缓存") {
                 PermissionGatedNavigationLink(
+                    label: String(localized: "托管头"),
+                    systemImage: "list.bullet.rectangle.portrait",
+                    requiredScope: "managed-headers.read",
+                    tint: .teal
+                ) {
+                    ManagedHeadersView(zoneId: zoneId, session: session)
+                }
+                PermissionGatedNavigationLink(
                     label: "Transform Rules",
                     systemImage: "arrow.triangle.branch",
                     requiredScope: "zone-transform-rules.read",

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">一个开关拦住 AI 爬虫</string>
+    <string name="whatsnew_2_0_0_0_detail">域名详情页新增「AI 爬虫」一栏，三档任选：不拦截、只拦广告页、全站拦截。AI 内容相关的两个设置也挪到了同一页，不必再开控制台。</string>
+    <string name="whatsnew_2_0_0_1_title">源站掉线，Cloudflare 直接推给你</string>
+    <string name="whatsnew_2_0_0_1_detail">域名详情页新增独立健康检查：查看每个源站的状态与失败原因，左滑暂停、右滑删除。打开「源站异常时通知我」后，由 Cloudflare 在状态变化时直接推送，App 不用开着。</string>
+    <string name="whatsnew_2_0_0_2_title">域名到期日一眼看到</string>
+    <string name="whatsnew_2_0_0_2_detail">概览页新增「域名注册商」：在 Cloudflare 注册的域名，到期日、自动续费与转移锁状态都列在一起，快到期的会标出来。</string>
+    <string name="whatsnew_2_0_0_3_title">看清一条请求在 Cloudflare 里走过什么</string>
+    <string name="whatsnew_2_0_0_3_detail">概览页新增「请求追踪」：填一个网址就能看到这条请求依次命中了哪些规则——重定向、WAF、缓存规则、Worker，每一步是否生效都写清楚，调规则不用再靠猜。</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC 与 DNS 进阶设置</string>
+    <string name="whatsnew_2_0_0_4_detail">域名详情页新增 DNS 设置：一键开关 DNSSEC 并复制要填到注册商那边的 DS 记录，另可调整 CNAME 展平方式与域名服务器类型。</string>
+    <string name="whatsnew_2_0_0_5_title">Worker 构建失败会提醒你</string>
+    <string name="whatsnew_2_0_0_5_detail">Worker 详情页新增构建记录：每次构建的状态、耗时与触发来源都能看到。挑几个关心的 Worker 开启监视，构建失败时会收到通知。</string>
+    <string name="whatsnew_2_0_0_6_title">更多模块，以及一处处打磨</string>
+    <string name="whatsnew_2_0_0_6_detail">新增 R2 数据目录、托管请求头、URL 安全扫描与 Email 抑制列表。审计日志点进任意一条即可查看同一资源的完整变更历史；缓存规则表达式加了常用字段速插（含 Bot 分数与来源 ASN）；Durable Objects 增加内存分位数。并修复隧道详情页不显示活跃连接的问题。</string>
     <string name="whatsnew_1_7_2_0_title">一键暂停 Cloudflare</string>
     <string name="whatsnew_1_7_2_0_detail">域名设置页新增「暂停 Cloudflare」开关。暂停后流量不再经过 Cloudflare——WAF、缓存加速与源站 IP 隐藏都会失效，DNS 仍由 Cloudflare 解析；恢复同样一键完成，两者约 5 分钟生效。</string>
     <string name="whatsnew_1_7_1_0_title">记住你的默认账号</string>

@@ -1,5 +1,6 @@
 package jiamin.chen.orangecloud.data.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 // MARK: - Email Routing：域名级路由规则 + 设置 + 账号级目的地址。对应 iOS EmailRoutingModels。
@@ -82,3 +83,25 @@ data class EmailDestinationAddress(
 
 @Serializable
 data class EmailDestinationCreate(val email: String)
+
+/**
+ * 被抑制的收件地址：硬退信/投诉后 Cloudflare 不再向其转发。
+ * GET/POST /zones/{zone_id}/email/routing/suppression
+ *
+ * 与「路由规则」是两回事：规则决定往哪转，抑制决定不往哪转——
+ * 用户常见困惑「规则明明配了却收不到」多半就是命中了这里。
+ */
+@Serializable
+data class EmailSuppression(
+    val id: String,
+    val email: String? = null,
+    /** hard_bounce / soft_bounce / complaint / manual */
+    val reason: String? = null,
+    @SerialName("created_at") val createdAt: String? = null,
+    /** 到期后自动解除；null 表示永久 */
+    @SerialName("expires_at") val expiresAt: String? = null,
+    val zones: List<String>? = null,
+)
+
+@Serializable
+data class EmailSuppressionCreate(val email: String)

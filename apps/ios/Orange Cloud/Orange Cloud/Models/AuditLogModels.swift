@@ -83,6 +83,14 @@ nonisolated struct AuditLogResource: Codable, Sendable {
 /// 从根上绕开它与通用 ResultInfo(count: Int) 的类型冲突。
 nonisolated struct AuditResultInfo: Codable, Sendable {
     let cursor: String?
+    /// 仅资源变更历史返回：exact / approximate / unavailable。
+    /// approximate 表示没拿到资源 URI、靠其它字段近似匹配，结果可能混入无关条目——必须告诉用户。
+    let historyStatus: String?
+
+    enum CodingKeys: String, CodingKey {
+        case cursor
+        case historyStatus = "history_status"
+    }
 }
 
 /// 审计日志分页响应信封（合成 Codable；errors 设为可选以容忍 null/缺省）。

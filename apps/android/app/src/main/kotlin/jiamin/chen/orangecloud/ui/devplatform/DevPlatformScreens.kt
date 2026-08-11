@@ -95,8 +95,10 @@ import jiamin.chen.orangecloud.core.design.theme.OcOrange
 import jiamin.chen.orangecloud.data.model.AIGateway
 import jiamin.chen.orangecloud.data.model.AIModel
 import jiamin.chen.orangecloud.data.model.CFQueue
+import jiamin.chen.orangecloud.data.model.DurableObjectMemory
 import jiamin.chen.orangecloud.data.model.DurableObjectNamespace
 import jiamin.chen.orangecloud.data.model.HyperdriveConfig
+import jiamin.chen.orangecloud.ui.storage.formatBytes
 import jiamin.chen.orangecloud.ui.storage.StorageGroupedListBody
 import jiamin.chen.orangecloud.ui.storage.StorageListBody
 import jiamin.chen.orangecloud.ui.storage.StorageRow
@@ -255,14 +257,71 @@ private fun GatewayCreateForm(isSaving: Boolean, onSave: (id: String, cacheTtl: 
 @Composable
 fun DurableObjectsScreen(onBack: () -> Unit, viewModel: DurableObjectsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val expanded by viewModel.expanded.collectAsStateWithLifecycle()
+    val memory by viewModel.memory.collectAsStateWithLifecycle()
     DevListScaffold(stringResource(R.string.dev_durable_objects), state.isLoading, onBack, { viewModel.load() }) { onSky ->
         StorageListBody(state, onSky, Icons.Outlined.Memory, stringResource(R.string.dev_durable_objects_empty), { viewModel.load() }) { ns: DurableObjectNamespace ->
-            StorageRow(
-                Icons.Outlined.Memory,
-                ns.name ?: ns.className ?: ns.id,
-                listOfNotNull(ns.className, ns.script).joinToString(" · ").ifBlank { null },
-                showChevron = false,
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                StorageRow(
+                    Icons.Outlined.Memory,
+                    ns.name ?: ns.className ?: ns.id,
+                    listOfNotNull(ns.className, ns.script).joinToString(" · ").ifBlank { null },
+                    showChevron = false,
+                    onClick = { viewModel.toggleMemory(ns.id) },
+                )
+                if (expanded == ns.id) DurableObjectMemoryCard(memory[ns.id], loaded = memory.containsKey(ns.id))
+            }
+        }
+    }
+}
+
+/** 24h 内存分位数。口径是 V8 isolate 而非单个对象，footer 必须写清楚，否则会被读成「这个对象占了多少」。 */
+@Composable
+private fun DurableObjectMemoryCard(memory: DurableObjectMemory?, loaded: Boolean) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                stringResource(R.string.do_memory_title),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
             )
+            when {
+                !loaded -> CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
+                memory == null -> Text(
+                    stringResource(R.string.do_memory_unavailable),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                else -> {
+                    listOf(
+                        "P50" to memory.p50,
+                        "P90" to memory.p90,
+                        "P99" to memory.p99,
+                        "P99.9" to memory.p999,
+                    ).forEach { (label, value) ->
+                        Row(Modifier.fillMaxWidth()) {
+                            Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                formatBytes(value),
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily.Monospace,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    }
+                    Text(
+                        stringResource(R.string.do_memory_footer),
+                        fontSize = 11.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
         }
     }
 }

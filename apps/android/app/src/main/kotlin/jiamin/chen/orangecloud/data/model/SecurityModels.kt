@@ -52,10 +52,50 @@ data class Tunnel(
     @SerialName("conns_active_at") val connsActiveAt: String? = null,
     @SerialName("tun_type") val tunType: String? = null,
     @SerialName("remote_config") val remoteConfig: Boolean? = null,
+    /**
+     * 过渡期字段：CF 将于 **2026-10-05** 从 list/get 响应移除（2026-07-09 公告）。
+     * 只用来在详情页首帧占位，真实数据以 SecurityRepository.tunnelConnections(...) 为准。
+     */
     val connections: List<TunnelConnection>? = null,
 ) {
     val activeConnections: Int get() = connections?.size ?: 0
 }
+
+/**
+ * Zone 机器人管控配置（GET/PUT /zones/{id}/bot_management）。
+ *
+ * 响应 result 是四种套餐形态的 oneOf（Bot Fight Mode / SBFM Definitely / SBFM Likely /
+ * BM Enterprise），四者都 allOf 引用同一个 base_config。此处只建模 base_config 里
+ * 与 AI / 爬虫相关的字段，套餐专属字段（sbfm_* / fight_mode 等）一律不碰——
+ * 因此全部可选，任何套餐的响应都能安全解码。
+ *
+ * 写入用 PUT 但是**合并语义**：官方示例就是只发要改的字段（如 {"fight_mode": false}），
+ * base_config 无 required 字段。故 [BotManagementUpdate] 每次只带一个非 null 项，
+ * 既不覆盖其它设置，也不会把只读字段回写过去。
+ */
+@Serializable
+data class BotManagementConfig(
+    /** block（全站）/ only_on_ad_pages（仅带广告页）/ disabled（放行） */
+    @SerialName("ai_bots_protection") val aiBotsProtection: String? = null,
+    /** enabled / disabled —— 链接迷宫（AI Labyrinth） */
+    @SerialName("crawler_protection") val crawlerProtection: String? = null,
+    /** block / disabled —— 内容机器人 */
+    @SerialName("content_bots_protection") val contentBotsProtection: String? = null,
+    /** off / policy_only —— Robots 访问控制许可证 */
+    @SerialName("cf_robots_variant") val cfRobotsVariant: String? = null,
+    /** 托管 robots.txt */
+    @SerialName("is_robots_txt_managed") val isRobotsTxtManaged: Boolean? = null,
+)
+
+/** 单字段写入体。null 项不参与序列化（encodeDefaults=false 时默认省略）。 */
+@Serializable
+data class BotManagementUpdate(
+    @SerialName("ai_bots_protection") val aiBotsProtection: String? = null,
+    @SerialName("crawler_protection") val crawlerProtection: String? = null,
+    @SerialName("content_bots_protection") val contentBotsProtection: String? = null,
+    @SerialName("cf_robots_variant") val cfRobotsVariant: String? = null,
+    @SerialName("is_robots_txt_managed") val isRobotsTxtManaged: Boolean? = null,
+)
 
 @Serializable
 data class TunnelConnection(
@@ -64,7 +104,39 @@ data class TunnelConnection(
     @SerialName("origin_ip") val originIp: String? = null,
     @SerialName("opened_at") val openedAt: String? = null,
     @SerialName("client_version") val clientVersion: String? = null,
+    /** 仅专用端点返回；旧的内嵌数组没有这两个字段。 */
+    @SerialName("client_id") val clientId: String? = null,
+    val uuid: String? = null,
 )
+
+/**
+ * GET /accounts/{id}/cfd_tunnel/{id}/connections 的 result 元素。
+ * 一个 client 即一个 cloudflared 进程，其 conns 是它维持的各条连接。
+ */
+@Serializable
+data class TunnelClient(
+    val id: String? = null,
+    val arch: String? = null,
+    val version: String? = null,
+    @SerialName("run_at") val runAt: String? = null,
+    @SerialName("config_version") val configVersion: Int? = null,
+    val features: List<String>? = null,
+    val conns: List<TunnelConnection>? = null,
+)
+
+/**
+ * 摊平成 UI 直接消费的连接列表。
+ * client_version 在 conns 里可能缺省，回退用 client 自身的 version 补齐。
+ */
+fun List<TunnelClient>.flattenedConnections(): List<TunnelConnection> =
+    flatMap { client ->
+        client.conns.orEmpty().map { conn ->
+            conn.copy(
+                clientVersion = conn.clientVersion ?: client.version,
+                clientId = conn.clientId ?: client.id,
+            )
+        }
+    }
 
 /**
  * 新建隧道（POST /accounts/{id}/cfd_tunnel）。固定远程托管（config_src=cloudflare），
@@ -145,3 +217,51 @@ enum class IngressServiceKind(val scheme: String, val label: String) {
 /** PUT /configurations 请求体：{ "config": { … } }。 */
 @Serializable
 data class TunnelConfigUpdate(val config: TunnelConfig)
+
+/**
+ * 独立健康检查（/zones/{zone_id}/healthchecks）。
+ *
+ * 与负载均衡的 monitor 是两回事：LB monitor 只在负载均衡语境里生效，
+ * 这里是独立监控单个 IP / 主机名，单源站也能用。
+ * 套餐：免费版不可用（0 个），Pro 10 / Business 50 / Enterprise 1000。
+ */
+@Serializable
+data class HealthCheck(
+    val id: String,
+    val name: String,
+    /** 被监控的源站主机名或 IP */
+    val address: String? = null,
+    val description: String? = null,
+    /** HTTP / HTTPS / TCP */
+    val type: String? = null,
+    /** healthy / unhealthy / unknown */
+    val status: String? = null,
+    @SerialName("failure_reason") val failureReason: String? = null,
+    /** 暂停后不再向源站发送检查 */
+    val suspended: Boolean? = null,
+    /** 检查间隔（秒） */
+    val interval: Int? = null,
+    val timeout: Int? = null,
+    val retries: Int? = null,
+    @SerialName("consecutive_fails") val consecutiveFails: Int? = null,
+    @SerialName("consecutive_successes") val consecutiveSuccesses: Int? = null,
+    /** 发起检查的区域；null 表示由 Cloudflare 自选 */
+    @SerialName("check_regions") val checkRegions: List<String>? = null,
+    @SerialName("created_on") val createdOn: String? = null,
+    @SerialName("modified_on") val modifiedOn: String? = null,
+) {
+    /**
+     * 暂停优先于 status——暂停时 CF 不再探测，status 会停在最后一次结果上，直接显示会误导。
+     */
+    val displayStatus: String
+        get() = when {
+            suspended == true -> "suspended"
+            status == "healthy" -> "healthy"
+            status == "unhealthy" -> "unhealthy"
+            else -> "unknown"
+        }
+}
+
+/** PATCH 体：只发暂停位 */
+@Serializable
+data class HealthCheckSuspendUpdate(val suspended: Boolean)

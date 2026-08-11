@@ -86,6 +86,26 @@ struct CacheRuleEditorView: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .frame(minHeight: 90)
+
+                    // 表达式是自由文本，字段全靠记——给常用字段一个点按插入。
+                    // 含 2026-07-16 起缓存规则新支持的 bot 分数与 ASN 匹配。
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 6) {
+                            ForEach(CacheRuleField.common) { field in
+                                Button {
+                                    insert(field.token)
+                                } label: {
+                                    Text(field.label)
+                                        .font(.caption2)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.ocOrange.opacity(0.12), in: Capsule())
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
                 } header: {
                     Text("匹配表达式")
                 } footer: {
@@ -240,4 +260,15 @@ struct CacheRuleEditorView: View {
             dismiss()
         }
     }
+    /// 点按插入字段：光标概念在 TextEditor 里不好拿，直接追加到末尾并补一个空格
+    private func insert(_ token: String) {
+        if expression.isEmpty {
+            expression = token
+        } else if expression.hasSuffix(" ") {
+            expression += token
+        } else {
+            expression += " " + token
+        }
+    }
+
 }

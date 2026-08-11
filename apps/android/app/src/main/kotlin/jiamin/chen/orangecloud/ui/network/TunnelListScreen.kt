@@ -173,8 +173,17 @@ private fun TunnelRow(tunnel: Tunnel, onClick: () -> Unit, onLongClick: (() -> U
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+                // 连接数来自列表响应内嵌的 connections，CF 将于 2026-10-05 移除该字段。
+                // 字段消失后此处只留状态——不为列表每行单发一次连接请求（N+1），
+                // 也不能无条件显示 0，否则健康隧道会被误标成「0 个连接」。
+                val status = stringResource(tunnelStatusLabel(tunnel.status))
+                val connectionCount = tunnel.connections?.size ?: 0
                 Text(
-                    "${stringResource(tunnelStatusLabel(tunnel.status))} · ${stringResource(R.string.tunnel_connections, tunnel.activeConnections)}",
+                    if (connectionCount > 0) {
+                        "$status · ${stringResource(R.string.tunnel_connections, connectionCount)}"
+                    } else {
+                        status
+                    },
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

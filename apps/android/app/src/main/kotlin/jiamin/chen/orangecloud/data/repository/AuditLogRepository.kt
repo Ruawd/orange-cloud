@@ -42,4 +42,36 @@ class AuditLogRepository @Inject constructor(
         }
         return page
     }
+    /**
+     * 某条审计日志所对应资源的完整变更序列（2026-07-27 上线）。
+     *
+     * 接口先用 id + action_time 定位源日志、从中推出资源标识，再回查同一资源的其它日志，
+     * 所以 **actionTime 必须传**（用于收窄查找窗口），否则定位不到。
+     *
+     * result_info.history_status 表示识别质量：exact / approximate / unavailable，需如实透传。
+     */
+    suspend fun resourceHistory(
+        accountId: String,
+        entryId: String,
+        actionTime: Instant,
+        since: Instant,
+        before: Instant,
+        limit: Int = 50,
+    ): AuditLogPage {
+        val query = listOf(
+            "action_time" to actionTime.toString(),
+            "since" to since.toString(),
+            "before" to before.toString(),
+            "limit" to limit.toString(),
+            "direction" to "desc",
+        )
+        val bytes = api.getRaw("accounts/$accountId/logs/audit/$entryId/history", query)
+        val page = runCatching { json.decodeFromString(AuditLogPage.serializer(), bytes.decodeToString()) }
+            .getOrElse { throw ApiError.Decoding(it) }
+        if (!page.success) {
+            throw ApiError.Cloudflare(page.errors.orEmpty().map { ApiError.CfError(it.code, it.message) })
+        }
+        return page
+    }
+
 }

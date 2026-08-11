@@ -4,6 +4,8 @@ import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.EmailDestinationAddress
 import jiamin.chen.orangecloud.data.model.EmailDestinationCreate
 import jiamin.chen.orangecloud.data.model.EmailRoutingRule
+import jiamin.chen.orangecloud.data.model.EmailSuppression
+import jiamin.chen.orangecloud.data.model.EmailSuppressionCreate
 import jiamin.chen.orangecloud.data.model.EmailRoutingRuleInput
 import jiamin.chen.orangecloud.data.model.EmailRoutingSettings
 import javax.inject.Inject
@@ -53,4 +55,21 @@ class EmailRoutingRepository @Inject constructor(
 
     suspend fun deleteAddress(accountId: String, addressId: String) =
         api.delete("accounts/$accountId/email/routing/addresses/$addressId")
+    // MARK: - 抑制列表（email-routing-suppression.read / .write）
+
+    /** 被抑制的收件地址。响应信封含 success/errors，与常规一致。 */
+    suspend fun suppressions(zoneId: String): List<EmailSuppression> =
+        api.getList<EmailSuppression>(
+            "zones/$zoneId/email/routing/suppression",
+            listOf("per_page" to "100"),
+        ).items
+
+    /** 手动抑制一个地址（此后不再向它转发） */
+    suspend fun addSuppression(zoneId: String, email: String): EmailSuppression =
+        api.post("zones/$zoneId/email/routing/suppression", EmailSuppressionCreate(email))
+
+    /** 解除抑制 */
+    suspend fun deleteSuppression(zoneId: String, id: String) =
+        api.delete("zones/$zoneId/email/routing/suppression/$id")
+
 }

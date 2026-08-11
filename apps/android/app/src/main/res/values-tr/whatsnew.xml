@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">Yapay zekâ tarayıcılarını tek anahtarla engelleyin</string>
+    <string name="whatsnew_2_0_0_0_detail">Alan adı ayrıntılarına üç modlu bir yapay zekâ tarayıcı satırı eklendi: engelleme yok, yalnızca reklam sayfaları ya da tüm site. İki yapay zekâ içerik ayarı da aynı ekrana taşındı; artık panele gitmeniz gerekmiyor.</string>
+    <string name="whatsnew_2_0_0_1_title">Kaynak sunucunuz düşerse Cloudflare doğrudan haber verir</string>
+    <string name="whatsnew_2_0_0_1_detail">Alan adı ayrıntılarında artık bağımsız sağlık kontrolleri listeleniyor: her kaynak için durum ve hata nedeni, kaydırarak duraklatma veya silme. Kaynak uyarısını açtığınızda Cloudflare, durum değişir değişmez bildirimi doğrudan gönderir; uygulamanın açık olması gerekmez.</string>
+    <string name="whatsnew_2_0_0_2_title">Alan adı bitiş tarihini bir bakışta görün</string>
+    <string name="whatsnew_2_0_0_2_detail">Genel bakışa bir kayıt kuruluşu bölümü eklendi: Cloudflare’de kayıtlı alan adlarının bitiş tarihi, otomatik yenileme ve transfer kilidi tek listede; yakında dolacaklar ayrıca işaretleniyor.</string>
+    <string name="whatsnew_2_0_0_3_title">Bir isteğin Cloudflare içinde neye çarptığını görün</string>
+    <string name="whatsnew_2_0_0_3_detail">Genel bakışa istek izleme eklendi: bir URL girin, isteğin sırayla hangi kurallara çarptığını — yönlendirmeler, WAF, önbellek kuralları, Worker’lar — ve her adımın gerçekten uygulanıp uygulanmadığını görün. Bir kuralın neden işlemediğini artık tahmin etmeyin.</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC ve gelişmiş DNS ayarları</string>
+    <string name="whatsnew_2_0_0_4_detail">Alan adı ayrıntılarına DNS ayarları ekranı eklendi: DNSSEC’i açıp kapatın ve kayıt kuruluşunuza yapıştıracağınız DS kaydını kopyalayın; ayrıca CNAME düzleştirmesini ve ad sunucusu türünü ayarlayın.</string>
+    <string name="whatsnew_2_0_0_5_title">Bir Worker derlemesi başarısız olunca haber alın</string>
+    <string name="whatsnew_2_0_0_5_detail">Worker ayrıntılarında artık derleme geçmişi var: her derlemenin durumu, süresi ve neyin tetiklediği. Önemsediğiniz Worker’ları izlemeye alın, bir derleme başarısız olduğunda bildirim alın.</string>
+    <string name="whatsnew_2_0_0_6_title">Daha fazla modül ve bolca cila</string>
+    <string name="whatsnew_2_0_0_6_detail">R2 Data Catalog, yönetilen başlıklar, URL güvenlik taraması ve E-posta engelleme listesi eklendi. Denetim günlüğünde herhangi bir kayda dokunarak o kaynağın tüm değişiklik geçmişini görebilirsiniz; önbellek kuralı ifadelerine sık kullanılan alanlar için hızlı ekleme geldi (bot puanı ve kaynak ASN dahil); Durable Objects artık bellek yüzdeliklerini gösteriyor. Ayrıca tünel ayrıntılarında etkin bağlantıların listelenmemesi sorunu giderildi.</string>
     <string name="whatsnew_1_7_2_0_title">Tek dokunuşla Cloudflare’i duraklatın</string>
     <string name="whatsnew_1_7_2_0_detail">Alan adı ayarlarına “Cloudflare’i duraklat” anahtarı eklendi. Duraklatıldığında trafik Cloudflare üzerinden geçmez; WAF, önbellek hızlandırma ve kaynak IP gizleme devre dışı kalır, DNS çözümlemesi Cloudflare’de sürer. Sürdürmek de tek dokunuş ve her ikisi de yaklaşık 5 dakikada etkili olur.</string>
     <string name="whatsnew_1_7_1_0_title">Varsayılan hesabınızı hatırlar</string>

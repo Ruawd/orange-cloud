@@ -1,5 +1,244 @@
 [
   {
+    "version": "2.0.0",
+    "date": "2026.08.10",
+    "channel": "Google Play",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "brain",
+        "title": {
+          "zh-Hans": "一个开关拦住 AI 爬虫",
+          "en": "Block AI crawlers with one switch",
+          "zh-Hant": "一個開關擋住 AI 爬蟲",
+          "zh-HK": "一個開關擋住 AI 爬蟲",
+          "ja": "AI クローラーをスイッチひとつでブロック",
+          "es-MX": "Bloquea rastreadores de IA con un interruptor",
+          "ko": "스위치 하나로 AI 크롤러 차단",
+          "pt-BR": "Bloqueie rastreadores de IA com um botão",
+          "pt-PT": "Bloqueie rastreadores de IA com um interruptor",
+          "de": "KI-Crawler mit einem Schalter blocken",
+          "fr": "Bloquez les robots d’IA en un geste",
+          "ar": "أوقف زواحف الذكاء الاصطناعي بمفتاح واحد",
+          "tr": "Yapay zekâ tarayıcılarını tek anahtarla engelleyin"
+        },
+        "detail": {
+          "zh-Hans": "域名详情页新增「AI 爬虫」一栏，三档任选：不拦截、只拦广告页、全站拦截。AI 内容相关的两个设置也挪到了同一页，不必再开控制台。",
+          "en": "Zone details now has an AI crawlers row with three modes: off, ad pages only, or block everywhere. The two AI content settings moved to the same screen, so you no longer need the dashboard.",
+          "zh-Hant": "網域詳情頁新增「AI 爬蟲」一欄，三檔任選：不攔截、只攔廣告頁、全站攔截。AI 內容相關的兩個設定也移到同一頁，不必再開主控台。",
+          "zh-HK": "域名詳情頁新增「AI 爬蟲」一欄，三檔任選：不攔截、只攔廣告頁、全站攔截。AI 內容相關的兩個設定也移到同一頁，不必再開控制台。",
+          "ja": "ドメイン詳細に「AI クローラー」の項目が加わりました。ブロックしない／広告ページのみ／サイト全体の 3 段階から選べます。AI コンテンツ関連の 2 つの設定も同じ画面に移り、ダッシュボードを開く必要はありません。",
+          "es-MX": "Los detalles del dominio ahora incluyen una fila de rastreadores de IA con tres modos: sin bloqueo, solo páginas con anuncios o todo el sitio. Los dos ajustes de contenido de IA pasaron a la misma pantalla, así que ya no hace falta el panel.",
+          "ko": "도메인 상세 화면에 ‘AI 크롤러’ 항목이 생겼습니다. 차단 안 함, 광고 페이지만, 사이트 전체 중에서 고를 수 있습니다. AI 콘텐츠 설정 두 개도 같은 화면으로 옮겨서 대시보드를 열 필요가 없습니다.",
+          "pt-BR": "Os detalhes do domínio agora têm uma linha de rastreadores de IA com três modos: sem bloqueio, só páginas com anúncios ou o site todo. As duas configurações de conteúdo de IA foram para a mesma tela, então o painel não é mais necessário.",
+          "pt-PT": "Os detalhes do domínio passam a ter uma linha de rastreadores de IA com três modos: sem bloqueio, apenas páginas com anúncios ou todo o site. As duas definições de conteúdo de IA passaram para o mesmo ecrã, pelo que já não precisa do painel.",
+          "de": "In den Domain-Details gibt es jetzt eine Zeile für KI-Crawler mit drei Stufen: nicht blocken, nur Anzeigenseiten oder die ganze Website. Die beiden KI-Inhaltseinstellungen sind auf denselben Bildschirm gewandert – das Dashboard brauchst du dafür nicht mehr.",
+          "fr": "Les détails du domaine comportent désormais une ligne « robots d’IA » avec trois niveaux : aucun blocage, pages publicitaires uniquement, ou tout le site. Les deux réglages de contenu IA ont rejoint le même écran : plus besoin du tableau de bord.",
+          "ar": "أضفنا إلى تفاصيل النطاق صفًّا لزواحف الذكاء الاصطناعي بثلاثة أوضاع: بلا حظر، أو صفحات الإعلانات فقط، أو الموقع كله. كما انتقل إعدادا محتوى الذكاء الاصطناعي إلى الشاشة نفسها، فلم تعد بحاجة إلى لوحة التحكم.",
+          "tr": "Alan adı ayrıntılarına üç modlu bir yapay zekâ tarayıcı satırı eklendi: engelleme yok, yalnızca reklam sayfaları ya da tüm site. İki yapay zekâ içerik ayarı da aynı ekrana taşındı; artık panele gitmeniz gerekmiyor."
+        }
+      },
+      {
+        "icon": "waveform.path.ecg",
+        "title": {
+          "zh-Hans": "源站掉线，Cloudflare 直接推给你",
+          "en": "Cloudflare pings you when your origin goes down",
+          "zh-Hant": "來源伺服器掉線，Cloudflare 直接推給你",
+          "zh-HK": "源站掉線，Cloudflare 直接推給你",
+          "ja": "オリジンが落ちたら Cloudflare が直接通知",
+          "es-MX": "Cloudflare te avisa si tu servidor de origen se cae",
+          "ko": "오리진이 죽으면 Cloudflare가 바로 알려줍니다",
+          "pt-BR": "O Cloudflare te avisa quando a origem cai",
+          "pt-PT": "O Cloudflare avisa-o quando a origem fica em baixo",
+          "de": "Cloudflare meldet sich, wenn dein Origin ausfällt",
+          "fr": "Cloudflare vous prévient quand votre origine tombe",
+          "ar": "يخبرك Cloudflare مباشرةً عند تعطّل خادم المصدر",
+          "tr": "Kaynak sunucunuz düşerse Cloudflare doğrudan haber verir"
+        },
+        "detail": {
+          "zh-Hans": "域名详情页新增独立健康检查：查看每个源站的状态与失败原因，左滑暂停、右滑删除。打开「源站异常时通知我」后，由 Cloudflare 在状态变化时直接推送，App 不用开着。",
+          "en": "Zone details now lists standalone health checks — status and failure reason per origin, swipe to suspend or delete. Turn on origin alerts and Cloudflare pushes you the moment status changes, whether or not the app is running.",
+          "zh-Hant": "網域詳情頁新增獨立健康檢查：查看每個來源伺服器的狀態與失敗原因，左滑暫停、右滑刪除。開啟「來源異常時通知我」後，由 Cloudflare 在狀態變化時直接推播，App 不必開著。",
+          "zh-HK": "域名詳情頁新增獨立健康檢查：查看每個源站的狀態與失敗原因，左滑暫停、右滑刪除。開啟「源站異常時通知我」後，由 Cloudflare 在狀態變化時直接推送，App 不用開著。",
+          "ja": "ドメイン詳細にスタンドアロンのヘルスチェックが加わりました。オリジンごとの状態と失敗理由を確認でき、スワイプで一時停止や削除ができます。「オリジン異常時に通知」をオンにすると、状態が変わった時点で Cloudflare が直接通知するので、アプリを開いていなくても届きます。",
+          "es-MX": "Los detalles del dominio ahora listan comprobaciones de estado independientes: estado y motivo del fallo por origen, y desliza para pausar o eliminar. Activa el aviso de origen y Cloudflare te lo envía en cuanto cambie el estado, con la app abierta o no.",
+          "ko": "도메인 상세 화면에 독립 상태 검사가 추가됐습니다. 오리진별 상태와 실패 사유를 보고, 밀어서 일시중지하거나 삭제할 수 있습니다. ‘오리진 이상 시 알림’을 켜면 상태가 바뀌는 순간 Cloudflare가 직접 알림을 보내므로 앱을 켜 둘 필요가 없습니다.",
+          "pt-BR": "Os detalhes do domínio agora listam verificações de integridade independentes: status e motivo da falha por origem, deslize para pausar ou excluir. Ative o alerta de origem e o Cloudflare envia assim que o status mudar, com o app aberto ou não.",
+          "pt-PT": "Os detalhes do domínio passam a listar verificações de estado independentes: estado e motivo da falha por origem, deslize para pausar ou eliminar. Ative o alerta de origem e o Cloudflare envia assim que o estado mudar, com a app aberta ou não.",
+          "de": "In den Domain-Details stehen jetzt eigenständige Health Checks: Status und Fehlergrund je Origin, per Wischen pausieren oder löschen. Aktivierst du die Origin-Benachrichtigung, schickt Cloudflare sie direkt beim Statuswechsel – auch wenn die App geschlossen ist.",
+          "fr": "Les détails du domaine listent désormais les contrôles d’intégrité autonomes : état et cause de l’échec par origine, balayez pour suspendre ou supprimer. Activez l’alerte d’origine et Cloudflare vous l’envoie dès que l’état change, application ouverte ou non.",
+          "ar": "تعرض تفاصيل النطاق الآن فحوص السلامة المستقلة: حالة كل خادم مصدر وسبب الإخفاق، مع السحب للإيقاف المؤقت أو الحذف. وبتفعيل تنبيه المصدر يرسل Cloudflare الإشعار فور تغيّر الحالة، سواء كان التطبيق مفتوحًا أم لا.",
+          "tr": "Alan adı ayrıntılarında artık bağımsız sağlık kontrolleri listeleniyor: her kaynak için durum ve hata nedeni, kaydırarak duraklatma veya silme. Kaynak uyarısını açtığınızda Cloudflare, durum değişir değişmez bildirimi doğrudan gönderir; uygulamanın açık olması gerekmez."
+        }
+      },
+      {
+        "icon": "calendar.badge.clock",
+        "title": {
+          "zh-Hans": "域名到期日一眼看到",
+          "en": "See domain expiry at a glance",
+          "zh-Hant": "網域到期日一眼看到",
+          "zh-HK": "域名到期日一眼看到",
+          "ja": "ドメインの有効期限がひと目で",
+          "es-MX": "Mira el vencimiento del dominio de un vistazo",
+          "ko": "도메인 만료일을 한눈에",
+          "pt-BR": "Veja o vencimento do domínio num relance",
+          "pt-PT": "Veja a expiração do domínio num relance",
+          "de": "Domain-Ablauf auf einen Blick",
+          "fr": "L’expiration du domaine en un coup d’œil",
+          "ar": "تاريخ انتهاء النطاق في لمحة",
+          "tr": "Alan adı bitiş tarihini bir bakışta görün"
+        },
+        "detail": {
+          "zh-Hans": "概览页新增「域名注册商」：在 Cloudflare 注册的域名，到期日、自动续费与转移锁状态都列在一起，快到期的会标出来。",
+          "en": "The overview gains a Registrar section: for domains registered with Cloudflare you get expiry date, auto-renew and transfer lock in one list, with the ones expiring soon called out.",
+          "zh-Hant": "總覽頁新增「網域註冊商」：在 Cloudflare 註冊的網域，到期日、自動續約與移轉鎖狀態列在一起，快到期的會標示出來。",
+          "zh-HK": "概覽頁新增「域名註冊商」：在 Cloudflare 註冊的域名，到期日、自動續費與轉移鎖狀態列在一起，快到期的會標出來。",
+          "ja": "概要ページに「ドメイン登録」が加わりました。Cloudflare で登録したドメインの有効期限・自動更新・移管ロックが一覧で並び、期限が近いものは目立つように表示されます。",
+          "es-MX": "El resumen suma una sección de registrador: para los dominios registrados en Cloudflare verás vencimiento, renovación automática y bloqueo de transferencia en una sola lista, con los próximos a vencer destacados.",
+          "ko": "개요 화면에 ‘도메인 등록’ 섹션이 생겼습니다. Cloudflare에 등록한 도메인의 만료일, 자동 갱신, 이전 잠금을 한 목록에서 보고, 곧 만료되는 항목은 따로 표시됩니다.",
+          "pt-BR": "A visão geral ganha uma seção de registrador: para domínios registrados na Cloudflare você vê vencimento, renovação automática e bloqueio de transferência numa lista só, com os que vencem em breve destacados.",
+          "pt-PT": "A descrição geral ganha uma secção de registador: para domínios registados na Cloudflare vê expiração, renovação automática e bloqueio de transferência numa só lista, com os que expiram em breve destacados.",
+          "de": "Die Übersicht bekommt einen Registrar-Bereich: Für bei Cloudflare registrierte Domains stehen Ablaufdatum, automatische Verlängerung und Transfer-Sperre in einer Liste – bald ablaufende sind hervorgehoben.",
+          "fr": "L’aperçu gagne une section Bureau d’enregistrement : pour les domaines enregistrés chez Cloudflare, expiration, renouvellement automatique et verrou de transfert dans une même liste, avec un repère sur ceux qui expirent bientôt.",
+          "ar": "أضفنا إلى صفحة النظرة العامة قسم «مُسجِّل النطاقات»: للنطاقات المسجّلة لدى Cloudflare تظهر تواريخ الانتهاء والتجديد التلقائي وقفل النقل في قائمة واحدة، مع إبراز ما يقترب انتهاؤه.",
+          "tr": "Genel bakışa bir kayıt kuruluşu bölümü eklendi: Cloudflare’de kayıtlı alan adlarının bitiş tarihi, otomatik yenileme ve transfer kilidi tek listede; yakında dolacaklar ayrıca işaretleniyor."
+        }
+      },
+      {
+        "icon": "scope",
+        "title": {
+          "zh-Hans": "看清一条请求在 Cloudflare 里走过什么",
+          "en": "See what a request actually hits inside Cloudflare",
+          "zh-Hant": "看清一筆請求在 Cloudflare 裡走過什麼",
+          "zh-HK": "睇清一條請求喺 Cloudflare 裡面經過咗啲乜",
+          "ja": "リクエストが Cloudflare 内で何を通ったかを可視化",
+          "es-MX": "Mira por qué reglas pasa una solicitud dentro de Cloudflare",
+          "ko": "요청이 Cloudflare 안에서 무엇을 거치는지 확인",
+          "pt-BR": "Veja por onde uma requisição passa dentro da Cloudflare",
+          "pt-PT": "Veja por onde passa um pedido dentro da Cloudflare",
+          "de": "Sieh, was eine Anfrage in Cloudflare wirklich trifft",
+          "fr": "Voyez ce qu’une requête traverse réellement dans Cloudflare",
+          "ar": "اعرف ما يمرّ به الطلب فعليًا داخل Cloudflare",
+          "tr": "Bir isteğin Cloudflare içinde neye çarptığını görün"
+        },
+        "detail": {
+          "zh-Hans": "概览页新增「请求追踪」：填一个网址就能看到这条请求依次命中了哪些规则——重定向、WAF、缓存规则、Worker，每一步是否生效都写清楚，调规则不用再靠猜。",
+          "en": "The overview gains Request Tracing: enter a URL and see, step by step, which rules the request hits — redirects, WAF, cache rules, Workers — and whether each one fired. No more guessing why a rule didn’t apply.",
+          "zh-Hant": "總覽頁新增「請求追蹤」：填一個網址就能看到這筆請求依序命中了哪些規則——重新導向、WAF、快取規則、Worker，每一步是否生效都寫清楚，調規則不必再靠猜。",
+          "zh-HK": "概覽頁新增「請求追蹤」：填一個網址就能看到這條請求依次命中咗邊啲規則——重新導向、WAF、緩存規則、Worker，每一步有冇生效都寫得清清楚楚，調規則唔使再靠估。",
+          "ja": "概要ページに「リクエスト追跡」が加わりました。URL を入力すると、そのリクエストがリダイレクト・WAF・キャッシュルール・Worker のどれに順番に当たり、各ステップが実際に効いたかまで表示されます。ルール調整で当て推量は不要です。",
+          "es-MX": "El resumen suma Rastreo de solicitudes: escribe una URL y verás, paso a paso, qué reglas alcanza la solicitud —redirecciones, WAF, reglas de caché, Workers— y si cada una se aplicó. Se acabó adivinar por qué una regla no entró.",
+          "ko": "개요 화면에 ‘요청 추적’이 추가됐습니다. URL을 넣으면 그 요청이 리디렉션, WAF, 캐시 규칙, Worker 중 무엇을 순서대로 거치고 각 단계가 실제로 적용됐는지까지 보여 줍니다. 규칙이 왜 안 먹는지 더 이상 짐작하지 않아도 됩니다.",
+          "pt-BR": "A visão geral ganha Rastreamento de requisições: informe uma URL e veja, passo a passo, quais regras a requisição atinge — redirecionamentos, WAF, regras de cache, Workers — e se cada uma foi aplicada. Chega de adivinhar por que uma regra não pegou.",
+          "pt-PT": "A descrição geral ganha Rastreio de pedidos: indique um URL e veja, passo a passo, que regras o pedido atinge — redirecionamentos, WAF, regras de cache, Workers — e se cada uma foi aplicada. Deixa de ser preciso adivinhar.",
+          "de": "Die Übersicht bekommt Request Tracing: Gib eine URL ein und sieh Schritt für Schritt, auf welche Regeln die Anfrage trifft – Redirects, WAF, Cache-Regeln, Workers – und ob jede davon gegriffen hat. Kein Raten mehr, warum eine Regel nicht zieht.",
+          "fr": "L’aperçu gagne le traçage de requêtes : saisissez une URL et voyez, étape par étape, quelles règles la requête rencontre — redirections, WAF, règles de cache, Workers — et si chacune s’est appliquée. Fini les suppositions.",
+          "ar": "أضفنا إلى صفحة النظرة العامة «تتبّع الطلبات»: أدخل عنوانًا لترى خطوة بخطوة القواعد التي يمرّ بها الطلب — إعادة التوجيه وWAF وقواعد التخزين المؤقت وWorkers — وما إذا كانت كل قاعدة قد طُبِّقت فعلًا. لا حاجة بعد الآن للتخمين.",
+          "tr": "Genel bakışa istek izleme eklendi: bir URL girin, isteğin sırayla hangi kurallara çarptığını — yönlendirmeler, WAF, önbellek kuralları, Worker’lar — ve her adımın gerçekten uygulanıp uygulanmadığını görün. Bir kuralın neden işlemediğini artık tahmin etmeyin."
+        }
+      },
+      {
+        "icon": "lock.shield",
+        "title": {
+          "zh-Hans": "DNSSEC 与 DNS 进阶设置",
+          "en": "DNSSEC and advanced DNS settings",
+          "zh-Hant": "DNSSEC 與 DNS 進階設定",
+          "zh-HK": "DNSSEC 同 DNS 進階設定",
+          "ja": "DNSSEC と DNS の詳細設定",
+          "es-MX": "DNSSEC y ajustes avanzados de DNS",
+          "ko": "DNSSEC 및 고급 DNS 설정",
+          "pt-BR": "DNSSEC e configurações avançadas de DNS",
+          "pt-PT": "DNSSEC e definições avançadas de DNS",
+          "de": "DNSSEC und erweiterte DNS-Einstellungen",
+          "fr": "DNSSEC et réglages DNS avancés",
+          "ar": "DNSSEC وإعدادات DNS المتقدمة",
+          "tr": "DNSSEC ve gelişmiş DNS ayarları"
+        },
+        "detail": {
+          "zh-Hans": "域名详情页新增 DNS 设置：一键开关 DNSSEC 并复制要填到注册商那边的 DS 记录，另可调整 CNAME 展平方式与域名服务器类型。",
+          "en": "Zone details gains a DNS settings screen: switch DNSSEC on or off and copy the DS record you need to paste at your registrar, plus adjust CNAME flattening and the nameserver type.",
+          "zh-Hant": "網域詳情頁新增 DNS 設定：一鍵開關 DNSSEC 並複製要填到註冊商那邊的 DS 記錄，另可調整 CNAME 扁平化方式與名稱伺服器類型。",
+          "zh-HK": "域名詳情頁新增 DNS 設定：一鍵開關 DNSSEC 並複製要填去註冊商嗰邊嘅 DS 記錄，仲可以調整 CNAME 扁平化方式同域名伺服器類型。",
+          "ja": "ドメイン詳細に DNS 設定が加わりました。DNSSEC をワンタップで切り替え、レジストラ側に貼り付ける DS レコードをコピーできます。CNAME フラット化とネームサーバーの種類も変更できます。",
+          "es-MX": "Los detalles del dominio suman una pantalla de ajustes DNS: activa o desactiva DNSSEC y copia el registro DS que debes pegar en tu registrador, además de ajustar el aplanamiento de CNAME y el tipo de servidor de nombres.",
+          "ko": "도메인 상세 화면에 DNS 설정이 생겼습니다. DNSSEC을 한 번에 켜고 끄면서 등록기관에 붙여 넣을 DS 레코드를 복사할 수 있고, CNAME 평탄화와 네임서버 유형도 조정할 수 있습니다.",
+          "pt-BR": "Os detalhes do domínio ganham uma tela de configurações de DNS: ligue ou desligue o DNSSEC e copie o registro DS para colar no seu registrador, além de ajustar o achatamento de CNAME e o tipo de servidor de nomes.",
+          "pt-PT": "Os detalhes do domínio ganham um ecrã de definições de DNS: ligue ou desligue o DNSSEC e copie o registo DS para colar no seu registador, além de ajustar o achatamento de CNAME e o tipo de servidor de nomes.",
+          "de": "Die Domain-Details bekommen einen DNS-Einstellungsbildschirm: DNSSEC ein- oder ausschalten und den DS-Eintrag kopieren, den du beim Registrar einträgst – dazu CNAME-Flattening und Nameserver-Typ anpassen.",
+          "fr": "Les détails du domaine gagnent un écran de réglages DNS : activez ou désactivez DNSSEC et copiez l’enregistrement DS à coller chez votre bureau d’enregistrement, et ajustez l’aplatissement CNAME et le type de serveurs de noms.",
+          "ar": "أضفنا إلى تفاصيل النطاق شاشة إعدادات DNS: فعِّل DNSSEC أو أوقفه وانسخ سجل DS المطلوب لصقه لدى المُسجِّل، مع إمكانية ضبط تسطيح CNAME ونوع خوادم الأسماء.",
+          "tr": "Alan adı ayrıntılarına DNS ayarları ekranı eklendi: DNSSEC’i açıp kapatın ve kayıt kuruluşunuza yapıştıracağınız DS kaydını kopyalayın; ayrıca CNAME düzleştirmesini ve ad sunucusu türünü ayarlayın."
+        }
+      },
+      {
+        "icon": "hammer",
+        "title": {
+          "zh-Hans": "Worker 构建失败会提醒你",
+          "en": "Get told when a Worker build fails",
+          "zh-Hant": "Worker 建置失敗會提醒你",
+          "zh-HK": "Worker 建置失敗會提你",
+          "ja": "Worker のビルド失敗をお知らせ",
+          "es-MX": "Te avisamos cuando falla una compilación de Worker",
+          "ko": "Worker 빌드가 실패하면 알려 드립니다",
+          "pt-BR": "Avisamos quando um build do Worker falha",
+          "pt-PT": "Avisamos quando uma compilação do Worker falha",
+          "de": "Melden, wenn ein Worker-Build fehlschlägt",
+          "fr": "Soyez averti quand un build de Worker échoue",
+          "ar": "تنبيه عند فشل بناء Worker",
+          "tr": "Bir Worker derlemesi başarısız olunca haber alın"
+        },
+        "detail": {
+          "zh-Hans": "Worker 详情页新增构建记录：每次构建的状态、耗时与触发来源都能看到。挑几个关心的 Worker 开启监视，构建失败时会收到通知。",
+          "en": "Worker details now show build history — status, duration and what triggered each build. Watch the Workers you care about and you’ll get a notification when a build fails.",
+          "zh-Hant": "Worker 詳情頁新增建置記錄：每次建置的狀態、耗時與觸發來源都能看到。挑幾個在意的 Worker 開啟監看，建置失敗時就會收到通知。",
+          "zh-HK": "Worker 詳情頁新增建置記錄：每次建置嘅狀態、耗時同觸發來源都睇得到。揀幾個關心嘅 Worker 開咗監察，建置失敗就會收到通知。",
+          "ja": "Worker 詳細にビルド履歴が加わりました。各ビルドの状態・所要時間・トリガー元を確認できます。気になる Worker を監視対象にしておくと、ビルド失敗時に通知が届きます。",
+          "es-MX": "Los detalles del Worker ahora muestran el historial de compilaciones: estado, duración y qué disparó cada una. Vigila los Workers que te importan y recibirás un aviso cuando una compilación falle.",
+          "ko": "Worker 상세 화면에 빌드 기록이 추가됐습니다. 각 빌드의 상태, 소요 시간, 트리거 출처를 볼 수 있습니다. 신경 쓰는 Worker를 감시로 지정해 두면 빌드 실패 시 알림이 옵니다.",
+          "pt-BR": "Os detalhes do Worker agora mostram o histórico de builds: status, duração e o que disparou cada um. Monitore os Workers que importam e você recebe um aviso quando um build falhar.",
+          "pt-PT": "Os detalhes do Worker passam a mostrar o histórico de compilações: estado, duração e o que despoletou cada uma. Vigie os Workers que lhe interessam e receberá um aviso quando uma compilação falhar.",
+          "de": "Die Worker-Details zeigen jetzt den Build-Verlauf: Status, Dauer und Auslöser jedes Builds. Beobachte die Workers, die dir wichtig sind, und du bekommst eine Meldung, wenn ein Build fehlschlägt.",
+          "fr": "Les détails du Worker affichent désormais l’historique des builds : état, durée et déclencheur de chacun. Surveillez les Workers qui comptent et vous serez notifié dès qu’un build échoue.",
+          "ar": "تعرض تفاصيل الـ Worker الآن سجل عمليات البناء: الحالة والمدة ومصدر التشغيل لكل عملية. راقِب الـ Workers التي تهمّك لتصلك إشعارات عند فشل أي عملية بناء.",
+          "tr": "Worker ayrıntılarında artık derleme geçmişi var: her derlemenin durumu, süresi ve neyin tetiklediği. Önemsediğiniz Worker’ları izlemeye alın, bir derleme başarısız olduğunda bildirim alın."
+        }
+      },
+      {
+        "icon": "square.grid.2x2",
+        "title": {
+          "zh-Hans": "更多模块，以及一处处打磨",
+          "en": "More modules, and a lot of polish",
+          "zh-Hant": "更多模組，以及一處處打磨",
+          "zh-HK": "更多模組，同埋一處處打磨",
+          "ja": "モジュールの追加と細部の磨き込み",
+          "es-MX": "Más módulos y muchos detalles pulidos",
+          "ko": "모듈 추가와 곳곳의 다듬기",
+          "pt-BR": "Mais módulos e muito polimento",
+          "pt-PT": "Mais módulos e muito polimento",
+          "de": "Mehr Module und viel Feinschliff",
+          "fr": "De nouveaux modules et beaucoup de finitions",
+          "ar": "وحدات إضافية ولمسات صقل كثيرة",
+          "tr": "Daha fazla modül ve bolca cila"
+        },
+        "detail": {
+          "zh-Hans": "新增 R2 数据目录、托管请求头、URL 安全扫描与 Email 抑制列表。审计日志点进任意一条即可查看同一资源的完整变更历史；缓存规则表达式加了常用字段速插（含 Bot 分数与来源 ASN）；Durable Objects 增加内存分位数。并修复隧道详情页不显示活跃连接的问题。",
+          "en": "Added R2 Data Catalog, Managed Transforms, URL security scanning and the Email suppression list. Tap any audit log entry to see the full change history of that resource; cache rule expressions got quick-insert chips for common fields (including bot score and source ASN); and Durable Objects now show memory percentiles. Also fixed tunnel details not listing active connections.",
+          "zh-Hant": "新增 R2 資料目錄、託管請求標頭、URL 安全掃描與 Email 抑制清單。審計日誌點進任一筆即可查看同一資源的完整變更歷史；快取規則運算式加了常用欄位速插（含 Bot 分數與來源 ASN）；Durable Objects 增加記憶體分位數。並修正通道詳情頁不顯示使用中連線的問題。",
+          "zh-HK": "新增 R2 數據目錄、託管請求標頭、URL 安全掃描同 Email 抑制清單。審計日誌撳入任何一條就可以睇到同一資源嘅完整變更歷史；緩存規則運算式加咗常用欄位速插（包括 Bot 分數同來源 ASN）；Durable Objects 加咗記憶體分位數。另外修正咗隧道詳情頁唔顯示使用中連線嘅問題。",
+          "ja": "R2 データカタログ、マネージドヘッダー、URL セキュリティスキャン、Email 抑制リストを追加しました。監査ログはどの項目からでも、そのリソースの変更履歴全体を辿れます。キャッシュルールの式にはよく使うフィールド（ボットスコアや送信元 ASN を含む）のクイック挿入を追加。Durable Objects にはメモリのパーセンタイルが加わりました。トンネル詳細でアクティブな接続が表示されない問題も修正しています。",
+          "es-MX": "Agregamos R2 Data Catalog, encabezados administrados, escaneo de seguridad de URL y la lista de supresión de Email. Toca cualquier entrada del registro de auditoría para ver el historial completo de cambios de ese recurso; las expresiones de reglas de caché ahora tienen atajos para campos comunes (incluidos la puntuación de bot y el ASN de origen); y Durable Objects muestra percentiles de memoria. También corregimos que los detalles del túnel no listaran las conexiones activas.",
+          "ko": "R2 데이터 카탈로그, 관리형 헤더, URL 보안 검사, Email 억제 목록을 추가했습니다. 감사 로그의 아무 항목이나 누르면 해당 리소스의 전체 변경 기록을 볼 수 있습니다. 캐시 규칙 식에는 자주 쓰는 필드(봇 점수, 출발지 ASN 포함) 빠른 삽입이 생겼고, Durable Objects에는 메모리 백분위수가 추가됐습니다. 터널 상세에서 활성 연결이 표시되지 않던 문제도 고쳤습니다.",
+          "pt-BR": "Adicionamos o R2 Data Catalog, cabeçalhos gerenciados, varredura de segurança de URL e a lista de supressão de Email. Toque em qualquer entrada do log de auditoria para ver todo o histórico de alterações daquele recurso; as expressões de regras de cache ganharam atalhos para campos comuns (incluindo pontuação de bot e ASN de origem); e os Durable Objects mostram percentis de memória. Também corrigimos os detalhes do túnel não listarem conexões ativas.",
+          "pt-PT": "Adicionámos o R2 Data Catalog, cabeçalhos geridos, análise de segurança de URL e a lista de supressão de Email. Toque em qualquer entrada do registo de auditoria para ver todo o histórico de alterações desse recurso; as expressões de regras de cache ganharam atalhos para campos comuns (incluindo pontuação de bot e ASN de origem); e os Durable Objects mostram percentis de memória. Corrigimos ainda os detalhes do túnel não listarem ligações ativas.",
+          "de": "Neu dabei: R2 Data Catalog, Managed Transforms, URL-Sicherheitsscan und die E-Mail-Sperrliste. Tippe im Audit-Log auf einen Eintrag, um den vollständigen Änderungsverlauf dieser Ressource zu sehen; Cache-Regel-Ausdrücke haben jetzt Schnellbausteine für gängige Felder (inklusive Bot-Score und Quell-ASN); und Durable Objects zeigen Speicher-Perzentile. Außerdem behoben: In den Tunnel-Details fehlten die aktiven Verbindungen.",
+          "fr": "Ajout de R2 Data Catalog, des en-têtes gérés, de l’analyse de sécurité d’URL et de la liste de suppression Email. Touchez n’importe quelle entrée du journal d’audit pour voir tout l’historique des modifications de la ressource ; les expressions de règles de cache disposent de raccourcis pour les champs courants (score de bot et ASN source compris) ; et les Durable Objects affichent des percentiles de mémoire. Correction également des détails de tunnel qui n’affichaient pas les connexions actives.",
+          "ar": "أضفنا R2 Data Catalog والعناوين المُدارة وفحص أمان الروابط وقائمة حظر البريد. اضغط أي سجل تدقيق لعرض سجل التغييرات الكامل لذلك المورد؛ وأضفنا إلى تعبيرات قواعد التخزين المؤقت إدراجًا سريعًا للحقول الشائعة (بما فيها درجة الروبوت ورقم النظام المصدر ASN)؛ كما تعرض Durable Objects الآن مئينات الذاكرة. وأصلحنا كذلك عدم ظهور الاتصالات النشطة في تفاصيل النفق.",
+          "tr": "R2 Data Catalog, yönetilen başlıklar, URL güvenlik taraması ve E-posta engelleme listesi eklendi. Denetim günlüğünde herhangi bir kayda dokunarak o kaynağın tüm değişiklik geçmişini görebilirsiniz; önbellek kuralı ifadelerine sık kullanılan alanlar için hızlı ekleme geldi (bot puanı ve kaynak ASN dahil); Durable Objects artık bellek yüzdeliklerini gösteriyor. Ayrıca tünel ayrıntılarında etkin bağlantıların listelenmemesi sorunu giderildi."
+        }
+      }
+    ]
+  },
+  {
     "version": "1.7.2",
     "date": "2026.08.08",
     "channel": "Google Play",

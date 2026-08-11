@@ -12,6 +12,10 @@ import jiamin.chen.orangecloud.data.model.CFQueue
 import jiamin.chen.orangecloud.data.model.CFQueueCreate
 import jiamin.chen.orangecloud.data.model.CFQueuePurge
 import jiamin.chen.orangecloud.data.model.CFQueueUpdate
+import jiamin.chen.orangecloud.data.model.DOMemoryData
+import jiamin.chen.orangecloud.data.model.DOMemoryQuery
+import jiamin.chen.orangecloud.data.model.DOMemoryVariables
+import jiamin.chen.orangecloud.data.model.DurableObjectMemory
 import jiamin.chen.orangecloud.data.model.DurableObjectNamespace
 import jiamin.chen.orangecloud.data.model.HyperdriveConfig
 import jiamin.chen.orangecloud.data.model.HyperdriveCreate
@@ -69,6 +73,26 @@ class DeveloperPlatformRepository @Inject constructor(
 
     suspend fun listDurableObjectNamespaces(accountId: String): List<DurableObjectNamespace> =
         api.get("accounts/$accountId/workers/durable_objects/namespaces")
+
+    /**
+     * namespace 的 24h 内存分位数。REST 没有这项，只在 GraphQL 的
+     * durableObjectsPeriodicGroups 里；免费账号的账户级 GraphQL 会被 authz 挡，调用方需容错。
+     */
+    suspend fun durableObjectMemory(accountId: String, namespaceId: String): DurableObjectMemory? {
+        val until = java.time.Instant.now()
+        val since = until.minus(24, java.time.temporal.ChronoUnit.HOURS)
+        val data = api.graphQL<DOMemoryData, DOMemoryVariables>(
+            DOMemoryQuery.text,
+            DOMemoryVariables(accountId, namespaceId, since.toString(), until.toString()),
+        )
+        val q = data.viewer.accounts.firstOrNull()?.groups?.firstOrNull()?.quantiles ?: return null
+        return DurableObjectMemory(
+            p50 = q.p50 ?: return null,
+            p90 = q.p90 ?: 0L,
+            p99 = q.p99 ?: 0L,
+            p999 = q.p999 ?: 0L,
+        )
+    }
 
     suspend fun listHyperdrive(accountId: String): List<HyperdriveConfig> =
         api.get("accounts/$accountId/hyperdrive/configs")

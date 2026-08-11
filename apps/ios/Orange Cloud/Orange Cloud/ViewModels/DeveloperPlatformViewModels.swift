@@ -364,11 +364,22 @@ final class DurableObjectInstancesViewModel {
     let accountId: String?
     let namespaceId: String
 
+    // MARK: 内存用量（账户级 GraphQL，免费账号常被 authz 挡）
+
+    private(set) var memory: DurableObjectMemory?
+
     init(service: DurableObjectService, accountId: String?, namespaceId: String) {
         self.service = service
         self.accountId = accountId
         self.namespaceId = namespaceId
     }
+
+    /// 拿不到就静默——与账号用量同一条 authz 链路，弹错只会打扰用户
+    func loadMemory() async {
+        guard let accountId else { return }
+        memory = try? await service.memoryUsage(accountId: accountId, namespaceId: namespaceId)
+    }
+
 
     func load() async {
         guard let accountId, !isLoading else { return }

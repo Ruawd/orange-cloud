@@ -21,6 +21,7 @@ import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Dns
 import androidx.compose.material.icons.outlined.Hub
+import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Shield
@@ -61,7 +62,7 @@ import jiamin.chen.orangecloud.core.design.theme.OcSuccess
 import jiamin.chen.orangecloud.data.model.Zone
 
 /** 域名级深入工具（统一一个回调，新增工具只加枚举项 + ToolRow，免改签名）。 */
-enum class ZoneTool { CACHE, RATE_LIMIT, EMAIL_ROUTING, LOAD_BALANCER }
+enum class ZoneTool { CACHE, RATE_LIMIT, EMAIL_ROUTING, LOAD_BALANCER, HEALTH_CHECK, DNS_SETTINGS, MANAGED_HEADERS }
 
 /** 单个域名的工具中枢 + 概览（hero 卡 + 工具分发 + Name Servers）。对应 iOS ZoneDetailView。 */
 @Composable
@@ -109,12 +110,17 @@ fun ZoneDetailScreen(
                 zone?.let { HeroCard(it) }
 
                 ToolRow(Icons.Outlined.Dns, stringResource(R.string.zone_tool_dns), onOpenDns)
+                // zone 级 DNS 策略（DNSSEC / CNAME 展平 / NS 类型），与逐条记录分开
+                ToolRow(Icons.Outlined.Tune, stringResource(R.string.dnss_title), { onOpenZoneTool(ZoneTool.DNS_SETTINGS) })
+                ToolRow(Icons.Outlined.SwapHoriz, stringResource(R.string.mh_title), { onOpenZoneTool(ZoneTool.MANAGED_HEADERS) })
                 ToolRow(Icons.AutoMirrored.Outlined.ShowChart, stringResource(R.string.zone_tool_analytics), onOpenAnalytics)
                 ToolRow(Icons.Outlined.Shield, stringResource(R.string.zone_tool_waf), onOpenWaf)
                 ToolRow(Icons.Outlined.Bolt, stringResource(R.string.zone_tool_cache), { onOpenZoneTool(ZoneTool.CACHE) })
                 ToolRow(Icons.Outlined.Timer, stringResource(R.string.zone_tool_rate_limit), { onOpenZoneTool(ZoneTool.RATE_LIMIT) })
                 ToolRow(Icons.Outlined.MailOutline, stringResource(R.string.zone_tool_email_routing), { onOpenZoneTool(ZoneTool.EMAIL_ROUTING) })
                 ToolRow(Icons.Outlined.Hub, stringResource(R.string.zone_tool_load_balancer), { onOpenZoneTool(ZoneTool.LOAD_BALANCER) })
+                // 与负载均衡的监控器不同源：这里监控单个源站，单源站也能用
+                ToolRow(Icons.Outlined.MonitorHeart, stringResource(R.string.hc_title), { onOpenZoneTool(ZoneTool.HEALTH_CHECK) })
                 ToolRow(Icons.Outlined.Lock, stringResource(R.string.zone_tool_ssl), onOpenSsl)
                 ToolRow(Icons.Outlined.VerifiedUser, stringResource(R.string.zone_tool_ssl_certs), onOpenSslCerts)
                 ToolRow(Icons.Outlined.SwapHoriz, stringResource(R.string.zone_tool_transform), onOpenTransform)

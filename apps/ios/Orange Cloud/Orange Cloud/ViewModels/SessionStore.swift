@@ -26,6 +26,16 @@ final class SessionStore {
     let wafService:        WAFService
     let snippetService:    SnippetService
     let zoneSettingsService: ZoneSettingsService
+    let botManagementService:      BotManagementService
+    let healthCheckService:        HealthCheckService
+    let dnsSettingsService:        DNSSettingsService
+    let registrarService:          RegistrarService
+    let requestTracerService:      RequestTracerService
+    let r2CatalogService:          R2CatalogService
+    let workerBuildService:        WorkerBuildService
+    let alertingService:           AlertingService
+    let managedHeaderService:      ManagedHeaderService
+    let urlScannerService:         URLScannerService
     let sslCertificateService:     SSLCertificateService
     let transformRuleService:      TransformRuleService
     let firewallAccessRuleService: FirewallAccessRuleService
@@ -81,6 +91,16 @@ final class SessionStore {
         self.wafService        = WAFService(client: client)
         self.snippetService    = SnippetService(client: client)
         self.zoneSettingsService = ZoneSettingsService(client: client)
+        self.botManagementService      = BotManagementService(client: client)
+        self.healthCheckService        = HealthCheckService(client: client)
+        self.dnsSettingsService        = DNSSettingsService(client: client)
+        self.registrarService          = RegistrarService(client: client)
+        self.requestTracerService      = RequestTracerService(client: client)
+        self.r2CatalogService          = R2CatalogService(client: client)
+        self.workerBuildService        = WorkerBuildService(client: client)
+        self.alertingService           = AlertingService(client: client)
+        self.managedHeaderService      = ManagedHeaderService(client: client)
+        self.urlScannerService         = URLScannerService(client: client)
         self.sslCertificateService     = SSLCertificateService(client: client)
         self.transformRuleService      = TransformRuleService(client: client)
         self.firewallAccessRuleService = FirewallAccessRuleService(client: client)

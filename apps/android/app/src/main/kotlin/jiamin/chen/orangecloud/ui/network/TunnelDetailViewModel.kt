@@ -10,6 +10,7 @@ import jiamin.chen.orangecloud.data.model.CreateDnsRecord
 import jiamin.chen.orangecloud.data.model.IngressRule
 import jiamin.chen.orangecloud.data.model.Tunnel
 import jiamin.chen.orangecloud.data.model.TunnelConfig
+import jiamin.chen.orangecloud.data.model.TunnelConnection
 import jiamin.chen.orangecloud.data.model.Zone
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.DnsRepository
@@ -40,6 +41,10 @@ data class TunnelDetailUiState(
     val isSaving: Boolean = false,
     val canWrite: Boolean = false,
     val error: String? = null,
+    // 活跃连接：首帧用内嵌数组占位，随后由专用端点覆盖
+    // （内嵌字段 CF 将于 2026-10-05 移除，届时占位恒为空、完全依赖端点）
+    val connections: List<TunnelConnection> = emptyList(),
+    val isLoadingConnections: Boolean = false,
 ) {
     /** 非 catch-all 的公共主机名规则（供 UI 列表）。 */
     val publicHostnames: List<IngressRule>
@@ -93,7 +98,10 @@ class TunnelDetailViewModel @Inject constructor(
                 accountStore.ensureLoaded()
                 val accountId = accountStore.selectedAccountId.value ?: error("no account")
                 val tunnel = securityRepository.getTunnel(accountId, tunnelId)
-                _uiState.update { it.copy(tunnel = tunnel) }
+                _uiState.update {
+                    it.copy(tunnel = tunnel, connections = tunnel.connections.orEmpty())
+                }
+                loadConnections(accountId)
                 if (tunnel.remoteConfig == true) loadConfiguration(accountId)
             } catch (e: Exception) {
                 _uiState.update { it.copy(hasError = true) }
@@ -133,6 +141,19 @@ class TunnelDetailViewModel @Inject constructor(
     }
 
     /** 清理失活连接（活跃的 cloudflared 会自动重连）。 */
+    /** 拉取活跃连接。失败不报错——详情页其余内容仍可用，保留占位数据即可。 */
+    private suspend fun loadConnections(accountId: String) {
+        _uiState.update { it.copy(isLoadingConnections = true) }
+        try {
+            val conns = securityRepository.tunnelConnections(accountId, tunnelId)
+            _uiState.update { it.copy(connections = conns) }
+        } catch (_: Exception) {
+            // 保留内嵌占位，不打断详情页
+        } finally {
+            _uiState.update { it.copy(isLoadingConnections = false) }
+        }
+    }
+
     fun cleanupConnections() {
         if (!canWrite || _uiState.value.isSaving) return
         viewModelScope.launch {

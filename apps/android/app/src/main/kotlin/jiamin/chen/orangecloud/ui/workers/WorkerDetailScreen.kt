@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Public
@@ -83,6 +84,7 @@ fun WorkerDetailScreen(
     onOpenTriggers: () -> Unit = {},
     onOpenDomains: () -> Unit = {},
     onOpenDeployments: () -> Unit = {},
+    onOpenBuilds: () -> Unit = {},
     onEditCode: () -> Unit = {},
     // 查看免费；写操作（编辑/删除）门控 Pro：编辑走路由 ProGate，删除在此按 isPro 拦（非 Pro → onShowPaywall）
     isPro: Boolean = true,
@@ -150,6 +152,7 @@ fun WorkerDetailScreen(
                         ManageRow(Icons.Outlined.Schedule, stringResource(R.string.worker_manage_triggers), onOpenTriggers)
                         ManageRow(Icons.Outlined.Public, stringResource(R.string.worker_manage_domains), onOpenDomains)
                         ManageRow(Icons.Outlined.History, stringResource(R.string.worker_manage_deployments), onOpenDeployments)
+                        ManageRow(Icons.Outlined.Build, stringResource(R.string.builds_title), onOpenBuilds)
                     }
                 }
 

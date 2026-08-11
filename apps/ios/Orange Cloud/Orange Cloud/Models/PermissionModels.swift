@@ -133,13 +133,96 @@ extension FeaturePermission {
             isRequired: false
         ),
         .init(
+            id: "managed_headers",
+            title: String(localized: "托管头"),
+            description: String(localized: "Cloudflare 维护的请求/响应头改写开关"),
+            icon: "list.bullet.rectangle.portrait",
+            readScopes: ["managed-headers.read"],
+            editScopes: ["managed-headers.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "workers_builds",
+            title: String(localized: "Workers 构建"),
+            description: String(localized: "查看 CI 构建记录与日志；读写可取消构建"),
+            icon: "hammer.circle",
+            readScopes: ["workers-ci.read"],
+            editScopes: ["workers-ci.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "r2_catalog",
+            title: String(localized: "R2 数据目录"),
+            description: String(localized: "把 R2 桶启用为 Iceberg 数据仓库"),
+            icon: "tablecells",
+            readScopes: ["r2-catalog.read"],
+            editScopes: ["r2-catalog.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "url_scanner",
+            title: String(localized: "URL 扫描"),
+            description: String(localized: "提交链接做安全扫描并查看报告"),
+            icon: "magnifyingglass.circle",
+            readScopes: ["url-scanner.read"],
+            editScopes: ["url-scanner.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "request_tracer",
+            title: String(localized: "请求追踪"),
+            description: String(localized: "模拟请求，查看它命中了哪些规则"),
+            icon: "point.topleft.down.curvedto.point.bottomright.up",
+            readScopes: ["request-tracer.read"],
+            editScopes: [],
+            isRequired: false
+        ),
+        .init(
+            id: "registrar",
+            title: String(localized: "域名注册"),
+            description: String(localized: "查看在 Cloudflare 注册的域名与到期日；读写可改自动续费"),
+            icon: "checkmark.seal",
+            readScopes: ["registrar-domains.read"],
+            editScopes: ["registrar-domains.admin"],
+            isRequired: false
+        ),
+        .init(
+            id: "dns_settings",
+            title: String(localized: "DNS 设置"),
+            description: String(localized: "DNSSEC、CNAME 展平与名称服务器"),
+            icon: "gearshape.2",
+            readScopes: ["zone-dns-settings.read"],
+            editScopes: ["zone-dns-settings.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "health_checks",
+            title: String(localized: "健康检查"),
+            description: String(localized: "监控源站是否在线；读写可暂停与删除"),
+            icon: "waveform.path.ecg",
+            readScopes: ["healthcheck.read"],
+            editScopes: ["healthcheck.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "bot_management",
+            title: String(localized: "AI 与机器人"),
+            description: String(localized: "管控 AI 爬虫、内容机器人与 robots.txt"),
+            icon: "ant",
+            readScopes: ["bot-management.read"],
+            editScopes: ["bot-management.write"],
+            isRequired: false
+        ),
+        .init(
             id: "email_routing",
             title: "Email Routing",
             description: String(localized: "查看与管理邮件路由规则与目的地址"),
             icon: "envelope",
             // rules 是域名级，addresses 是账号级——两组 scope 都要才能完整使用
-            readScopes: ["email-routing-rule.read", "email-routing-address.read"],
-            editScopes: ["email-routing-rule.write", "email-routing-address.write"],
+            readScopes: ["email-routing-rule.read", "email-routing-address.read",
+                         "email-routing-suppression.read"],
+            editScopes: ["email-routing-rule.write", "email-routing-address.write",
+                         "email-routing-suppression.write"],
             isRequired: false
         ),
         .init(

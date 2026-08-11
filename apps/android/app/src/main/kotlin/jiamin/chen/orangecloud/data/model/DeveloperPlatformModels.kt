@@ -170,3 +170,70 @@ data class HyperdriveCachingPatch(
     @SerialName("max_age") val maxAge: Int? = null,
     @SerialName("stale_while_revalidate") val staleWhileRevalidate: Int? = null,
 )
+
+// MARK: - Durable Objects 内存指标（GraphQL durableObjectsPeriodicGroups）
+
+/**
+ * 一个 namespace 24 小时内的内存分位数。
+ *
+ * 注意口径：这是 **V8 isolate** 的内存，不是单个 DO 实例的——一个 isolate 可能同时承载
+ * 同类的多个对象与外围 Worker 代码，每个 isolate 上限 128 MB。
+ */
+data class DurableObjectMemory(
+    val p50: Long,
+    val p90: Long,
+    val p99: Long,
+    val p999: Long,
+)
+
+@Serializable
+data class DOMemoryVariables(
+    val accountTag: String,
+    val namespaceId: String,
+    val since: String,
+    val until: String,
+)
+
+@Serializable
+data class DOMemoryData(val viewer: DOMemoryViewer)
+
+@Serializable
+data class DOMemoryViewer(val accounts: List<DOMemoryAccount> = emptyList())
+
+@Serializable
+data class DOMemoryAccount(
+    @SerialName("durableObjectsPeriodicGroups") val groups: List<DOMemoryGroup> = emptyList(),
+)
+
+@Serializable
+data class DOMemoryGroup(val quantiles: DOMemoryQuantiles? = null)
+
+@Serializable
+data class DOMemoryQuantiles(
+    @SerialName("memoryUsageBytesP50") val p50: Long? = null,
+    @SerialName("memoryUsageBytesP90") val p90: Long? = null,
+    @SerialName("memoryUsageBytesP99") val p99: Long? = null,
+    @SerialName("memoryUsageBytesP999") val p999: Long? = null,
+)
+
+object DOMemoryQuery {
+    val text: String = """
+        query DOMemory(${'$'}accountTag: String!, ${'$'}namespaceId: String!, ${'$'}since: Time!, ${'$'}until: Time!) {
+          viewer {
+            accounts(filter: { accountTag: ${'$'}accountTag }) {
+              durableObjectsPeriodicGroups(
+                limit: 1
+                filter: { datetime_geq: ${'$'}since, datetime_leq: ${'$'}until, namespaceId: ${'$'}namespaceId }
+              ) {
+                quantiles {
+                  memoryUsageBytesP50
+                  memoryUsageBytesP90
+                  memoryUsageBytesP99
+                  memoryUsageBytesP999
+                }
+              }
+            }
+          }
+        }
+    """.trimIndent()
+}

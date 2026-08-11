@@ -187,3 +187,27 @@ nonisolated struct CacheRuleToggle: Codable, Sendable {
 nonisolated struct CacheEntrypointUpdate: Codable, Sendable {
     let rules: [CacheRuleCreate]
 }
+
+// MARK: - 表达式常用字段
+
+/// 缓存规则表达式的常用字段，供编辑器点按插入。
+/// 含 2026-07-16 起缓存规则新支持的 bot management 分数与 ASN 匹配字段。
+nonisolated struct CacheRuleField: Identifiable, Sendable {
+    let label: String
+    let token: String
+
+    var id: String { token }
+
+    static let common: [CacheRuleField] = [
+        .init(label: "路径",     token: "http.request.uri.path"),
+        .init(label: "主机",     token: "http.host"),
+        .init(label: "查询串",   token: "http.request.uri.query"),
+        .init(label: "方法",     token: "http.request.method"),
+        .init(label: "Cookie",  token: "http.cookie"),
+        .init(label: "国家",     token: "ip.src.country"),
+        // 2026-07-16 新增：缓存规则现在也能按 bot 分数与来源 ASN 匹配
+        .init(label: "Bot 分数", token: "cf.bot_management.score"),
+        .init(label: "已验证机器人", token: "cf.bot_management.verified_bot"),
+        .init(label: "ASN",     token: "ip.src.asnum"),
+    ]
+}

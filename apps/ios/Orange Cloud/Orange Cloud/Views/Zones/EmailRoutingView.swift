@@ -135,6 +135,50 @@ struct EmailRoutingView: View {
                 .glassRow()
             }
 
+            // 抑制列表：规则决定往哪转，抑制决定不往哪转——
+            // 「规则配了却收不到」多半就是命中了这里，所以要能看见
+            if vm.suppressionsAvailable {
+                Section {
+                    if vm.suppressions.isEmpty {
+                        Text("没有被抑制的地址。")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    } else {
+                        ForEach(vm.suppressions) { item in
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.email ?? item.id)
+                                    .font(.callout)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                                HStack(spacing: 6) {
+                                    Text(item.reasonText)
+                                    if let expires = WorkerScript.parseDate(item.expiresAt) {
+                                        Text(expires, format: .dateTime.year().month().day())
+                                    } else {
+                                        Text("永久")
+                                    }
+                                }
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                if canEditRules {
+                                    Button(role: .destructive) {
+                                        Task { await vm.removeSuppression(item) }
+                                    } label: {
+                                        Label("解除", systemImage: "arrow.uturn.backward")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text("已抑制地址")
+                } footer: {
+                    Text("这些地址退信或投诉过，Cloudflare 已停止向其转发。左滑可解除。")
+                }
+                .glassRow()
+            }
+
             if let error = vm.error {
                 Section {
                     Text(error).font(.footnote).foregroundStyle(.red)

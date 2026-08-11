@@ -4,9 +4,12 @@ import jiamin.chen.orangecloud.core.network.ApiError
 import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.CreateTunnelRequest
 import jiamin.chen.orangecloud.data.model.Tunnel
+import jiamin.chen.orangecloud.data.model.TunnelClient
 import jiamin.chen.orangecloud.data.model.TunnelConfig
 import jiamin.chen.orangecloud.data.model.TunnelConfigResult
 import jiamin.chen.orangecloud.data.model.TunnelConfigUpdate
+import jiamin.chen.orangecloud.data.model.TunnelConnection
+import jiamin.chen.orangecloud.data.model.flattenedConnections
 import jiamin.chen.orangecloud.data.model.WafEntrypointUpdate
 import jiamin.chen.orangecloud.data.model.WafRule
 import jiamin.chen.orangecloud.data.model.WafRuleCreate
@@ -68,11 +71,23 @@ class SecurityRepository @Inject constructor(
     }
 
     /**
-     * 单条隧道详情。cfd_tunnel 对象 schema 内嵌 connections（活跃连接，扁平形态），
-     * 列表与详情共用同一结构，故详情即可拿到连接列表（对齐 iOS：直接用内嵌 connections）。
+     * 单条隧道详情。列表与详情共用同一结构。
+     *
+     * 注意：cfd_tunnel 对象曾内嵌 connections（扁平形态），CF 将于 **2026-10-05** 移除该字段，
+     * 活跃连接改由 [tunnelConnections] 的专用端点提供，勿再依赖内嵌数组。
      */
     suspend fun getTunnel(accountId: String, tunnelId: String): Tunnel =
         api.get("accounts/$accountId/cfd_tunnel/$tunnelId")
+
+    /**
+     * 隧道的活跃连接（专用端点）。
+     *
+     * result 是 Client 数组（一个 cloudflared 进程一项），此处摊平为连接列表供 UI 直接消费。
+     */
+    suspend fun tunnelConnections(accountId: String, tunnelId: String): List<TunnelConnection> =
+        api.getList<TunnelClient>("accounts/$accountId/cfd_tunnel/$tunnelId/connections")
+            .items
+            .flattenedConnections()
 
     // MARK: - 隧道生命周期（argotunnel.write）
 

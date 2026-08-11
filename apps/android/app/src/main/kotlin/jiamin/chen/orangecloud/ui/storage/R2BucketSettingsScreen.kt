@@ -18,6 +18,10 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHost
@@ -57,6 +61,7 @@ fun R2BucketSettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val genericErr = stringResource(R.string.error_generic)
     val corsClearedMsg = stringResource(R.string.r2_cors_cleared)
+    var confirmCatalog by remember { mutableStateOf(false) }
     val domainRemovedMsg = stringResource(R.string.r2_domain_removed)
 
     LaunchedEffect(Unit) {
@@ -139,6 +144,40 @@ fun R2BucketSettingsScreen(
                             }
                         }
 
+                        // 数据目录（Iceberg）。启用是计费动作，故走二次确认。
+                        if (state.canReadCatalog && state.catalogLoaded) {
+                            SectionTitle(stringResource(R.string.r2_catalog))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        stringResource(R.string.r2_catalog_enable),
+                                        fontSize = 15.sp,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                    Text(
+                                        stringResource(R.string.r2_catalog_desc),
+                                        fontSize = 12.sp,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                }
+                                Switch(
+                                    checked = state.catalogEnabled,
+                                    onCheckedChange = { on ->
+                                        if (on) confirmCatalog = true else viewModel.setCatalogEnabled(false)
+                                    },
+                                    enabled = state.canWriteCatalog && !state.isCatalogMutating,
+                                )
+                            }
+                            if (state.catalogEnabled) {
+                                state.catalog?.name?.let { HintText(it) }
+                                if (state.catalogNamespaces.isEmpty()) {
+                                    HintText(stringResource(R.string.r2_catalog_no_namespaces))
+                                } else {
+                                    state.catalogNamespaces.forEach { HintText(it.displayName) }
+                                }
+                            }
+                        }
+
                         // CORS
                         SectionTitle(stringResource(R.string.r2_cors))
                         if (state.corsRules.isEmpty()) {
@@ -167,6 +206,22 @@ fun R2BucketSettingsScreen(
             }
             SnackbarHost(snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
         }
+    }
+
+    if (confirmCatalog) {
+        AlertDialog(
+            onDismissRequest = { confirmCatalog = false },
+            title = { Text(stringResource(R.string.r2_catalog_enable)) },
+            text = { Text(stringResource(R.string.r2_catalog_enable_confirm)) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.setCatalogEnabled(true); confirmCatalog = false }) {
+                    Text(stringResource(R.string.r2_catalog_enable))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmCatalog = false }) { Text(stringResource(R.string.dns_cancel)) }
+            },
+        )
     }
 }
 

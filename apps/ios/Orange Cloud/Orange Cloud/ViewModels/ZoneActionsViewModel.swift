@@ -2,7 +2,8 @@
 //  ZoneActionsViewModel.swift
 //  Orange Cloud
 //
-//  Zone 详情页「操作」区：Under Attack / 开发模式 / 暂停 Cloudflare 开关 + 缓存清理。
+//  Zone 详情页「操作」区：Under Attack / 开发模式 / 暂停 Cloudflare 开关 + 缓存清理，
+//  以及「AI 内容控制」区：AI 训练重定向 / 面向 Agent 的 Markdown。
 //
 //  注意暂停态与另两个开关的数据源不同：Under Attack / 开发模式读写 zone settings
 //  （zone-settings.read/.write），暂停读写 zone 本身（zone.read / zone.write），
@@ -22,8 +23,35 @@ final class ZoneActionsViewModel {
     /// 是否暂停 Cloudflare 代理。初值取自本地缓存，进页后再用 API 校准。
     private(set) var paused: Bool
 
+    // MARK: AI 内容控制（Pro/Business 起；免费套餐读取即失败，整卡隐藏）
+
+    /// Redirects for AI Training —— 把 AI 训练类爬虫重定向走
+    private(set) var aiTrainingRedirect = false
+    /// Markdown for Agents —— 按 Accept: text/markdown 把 HTML 转 Markdown 供 agent 消费
+    private(set) var markdownForAgents = false
+    /// 两项中至少一项读到了，才认为该 Zone 支持这组设置
+    private(set) var aiSettingsAvailable = false
+
+    // MARK: 机器人管控（bot-management.read/.write，全套餐可用）
+
+    /// AI 爬虫处置：全站拦 / 仅广告页 / 放行
+    private(set) var aiBotsProtection: AIBotsProtection = .disabled
+    /// 链接迷宫（AI Labyrinth）
+    private(set) var crawlerProtection = false
+    /// 拦内容机器人
+    private(set) var contentBotsProtection = false
+    /// Robots 访问控制许可证
+    private(set) var robotsLicense = false
+    /// 托管 robots.txt
+    private(set) var managedRobotsTxt = false
+    private(set) var botConfigLoaded = false
+
     var isTogglingUnderAttack = false
     var isTogglingDevMode = false
+    var isTogglingAITrainingRedirect = false
+    var isTogglingMarkdownForAgents = false
+    /// 机器人管控五项共用一个忙态：同一个端点，串行改更安全
+    var isUpdatingBotConfig = false
     var isTogglingPause = false
     var isPurging = false
     var didPurge = false       // sensoryFeedback / 提示触发器
@@ -31,11 +59,19 @@ final class ZoneActionsViewModel {
 
     private let service: ZoneSettingsService
     private let zoneService: ZoneService
+    private let botService: BotManagementService
     private let zoneId: String
 
-    init(service: ZoneSettingsService, zoneService: ZoneService, zoneId: String, paused: Bool = false) {
+    init(
+        service: ZoneSettingsService,
+        zoneService: ZoneService,
+        botService: BotManagementService,
+        zoneId: String,
+        paused: Bool = false
+    ) {
         self.service = service
         self.zoneService = zoneService
+        self.botService = botService
         self.zoneId = zoneId
         self.paused = paused
     }
@@ -49,6 +85,104 @@ final class ZoneActionsViewModel {
         underAttack = security == "under_attack"
         devMode = dev == "on"
         settingsLoaded = true
+    }
+
+    /// 读 AI 内容控制两项。免费套餐不支持这两个 setting，读取会失败——
+    /// 此时 aiSettingsAvailable 保持 false，调用方整卡隐藏，不给用户一个永远打不开的锁。
+    func loadAISettings() async {
+        guard !aiSettingsAvailable else { return }
+        async let redirectTask = service.getSetting(zoneId: zoneId, setting: "redirects_for_ai_training")
+        async let converterTask = service.getSetting(zoneId: zoneId, setting: "content_converter")
+        let redirect = try? await redirectTask
+        let converter = try? await converterTask
+        guard redirect != nil || converter != nil else { return }
+        aiTrainingRedirect = redirect == "on"
+        markdownForAgents = converter == "on"
+        aiSettingsAvailable = true
+    }
+
+    /// 读机器人管控配置。四种套餐形态共用 base_config，任何套餐都能读到。
+    func loadBotConfig() async {
+        guard !botConfigLoaded else { return }
+        guard let config = try? await botService.config(zoneId: zoneId) else { return }
+        apply(config)
+        botConfigLoaded = true
+    }
+
+    private func apply(_ config: BotManagementConfig) {
+        aiBotsProtection      = AIBotsProtection(apiValue: config.aiBotsProtection)
+        crawlerProtection     = config.crawlerProtection == "enabled"
+        contentBotsProtection = config.contentBotsProtection == "block"
+        robotsLicense         = config.cfRobotsVariant == "policy_only"
+        managedRobotsTxt      = config.isRobotsTxtManaged == true
+    }
+
+    /// 写单个字段。PUT 是合并语义，只发改动的那一个，不会动 sbfm_* 等套餐专属配置。
+    private func updateBot<Value: Codable & Sendable>(
+        _ field: BotManagementField,
+        _ value: Value
+    ) async {
+        guard !isUpdatingBotConfig else { return }
+        isUpdatingBotConfig = true
+        error = nil
+        do {
+            apply(try await botService.update(zoneId: zoneId, field: field, value: value))
+        } catch {
+            self.error = error.localizedDescription
+        }
+        isUpdatingBotConfig = false
+    }
+
+    func setAIBotsProtection(_ mode: AIBotsProtection) async {
+        await updateBot(.aiBotsProtection, mode.rawValue)
+    }
+
+    func setCrawlerProtection(_ on: Bool) async {
+        await updateBot(.crawlerProtection, on ? "enabled" : "disabled")
+    }
+
+    func setContentBotsProtection(_ on: Bool) async {
+        await updateBot(.contentBotsProtection, on ? "block" : "disabled")
+    }
+
+    func setRobotsLicense(_ on: Bool) async {
+        await updateBot(.cfRobotsVariant, on ? "policy_only" : "off")
+    }
+
+    func setManagedRobotsTxt(_ on: Bool) async {
+        await updateBot(.isRobotsTxtManaged, on)
+    }
+
+    func setAITrainingRedirect(_ on: Bool) async {
+        guard !isTogglingAITrainingRedirect else { return }
+        isTogglingAITrainingRedirect = true
+        error = nil
+        do {
+            let value = try await service.setSetting(
+                zoneId: zoneId, setting: "redirects_for_ai_training",
+                value: on ? "on" : "off"
+            )
+            aiTrainingRedirect = value == "on"
+        } catch {
+            self.error = error.localizedDescription
+        }
+        isTogglingAITrainingRedirect = false
+    }
+
+    func setMarkdownForAgents(_ on: Bool) async {
+        guard !isTogglingMarkdownForAgents else { return }
+        isTogglingMarkdownForAgents = true
+        error = nil
+        do {
+            let value = try await service.setSetting(
+                zoneId: zoneId, setting: "content_converter",
+                value: on ? "on" : "off"
+            )
+            markdownForAgents = value == "on"
+        } catch {
+            self.error = error.localizedDescription
+        }
+        isTogglingMarkdownForAgents = false
     }
 
     func setUnderAttack(_ on: Bool) async {

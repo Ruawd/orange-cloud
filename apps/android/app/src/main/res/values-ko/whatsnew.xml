@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">스위치 하나로 AI 크롤러 차단</string>
+    <string name="whatsnew_2_0_0_0_detail">도메인 상세 화면에 ‘AI 크롤러’ 항목이 생겼습니다. 차단 안 함, 광고 페이지만, 사이트 전체 중에서 고를 수 있습니다. AI 콘텐츠 설정 두 개도 같은 화면으로 옮겨서 대시보드를 열 필요가 없습니다.</string>
+    <string name="whatsnew_2_0_0_1_title">오리진이 죽으면 Cloudflare가 바로 알려줍니다</string>
+    <string name="whatsnew_2_0_0_1_detail">도메인 상세 화면에 독립 상태 검사가 추가됐습니다. 오리진별 상태와 실패 사유를 보고, 밀어서 일시중지하거나 삭제할 수 있습니다. ‘오리진 이상 시 알림’을 켜면 상태가 바뀌는 순간 Cloudflare가 직접 알림을 보내므로 앱을 켜 둘 필요가 없습니다.</string>
+    <string name="whatsnew_2_0_0_2_title">도메인 만료일을 한눈에</string>
+    <string name="whatsnew_2_0_0_2_detail">개요 화면에 ‘도메인 등록’ 섹션이 생겼습니다. Cloudflare에 등록한 도메인의 만료일, 자동 갱신, 이전 잠금을 한 목록에서 보고, 곧 만료되는 항목은 따로 표시됩니다.</string>
+    <string name="whatsnew_2_0_0_3_title">요청이 Cloudflare 안에서 무엇을 거치는지 확인</string>
+    <string name="whatsnew_2_0_0_3_detail">개요 화면에 ‘요청 추적’이 추가됐습니다. URL을 넣으면 그 요청이 리디렉션, WAF, 캐시 규칙, Worker 중 무엇을 순서대로 거치고 각 단계가 실제로 적용됐는지까지 보여 줍니다. 규칙이 왜 안 먹는지 더 이상 짐작하지 않아도 됩니다.</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC 및 고급 DNS 설정</string>
+    <string name="whatsnew_2_0_0_4_detail">도메인 상세 화면에 DNS 설정이 생겼습니다. DNSSEC을 한 번에 켜고 끄면서 등록기관에 붙여 넣을 DS 레코드를 복사할 수 있고, CNAME 평탄화와 네임서버 유형도 조정할 수 있습니다.</string>
+    <string name="whatsnew_2_0_0_5_title">Worker 빌드가 실패하면 알려 드립니다</string>
+    <string name="whatsnew_2_0_0_5_detail">Worker 상세 화면에 빌드 기록이 추가됐습니다. 각 빌드의 상태, 소요 시간, 트리거 출처를 볼 수 있습니다. 신경 쓰는 Worker를 감시로 지정해 두면 빌드 실패 시 알림이 옵니다.</string>
+    <string name="whatsnew_2_0_0_6_title">모듈 추가와 곳곳의 다듬기</string>
+    <string name="whatsnew_2_0_0_6_detail">R2 데이터 카탈로그, 관리형 헤더, URL 보안 검사, Email 억제 목록을 추가했습니다. 감사 로그의 아무 항목이나 누르면 해당 리소스의 전체 변경 기록을 볼 수 있습니다. 캐시 규칙 식에는 자주 쓰는 필드(봇 점수, 출발지 ASN 포함) 빠른 삽입이 생겼고, Durable Objects에는 메모리 백분위수가 추가됐습니다. 터널 상세에서 활성 연결이 표시되지 않던 문제도 고쳤습니다.</string>
     <string name="whatsnew_1_7_2_0_title">한 번의 탭으로 Cloudflare 일시 중지</string>
     <string name="whatsnew_1_7_2_0_detail">도메인 설정에 \'Cloudflare 일시 중지\' 스위치가 생겼습니다. 일시 중지하면 트래픽이 Cloudflare를 거치지 않아 WAF, 캐시 가속, 원본 IP 숨김이 중단되며 DNS는 계속 Cloudflare가 확인합니다. 다시 시작도 한 번의 탭이고, 두 경우 모두 약 5분 뒤 적용됩니다.</string>
     <string name="whatsnew_1_7_1_0_title">기본 계정을 기억합니다</string>

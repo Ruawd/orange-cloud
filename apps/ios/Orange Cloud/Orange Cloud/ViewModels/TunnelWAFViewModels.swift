@@ -72,8 +72,12 @@ final class TunnelDetailViewModel {
 
     var token: String?
     var config: TunnelConfig?
+    /// 活跃连接。首帧用列表响应内嵌的数组占位，随后由专用端点覆盖
+    /// （内嵌字段 CF 将于 2026-10-05 移除，届时占位恒为空、完全依赖端点）。
+    var connections: [TunnelConnection]
     var isLoadingToken = false
     var isLoadingConfig = false
+    var isLoadingConnections = false
     var configLoaded = false
     var isSaving = false
     var error: String?
@@ -89,6 +93,7 @@ final class TunnelDetailViewModel {
 
     init(tunnel: Tunnel, accountId: String, session: SessionStore, canWriteDNS: Bool) {
         self.tunnel = tunnel
+        self.connections = tunnel.connections ?? []
         self.accountId = accountId
         self.tunnelService = session.tunnelService
         self.dnsService = session.dnsService
@@ -145,6 +150,18 @@ final class TunnelDetailViewModel {
     }
 
     /// 清理失活连接（危险区）。活跃的 cloudflared 会自动重连。
+    /// 拉取活跃连接。失败不弹错误框——详情页其余内容仍可用，保留占位数据即可。
+    func loadConnections() async {
+        guard !isLoadingConnections else { return }
+        isLoadingConnections = true
+        defer { isLoadingConnections = false }
+        do {
+            connections = try await tunnelService.connections(accountId: accountId, tunnelId: tunnel.id)
+        } catch {
+            AppLog.network.info("tunnel connections fetch failed for tunnel=\(self.tunnel.id); keeping placeholder")
+        }
+    }
+
     func cleanupConnections() async {
         guard !isSaving else { return }
         isSaving = true
@@ -152,6 +169,8 @@ final class TunnelDetailViewModel {
         defer { isSaving = false }
         do {
             try await tunnelService.deleteConnections(accountId: accountId, tunnelId: tunnel.id)
+            // 清理后立刻回读，避免列表还显示已被移除的失活连接
+            await loadConnections()
         } catch {
             self.error = error.localizedDescription
         }

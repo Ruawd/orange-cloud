@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_0_0_0_title">KI-Crawler mit einem Schalter blocken</string>
+    <string name="whatsnew_2_0_0_0_detail">In den Domain-Details gibt es jetzt eine Zeile für KI-Crawler mit drei Stufen: nicht blocken, nur Anzeigenseiten oder die ganze Website. Die beiden KI-Inhaltseinstellungen sind auf denselben Bildschirm gewandert – das Dashboard brauchst du dafür nicht mehr.</string>
+    <string name="whatsnew_2_0_0_1_title">Cloudflare meldet sich, wenn dein Origin ausfällt</string>
+    <string name="whatsnew_2_0_0_1_detail">In den Domain-Details stehen jetzt eigenständige Health Checks: Status und Fehlergrund je Origin, per Wischen pausieren oder löschen. Aktivierst du die Origin-Benachrichtigung, schickt Cloudflare sie direkt beim Statuswechsel – auch wenn die App geschlossen ist.</string>
+    <string name="whatsnew_2_0_0_2_title">Domain-Ablauf auf einen Blick</string>
+    <string name="whatsnew_2_0_0_2_detail">Die Übersicht bekommt einen Registrar-Bereich: Für bei Cloudflare registrierte Domains stehen Ablaufdatum, automatische Verlängerung und Transfer-Sperre in einer Liste – bald ablaufende sind hervorgehoben.</string>
+    <string name="whatsnew_2_0_0_3_title">Sieh, was eine Anfrage in Cloudflare wirklich trifft</string>
+    <string name="whatsnew_2_0_0_3_detail">Die Übersicht bekommt Request Tracing: Gib eine URL ein und sieh Schritt für Schritt, auf welche Regeln die Anfrage trifft – Redirects, WAF, Cache-Regeln, Workers – und ob jede davon gegriffen hat. Kein Raten mehr, warum eine Regel nicht zieht.</string>
+    <string name="whatsnew_2_0_0_4_title">DNSSEC und erweiterte DNS-Einstellungen</string>
+    <string name="whatsnew_2_0_0_4_detail">Die Domain-Details bekommen einen DNS-Einstellungsbildschirm: DNSSEC ein- oder ausschalten und den DS-Eintrag kopieren, den du beim Registrar einträgst – dazu CNAME-Flattening und Nameserver-Typ anpassen.</string>
+    <string name="whatsnew_2_0_0_5_title">Melden, wenn ein Worker-Build fehlschlägt</string>
+    <string name="whatsnew_2_0_0_5_detail">Die Worker-Details zeigen jetzt den Build-Verlauf: Status, Dauer und Auslöser jedes Builds. Beobachte die Workers, die dir wichtig sind, und du bekommst eine Meldung, wenn ein Build fehlschlägt.</string>
+    <string name="whatsnew_2_0_0_6_title">Mehr Module und viel Feinschliff</string>
+    <string name="whatsnew_2_0_0_6_detail">Neu dabei: R2 Data Catalog, Managed Transforms, URL-Sicherheitsscan und die E-Mail-Sperrliste. Tippe im Audit-Log auf einen Eintrag, um den vollständigen Änderungsverlauf dieser Ressource zu sehen; Cache-Regel-Ausdrücke haben jetzt Schnellbausteine für gängige Felder (inklusive Bot-Score und Quell-ASN); und Durable Objects zeigen Speicher-Perzentile. Außerdem behoben: In den Tunnel-Details fehlten die aktiven Verbindungen.</string>
     <string name="whatsnew_1_7_2_0_title">Cloudflare mit einem Tipp pausieren</string>
     <string name="whatsnew_1_7_2_0_detail">In den Domain-Einstellungen gibt es jetzt den Schalter „Cloudflare pausieren“. Pausiert läuft der Traffic nicht mehr über Cloudflare – WAF, Caching und die Verschleierung der Origin-IP entfallen, DNS wird weiterhin von Cloudflare aufgelöst. Fortsetzen geht genauso schnell, und beides greift nach etwa 5 Minuten.</string>
     <string name="whatsnew_1_7_1_0_title">Merkt sich dein Standardkonto</string>

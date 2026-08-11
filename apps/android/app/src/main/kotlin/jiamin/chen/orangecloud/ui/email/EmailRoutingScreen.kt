@@ -152,6 +152,20 @@ fun EmailRoutingScreen(
                         if (viewModel.canAddAddress) {
                             item { AddRowButton(stringResource(R.string.email_add_address)) { showAddAddress = true } }
                         }
+
+                        // 规则决定往哪转，抑制决定不往哪转——
+                        // 「规则配了却收不到」多半就是命中了这里，所以要能看见
+                        if (state.suppressionsAvailable) {
+                            item { SectionHeader(stringResource(R.string.email_suppression_section), onSky) }
+                            if (state.suppressions.isEmpty()) {
+                                item { EmptyHint(stringResource(R.string.email_suppression_empty)) }
+                            } else {
+                                items(state.suppressions, key = { "sup-${it.id}" }) { item ->
+                                    SuppressionRow(item, state.canWrite) { viewModel.removeSuppression(item) }
+                                }
+                            }
+                            item { EmptyHint(stringResource(R.string.email_suppression_hint)) }
+                        }
                     }
                 }
             }
@@ -346,3 +360,45 @@ private fun AddAddressForm(isSaving: Boolean, onSave: (email: String) -> Unit) {
         }
     }
 }
+
+@Composable
+private fun SuppressionRow(
+    item: jiamin.chen.orangecloud.data.model.EmailSuppression,
+    canWrite: Boolean,
+    onLift: () -> Unit,
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    item.email ?: item.id,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    stringResource(suppressionReasonLabel(item.reason)),
+                    fontSize = 11.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            if (canWrite) {
+                TextButton(onClick = onLift) { Text(stringResource(R.string.email_suppression_lift)) }
+            }
+        }
+    }
+}
+
+private fun suppressionReasonLabel(reason: String?) = when (reason) {
+    "hard_bounce" -> R.string.email_reason_hard_bounce
+    "soft_bounce" -> R.string.email_reason_soft_bounce
+    "complaint" -> R.string.email_reason_complaint
+    "manual" -> R.string.email_reason_manual
+    else -> R.string.hc_status_unknown
+}
+

@@ -42,6 +42,7 @@ struct ZoneDetailView: View {
         _actionsViewModel = State(initialValue: ZoneActionsViewModel(
             service: session.zoneSettingsService,
             zoneService: session.zoneService,
+            botService: session.botManagementService,
             zoneId: zoneId,
             paused: zone.paused
         ))
@@ -56,6 +57,8 @@ struct ZoneDetailView: View {
 
     private var canReadSettings: Bool { auth.hasScope("zone-settings.read") }
     private var canEditSettings: Bool { auth.hasScope("zone-settings.write") }
+    private var canReadBots: Bool { auth.hasScope("bot-management.read") }
+    private var canEditBots: Bool { auth.hasScope("bot-management.write") }
     private var canPurge: Bool { auth.hasScope("cache.purge") }
     /// 暂停 / 恢复走 zone 本身，权限与 zone-settings 那条链路无关
     private var canEditZone: Bool { auth.hasScope("zone.write") }
@@ -117,6 +120,16 @@ struct ZoneDetailView: View {
                         DNSListView(zoneId: zone.id, zoneName: zone.name, session: session)
                     }
                     .listRowStyleValue(String(localized: "\(dnsRecordDisplayCount) 条"))
+
+                    // zone 级 DNS 策略（DNSSEC / CNAME 展平 / NS 类型），与逐条记录分开
+                    PermissionGatedValueLink(
+                        label: String(localized: "DNS 设置"),
+                        systemImage: "gearshape.2",
+                        requiredScope: "zone-dns-settings.read",
+                        tint: .indigo,
+                        showsChevron: true,
+                        value: ZoneRoute.dnsSettings(zoneId: zone.id, zoneName: zone.name)
+                    )
 
                     ProGatedNavigationLink(
                         label: String(localized: "WAF 防火墙"),
@@ -202,6 +215,16 @@ struct ZoneDetailView: View {
                         ZoneAccessRulesView(zoneId: zone.id, session: session)
                     }
 
+                    // 与负载均衡的监控器不同源：这里监控单个源站，单源站也能用
+                    PermissionGatedValueLink(
+                        label: String(localized: "健康检查"),
+                        systemImage: "waveform.path.ecg",
+                        requiredScope: "healthcheck.read",
+                        tint: .green,
+                        showsChevron: true,
+                        value: ZoneRoute.healthChecks(zoneId: zone.id, zoneName: zone.name)
+                    )
+
                     ProGatedValueLink(
                         label: String(localized: "负载均衡"),
                         systemImage: "arrow.left.arrow.right",
@@ -211,6 +234,122 @@ struct ZoneDetailView: View {
                         showsChevron: true,
                         value: ZoneRoute.loadBalancers(zoneId: zone.id, zoneName: zone.name)
                     )
+                }
+
+                // 整卡仅在读到任一组配置时出现：
+                // 机器人管控全套餐可用但需 bot-management.read；
+                // 上面两个 zone setting 是 Pro/Business 起，免费套餐读取即失败。
+                // 与其给用户一排永远打不开的锁，不如不显示。
+                if actionsViewModel.botConfigLoaded || actionsViewModel.aiSettingsAvailable {
+                    sectionCard(String(localized: "AI 内容控制")) {
+                        if actionsViewModel.botConfigLoaded {
+                            settingPickerRow(
+                                title: String(localized: "AI 爬虫"),
+                                subtitle: String(localized: "抓取内容用于训练或问答的机器人"),
+                                icon: "ant",
+                                tint: .indigo,
+                                selection: actionsViewModel.aiBotsProtection,
+                                isBusy: actionsViewModel.isUpdatingBotConfig,
+                                canEdit: canEditBots,
+                                deniedScope: "bot-management.write",
+                                requestChange: { mode in
+                                    Task { await actionsViewModel.setAIBotsProtection(mode) }
+                                }
+                            )
+
+                            settingToggleRow(
+                                title: String(localized: "链接迷宫"),
+                                subtitle: String(localized: "用无尽链接消耗违规爬虫"),
+                                icon: "arrow.triangle.turn.up.right.diamond",
+                                tint: .indigo,
+                                isOn: actionsViewModel.crawlerProtection,
+                                isBusy: actionsViewModel.isUpdatingBotConfig,
+                                canEdit: canEditBots,
+                                isLoaded: true,
+                                deniedScope: "bot-management.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setCrawlerProtection(on) }
+                                }
+                            )
+
+                            settingToggleRow(
+                                title: String(localized: "拦截内容机器人"),
+                                subtitle: String(localized: "拦下低可信自动流量，已验证的机器人除外"),
+                                icon: "person.badge.shield.checkmark",
+                                tint: .indigo,
+                                isOn: actionsViewModel.contentBotsProtection,
+                                isBusy: actionsViewModel.isUpdatingBotConfig,
+                                canEdit: canEditBots,
+                                isLoaded: true,
+                                deniedScope: "bot-management.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setContentBotsProtection(on) }
+                                }
+                            )
+
+                            settingToggleRow(
+                                title: String(localized: "托管 robots.txt"),
+                                subtitle: String(localized: "由 Cloudflare 维护，置于现有内容之前"),
+                                icon: "list.bullet.rectangle",
+                                tint: .teal,
+                                isOn: actionsViewModel.managedRobotsTxt,
+                                isBusy: actionsViewModel.isUpdatingBotConfig,
+                                canEdit: canEditBots,
+                                isLoaded: true,
+                                deniedScope: "bot-management.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setManagedRobotsTxt(on) }
+                                }
+                            )
+
+                            settingToggleRow(
+                                title: String(localized: "内容使用声明"),
+                                subtitle: String(localized: "在 robots.txt 中声明内容的使用许可"),
+                                icon: "doc.badge.gearshape",
+                                tint: .teal,
+                                isOn: actionsViewModel.robotsLicense,
+                                isBusy: actionsViewModel.isUpdatingBotConfig,
+                                canEdit: canEditBots,
+                                isLoaded: true,
+                                deniedScope: "bot-management.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setRobotsLicense(on) }
+                                }
+                            )
+                        }
+
+                        if actionsViewModel.aiSettingsAvailable {
+                            settingToggleRow(
+                                title: String(localized: "AI 训练重定向"),
+                                subtitle: String(localized: "把用于模型训练的爬虫引走"),
+                                icon: "arrow.triangle.branch",
+                                tint: .purple,
+                                isOn: actionsViewModel.aiTrainingRedirect,
+                                isBusy: actionsViewModel.isTogglingAITrainingRedirect,
+                                canEdit: canEditSettings,
+                                isLoaded: true,
+                                deniedScope: "zone-settings.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setAITrainingRedirect(on) }
+                                }
+                            )
+
+                            settingToggleRow(
+                                title: String(localized: "面向 Agent 的 Markdown"),
+                                subtitle: String(localized: "按请求把页面转成 Markdown 返回"),
+                                icon: "doc.plaintext",
+                                tint: .teal,
+                                isOn: actionsViewModel.markdownForAgents,
+                                isBusy: actionsViewModel.isTogglingMarkdownForAgents,
+                                canEdit: canEditSettings,
+                                isLoaded: true,
+                                deniedScope: "zone-settings.write",
+                                requestToggle: { on in
+                                    Task { await actionsViewModel.setMarkdownForAgents(on) }
+                                }
+                            )
+                        }
+                    }
                 }
 
                 sectionCard(String(localized: "操作")) {
@@ -349,6 +488,10 @@ struct ZoneDetailView: View {
         .task {
             if canReadSettings {
                 await actionsViewModel.loadSettings()
+                await actionsViewModel.loadAISettings()
+            }
+            if canReadBots {
+                await actionsViewModel.loadBotConfig()
             }
         }
         .task {
@@ -371,6 +514,10 @@ struct ZoneDetailView: View {
             }
             if canReadSettings {
                 await actionsViewModel.loadSettings()
+                await actionsViewModel.loadAISettings()
+            }
+            if canReadBots {
+                await actionsViewModel.loadBotConfig()
             }
             await syncPausedFromAPI()
         }
@@ -462,6 +609,62 @@ struct ZoneDetailView: View {
 
     /// canEdit / isLoaded / deniedScope 由调用方给：Under Attack 与开发模式走
     /// zone-settings.*，暂停走 zone.write，两条权限链路不共用。
+    /// 三档选择行。与 settingToggleRow 同构，只是右侧从开关换成菜单；
+    /// 无写权限时显示当前档位并在点击时提示缺失 scope。
+    private func settingPickerRow(
+        title: String,
+        subtitle: String,
+        icon: String,
+        tint: Color,
+        selection: AIBotsProtection,
+        isBusy: Bool,
+        canEdit: Bool,
+        deniedScope: String,
+        requestChange: @escaping (AIBotsProtection) -> Void
+    ) -> some View {
+        HStack(spacing: 12) {
+            TintIcon(systemImage: icon, color: tint)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            if isBusy {
+                ProgressView()
+            } else if canEdit {
+                Menu {
+                    ForEach(AIBotsProtection.allCases) { mode in
+                        Button {
+                            requestChange(mode)
+                        } label: {
+                            if mode == selection {
+                                Label(mode.label, systemImage: "checkmark")
+                            } else {
+                                Text(mode.label)
+                            }
+                        }
+                    }
+                } label: {
+                    Text(selection.label)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .accessibilityLabel(title)
+            } else {
+                Button {
+                    deniedScopeHint = deniedScope
+                    showActionDenied = true
+                } label: {
+                    Text(selection.label)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
     private func settingToggleRow(
         title: String,
         subtitle: String,
@@ -641,6 +844,8 @@ private extension View {
 enum ZoneRoute: Hashable {
     case rulesHub(zoneId: String, zoneName: String)
     case loadBalancers(zoneId: String, zoneName: String)
+    case healthChecks(zoneId: String, zoneName: String)
+    case dnsSettings(zoneId: String, zoneName: String)
     case snippets(zoneId: String, zoneName: String)
     case bulkRedirects
 }
@@ -654,6 +859,10 @@ extension View {
                 ZoneRulesHubView(zoneId: zoneId, zoneName: zoneName, session: session)
             case .loadBalancers(let zoneId, let zoneName):
                 LoadBalancerListView(zoneId: zoneId, zoneName: zoneName, session: session)
+            case .healthChecks(let zoneId, let zoneName):
+                HealthCheckListView(zoneId: zoneId, zoneName: zoneName, session: session)
+            case .dnsSettings(let zoneId, let zoneName):
+                ZoneDNSSettingsView(zoneId: zoneId, zoneName: zoneName, session: session)
             case .snippets(let zoneId, let zoneName):
                 SnippetsListView(zoneId: zoneId, zoneName: zoneName, session: session)
             case .bulkRedirects:

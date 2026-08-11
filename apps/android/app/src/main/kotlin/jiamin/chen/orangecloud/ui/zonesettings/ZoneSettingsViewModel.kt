@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jiamin.chen.orangecloud.core.auth.AuthRepository
 import jiamin.chen.orangecloud.core.auth.Scopes
+import jiamin.chen.orangecloud.data.model.BotManagementConfig
+import jiamin.chen.orangecloud.data.model.BotManagementUpdate
 import jiamin.chen.orangecloud.data.repository.AccountStore
 import jiamin.chen.orangecloud.data.repository.ZoneRepository
 import jiamin.chen.orangecloud.data.repository.ZoneSettingsRepository
@@ -32,6 +34,20 @@ data class ZoneSettingsUiState(
     val underAttack: Boolean = false,
     /** 是否暂停 Cloudflare 代理。与上面两个开关不同源：读写的是域名本身。 */
     val paused: Boolean = false,
+    /** AI 训练重定向（redirects_for_ai_training）。Pro/Business 起。 */
+    val aiTrainingRedirect: Boolean = false,
+    /** 面向 Agent 的 Markdown（content_converter）。Pro/Business 起。 */
+    val markdownForAgents: Boolean = false,
+    /** 两项中至少一项读到了，才认为该域名支持这组设置；否则整组隐藏。 */
+    val aiSettingsAvailable: Boolean = false,
+    // 机器人管控（全套餐可用，但需 bot-management.read）
+    val aiBotsProtection: String = "disabled",
+    val crawlerProtection: Boolean = false,
+    val contentBotsProtection: Boolean = false,
+    val robotsLicense: Boolean = false,
+    val managedRobotsTxt: Boolean = false,
+    val botConfigLoaded: Boolean = false,
+    val canWriteBots: Boolean = false,
     val isLoading: Boolean = false,
     val isPurging: Boolean = false,
     val isTogglingPause: Boolean = false,
@@ -39,7 +55,17 @@ data class ZoneSettingsUiState(
     val canWrite: Boolean = false,
     val canPurge: Boolean = false,
     val canPause: Boolean = false,
-)
+) {
+    /** 把接口返回的机器人配置摊到界面状态上。未知取值按最保守的「放行 / 关闭」显示。 */
+    fun applyBotConfig(cfg: BotManagementConfig) = copy(
+        aiBotsProtection = cfg.aiBotsProtection ?: "disabled",
+        crawlerProtection = cfg.crawlerProtection == "enabled",
+        contentBotsProtection = cfg.contentBotsProtection == "block",
+        robotsLicense = cfg.cfRobotsVariant == "policy_only",
+        managedRobotsTxt = cfg.isRobotsTxtManaged == true,
+        botConfigLoaded = true,
+    )
+}
 
 @HiltViewModel
 class ZoneSettingsViewModel @Inject constructor(
@@ -55,6 +81,11 @@ class ZoneSettingsViewModel @Inject constructor(
     private val canWrite = authRepository.hasScope(Scopes.ZONE_SETTINGS_WRITE)
     private val canPurge = authRepository.hasScope(Scopes.CACHE_PURGE)
 
+    // 机器人管控是另一条权限链路（bot-management.*），与 zone-settings.* 无关：
+    // 只有 zone-settings.read 时这组隐藏，只有 bot-management.read 时这组照常显示
+    private val canReadBots = authRepository.hasScope(Scopes.BOT_MANAGEMENT_READ)
+    private val canWriteBots = authRepository.hasScope(Scopes.BOT_MANAGEMENT_WRITE)
+
     // 暂停走域名本身（zone.read/.write），与 zone-settings.* 那条链路的权限无关：
     // 没有 zone-settings.read 时本页只剩这一个开关，也要照常可用
     private val canPause = authRepository.hasScope(Scopes.ZONE_WRITE)
@@ -67,6 +98,7 @@ class ZoneSettingsViewModel @Inject constructor(
             canWrite = canWrite,
             canPurge = canPurge,
             canPause = canPause,
+            canWriteBots = canWriteBots,
         ),
     )
     val uiState: StateFlow<ZoneSettingsUiState> = _uiState.asStateFlow()
@@ -76,6 +108,7 @@ class ZoneSettingsViewModel @Inject constructor(
 
     init {
         if (hasRead) load()
+        if (canReadBots) loadBotConfig()
         // 暂停态读缓存（Room 单一可信源），再拉一次网络校准
         viewModelScope.launch {
             zoneRepository.observeZone(zoneId).filterNotNull().collect { zone ->
@@ -121,10 +154,21 @@ class ZoneSettingsViewModel @Inject constructor(
             try {
                 val dev = async { runCatching { repository.getSetting(zoneId, "development_mode") }.getOrNull() }
                 val sec = async { runCatching { repository.getSetting(zoneId, "security_level") }.getOrNull() }
+                // 免费套餐不支持这两项，读取会失败——读不到就整组隐藏，
+                // 而不是给用户两个永远打不开的开关。
+                val aiRedirect =
+                    async { runCatching { repository.getSetting(zoneId, "redirects_for_ai_training") }.getOrNull() }
+                val converter =
+                    async { runCatching { repository.getSetting(zoneId, "content_converter") }.getOrNull() }
+                val aiRedirectValue = aiRedirect.await()
+                val converterValue = converter.await()
                 _uiState.update {
                     it.copy(
                         developmentMode = dev.await() == "on",
                         underAttack = sec.await() == "under_attack",
+                        aiTrainingRedirect = aiRedirectValue == "on",
+                        markdownForAgents = converterValue == "on",
+                        aiSettingsAvailable = aiRedirectValue != null || converterValue != null,
                     )
                 }
             } finally {
@@ -147,6 +191,74 @@ class ZoneSettingsViewModel @Inject constructor(
         _uiState.update { it.copy(underAttack = on) }
         viewModelScope.launch {
             runCatching { repository.setSetting(zoneId, "security_level", if (on) "under_attack" else "medium") }
+                .onFailure { eventChannel.send(ZoneSettingsEvent.Error(it.message)); load() }
+        }
+    }
+
+    /** 读机器人管控。四种套餐形态共用 base_config，任何套餐都能读到。 */
+    fun loadBotConfig() {
+        if (!canReadBots) return
+        viewModelScope.launch {
+            runCatching { repository.getBotManagement(zoneId) }
+                .onSuccess { cfg -> _uiState.update { it.applyBotConfig(cfg) } }
+        }
+    }
+
+    /**
+     * 写单个字段。PUT 合并语义，只发改动那一项，不会动 sbfm_* 等套餐专属配置。
+     * 失败后回读，纠正界面上的乐观值。
+     */
+    private fun updateBotConfig(optimistic: ZoneSettingsUiState.() -> ZoneSettingsUiState, update: BotManagementUpdate) {
+        if (!canWriteBots) return
+        _uiState.update(optimistic)
+        viewModelScope.launch {
+            runCatching { repository.setBotManagement(zoneId, update) }
+                .onSuccess { cfg -> _uiState.update { it.applyBotConfig(cfg) } }
+                .onFailure { eventChannel.send(ZoneSettingsEvent.Error(it.message)); loadBotConfig() }
+        }
+    }
+
+    fun setAiBotsProtection(mode: String) =
+        updateBotConfig({ copy(aiBotsProtection = mode) }, BotManagementUpdate(aiBotsProtection = mode))
+
+    fun setCrawlerProtection(on: Boolean) =
+        updateBotConfig(
+            { copy(crawlerProtection = on) },
+            BotManagementUpdate(crawlerProtection = if (on) "enabled" else "disabled"),
+        )
+
+    fun setContentBotsProtection(on: Boolean) =
+        updateBotConfig(
+            { copy(contentBotsProtection = on) },
+            BotManagementUpdate(contentBotsProtection = if (on) "block" else "disabled"),
+        )
+
+    fun setRobotsLicense(on: Boolean) =
+        updateBotConfig(
+            { copy(robotsLicense = on) },
+            BotManagementUpdate(cfRobotsVariant = if (on) "policy_only" else "off"),
+        )
+
+    fun setManagedRobotsTxt(on: Boolean) =
+        updateBotConfig(
+            { copy(managedRobotsTxt = on) },
+            BotManagementUpdate(isRobotsTxtManaged = on),
+        )
+
+    fun setAiTrainingRedirect(on: Boolean) {
+        if (!canWrite) return
+        _uiState.update { it.copy(aiTrainingRedirect = on) }
+        viewModelScope.launch {
+            runCatching { repository.setSetting(zoneId, "redirects_for_ai_training", if (on) "on" else "off") }
+                .onFailure { eventChannel.send(ZoneSettingsEvent.Error(it.message)); load() }
+        }
+    }
+
+    fun setMarkdownForAgents(on: Boolean) {
+        if (!canWrite) return
+        _uiState.update { it.copy(markdownForAgents = on) }
+        viewModelScope.launch {
+            runCatching { repository.setSetting(zoneId, "content_converter", if (on) "on" else "off") }
                 .onFailure { eventChannel.send(ZoneSettingsEvent.Error(it.message)); load() }
         }
     }

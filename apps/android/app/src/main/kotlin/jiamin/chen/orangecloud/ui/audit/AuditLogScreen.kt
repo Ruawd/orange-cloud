@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
@@ -18,10 +19,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -107,7 +114,9 @@ fun AuditLogScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(state.entries, key = { it.id ?: it.hashCode().toString() }) { entry ->
-                        AuditRow(entry)
+                        // 只有同时拿到 id 与时间戳才查得动变更历史（接口靠这两项定位资源）
+                        val canTrace = entry.id != null && entry.timestampMillis != null
+                        AuditRow(entry, onClick = if (canTrace) ({ viewModel.openHistory(entry) }) else null)
                     }
                     if (state.isLoadingMore) {
                         item {
@@ -120,11 +129,82 @@ fun AuditLogScreen(
             }
         }
     }
+
+    state.historyOf?.let { origin ->
+        AuditHistorySheet(
+            origin = origin,
+            entries = state.history,
+            isLoading = state.isLoadingHistory,
+            status = state.historyStatus,
+            hasError = state.historyError,
+            onDismiss = { viewModel.closeHistory() },
+        )
+    }
+}
+
+/** 同一资源在 30 天窗口内的全部变更。status=approximate 时结果可能混入无关条目，据实说明。 */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AuditHistorySheet(
+    origin: AuditLogEntry,
+    entries: List<AuditLogEntry>,
+    isLoading: Boolean,
+    status: String?,
+    hasError: Boolean,
+    onDismiss: () -> Unit,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState()) {
+        Column(
+            Modifier.fillMaxWidth().heightIn(max = 560.dp).padding(horizontal = 16.dp).padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Text(
+                stringResource(R.string.audit_history_title),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            origin.resource?.type?.takeIf { it.isNotBlank() }?.let {
+                Text(it, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            val note = when {
+                status == "unavailable" -> stringResource(R.string.audit_history_unavailable)
+                status == "approximate" -> stringResource(R.string.audit_history_approximate)
+                else -> stringResource(R.string.audit_history_footer)
+            }
+            Text(note, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            when {
+                isLoading -> Box(Modifier.fillMaxWidth().padding(24.dp), Alignment.Center) {
+                    CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+                }
+                hasError -> Text(
+                    stringResource(R.string.error_generic),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                entries.isEmpty() -> Text(
+                    stringResource(R.string.audit_history_empty),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                else -> Column(
+                    Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    entries.forEach { AuditRow(it, onClick = null) }
+                }
+            }
+        }
+    }
 }
 
 @Composable
-private fun AuditRow(entry: AuditLogEntry) {
-    Surface(color = MaterialTheme.colorScheme.surfaceContainerLow, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+private fun AuditRow(entry: AuditLogEntry, onClick: (() -> Unit)? = null) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth().then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
+    ) {
         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
             val ok = entry.succeeded
             val dotColor = when (ok) {

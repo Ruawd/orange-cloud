@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -100,6 +104,50 @@ fun ZoneSettingsScreen(
                         enabled = state.canPause && !state.isTogglingPause,
                         onChange = { on -> confirmPause = on },
                     )
+                    // 机器人管控走 bot-management.* 这条独立权限链路，全套餐可用。
+                    // 放在 missingScope 分支之外：只授权了这一组、没给 zone-settings.read 时也要能用。
+                    if (state.botConfigLoaded) {
+                        ChoiceCard(
+                            title = stringResource(R.string.zs_ai_bots),
+                            subtitle = stringResource(R.string.zs_ai_bots_desc),
+                            selected = state.aiBotsProtection,
+                            options = listOf(
+                                "disabled" to stringResource(R.string.zs_ai_bots_allow),
+                                "only_on_ad_pages" to stringResource(R.string.zs_ai_bots_ads),
+                                "block" to stringResource(R.string.zs_ai_bots_block),
+                            ),
+                            enabled = state.canWriteBots,
+                            onChange = viewModel::setAiBotsProtection,
+                        )
+                        ToggleCard(
+                            title = stringResource(R.string.zs_link_maze),
+                            subtitle = stringResource(R.string.zs_link_maze_desc),
+                            checked = state.crawlerProtection,
+                            enabled = state.canWriteBots,
+                            onChange = viewModel::setCrawlerProtection,
+                        )
+                        ToggleCard(
+                            title = stringResource(R.string.zs_content_bots),
+                            subtitle = stringResource(R.string.zs_content_bots_desc),
+                            checked = state.contentBotsProtection,
+                            enabled = state.canWriteBots,
+                            onChange = viewModel::setContentBotsProtection,
+                        )
+                        ToggleCard(
+                            title = stringResource(R.string.zs_managed_robots),
+                            subtitle = stringResource(R.string.zs_managed_robots_desc),
+                            checked = state.managedRobotsTxt,
+                            enabled = state.canWriteBots,
+                            onChange = viewModel::setManagedRobotsTxt,
+                        )
+                        ToggleCard(
+                            title = stringResource(R.string.zs_robots_license),
+                            subtitle = stringResource(R.string.zs_robots_license_desc),
+                            checked = state.robotsLicense,
+                            enabled = state.canWriteBots,
+                            onChange = viewModel::setRobotsLicense,
+                        )
+                    }
                     if (state.missingScope) {
                         Box(Modifier.weight(1f)) {
                             SkyEmptyState(
@@ -122,6 +170,23 @@ fun ZoneSettingsScreen(
                             enabled = state.canWrite,
                             onChange = viewModel::setUnderAttack,
                         )
+                        // 仅在该域名支持这组设置时出现（免费套餐读取即失败）
+                        if (state.aiSettingsAvailable) {
+                            ToggleCard(
+                                title = stringResource(R.string.zs_ai_training_redirect),
+                                subtitle = stringResource(R.string.zs_ai_training_redirect_desc),
+                                checked = state.aiTrainingRedirect,
+                                enabled = state.canWrite,
+                                onChange = viewModel::setAiTrainingRedirect,
+                            )
+                            ToggleCard(
+                                title = stringResource(R.string.zs_markdown_for_agents),
+                                subtitle = stringResource(R.string.zs_markdown_for_agents_desc),
+                                checked = state.markdownForAgents,
+                                enabled = state.canWrite,
+                                onChange = viewModel::setMarkdownForAgents,
+                            )
+                        }
                         if (state.canPurge) {
                             OutlinedButton(
                                 onClick = { confirmPurge = true },
@@ -250,6 +315,44 @@ private fun PurgeByUrlDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.dns_cancel)) } },
     )
+}
+
+/**
+ * 三档选择卡。用于 ai_bots_protection（disabled / only_on_ad_pages / block）。
+ * 与 ToggleCard 同构，右侧换成分段选择。
+ */
+@Composable
+private fun ChoiceCard(
+    title: String,
+    subtitle: String,
+    selected: String,
+    options: List<Pair<String, String>>,
+    enabled: Boolean,
+    onChange: (String) -> Unit,
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+            Text(subtitle, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(12.dp))
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                options.forEachIndexed { index, (value, label) ->
+                    SegmentedButton(
+                        selected = selected == value,
+                        onClick = { onChange(value) },
+                        enabled = enabled,
+                        shape = SegmentedButtonDefaults.itemShape(index, options.size),
+                    ) {
+                        Text(label, fontSize = 13.sp, maxLines = 1)
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
