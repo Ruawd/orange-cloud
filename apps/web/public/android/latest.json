@@ -1,7 +1,7 @@
 {
-  "versionCode": 23,
-  "versionName": "2.0.0",
+  "versionCode": 24,
+  "versionName": "2.1.0",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "本次为 2.0 大版本：AI 爬虫管控、独立健康检查与源站推送、域名注册商、请求追踪、DNS 进阶设置、Worker 构建记录与失败提醒，另新增 R2 数据目录、托管头、URL 扫描与 Email 抑制。"
+  "note": "本次更新：Turnstile 人机验证管理（新建 / 编辑 / 密钥轮换）、R2 SQL 查询控制台、Workers 密钥批量导入，缓存规则新增 JA3/JA4 字段并保护 Vary 配置。"
 }

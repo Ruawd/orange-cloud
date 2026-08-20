@@ -60,6 +60,8 @@ import jiamin.chen.orangecloud.ui.dashboard.DashboardResourceType
 import jiamin.chen.orangecloud.ui.dashboard.DashboardScreen
 import jiamin.chen.orangecloud.ui.dns.DnsListScreen
 import jiamin.chen.orangecloud.ui.network.TunnelDetailScreen
+import jiamin.chen.orangecloud.ui.turnstile.TurnstileDetailScreen
+import jiamin.chen.orangecloud.ui.turnstile.TurnstileListScreen
 import jiamin.chen.orangecloud.ui.network.TunnelListScreen
 import jiamin.chen.orangecloud.ui.paywall.ProGate
 import jiamin.chen.orangecloud.ui.waf.WafRulesScreen
@@ -111,6 +113,7 @@ import jiamin.chen.orangecloud.ui.storage.KVKeyListScreen
 import jiamin.chen.orangecloud.ui.storage.KVNamespaceListScreen
 import jiamin.chen.orangecloud.ui.storage.R2BucketListScreen
 import jiamin.chen.orangecloud.ui.storage.R2BucketSettingsScreen
+import jiamin.chen.orangecloud.ui.storage.R2SqlQueryScreen
 import jiamin.chen.orangecloud.ui.storage.R2ObjectListScreen
 import jiamin.chen.orangecloud.ui.storage.StorageHubScreen
 import jiamin.chen.orangecloud.ui.workers.WorkerCreateScreen
@@ -190,10 +193,12 @@ private object Dest {
     const val SETTINGS = "settings"
     const val IDENTITY_ROUTE = "identity/{sessionId}"
     const val TUNNELS = "tunnels"
+    const val TURNSTILE = "turnstile"
     const val REGISTRAR = "registrar"
     const val TRACER = "tracer"
     const val URL_SCANNER = "urlscanner"
     const val TUNNEL_DETAIL_ROUTE = "tunnel/{tunnelId}?tunnelName={tunnelName}"
+    const val TURNSTILE_DETAIL_ROUTE = "turnstile/{sitekey}"
     const val STATUS = "status"
     const val AUDIT = "audit"
     const val ALERTING = "alerting"
@@ -210,6 +215,7 @@ private object Dest {
     const val R2_BUCKETS = "r2/buckets"
     const val R2_OBJECTS_ROUTE = "r2/objects/{bucket}"
     const val R2_BUCKET_SETTINGS_ROUTE = "r2/settings/{bucket}"
+    const val R2_SQL_ROUTE = "r2/sql/{bucket}"
     const val D1_DATABASES = "d1/databases"
     const val D1_QUERY_ROUTE = "d1/query/{dbId}?dbName={dbName}"
     const val D1_TABLE_ROUTE = "d1/table/{dbId}?table={table}"
@@ -271,6 +277,7 @@ private object Dest {
         "dev/ai/run/${Uri.encode(model)}?task=${Uri.encode(task)}&desc=${Uri.encode(desc)}"
     fun identity(sessionId: String): String = "identity/${Uri.encode(sessionId)}"
     fun tunnelDetail(id: String, name: String): String = "tunnel/$id?tunnelName=${Uri.encode(name)}"
+    fun turnstileDetail(sitekey: String): String = "turnstile/$sitekey"
     fun worker(scriptName: String): String = "worker/${Uri.encode(scriptName)}"
     fun workerEdit(scriptName: String): String = "worker_edit/${Uri.encode(scriptName)}"
     fun workerSecrets(scriptName: String): String = "worker/${Uri.encode(scriptName)}/secrets"
@@ -281,6 +288,7 @@ private object Dest {
     fun tail(scriptName: String): String = "tail/${Uri.encode(scriptName)}"
     fun r2Objects(bucket: String): String = "r2/objects/${Uri.encode(bucket)}"
     fun r2Settings(bucket: String): String = "r2/settings/${Uri.encode(bucket)}"
+    fun r2Sql(bucket: String): String = "r2/sql/${Uri.encode(bucket)}"
     fun d1Query(dbId: String, dbName: String): String = "d1/query/$dbId?dbName=${Uri.encode(dbName)}"
     fun d1Table(dbId: String, table: String): String = "d1/table/$dbId?table=${Uri.encode(table)}"
     fun kvKeys(nsId: String, nsTitle: String): String = "kv/keys/$nsId?nsTitle=${Uri.encode(nsTitle)}"
@@ -288,6 +296,7 @@ private object Dest {
     /** 路由 → 高亮的顶级标签（下钻页归属其父标签）。 */
     fun topOf(route: String?): TopDestination = when {
         route == DASHBOARD || route == TUNNELS || route?.startsWith("tunnel/") == true ||
+        route == TURNSTILE || route?.startsWith("turnstile/") == true ||
             route == REDIRECTS || route?.startsWith("redirects/") == true ||
             route?.startsWith("zerotrust") == true -> TopDestination.Dashboard
         route == SETTINGS || route == STATUS || route == AUDIT || route == ALERTING || route?.startsWith("identity/") == true -> TopDestination.Settings
@@ -397,6 +406,7 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
             composable(Dest.DASHBOARD) {
                 DashboardScreen(
                     onOpenTunnels = { navController.navigate(Dest.TUNNELS) },
+                    onOpenTurnstile = { navController.navigate(Dest.TURNSTILE) },
                     onOpenRegistrar = { navController.navigate(Dest.REGISTRAR) },
                     onOpenTracer = { navController.navigate(Dest.TRACER) },
                     onOpenUrlScanner = { navController.navigate(Dest.URL_SCANNER) },
@@ -486,6 +496,20 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                 ),
             ) {
                 ProGate { TunnelDetailScreen(onBack = { navController.popBackStack() }) }
+            }
+            composable(Dest.TURNSTILE) {
+                ProGate {
+                    TurnstileListScreen(
+                        onBack = { navController.popBackStack() },
+                        onOpenWidget = { sitekey -> navController.navigate(Dest.turnstileDetail(sitekey)) },
+                    )
+                }
+            }
+            composable(
+                route = Dest.TURNSTILE_DETAIL_ROUTE,
+                arguments = listOf(navArgument("sitekey") { type = NavType.StringType }),
+            ) {
+                ProGate { TurnstileDetailScreen(onBack = { navController.popBackStack() }) }
             }
             composable(
                 Dest.ZONES,
@@ -836,7 +860,16 @@ private fun MainScaffold(onOpenToolbox: () -> Unit) {
                 route = Dest.R2_BUCKET_SETTINGS_ROUTE,
                 arguments = listOf(navArgument("bucket") { type = NavType.StringType }),
             ) {
-                R2BucketSettingsScreen(onBack = { navController.popBackStack() })
+                R2BucketSettingsScreen(
+                    onBack = { navController.popBackStack() },
+                    onOpenSql = { bucket -> navController.navigate(Dest.r2Sql(bucket)) },
+                )
+            }
+            composable(
+                route = Dest.R2_SQL_ROUTE,
+                arguments = listOf(navArgument("bucket") { type = NavType.StringType }),
+            ) {
+                R2SqlQueryScreen(onBack = { navController.popBackStack() })
             }
             composable(Dest.D1_DATABASES) {
                 D1DatabaseListScreen(

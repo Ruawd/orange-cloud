@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.Hub
+import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Person
@@ -68,6 +69,7 @@ import jiamin.chen.orangecloud.data.model.Zone
 @Composable
 fun DashboardScreen(
     onOpenTunnels: () -> Unit,
+    onOpenTurnstile: () -> Unit,
     onOpenRegistrar: () -> Unit,
     onOpenTracer: () -> Unit,
     onOpenUrlScanner: () -> Unit,
@@ -219,6 +221,7 @@ fun DashboardScreen(
                 ) {
                     QuickAction(Icons.Outlined.Refresh, stringResource(R.string.dash_refresh)) { viewModel.refresh() }
                     QuickAction(Icons.Outlined.Hub, stringResource(R.string.tunnel_title), onOpenTunnels)
+                    QuickAction(Icons.Outlined.Shield, stringResource(R.string.ts_title), onOpenTurnstile)
                     QuickAction(Icons.Outlined.VerifiedUser, stringResource(R.string.reg_title), onOpenRegistrar)
                     QuickAction(Icons.Outlined.Troubleshoot, stringResource(R.string.trace_title), onOpenTracer)
                     QuickAction(Icons.Outlined.TravelExplore, stringResource(R.string.urls_title), onOpenUrlScanner)

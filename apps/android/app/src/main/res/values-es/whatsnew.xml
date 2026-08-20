@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Gestiona Turnstile desde el bolsillo</string>
+    <string name="whatsnew_2_1_0_0_detail">Nueva entrada de Turnstile en el resumen: explora todos los widgets, crea y edita dominios y modos, rota secretos con un periodo de gracia opcional de 2 horas y copia la sitekey o el secreto con un toque.</string>
+    <string name="whatsnew_2_1_0_1_title">Consulta R2 Data Catalog con SQL</string>
+    <string name="whatsnew_2_1_0_1_detail">Los ajustes del bucket ganan una consola R2 SQL en Data Catalog: toca una tabla para generar la consulta y ver los resultados en una tabla. Se factura por datos escaneados (10 GB gratis al mes); la consola te lo recuerda.</string>
+    <string name="whatsnew_2_1_0_2_title">Importa secretos de Workers en lote</string>
+    <string name="whatsnew_2_1_0_2_detail">Pega un objeto JSON para escribir variables o secretos en lote: usa el nuevo endpoint masivo de Cloudflare, una sola llamada atómica en vez de guardar uno por uno.</string>
+    <string name="whatsnew_2_1_0_3_title">Las reglas de caché aprenden JA3/JA4</string>
+    <string name="whatsnew_2_1_0_3_detail">Los chips de inserción rápida suman los campos de huella JA3/JA4 (requiere suscripción a Bot Management). Las reglas con caché por Vary pasan a solo lectura en la app para que una edición no borre esa configuración.</string>
     <string name="whatsnew_2_0_0_0_title">Bloquea rastreadores de IA con un interruptor</string>
     <string name="whatsnew_2_0_0_0_detail">Los detalles del dominio ahora incluyen una fila de rastreadores de IA con tres modos: sin bloqueo, solo páginas con anuncios o todo el sitio. Los dos ajustes de contenido de IA pasaron a la misma pantalla, así que ya no hace falta el panel.</string>
     <string name="whatsnew_2_0_0_1_title">Cloudflare te avisa si tu servidor de origen se cae</string>

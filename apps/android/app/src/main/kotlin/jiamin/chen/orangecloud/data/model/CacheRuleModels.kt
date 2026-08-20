@@ -44,11 +44,14 @@ data class CacheActionParameters(
     @SerialName("read_timeout") val readTimeout: Int? = null,
     @SerialName("origin_cache_control") val originCacheControl: Boolean? = null,
     @SerialName("additional_cacheable_ports") val additionalCacheablePorts: List<Int>? = null,
+    /** 2026-07-02 新增：按 Vary 响应头缓存多版本（仅探测存在性，防止编辑覆盖丢配置） */
+    val vary: kotlinx.serialization.json.JsonElement? = null,
 ) {
     /** 含未开放的高级设置 → 编辑器只读（status_code_ttl 不计入，编辑时原样保留）。 */
     val hasAdvancedSettings: Boolean
         get() = cacheKey != null || cacheReserve != null || readTimeout != null ||
-            originCacheControl != null || (additionalCacheablePorts?.isNotEmpty() == true)
+            originCacheControl != null || (additionalCacheablePorts?.isNotEmpty() == true) ||
+            vary != null
 }
 
 @Serializable

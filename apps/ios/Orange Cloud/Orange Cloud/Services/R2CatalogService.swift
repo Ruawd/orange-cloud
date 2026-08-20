@@ -63,6 +63,18 @@ struct R2CatalogService {
         }
         return response.result?.namespaces ?? []
     }
+
+    /// 某命名空间下的表清单（嵌套命名空间按 Iceberg 惯例以 . 连接进路径）
+    func tables(accountId: String, bucketName: String, namespace: String) async throws -> [R2CatalogTableIdentifier] {
+        let response: CFAPIResponse<R2CatalogTableList> = try await client.get(
+            "accounts/\(accountId)/r2-catalog/\(bucketName)/namespaces/\(namespace)/tables",
+            queryItems: [URLQueryItem(name: "page_size", value: "100")]
+        )
+        guard response.success else {
+            throw response.toAPIError()
+        }
+        return response.result?.identifiers ?? []
+    }
 }
 
 /// enable / disable 是无体 POST，但 CFAPIClient.post 要求 Encodable body

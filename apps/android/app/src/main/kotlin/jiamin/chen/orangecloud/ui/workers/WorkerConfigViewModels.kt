@@ -163,6 +163,51 @@ class WorkerBindingsViewModel @Inject constructor(
         }
     }
 
+    // MARK: - 批量导入（JSON）
+
+    /** 批量导入变量（plain_text）：单次 PATCH，导入项设为实体、其余绑定 inherit，同名覆盖。原子。 */
+    fun bulkImportVariables(pairs: List<Pair<String, String>>, onDone: () -> Unit) {
+        val s = settings ?: return
+        if (!canWrite || _uiState.value.isSaving || pairs.isEmpty()) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSaving = true, error = null) }
+            try {
+                val imported = pairs.map { it.first }.toSet()
+                val bindings = s.validBindings.filterNot { it.name in imported }.map { it.asInherit() } +
+                    pairs.map { (name, value) -> WorkerBindingInput("plain_text", name, value) }
+                patchAndReload(bindings)
+                onDone()
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
+    }
+
+    /** 批量导入密钥（secret_text）：走 secrets-bulk 端点单次 PATCH 原子生效，同名覆盖（>100 项分批）。 */
+    fun bulkImportSecrets(pairs: List<Pair<String, String>>, onDone: () -> Unit) {
+        if (!canWrite || _uiState.value.isSaving || pairs.isEmpty()) return
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSaving = true, error = null) }
+            try {
+                val accountId = accountId()
+                pairs.chunked(100).forEach { chunk ->
+                    workerRepository.bulkPatchSecrets(accountId, scriptName, chunk)
+                }
+                _uiState.update { it.copy(secrets = workerRepository.listSecrets(accountId, scriptName)) }
+                onDone()
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+                runCatching {
+                    _uiState.update { it.copy(secrets = workerRepository.listSecrets(accountId(), scriptName)) }
+                }
+            } finally {
+                _uiState.update { it.copy(isSaving = false) }
+            }
+        }
+    }
+
     private suspend fun patchAndReload(bindings: List<WorkerBindingInput>) {
         val s = settings ?: return
         val accountId = accountId()

@@ -443,5 +443,7 @@ private val CACHE_FIELD_CHIPS: List<Pair<Int, String>> = listOf(
     R.string.cache_chip_country to "ip.src.country",
     R.string.cache_chip_bot_score to "cf.bot_management.score",
     R.string.cache_chip_verified_bot to "cf.bot_management.verified_bot",
+    R.string.cache_chip_ja3 to "cf.bot_management.ja3_hash",
+    R.string.cache_chip_ja4 to "cf.bot_management.ja4",
     R.string.cache_chip_asn to "ip.src.asnum",
 )

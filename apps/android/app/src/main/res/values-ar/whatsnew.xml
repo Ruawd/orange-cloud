@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">أدر Turnstile من جيبك</string>
+    <string name="whatsnew_2_1_0_0_detail">مدخل جديد لـ Turnstile في صفحة النظرة العامة: تصفح كل العناصر، أنشئ وعدّل النطاقات والأوضاع، ودوّر الأسرار مع مهلة اختيارية لساعتين، وانسخ sitekey أو secret بنقرة.</string>
+    <string name="whatsnew_2_1_0_1_title">استعلم عن كتالوج بيانات R2 مباشرة بلغة SQL</string>
+    <string name="whatsnew_2_1_0_1_detail">أضفنا وحدة تحكم R2 SQL إلى كتالوج البيانات في إعدادات الحاوية: انقر على جدول لبدء استعلام واعرض النتائج في شبكة. تُحتسب التكلفة حسب البيانات الممسوحة (أول 10 GB شهريًا مجانًا) — وستذكّرك وحدة التحكم بذلك.</string>
+    <string name="whatsnew_2_1_0_2_title">استورد أسرار Workers دفعة واحدة</string>
+    <string name="whatsnew_2_1_0_2_detail">الصق كائن JSON لكتابة المتغيرات أو الأسرار دفعة واحدة — عبر واجهة Cloudflare الجديدة للعمليات المجمعة، استدعاء ذرّي واحد بدل الحفظ واحدًا تلو الآخر.</string>
+    <string name="whatsnew_2_1_0_3_title">قواعد التخزين المؤقت تتعرف على JA3/JA4</string>
+    <string name="whatsnew_2_1_0_3_detail">أضفنا حقول بصمتي JA3/JA4 إلى شرائح الإدراج السريع (يتطلب اشتراك Bot Management). القواعد التي تستخدم التخزين المؤقت عبر Vary تصبح للقراءة فقط في التطبيق حتى لا يُفقد هذا الإعداد عند التعديل.</string>
     <string name="whatsnew_2_0_0_0_title">أوقف زواحف الذكاء الاصطناعي بمفتاح واحد</string>
     <string name="whatsnew_2_0_0_0_detail">أضفنا إلى تفاصيل النطاق صفًّا لزواحف الذكاء الاصطناعي بثلاثة أوضاع: بلا حظر، أو صفحات الإعلانات فقط، أو الموقع كله. كما انتقل إعدادا محتوى الذكاء الاصطناعي إلى الشاشة نفسها، فلم تعد بحاجة إلى لوحة التحكم.</string>
     <string name="whatsnew_2_0_0_1_title">يخبرك Cloudflare مباشرةً عند تعطّل خادم المصدر</string>

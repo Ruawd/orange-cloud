@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Turnstile을 주머니 속에서 관리</string>
+    <string name="whatsnew_2_1_0_0_detail">개요 화면에 Turnstile 입구가 생겼습니다. 전체 위젯을 둘러보고, 만들고, 도메인과 모드를 수정하고, 2시간 유예를 선택해 시크릿을 교체하고, sitekey와 secret을 탭 한 번으로 복사하세요.</string>
+    <string name="whatsnew_2_1_0_1_title">R2 데이터 카탈로그를 SQL로 바로 조회</string>
+    <string name="whatsnew_2_1_0_1_detail">버킷 설정의 데이터 카탈로그에 R2 SQL 콘솔이 추가되었습니다. 테이블을 탭해 쿼리를 만들고 결과를 표로 확인하세요. 스캔한 데이터양으로 과금되며(매월 10 GB 무료) 콘솔에 안내가 있습니다.</string>
+    <string name="whatsnew_2_1_0_2_title">Workers 시크릿을 한 번에 가져오기</string>
+    <string name="whatsnew_2_1_0_2_detail">JSON을 붙여넣어 변수나 시크릿을 일괄 기록하세요. Cloudflare의 새 벌크 엔드포인트로 한 번의 원자적 호출이면 됩니다.</string>
+    <string name="whatsnew_2_1_0_3_title">캐시 규칙이 JA3/JA4를 알게 됐어요</string>
+    <string name="whatsnew_2_1_0_3_detail">표현식 빠른 삽입 칩에 JA3/JA4 지문 필드가 추가되었습니다(Bot Management 구독 필요). Vary 다중 버전 캐시를 쓰는 규칙은 앱에서 읽기 전용이 되어 잘못 수정해 설정을 잃는 일을 막습니다.</string>
     <string name="whatsnew_2_0_0_0_title">스위치 하나로 AI 크롤러 차단</string>
     <string name="whatsnew_2_0_0_0_detail">도메인 상세 화면에 ‘AI 크롤러’ 항목이 생겼습니다. 차단 안 함, 광고 페이지만, 사이트 전체 중에서 고를 수 있습니다. AI 콘텐츠 설정 두 개도 같은 화면으로 옮겨서 대시보드를 열 필요가 없습니다.</string>
     <string name="whatsnew_2_0_0_1_title">오리진이 죽으면 Cloudflare가 바로 알려줍니다</string>

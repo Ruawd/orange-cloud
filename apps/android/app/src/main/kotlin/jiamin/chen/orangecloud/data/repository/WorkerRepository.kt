@@ -19,6 +19,7 @@ import jiamin.chen.orangecloud.data.model.WorkerScheduleInput
 import jiamin.chen.orangecloud.data.model.WorkerScript
 import jiamin.chen.orangecloud.data.model.WorkerSecret
 import jiamin.chen.orangecloud.data.model.WorkerSecretInput
+import jiamin.chen.orangecloud.data.model.WorkerSecretsBulkPatch
 import jiamin.chen.orangecloud.data.model.WorkerSettings
 import jiamin.chen.orangecloud.data.model.WorkerSettingsPatch
 import jiamin.chen.orangecloud.data.model.WorkerAccountSubdomain
@@ -148,6 +149,14 @@ class WorkerRepository @Inject constructor(
         api.putChecked("accounts/$accountId/workers/scripts/$scriptName/secrets", WorkerSecretInput(name, text))
 
     /** 删除密钥。 */
+    /** 批量写密钥（secrets-bulk，单次 ≤100 项原子生效；删除走单条端点，见模型注释）。 */
+    suspend fun bulkPatchSecrets(accountId: String, scriptName: String, upserts: List<Pair<String, String>>) {
+        val body = WorkerSecretsBulkPatch(
+            secrets = upserts.associate { (name, text) -> name to WorkerSecretInput(name, text) },
+        )
+        api.patchChecked("accounts/$accountId/workers/scripts/$scriptName/secrets-bulk", body)
+    }
+
     suspend fun deleteSecret(accountId: String, scriptName: String, name: String) =
         api.delete("accounts/$accountId/workers/scripts/$scriptName/secrets/$name")
 

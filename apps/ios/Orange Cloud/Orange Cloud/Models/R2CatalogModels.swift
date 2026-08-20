@@ -80,4 +80,26 @@ nonisolated struct R2CatalogNamespace: Codable, Identifiable, Hashable, Sendable
     var displayName: String {
         (name ?? []).joined(separator: " · ")
     }
+
+    /// SQL 里引用表用的前缀（嵌套命名空间以 . 连接）
+    var sqlName: String {
+        (name ?? []).joined(separator: ".")
+    }
+}
+
+/// 表清单的 result 外壳（GET .../namespaces/{ns}/tables）
+nonisolated struct R2CatalogTableList: Codable, Sendable {
+    let identifiers: [R2CatalogTableIdentifier]?
+}
+
+nonisolated struct R2CatalogTableIdentifier: Codable, Identifiable, Hashable, Sendable {
+    let name:      String?
+    let namespace: [String]?
+
+    var id: String { sqlName }
+
+    /// SQL 里的完整引用：namespace.table
+    var sqlName: String {
+        ((namespace ?? []) + [name ?? ""]).filter { !$0.isEmpty }.joined(separator: ".")
+    }
 }

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">隨手管理 Turnstile 人機驗證</string>
+    <string name="whatsnew_2_1_0_0_detail">總覽頁新增 Turnstile 入口：檢視全部元件，新增、改網域與模式，金鑰一鍵輪替（可留 2 小時寬限平滑過渡），sitekey 和 secret 點按即複製。</string>
+    <string name="whatsnew_2_1_0_1_title">R2 資料目錄，直接用 SQL 查</string>
+    <string name="whatsnew_2_1_0_1_detail">儲存桶設定的資料目錄裡新增 R2 SQL 查詢主控台：點選資料表名產生查詢，結果以表格呈現。按掃描量計費（每月 10 GB 免費），主控台內有提示。</string>
+    <string name="whatsnew_2_1_0_2_title">Workers 金鑰，一次批次匯入</string>
+    <string name="whatsnew_2_1_0_2_detail">貼上一段 JSON 就能批次寫入變數或金鑰：走 Cloudflare 新的批次介面，單次呼叫原子生效，不再逐條儲存。</string>
+    <string name="whatsnew_2_1_0_3_title">快取規則認識 JA3/JA4 了</string>
+    <string name="whatsnew_2_1_0_3_detail">運算式速插晶片補上 JA3/JA4 指紋欄位（需 Bot Management 訂閱）；帶 Vary 多版本快取的規則自動唯讀，避免在 App 裡誤改遺失設定。</string>
     <string name="whatsnew_2_0_0_0_title">一個開關擋住 AI 爬蟲</string>
     <string name="whatsnew_2_0_0_0_detail">網域詳情頁新增「AI 爬蟲」一欄，三檔任選：不攔截、只攔廣告頁、全站攔截。AI 內容相關的兩個設定也移到同一頁，不必再開主控台。</string>
     <string name="whatsnew_2_0_0_1_title">來源伺服器掉線，Cloudflare 直接推給你</string>

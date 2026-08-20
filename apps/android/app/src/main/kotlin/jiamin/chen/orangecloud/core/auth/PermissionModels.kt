@@ -33,7 +33,7 @@ object PermissionCatalog {
         PermissionFeature("dns_settings", R.string.perm_dns_settings, R.string.perm_dns_settings_desc, listOf(Scopes.ZONE_DNS_SETTINGS_READ), listOf(Scopes.ZONE_DNS_SETTINGS_WRITE)),
         PermissionFeature("registrar", R.string.perm_registrar, R.string.perm_registrar_desc, listOf(Scopes.REGISTRAR_READ), listOf(Scopes.REGISTRAR_ADMIN)),
         PermissionFeature("request_tracer", R.string.perm_tracer, R.string.perm_tracer_desc, listOf(Scopes.REQUEST_TRACER_READ)),
-        PermissionFeature("r2_catalog", R.string.perm_r2_catalog, R.string.perm_r2_catalog_desc, listOf(Scopes.R2_CATALOG_READ), listOf(Scopes.R2_CATALOG_WRITE)),
+        PermissionFeature("r2_catalog", R.string.perm_r2_catalog, R.string.perm_r2_catalog_desc, listOf(Scopes.R2_CATALOG_READ, Scopes.R2_CATALOG_SQL_READ), listOf(Scopes.R2_CATALOG_WRITE)),
         PermissionFeature("workers_builds", R.string.perm_builds, R.string.perm_builds_desc, listOf(Scopes.WORKERS_CI_READ), listOf(Scopes.WORKERS_CI_WRITE)),
         PermissionFeature("managed_headers", R.string.perm_managed_headers, R.string.perm_managed_headers_desc, listOf(Scopes.MANAGED_HEADERS_READ), listOf(Scopes.MANAGED_HEADERS_WRITE)),
         PermissionFeature("url_scanner", R.string.perm_url_scanner, R.string.perm_url_scanner_desc, listOf(Scopes.URL_SCANNER_READ), listOf(Scopes.URL_SCANNER_WRITE)),
@@ -55,6 +55,7 @@ object PermissionCatalog {
         PermissionFeature("ai_gateway", R.string.perm_ai_gateway, R.string.perm_ai_gateway_desc, listOf(Scopes.AIG_READ), listOf(Scopes.AIG_WRITE)),
         PermissionFeature("queues", R.string.perm_queues, R.string.perm_queues_desc, listOf(Scopes.QUEUES_READ), listOf(Scopes.QUEUES_WRITE)),
         PermissionFeature("hyperdrive", R.string.perm_hyperdrive, R.string.perm_hyperdrive_desc, listOf(Scopes.HYPERDRIVE_READ), listOf(Scopes.HYPERDRIVE_WRITE)),
+        PermissionFeature("turnstile", R.string.perm_turnstile, R.string.perm_turnstile_desc, listOf(Scopes.CHALLENGE_WIDGETS_READ), listOf(Scopes.CHALLENGE_WIDGETS_WRITE)),
         PermissionFeature("notifications", R.string.perm_notifications, R.string.perm_notifications_desc, listOf(Scopes.NOTIFICATIONS_READ), listOf(Scopes.NOTIFICATIONS_WRITE)),
     )
 

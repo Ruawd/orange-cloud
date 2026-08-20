@@ -153,9 +153,10 @@ extension FeaturePermission {
         .init(
             id: "r2_catalog",
             title: String(localized: "R2 数据目录"),
-            description: String(localized: "把 R2 桶启用为 Iceberg 数据仓库"),
+            description: String(localized: "把 R2 桶启用为 Iceberg 数据仓库，并用 R2 SQL 查询"),
             icon: "tablecells",
-            readScopes: ["r2-catalog.read"],
+            // r2-catalog-sql.read 供 R2 SQL 查询控制台（api.sql.cloudflarestorage.com）
+            readScopes: ["r2-catalog.read", "r2-catalog-sql.read"],
             editScopes: ["r2-catalog.write"],
             isRequired: false
         ),
@@ -380,6 +381,15 @@ extension FeaturePermission {
             icon: "bolt.horizontal.circle",
             readScopes: ["query-cache.read"],
             editScopes: ["query-cache.write"],
+            isRequired: false
+        ),
+        .init(
+            id: "turnstile",
+            title: "Turnstile",
+            description: String(localized: "管理人机验证组件与密钥轮换"),
+            icon: "checkmark.shield",
+            readScopes: ["challenge-widgets.read"],
+            editScopes: ["challenge-widgets.write"],
             isRequired: false
         ),
         .init(

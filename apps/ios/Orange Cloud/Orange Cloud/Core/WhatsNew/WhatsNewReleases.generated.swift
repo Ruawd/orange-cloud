@@ -10,6 +10,28 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "2.1.0", items: [
+            WhatsNewItem(
+                icon:   "checkmark.shield",
+                title:  String(localized: "随手管理 Turnstile 人机验证", table: "WhatsNew"),
+                detail: String(localized: "概览页新增 Turnstile 入口：查看全部组件，新建、改域名与模式，密钥一键轮换（可留 2 小时宽限平滑过渡），sitekey 和 secret 点按即复制。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "terminal",
+                title:  String(localized: "R2 数据目录，直接用 SQL 查", table: "WhatsNew"),
+                detail: String(localized: "桶设置的数据目录里新增 R2 SQL 查询控制台：点选表名生成查询，结果表格展示。按扫描量计费（每月 10 GB 免费），控制台内有提示。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "key.fill",
+                title:  String(localized: "Workers 密钥，一次批量导入", table: "WhatsNew"),
+                detail: String(localized: "粘贴一段 JSON 就能批量写入变量或密钥：走 Cloudflare 新的批量接口，单次调用原子生效，不再逐条保存。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "bolt.horizontal",
+                title:  String(localized: "缓存规则认识 JA3/JA4 了", table: "WhatsNew"),
+                detail: String(localized: "表达式速插芯片补上 JA3/JA4 指纹字段（需 Bot Management 订阅）；带 Vary 多版本缓存的规则自动只读，避免在 App 里误改丢掉配置。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "2.0.0", items: [
             WhatsNewItem(
                 icon:   "brain",

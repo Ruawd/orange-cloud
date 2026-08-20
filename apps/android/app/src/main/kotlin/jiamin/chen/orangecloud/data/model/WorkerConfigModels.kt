@@ -197,6 +197,16 @@ data class WorkerSecretInput(
     val type: String = "secret_text",
 )
 
+/**
+ * 批量写密钥（PATCH .../secrets-bulk，2026-06 新端点，单次 ≤100 项，原子生效）。
+ * JSON Merge Patch 语义里 null=删除，但全局 Json 配了 explicitNulls=false 会把 null 吞掉，
+ * 故本模型只承载新建/覆盖（删除仍走单条 DELETE 端点）。
+ */
+@Serializable
+data class WorkerSecretsBulkPatch(
+    val secrets: Map<String, WorkerSecretInput>,
+)
+
 // MARK: - Cron 触发器
 
 /** 单条 Cron 触发器（GET .../schedules）。 */

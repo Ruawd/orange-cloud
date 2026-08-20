@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Turnstile\'ı cebinizden yönetin</string>
+    <string name="whatsnew_2_1_0_0_detail">Genel bakışta yeni Turnstile girişi: tüm öğelere göz atın, alan adı ve mod oluşturup düzenleyin, isteğe bağlı 2 saatlik geçiş süresiyle anahtarları değiştirin, sitekey ve secret\'ı dokunarak kopyalayın.</string>
+    <string name="whatsnew_2_1_0_1_title">R2 Veri Kataloğu\'nu doğrudan SQL ile sorgulayın</string>
+    <string name="whatsnew_2_1_0_1_detail">Kova ayarlarındaki Veri Kataloğu\'na R2 SQL konsolu eklendi: bir tabloya dokunup sorgu oluşturun, sonuçları tabloda görün. Taranan veriye göre ücretlendirilir (ayda 10 GB ücretsiz) — konsol size hatırlatır.</string>
+    <string name="whatsnew_2_1_0_2_title">Workers gizli anahtarlarını toplu aktarın</string>
+    <string name="whatsnew_2_1_0_2_detail">Bir JSON nesnesi yapıştırarak değişken veya gizli anahtarları toplu yazın — Cloudflare\'ın yeni toplu uç noktasıyla tek atomik çağrı, tek tek kaydetmek yok.</string>
+    <string name="whatsnew_2_1_0_3_title">Önbellek kuralları JA3/JA4 öğrendi</string>
+    <string name="whatsnew_2_1_0_3_detail">Hızlı ekleme çiplerine JA3/JA4 parmak izi alanları eklendi (Bot Management aboneliği gerekir). Vary tabanlı önbellek kullanan kurallar uygulamada salt okunur olur, böylece düzenlemeler bu yapılandırmayı silmez.</string>
     <string name="whatsnew_2_0_0_0_title">Yapay zekâ tarayıcılarını tek anahtarla engelleyin</string>
     <string name="whatsnew_2_0_0_0_detail">Alan adı ayrıntılarına üç modlu bir yapay zekâ tarayıcı satırı eklendi: engelleme yok, yalnızca reklam sayfaları ya da tüm site. İki yapay zekâ içerik ayarı da aynı ekrana taşındı; artık panele gitmeniz gerekmiyor.</string>
     <string name="whatsnew_2_0_0_1_title">Kaynak sunucunuz düşerse Cloudflare doğrudan haber verir</string>

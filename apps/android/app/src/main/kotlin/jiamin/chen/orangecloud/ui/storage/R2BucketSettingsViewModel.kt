@@ -50,6 +50,8 @@ data class R2BucketSettingsUiState(
     val catalogLoaded: Boolean = false,
     val isCatalogMutating: Boolean = false,
     val canReadCatalog: Boolean = false,
+    /** r2-catalog-sql.read：目录已启用时展示 R2 SQL 查询入口 */
+    val canQuerySql: Boolean = false,
     val canWriteCatalog: Boolean = false,
 ) {
     val catalogEnabled: Boolean get() = catalog?.isActive == true
@@ -70,6 +72,7 @@ class R2BucketSettingsViewModel @Inject constructor(
     private val canWrite = authRepository.hasScope(Scopes.R2_WRITE)
     // 数据目录是另一条权限链路（r2-catalog.*），与 workers-r2.* 无关
     private val canReadCatalog = authRepository.hasScope(Scopes.R2_CATALOG_READ)
+    private val canQuerySql = authRepository.hasScope(Scopes.R2_CATALOG_SQL_READ)
     private val canWriteCatalog = authRepository.hasScope(Scopes.R2_CATALOG_WRITE)
 
     private val _uiState = MutableStateFlow(
@@ -79,6 +82,7 @@ class R2BucketSettingsViewModel @Inject constructor(
             missingScope = !hasRead,
             canWrite = canWrite,
             canReadCatalog = canReadCatalog,
+            canQuerySql = canQuerySql,
             canWriteCatalog = canWriteCatalog,
         ),
     )

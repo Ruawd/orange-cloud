@@ -17,6 +17,7 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
     case aiInsights, aiDNS, filesApp
     case queues, aiGateway, durableObjects, workersAI, hyperdrive
     case zoneRules
+    case turnstile
 
     var id: String { rawValue }
 
@@ -51,6 +52,7 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .workersAI:      String(localized: "Workers AI 需要 Pro")
         case .hyperdrive:     String(localized: "Hyperdrive 需要 Pro")
         case .zoneRules:      String(localized: "规则管理需要 Pro")
+        case .turnstile:      String(localized: "Turnstile 需要 Pro")
         }
     }
 
@@ -85,6 +87,7 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .workersAI:      String(localized: "浏览 Workers AI 模型目录，并试运行文本生成模型属于 Orange Cloud Pro。")
         case .hyperdrive:     String(localized: "查看与管理 Hyperdrive 数据库加速配置（缓存设置、改源连接、新建 / 删除）属于 Orange Cloud Pro。")
         case .zoneRules:      String(localized: "单条重定向、源站 / 配置 / 压缩规则、自定义错误与 Page Rules 的查看、启停与删除属于 Orange Cloud Pro。")
+        case .turnstile:      String(localized: "管理 Turnstile 人机验证组件（新建 / 编辑 / 密钥轮换）属于 Orange Cloud Pro。")
         }
     }
 
@@ -119,6 +122,7 @@ nonisolated enum ProFeature: String, Identifiable, Sendable {
         case .workersAI:      "brain"
         case .hyperdrive:     "bolt.horizontal.circle"
         case .zoneRules:      "list.bullet.rectangle"
+        case .turnstile:      "checkmark.shield"
         }
     }
 }

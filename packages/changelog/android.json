@@ -1,5 +1,145 @@
 [
   {
+    "version": "2.1.0",
+    "date": "2026.08.19",
+    "channel": "Google Play",
+    "inApp": true,
+    "items": [
+      {
+        "icon": "checkmark.shield",
+        "title": {
+          "zh-Hans": "随手管理 Turnstile 人机验证",
+          "en": "Manage Turnstile from your pocket",
+          "zh-Hant": "隨手管理 Turnstile 人機驗證",
+          "zh-HK": "隨手管理 Turnstile 人機驗證",
+          "ja": "Turnstile をポケットから管理",
+          "es-MX": "Gestiona Turnstile desde el bolsillo",
+          "ko": "Turnstile을 주머니 속에서 관리",
+          "pt-BR": "Gerencie o Turnstile do bolso",
+          "pt-PT": "Faça a gestão do Turnstile no bolso",
+          "de": "Turnstile aus der Hosentasche verwalten",
+          "fr": "Gérez Turnstile depuis votre poche",
+          "ar": "أدر Turnstile من جيبك",
+          "tr": "Turnstile'ı cebinizden yönetin"
+        },
+        "detail": {
+          "zh-Hans": "概览页新增 Turnstile 入口：查看全部组件，新建、改域名与模式，密钥一键轮换（可留 2 小时宽限平滑过渡），sitekey 和 secret 点按即复制。",
+          "en": "A new Turnstile entry on the overview: browse all widgets, create and edit domains and modes, rotate secrets with an optional 2-hour grace period, and tap to copy the sitekey or secret.",
+          "zh-Hant": "總覽頁新增 Turnstile 入口：檢視全部元件，新增、改網域與模式，金鑰一鍵輪替（可留 2 小時寬限平滑過渡），sitekey 和 secret 點按即複製。",
+          "zh-HK": "概覽頁新增 Turnstile 入口：查看全部組件，新建、改域名與模式，密鑰一鍵輪換（可留 2 小時寬限平滑過渡），sitekey 和 secret 點按即複製。",
+          "ja": "概要画面に Turnstile の入口を追加。全ウィジェットの一覧、作成やドメイン・モードの変更、シークレットのローテーション（2 時間の猶予つきでスムーズに移行）、sitekey と secret のタップコピーに対応しました。",
+          "es-MX": "Nueva entrada de Turnstile en el resumen: explora todos los widgets, crea y edita dominios y modos, rota secretos con un periodo de gracia opcional de 2 horas y copia la sitekey o el secreto con un toque.",
+          "ko": "개요 화면에 Turnstile 입구가 생겼습니다. 전체 위젯을 둘러보고, 만들고, 도메인과 모드를 수정하고, 2시간 유예를 선택해 시크릿을 교체하고, sitekey와 secret을 탭 한 번으로 복사하세요.",
+          "pt-BR": "Nova entrada do Turnstile na visão geral: veja todos os widgets, crie e edite domínios e modos, rotacione segredos com carência opcional de 2 horas e copie a sitekey ou o segredo com um toque.",
+          "pt-PT": "Nova entrada do Turnstile na vista geral: veja todos os widgets, crie e edite domínios e modos, rode segredos com tolerância opcional de 2 horas e copie a sitekey ou o segredo com um toque.",
+          "de": "Neuer Turnstile-Einstieg in der Übersicht: alle Widgets durchsehen, Domains und Modi anlegen und ändern, Secrets mit optionaler 2-Stunden-Karenz rotieren, Sitekey und Secret per Tipp kopieren.",
+          "fr": "Nouvelle entrée Turnstile sur l'aperçu : parcourez tous les widgets, créez et modifiez domaines et modes, renouvelez les secrets avec un délai de grâce optionnel de 2 h, et copiez la sitekey ou le secret d'un geste.",
+          "ar": "مدخل جديد لـ Turnstile في صفحة النظرة العامة: تصفح كل العناصر، أنشئ وعدّل النطاقات والأوضاع، ودوّر الأسرار مع مهلة اختيارية لساعتين، وانسخ sitekey أو secret بنقرة.",
+          "tr": "Genel bakışta yeni Turnstile girişi: tüm öğelere göz atın, alan adı ve mod oluşturup düzenleyin, isteğe bağlı 2 saatlik geçiş süresiyle anahtarları değiştirin, sitekey ve secret'ı dokunarak kopyalayın."
+        }
+      },
+      {
+        "icon": "terminal",
+        "title": {
+          "zh-Hans": "R2 数据目录，直接用 SQL 查",
+          "en": "Query R2 Data Catalog with SQL",
+          "zh-Hant": "R2 資料目錄，直接用 SQL 查",
+          "zh-HK": "R2 數據目錄，直接用 SQL 查",
+          "ja": "R2 データカタログを SQL で直接クエリ",
+          "es-MX": "Consulta R2 Data Catalog con SQL",
+          "ko": "R2 데이터 카탈로그를 SQL로 바로 조회",
+          "pt-BR": "Consulte o R2 Data Catalog com SQL",
+          "pt-PT": "Consulte o R2 Data Catalog com SQL",
+          "de": "R2 Data Catalog direkt per SQL abfragen",
+          "fr": "Interrogez R2 Data Catalog en SQL",
+          "ar": "استعلم عن كتالوج بيانات R2 مباشرة بلغة SQL",
+          "tr": "R2 Veri Kataloğu'nu doğrudan SQL ile sorgulayın"
+        },
+        "detail": {
+          "zh-Hans": "桶设置的数据目录里新增 R2 SQL 查询控制台：点选表名生成查询，结果表格展示。按扫描量计费（每月 10 GB 免费），控制台内有提示。",
+          "en": "Bucket settings gain an R2 SQL console under Data Catalog: tap a table to start a query and view results in a grid. Billed by data scanned (first 10 GB per month free) — the console reminds you.",
+          "zh-Hant": "儲存桶設定的資料目錄裡新增 R2 SQL 查詢主控台：點選資料表名產生查詢，結果以表格呈現。按掃描量計費（每月 10 GB 免費），主控台內有提示。",
+          "zh-HK": "儲存桶設定的數據目錄裡新增 R2 SQL 查詢控制台：點選表名生成查詢，結果表格展示。按掃描量計費（每月 10 GB 免費），控制台內有提示。",
+          "ja": "バケット設定のデータカタログに R2 SQL コンソールを追加。テーブル名をタップしてクエリを作り、結果をグリッドで確認できます。スキャン量課金（毎月 10 GB まで無料）で、コンソール内に注意書きがあります。",
+          "es-MX": "Los ajustes del bucket ganan una consola R2 SQL en Data Catalog: toca una tabla para generar la consulta y ver los resultados en una tabla. Se factura por datos escaneados (10 GB gratis al mes); la consola te lo recuerda.",
+          "ko": "버킷 설정의 데이터 카탈로그에 R2 SQL 콘솔이 추가되었습니다. 테이블을 탭해 쿼리를 만들고 결과를 표로 확인하세요. 스캔한 데이터양으로 과금되며(매월 10 GB 무료) 콘솔에 안내가 있습니다.",
+          "pt-BR": "As configurações do bucket ganham um console R2 SQL no Data Catalog: toque em uma tabela para gerar a consulta e veja os resultados em grade. Cobrança por dados verificados (10 GB grátis por mês) — o console avisa.",
+          "pt-PT": "As definições do bucket ganham uma consola R2 SQL no Data Catalog: toque numa tabela para gerar a consulta e veja os resultados em grelha. Faturação por dados analisados (10 GB grátis por mês) — a consola avisa.",
+          "de": "Die Bucket-Einstellungen erhalten unter Data Catalog eine R2-SQL-Konsole: Tabelle antippen, Abfrage starten, Ergebnisse im Raster ansehen. Abgerechnet nach gescannter Datenmenge (10 GB pro Monat frei) – die Konsole erinnert daran.",
+          "fr": "Les réglages du bucket gagnent une console R2 SQL sous Data Catalog : touchez une table pour lancer la requête et voir les résultats en grille. Facturation au volume scanné (10 GB gratuits par mois) — la console vous le rappelle.",
+          "ar": "أضفنا وحدة تحكم R2 SQL إلى كتالوج البيانات في إعدادات الحاوية: انقر على جدول لبدء استعلام واعرض النتائج في شبكة. تُحتسب التكلفة حسب البيانات الممسوحة (أول 10 GB شهريًا مجانًا) — وستذكّرك وحدة التحكم بذلك.",
+          "tr": "Kova ayarlarındaki Veri Kataloğu'na R2 SQL konsolu eklendi: bir tabloya dokunup sorgu oluşturun, sonuçları tabloda görün. Taranan veriye göre ücretlendirilir (ayda 10 GB ücretsiz) — konsol size hatırlatır."
+        }
+      },
+      {
+        "icon": "key.fill",
+        "title": {
+          "zh-Hans": "Workers 密钥，一次批量导入",
+          "en": "Bulk-import Worker secrets",
+          "zh-Hant": "Workers 金鑰，一次批次匯入",
+          "zh-HK": "Workers 密鑰，一次批量導入",
+          "ja": "Workers のシークレットを一括インポート",
+          "es-MX": "Importa secretos de Workers en lote",
+          "ko": "Workers 시크릿을 한 번에 가져오기",
+          "pt-BR": "Importe segredos do Workers em lote",
+          "pt-PT": "Importe segredos do Workers em lote",
+          "de": "Worker-Secrets im Stapel importieren",
+          "fr": "Importez les secrets Workers en masse",
+          "ar": "استورد أسرار Workers دفعة واحدة",
+          "tr": "Workers gizli anahtarlarını toplu aktarın"
+        },
+        "detail": {
+          "zh-Hans": "粘贴一段 JSON 就能批量写入变量或密钥：走 Cloudflare 新的批量接口，单次调用原子生效，不再逐条保存。",
+          "en": "Paste a JSON object to write variables or secrets in bulk — powered by Cloudflare's new bulk endpoint, one atomic call instead of saving one by one.",
+          "zh-Hant": "貼上一段 JSON 就能批次寫入變數或金鑰：走 Cloudflare 新的批次介面，單次呼叫原子生效，不再逐條儲存。",
+          "zh-HK": "貼上一段 JSON 就能批量寫入變數或密鑰：走 Cloudflare 新的批量接口，單次調用原子生效，不再逐條保存。",
+          "ja": "JSON を貼り付けるだけで変数やシークレットを一括登録。Cloudflare の新しいバルク API を使い、1 回の呼び出しでアトミックに反映されます。",
+          "es-MX": "Pega un objeto JSON para escribir variables o secretos en lote: usa el nuevo endpoint masivo de Cloudflare, una sola llamada atómica en vez de guardar uno por uno.",
+          "ko": "JSON을 붙여넣어 변수나 시크릿을 일괄 기록하세요. Cloudflare의 새 벌크 엔드포인트로 한 번의 원자적 호출이면 됩니다.",
+          "pt-BR": "Cole um objeto JSON para gravar variáveis ou segredos em lote — usa o novo endpoint em massa da Cloudflare, uma única chamada atômica em vez de salvar um por um.",
+          "pt-PT": "Cole um objeto JSON para gravar variáveis ou segredos em lote — usa o novo endpoint em massa da Cloudflare, uma única chamada atómica em vez de guardar um a um.",
+          "de": "JSON einfügen und Variablen oder Secrets im Stapel schreiben – über Cloudflares neuen Bulk-Endpunkt, ein atomarer Aufruf statt Einzelspeichern.",
+          "fr": "Collez un objet JSON pour écrire variables ou secrets en masse — via le nouvel endpoint bulk de Cloudflare, un seul appel atomique au lieu d'enregistrer un par un.",
+          "ar": "الصق كائن JSON لكتابة المتغيرات أو الأسرار دفعة واحدة — عبر واجهة Cloudflare الجديدة للعمليات المجمعة، استدعاء ذرّي واحد بدل الحفظ واحدًا تلو الآخر.",
+          "tr": "Bir JSON nesnesi yapıştırarak değişken veya gizli anahtarları toplu yazın — Cloudflare'ın yeni toplu uç noktasıyla tek atomik çağrı, tek tek kaydetmek yok."
+        }
+      },
+      {
+        "icon": "bolt.horizontal",
+        "title": {
+          "zh-Hans": "缓存规则认识 JA3/JA4 了",
+          "en": "Cache Rules learn JA3/JA4",
+          "zh-Hant": "快取規則認識 JA3/JA4 了",
+          "zh-HK": "緩存規則認識 JA3/JA4 了",
+          "ja": "キャッシュルールが JA3/JA4 に対応",
+          "es-MX": "Las reglas de caché aprenden JA3/JA4",
+          "ko": "캐시 규칙이 JA3/JA4를 알게 됐어요",
+          "pt-BR": "Regras de cache aprendem JA3/JA4",
+          "pt-PT": "Regras de cache aprendem JA3/JA4",
+          "de": "Cache-Regeln lernen JA3/JA4",
+          "fr": "Les règles de cache apprennent JA3/JA4",
+          "ar": "قواعد التخزين المؤقت تتعرف على JA3/JA4",
+          "tr": "Önbellek kuralları JA3/JA4 öğrendi"
+        },
+        "detail": {
+          "zh-Hans": "表达式速插芯片补上 JA3/JA4 指纹字段（需 Bot Management 订阅）；带 Vary 多版本缓存的规则自动只读，避免在 App 里误改丢掉配置。",
+          "en": "Expression quick-insert chips now include JA3/JA4 fingerprint fields (Bot Management subscription required). Rules using Vary-based caching turn read-only in the app so edits can't drop that config.",
+          "zh-Hant": "運算式速插晶片補上 JA3/JA4 指紋欄位（需 Bot Management 訂閱）；帶 Vary 多版本快取的規則自動唯讀，避免在 App 裡誤改遺失設定。",
+          "zh-HK": "表達式速插芯片補上 JA3/JA4 指紋欄位（需 Bot Management 訂閱）；帶 Vary 多版本緩存的規則自動只讀，避免在 App 裡誤改丟掉配置。",
+          "ja": "式のクイック挿入チップに JA3/JA4 フィンガープリントを追加（Bot Management サブスクリプションが必要）。Vary による複数バージョンキャッシュを使うルールはアプリ内で読み取り専用になり、誤編集で設定が消えるのを防ぎます。",
+          "es-MX": "Los chips de inserción rápida suman los campos de huella JA3/JA4 (requiere suscripción a Bot Management). Las reglas con caché por Vary pasan a solo lectura en la app para que una edición no borre esa configuración.",
+          "ko": "표현식 빠른 삽입 칩에 JA3/JA4 지문 필드가 추가되었습니다(Bot Management 구독 필요). Vary 다중 버전 캐시를 쓰는 규칙은 앱에서 읽기 전용이 되어 잘못 수정해 설정을 잃는 일을 막습니다.",
+          "pt-BR": "Os chips de inserção rápida ganham os campos de impressão digital JA3/JA4 (requer assinatura do Bot Management). Regras com cache por Vary ficam somente leitura no app, para uma edição não descartar essa configuração.",
+          "pt-PT": "Os chips de inserção rápida ganham os campos de impressão digital JA3/JA4 (requer subscrição do Bot Management). Regras com cache por Vary ficam só de leitura na app, para uma edição não descartar essa configuração.",
+          "de": "Die Schnelleinfüge-Chips für Ausdrücke enthalten jetzt JA3/JA4-Fingerprint-Felder (Bot-Management-Abo erforderlich). Regeln mit Vary-Caching werden in der App schreibgeschützt, damit Bearbeitungen diese Konfiguration nicht verwerfen.",
+          "fr": "Les puces d'insertion rapide gagnent les champs d'empreinte JA3/JA4 (abonnement Bot Management requis). Les règles utilisant le cache par Vary passent en lecture seule dans l'app pour qu'une modification ne supprime pas cette configuration.",
+          "ar": "أضفنا حقول بصمتي JA3/JA4 إلى شرائح الإدراج السريع (يتطلب اشتراك Bot Management). القواعد التي تستخدم التخزين المؤقت عبر Vary تصبح للقراءة فقط في التطبيق حتى لا يُفقد هذا الإعداد عند التعديل.",
+          "tr": "Hızlı ekleme çiplerine JA3/JA4 parmak izi alanları eklendi (Bot Management aboneliği gerekir). Vary tabanlı önbellek kullanan kurallar uygulamada salt okunur olur, böylece düzenlemeler bu yapılandırmayı silmez."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.0.0",
     "date": "2026.08.10",
     "channel": "Google Play",

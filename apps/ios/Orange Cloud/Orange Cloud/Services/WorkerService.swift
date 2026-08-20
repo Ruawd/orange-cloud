@@ -288,6 +288,29 @@ struct WorkerService {
         try await client.delete("accounts/\(accountId)/workers/scripts/\(scriptName)/secrets/\(name)")
     }
 
+    /// 批量写密钥（2026-06 新端点，单次 ≤100 项，原子生效）。
+    /// JSON Merge Patch：对象 → 新建/覆盖，null → 删除；未提及的密钥不受影响。
+    func bulkPatchSecrets(
+        accountId: String,
+        scriptName: String,
+        upserts: [(name: String, text: String)],
+        deletes: [String] = []
+    ) async throws {
+        var secrets: [String: WorkerSecretInput?] = [:]
+        for item in upserts {
+            secrets[item.name] = WorkerSecretInput(name: item.name, text: item.text)
+        }
+        for name in deletes {
+            // 双重可选陷阱：subscript 赋 nil 会移除键，须 updateValue 才能存下「值为 null」
+            secrets.updateValue(nil, forKey: name)
+        }
+        let response: CFAPIResponse<EmptyResponse> = try await client.patch(
+            "accounts/\(accountId)/workers/scripts/\(scriptName)/secrets-bulk",
+            body: WorkerSecretsBulkPatch(secrets: secrets)
+        )
+        guard response.success else { throw response.toAPIError() }
+    }
+
     // MARK: - Cron 触发器
 
     func schedules(accountId: String, scriptName: String) async throws -> [WorkerSchedule] {

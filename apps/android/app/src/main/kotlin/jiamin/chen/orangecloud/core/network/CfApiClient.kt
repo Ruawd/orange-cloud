@@ -117,6 +117,12 @@ class CfApiClient @Inject constructor(
         checkSuccess(executeRaw("PUT", path, emptyList(), payload, JSON_MEDIA_TYPE))
     }
 
+    /** JSON PATCH，只校验 success（secrets-bulk 等写端点 result 可能为 null）。 */
+    suspend inline fun <reified B> patchChecked(path: String, body: B) {
+        val payload = json.encodeToString(serializer<B>(), body).encodeToByteArray()
+        checkSuccess(executeRaw("PATCH", path, emptyList(), payload, JSON_MEDIA_TYPE))
+    }
+
     /** KV value 等非 JSON 信封端点：返回原始字节 */
     suspend fun getRaw(path: String, query: List<Pair<String, String>> = emptyList()): ByteArray =
         executeRaw("GET", path, query, null, null)
@@ -304,6 +310,44 @@ class CfApiClient @Inject constructor(
         }
         if (!env.success) throw ApiError.Cloudflare(env.errors.map { ApiError.CfError(it.code, it.message) })
         return env.result ?: throw ApiError.Decoding(IllegalStateException("result missing"))
+    }
+
+    /**
+     * 对 Cloudflare 系外部主机（如 R2 SQL 的 api.sql.cloudflarestorage.com）发 JSON POST，
+     * 复用 OAuth Bearer 与 401 刷新重试，返回 2xx 原始响应体。
+     * 注意：这些主机不一定走 client/v4 信封，错误体尽力解析 CF 业务错误。
+     */
+    suspend fun postExternalJson(url: String, body: ByteArray, isRetry: Boolean = false): ByteArray {
+        val token = tokenProvider.validAccessToken()
+        val request = Request.Builder()
+            .url(url.toHttpUrl())
+            .header("Authorization", "Bearer $token")
+            .method("POST", body.toRequestBody(JSON_MEDIA_TYPE.toMediaTypeOrNull()))
+            .build()
+        val (code, bytes) = try {
+            withContext(Dispatchers.IO) {
+                httpClient.newCall(request).execute().use { resp ->
+                    resp.code to (resp.body?.bytes() ?: ByteArray(0))
+                }
+            }
+        } catch (e: IOException) {
+            AppLog.network.error("POST $url (external) -> 网络错误: ${e.message}")
+            throw ApiError.Network(e)
+        }
+        AppLog.network.info("POST ${url.toHttpUrl().host} (external) -> $code${if (isRetry) " [retry]" else ""}")
+        if (code == 401 && !isRetry) {
+            tokenProvider.refreshAccessToken()
+            return postExternalJson(url, body, isRetry = true)
+        }
+        if (code !in 200..299) {
+            val cfErrors = runCatching {
+                json.decodeFromString(CfEnvelope.serializer(JsonElement.serializer()), bytes.decodeToString()).errors
+            }.getOrNull().orEmpty()
+            if (cfErrors.isNotEmpty()) throw ApiError.Cloudflare(cfErrors.map { ApiError.CfError(it.code, it.message) })
+            if (code == 401) throw ApiError.Unauthorized
+            throw ApiError.Http(code)
+        }
+        return bytes
     }
 
     @PublishedApi

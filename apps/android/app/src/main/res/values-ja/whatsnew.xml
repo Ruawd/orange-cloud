@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Turnstile をポケットから管理</string>
+    <string name="whatsnew_2_1_0_0_detail">概要画面に Turnstile の入口を追加。全ウィジェットの一覧、作成やドメイン・モードの変更、シークレットのローテーション（2 時間の猶予つきでスムーズに移行）、sitekey と secret のタップコピーに対応しました。</string>
+    <string name="whatsnew_2_1_0_1_title">R2 データカタログを SQL で直接クエリ</string>
+    <string name="whatsnew_2_1_0_1_detail">バケット設定のデータカタログに R2 SQL コンソールを追加。テーブル名をタップしてクエリを作り、結果をグリッドで確認できます。スキャン量課金（毎月 10 GB まで無料）で、コンソール内に注意書きがあります。</string>
+    <string name="whatsnew_2_1_0_2_title">Workers のシークレットを一括インポート</string>
+    <string name="whatsnew_2_1_0_2_detail">JSON を貼り付けるだけで変数やシークレットを一括登録。Cloudflare の新しいバルク API を使い、1 回の呼び出しでアトミックに反映されます。</string>
+    <string name="whatsnew_2_1_0_3_title">キャッシュルールが JA3/JA4 に対応</string>
+    <string name="whatsnew_2_1_0_3_detail">式のクイック挿入チップに JA3/JA4 フィンガープリントを追加（Bot Management サブスクリプションが必要）。Vary による複数バージョンキャッシュを使うルールはアプリ内で読み取り専用になり、誤編集で設定が消えるのを防ぎます。</string>
     <string name="whatsnew_2_0_0_0_title">AI クローラーをスイッチひとつでブロック</string>
     <string name="whatsnew_2_0_0_0_detail">ドメイン詳細に「AI クローラー」の項目が加わりました。ブロックしない／広告ページのみ／サイト全体の 3 段階から選べます。AI コンテンツ関連の 2 つの設定も同じ画面に移り、ダッシュボードを開く必要はありません。</string>
     <string name="whatsnew_2_0_0_1_title">オリジンが落ちたら Cloudflare が直接通知</string>

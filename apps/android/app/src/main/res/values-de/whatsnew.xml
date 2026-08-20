@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Turnstile aus der Hosentasche verwalten</string>
+    <string name="whatsnew_2_1_0_0_detail">Neuer Turnstile-Einstieg in der Übersicht: alle Widgets durchsehen, Domains und Modi anlegen und ändern, Secrets mit optionaler 2-Stunden-Karenz rotieren, Sitekey und Secret per Tipp kopieren.</string>
+    <string name="whatsnew_2_1_0_1_title">R2 Data Catalog direkt per SQL abfragen</string>
+    <string name="whatsnew_2_1_0_1_detail">Die Bucket-Einstellungen erhalten unter Data Catalog eine R2-SQL-Konsole: Tabelle antippen, Abfrage starten, Ergebnisse im Raster ansehen. Abgerechnet nach gescannter Datenmenge (10 GB pro Monat frei) – die Konsole erinnert daran.</string>
+    <string name="whatsnew_2_1_0_2_title">Worker-Secrets im Stapel importieren</string>
+    <string name="whatsnew_2_1_0_2_detail">JSON einfügen und Variablen oder Secrets im Stapel schreiben – über Cloudflares neuen Bulk-Endpunkt, ein atomarer Aufruf statt Einzelspeichern.</string>
+    <string name="whatsnew_2_1_0_3_title">Cache-Regeln lernen JA3/JA4</string>
+    <string name="whatsnew_2_1_0_3_detail">Die Schnelleinfüge-Chips für Ausdrücke enthalten jetzt JA3/JA4-Fingerprint-Felder (Bot-Management-Abo erforderlich). Regeln mit Vary-Caching werden in der App schreibgeschützt, damit Bearbeitungen diese Konfiguration nicht verwerfen.</string>
     <string name="whatsnew_2_0_0_0_title">KI-Crawler mit einem Schalter blocken</string>
     <string name="whatsnew_2_0_0_0_detail">In den Domain-Details gibt es jetzt eine Zeile für KI-Crawler mit drei Stufen: nicht blocken, nur Anzeigenseiten oder die ganze Website. Die beiden KI-Inhaltseinstellungen sind auf denselben Bildschirm gewandert – das Dashboard brauchst du dafür nicht mehr.</string>
     <string name="whatsnew_2_0_0_1_title">Cloudflare meldet sich, wenn dein Origin ausfällt</string>

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Manage Turnstile from your pocket</string>
+    <string name="whatsnew_2_1_0_0_detail">A new Turnstile entry on the overview: browse all widgets, create and edit domains and modes, rotate secrets with an optional 2-hour grace period, and tap to copy the sitekey or secret.</string>
+    <string name="whatsnew_2_1_0_1_title">Query R2 Data Catalog with SQL</string>
+    <string name="whatsnew_2_1_0_1_detail">Bucket settings gain an R2 SQL console under Data Catalog: tap a table to start a query and view results in a grid. Billed by data scanned (first 10 GB per month free) — the console reminds you.</string>
+    <string name="whatsnew_2_1_0_2_title">Bulk-import Worker secrets</string>
+    <string name="whatsnew_2_1_0_2_detail">Paste a JSON object to write variables or secrets in bulk — powered by Cloudflare\'s new bulk endpoint, one atomic call instead of saving one by one.</string>
+    <string name="whatsnew_2_1_0_3_title">Cache Rules learn JA3/JA4</string>
+    <string name="whatsnew_2_1_0_3_detail">Expression quick-insert chips now include JA3/JA4 fingerprint fields (Bot Management subscription required). Rules using Vary-based caching turn read-only in the app so edits can\'t drop that config.</string>
     <string name="whatsnew_2_0_0_0_title">Block AI crawlers with one switch</string>
     <string name="whatsnew_2_0_0_0_detail">Zone details now has an AI crawlers row with three modes: off, ad pages only, or block everywhere. The two AI content settings moved to the same screen, so you no longer need the dashboard.</string>
     <string name="whatsnew_2_0_0_1_title">Cloudflare pings you when your origin goes down</string>

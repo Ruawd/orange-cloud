@@ -55,4 +55,21 @@ data class R2CatalogNamespace(
 ) {
     /** 嵌套命名空间用 · 连接展示 */
     val displayName: String get() = name.orEmpty().joinToString(" · ")
+
+    /** SQL 里引用表用的前缀（嵌套命名空间以 . 连接） */
+    val sqlName: String get() = name.orEmpty().joinToString(".")
+}
+
+/** 表清单的 result 外壳（GET .../namespaces/{ns}/tables） */
+@Serializable
+data class R2CatalogTableList(val identifiers: List<R2CatalogTableIdentifier>? = null)
+
+@Serializable
+data class R2CatalogTableIdentifier(
+    val name: String? = null,
+    val namespace: List<String>? = null,
+) {
+    /** SQL 里的完整引用：namespace.table */
+    val sqlName: String
+        get() = (namespace.orEmpty() + listOfNotNull(name)).filter { it.isNotEmpty() }.joinToString(".")
 }

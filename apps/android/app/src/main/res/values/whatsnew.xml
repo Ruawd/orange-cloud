@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">随手管理 Turnstile 人机验证</string>
+    <string name="whatsnew_2_1_0_0_detail">概览页新增 Turnstile 入口：查看全部组件，新建、改域名与模式，密钥一键轮换（可留 2 小时宽限平滑过渡），sitekey 和 secret 点按即复制。</string>
+    <string name="whatsnew_2_1_0_1_title">R2 数据目录，直接用 SQL 查</string>
+    <string name="whatsnew_2_1_0_1_detail">桶设置的数据目录里新增 R2 SQL 查询控制台：点选表名生成查询，结果表格展示。按扫描量计费（每月 10 GB 免费），控制台内有提示。</string>
+    <string name="whatsnew_2_1_0_2_title">Workers 密钥，一次批量导入</string>
+    <string name="whatsnew_2_1_0_2_detail">粘贴一段 JSON 就能批量写入变量或密钥：走 Cloudflare 新的批量接口，单次调用原子生效，不再逐条保存。</string>
+    <string name="whatsnew_2_1_0_3_title">缓存规则认识 JA3/JA4 了</string>
+    <string name="whatsnew_2_1_0_3_detail">表达式速插芯片补上 JA3/JA4 指纹字段（需 Bot Management 订阅）；带 Vary 多版本缓存的规则自动只读，避免在 App 里误改丢掉配置。</string>
     <string name="whatsnew_2_0_0_0_title">一个开关拦住 AI 爬虫</string>
     <string name="whatsnew_2_0_0_0_detail">域名详情页新增「AI 爬虫」一栏，三档任选：不拦截、只拦广告页、全站拦截。AI 内容相关的两个设置也挪到了同一页，不必再开控制台。</string>
     <string name="whatsnew_2_0_0_1_title">源站掉线，Cloudflare 直接推给你</string>

@@ -65,6 +65,8 @@ struct DashboardView: View {
                         TunnelListView(session: session)
                     case .tunnelConnect(let tunnel):
                         TunnelConnectView(tunnel: tunnel, accountId: currentAccountId, session: session)
+                    case .turnstile:
+                        TurnstileListView(session: session)
                     case .accessApps:
                         AccessAppsView(session: session)
                     case .gatewayRules:
@@ -81,6 +83,10 @@ struct DashboardView: View {
                         canWrite: auth.hasScope("argotunnel.write"),
                         canWriteDNS: auth.hasScope("dns.write")
                     )
+                }
+                // Turnstile 详情同 Tunnel：列表行值式 push，目的页挂栈根
+                .navigationDestination(for: TurnstileWidget.self) { widget in
+                    TurnstileDetailView(widget: widget, session: session)
                 }
                 // 命令搜索 / 告警中心 / 跨类型置顶的跳转（Worker 详情、R2 对象、D1 控制台、
                 // KV 键列表内部都还要继续 push）同样只挂栈根，值式
@@ -1403,6 +1409,16 @@ private struct DashboardHomeView: View {
                 value: DashboardRoute.tunnels
             )
             Divider().padding(.leading, 44)
+            // Turnstile 列表点行还要 push 详情：同 Tunnel，必须值式 + 栈根 navdest
+            ProGatedValueLink(
+                label: "Turnstile",
+                systemImage: "checkmark.shield",
+                requiredScope: "challenge-widgets.read",
+                feature: .turnstile,
+                showsChevron: true,
+                value: DashboardRoute.turnstile
+            )
+            Divider().padding(.leading, 44)
             // Access / Gateway 同样必须值式：本岛（非 List 容器）里 eager 构造的目的页
             // 在 iOS 17.0 点击即整 App 冻结/看门狗杀（TF 用户实测，与 Tunnel 当年同症）。
             ProGatedValueLink(
@@ -1455,6 +1471,7 @@ enum DashboardRoute: Hashable {
     case requestTracer
     case tunnels
     case tunnelConnect(Tunnel)
+    case turnstile
     case accessApps
     case gatewayRules
     case bulkRedirects

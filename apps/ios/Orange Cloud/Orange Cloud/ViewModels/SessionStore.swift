@@ -53,6 +53,8 @@ final class SessionStore {
     let workersAIService:          WorkersAIService
     let hyperdriveService:         HyperdriveService
     let zoneRulesetService:        ZoneRulesetService
+    let turnstileService:          TurnstileService
+    let r2SQLService:              R2SQLService
 
     var accounts: [Account] = []
     var selectedAccount: Account? {
@@ -118,6 +120,8 @@ final class SessionStore {
         self.workersAIService          = WorkersAIService(client: client)
         self.hyperdriveService         = HyperdriveService(client: client)
         self.zoneRulesetService        = ZoneRulesetService(client: client)
+        self.turnstileService          = TurnstileService(client: client)
+        self.r2SQLService              = R2SQLService(client: client)
     }
 
     /// 幂等加载账号列表，选中上次选定的账号（没有则首个）

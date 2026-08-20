@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,6 +54,7 @@ import jiamin.chen.orangecloud.core.design.rememberSkyPhase
 @Composable
 fun R2BucketSettingsScreen(
     onBack: () -> Unit,
+    onOpenSql: (bucket: String) -> Unit = {},
     viewModel: R2BucketSettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -174,6 +176,18 @@ fun R2BucketSettingsScreen(
                                     HintText(stringResource(R.string.r2_catalog_no_namespaces))
                                 } else {
                                     state.catalogNamespaces.forEach { HintText(it.displayName) }
+                                }
+                                // R2 SQL 控制台（2026-08 起按扫描量计费，入口文案见控制台内提示）
+                                if (state.canQuerySql) {
+                                    Text(
+                                        stringResource(R.string.r2sql_entry),
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = jiamin.chen.orangecloud.core.design.theme.OcOrange,
+                                        modifier = Modifier
+                                            .clickable { onOpenSql(state.bucket) }
+                                            .padding(vertical = 6.dp),
+                                    )
                                 }
                             }
                         }

@@ -4,6 +4,8 @@ import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.R2Catalog
 import jiamin.chen.orangecloud.data.model.R2CatalogNamespace
 import jiamin.chen.orangecloud.data.model.R2CatalogNamespaceList
+import jiamin.chen.orangecloud.data.model.R2CatalogTableIdentifier
+import jiamin.chen.orangecloud.data.model.R2CatalogTableList
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,4 +34,10 @@ class R2CatalogRepository @Inject constructor(
         api.get<R2CatalogNamespaceList>(
             "accounts/$accountId/r2-catalog/$bucket/namespaces",
         ).namespaces.orEmpty()
+
+    /** 某命名空间下的表清单（嵌套命名空间按 Iceberg 惯例以 . 连接进路径）。 */
+    suspend fun tables(accountId: String, bucket: String, namespace: String): List<R2CatalogTableIdentifier> =
+        api.get<R2CatalogTableList>(
+            "accounts/$accountId/r2-catalog/$bucket/namespaces/$namespace/tables",
+        ).identifiers.orEmpty()
 }

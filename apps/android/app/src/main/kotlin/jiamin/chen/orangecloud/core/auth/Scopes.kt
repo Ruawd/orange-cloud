@@ -52,6 +52,13 @@ object Scopes {
     const val R2_CATALOG_READ = "r2-catalog.read"
     const val R2_CATALOG_WRITE = "r2-catalog.write"
 
+    /** R2 SQL（api.sql.cloudflarestorage.com 独立主机；OAuth 接受度未实测）。2026-08-03 起按扫描量计费。 */
+    const val R2_CATALOG_SQL_READ = "r2-catalog-sql.read"
+
+    /** Turnstile 人机验证组件（/accounts/{id}/challenges/widgets）。 */
+    const val CHALLENGE_WIDGETS_READ = "challenge-widgets.read"
+    const val CHALLENGE_WIDGETS_WRITE = "challenge-widgets.write"
+
     /** Workers Builds（CI 构建记录与日志）。 */
     const val WORKERS_CI_READ = "workers-ci.read"
     const val WORKERS_CI_WRITE = "workers-ci.write"

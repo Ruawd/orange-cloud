@@ -20,10 +20,12 @@ struct R2BucketSettingsView: View {
     @State private var showCatalogEnableConfirm = false
     @State private var showAddCors = false
     @State private var showDenied = false
+    @State private var showSQLConsole = false
 
     // 文件 App 挂载（Pro）
     private let bucketName: String
     private let accountId: String
+    private let session: SessionStore
     @State private var isMounted = false
     @State private var isMountBusy = false
     @State private var mountPaywall = false
@@ -32,6 +34,7 @@ struct R2BucketSettingsView: View {
         self.canWrite = canWrite
         self.bucketName = bucket.name
         self.accountId = session.selectedAccount?.id ?? ""
+        self.session = session
         _viewModel = State(initialValue: R2BucketSettingsViewModel(
             service: session.r2Service,
             accountId: session.selectedAccount?.id ?? "",
@@ -85,6 +88,9 @@ struct R2BucketSettingsView: View {
                 R2CorsRuleEditor { origins, methods, maxAge in
                     Task { await viewModel.addCorsRule(origins: origins, methods: methods, maxAgeSeconds: maxAge) }
                 }
+            }
+            .sheet(isPresented: $showSQLConsole) {
+                R2SQLQueryView(session: session, accountId: accountId, bucketName: bucketName)
             }
             .alert("权限不足", isPresented: $showDenied) {
                 Button("好", role: .cancel) {}
@@ -267,6 +273,14 @@ struct R2BucketSettingsView: View {
                             ForEach(catalogViewModel.namespaces) { namespace in
                                 Text(namespace.displayName)
                                     .font(.caption.monospaced())
+                            }
+                        }
+                        // R2 SQL 控制台（2026-08 起计费：$0.0025/GB 扫描、10GB/月免费）
+                        if auth.hasScope("r2-catalog-sql.read") {
+                            Button {
+                                showSQLConsole = true
+                            } label: {
+                                Label("R2 SQL 查询", systemImage: "terminal")
                             }
                         }
                     }

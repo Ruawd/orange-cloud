@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_0_0_title">Gérez Turnstile depuis votre poche</string>
+    <string name="whatsnew_2_1_0_0_detail">Nouvelle entrée Turnstile sur l\'aperçu : parcourez tous les widgets, créez et modifiez domaines et modes, renouvelez les secrets avec un délai de grâce optionnel de 2 h, et copiez la sitekey ou le secret d\'un geste.</string>
+    <string name="whatsnew_2_1_0_1_title">Interrogez R2 Data Catalog en SQL</string>
+    <string name="whatsnew_2_1_0_1_detail">Les réglages du bucket gagnent une console R2 SQL sous Data Catalog : touchez une table pour lancer la requête et voir les résultats en grille. Facturation au volume scanné (10 GB gratuits par mois) — la console vous le rappelle.</string>
+    <string name="whatsnew_2_1_0_2_title">Importez les secrets Workers en masse</string>
+    <string name="whatsnew_2_1_0_2_detail">Collez un objet JSON pour écrire variables ou secrets en masse — via le nouvel endpoint bulk de Cloudflare, un seul appel atomique au lieu d\'enregistrer un par un.</string>
+    <string name="whatsnew_2_1_0_3_title">Les règles de cache apprennent JA3/JA4</string>
+    <string name="whatsnew_2_1_0_3_detail">Les puces d\'insertion rapide gagnent les champs d\'empreinte JA3/JA4 (abonnement Bot Management requis). Les règles utilisant le cache par Vary passent en lecture seule dans l\'app pour qu\'une modification ne supprime pas cette configuration.</string>
     <string name="whatsnew_2_0_0_0_title">Bloquez les robots d’IA en un geste</string>
     <string name="whatsnew_2_0_0_0_detail">Les détails du domaine comportent désormais une ligne « robots d’IA » avec trois niveaux : aucun blocage, pages publicitaires uniquement, ou tout le site. Les deux réglages de contenu IA ont rejoint le même écran : plus besoin du tableau de bord.</string>
     <string name="whatsnew_2_0_0_1_title">Cloudflare vous prévient quand votre origine tombe</string>

@@ -7,8 +7,13 @@ import { APP_STORE_URL, APP_STORE_COMING } from "./AppStoreBadge";
 export const GITHUB_URL = "https://github.com/chen2he/orange-cloud";
 export const KOFI_URL = "https://ko-fi.com/chen2he";
 
-/** 顶部导航：绝对定位浮在天色上，不做 sticky */
-export default async function SiteHeader() {
+/** 顶部导航：绝对定位浮在天色上，不做 sticky。
+ *  hideLocaleSwitcher：指南文章只有英文版，切语言会落到 404，故在这些页面隐藏切换器。 */
+export default async function SiteHeader({
+	hideLocaleSwitcher = false,
+}: {
+	hideLocaleSwitcher?: boolean;
+} = {}) {
 	const t = await getTranslations("header");
 
 	return (
@@ -26,7 +31,7 @@ export default async function SiteHeader() {
 					<span className="f-display text-[17px] font-bold t-primary">Orange Cloud</span>
 				</Link>
 				<div className="flex items-center gap-3">
-					<LocaleSwitcher label={t("language")} />
+					{!hideLocaleSwitcher && <LocaleSwitcher label={t("language")} />}
 					<a
 						href={GITHUB_URL}
 						aria-label="GitHub"

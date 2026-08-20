@@ -306,6 +306,34 @@ actor CFAPIClient {
         return data
     }
 
+    /// 对 Cloudflare 系外部主机（如 R2 SQL 的 api.sql.cloudflarestorage.com）发 JSON POST，
+    /// 复用 OAuth Bearer 与临期刷新，返回 2xx 原始响应体。
+    /// 注意：这些主机不一定走 client/v4 信封，错误体也交给 mapHTTPError 尽力解析。
+    func postExternalJSON<B: Codable & Sendable>(url: URL, body: B) async throws -> Data {
+        let token = try await validAccessToken()
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(body)
+
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            Self.logTransportError("POST", url.absoluteString, "(external) network error", error)
+            throw APIError.networkError(error)
+        }
+        guard let http = response as? HTTPURLResponse else {
+            throw APIError.networkError(URLError(.badServerResponse))
+        }
+        guard (200...299).contains(http.statusCode) else {
+            AppLog.network.error("POST \(url.host ?? "")\(url.path) (external) -> \(http.statusCode)\(Self.cfErrorSummary(data))")
+            throw Self.mapHTTPError(status: http.statusCode, data: data)
+        }
+        return data
+    }
+
     /// multipart/form-data 表单字段写入，指定 method（Pages 创建部署：POST 一个 manifest 字段）
     func multipartFields<T: Codable & Sendable>(method: String, _ path: String, fields: [String: String]) async throws -> T {
         let boundary = "OrangeCloud-\(UUID().uuidString)"

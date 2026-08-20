@@ -29260,82 +29260,6 @@
         }
       }
     },
-    "作为密钥写入，逐个保存；同名将被覆盖，保存后不可读取。": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تُكتب كأسرار وتُحفظ واحدًا تلو الآخر؛ تُستبدل الأسماء المتطابقة ولا يمكن قراءتها بعد الحفظ."
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Werden als Secrets einzeln gespeichert; gleiche Namen werden überschrieben und sind nach dem Speichern nicht lesbar."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Written as secrets, saved one by one; same names are overwritten and can’t be read after saving."
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Se guardan como secretos, uno por uno; los nombres iguales se sobrescriben y no se pueden leer después."
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enregistrés comme secrets, un par un ; les mêmes noms sont écrasés et illisibles après enregistrement."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "シークレットとして1つずつ保存します。同名は上書きされ、保存後は読み取れません。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "비밀로 하나씩 저장됩니다. 동일한 이름은 덮어쓰며 저장 후에는 읽을 수 없습니다."
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gravados como segredos, um a um; nomes iguais são sobrescritos e não podem ser lidos após salvar."
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gravados como segredos, um a um; nomes iguais são substituídos e não podem ser lidos após guardar."
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sırlar olarak tek tek kaydedilir; aynı adlar üzerine yazılır ve kaydettikten sonra okunamaz."
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "以密鑰寫入，逐一儲存；同名會被覆寫，儲存後無法讀取。"
-          }
-        },
-        "zh-HK": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "以密鑰寫入，逐一儲存；同名會被覆寫，儲存後無法讀取。"
-          }
-        }
-      }
-    },
     "作为明文变量一次性写入；同名将被覆盖，不影响其它绑定。": {
       "localizations": {
         "ar": {
@@ -158941,82 +158865,6 @@
         }
       }
     },
-    "把 R2 桶启用为 Iceberg 数据仓库": {
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "تفعيل دلو R2 كمستودع Iceberg"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Einen R2-Bucket als Iceberg-Warehouse aktivieren"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enable an R2 bucket as an Iceberg warehouse"
-          }
-        },
-        "es-MX": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activa un bucket de R2 como almacén Iceberg"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activer un bucket R2 comme entrepôt Iceberg"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "R2 バケットを Iceberg データウェアハウスとして有効にします"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "R2 버킷을 Iceberg 웨어하우스로 사용합니다"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ative um bucket do R2 como data warehouse Iceberg"
-          }
-        },
-        "pt-PT": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ative um bucket do R2 como data warehouse Iceberg"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bir R2 kovasını Iceberg ambarı olarak etkinleştirin"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "把 R2 儲存桶啟用為 Iceberg 資料倉儲"
-          }
-        },
-        "zh-HK": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "把 R2 存儲桶啟用為 Iceberg 數據倉庫"
-          }
-        }
-      }
-    },
     "构建记录（%@）": {
       "localizations": {
         "ar": {
@@ -163193,6 +163041,3426 @@
           "stringUnit": {
             "state": "translated",
             "value": "已驗證機械人"
+          }
+        }
+      }
+    },
+    "JA3 指纹": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 fingerprint"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 指紋"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 指紋"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 フィンガープリント"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huella JA3"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 지문"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impressão digital JA3"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impressão digital JA3"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3-Fingerprint"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empreinte JA3"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بصمة JA3"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA3 parmak izi"
+          }
+        }
+      }
+    },
+    "JA4 指纹": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 fingerprint"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 指紋"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 指紋"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 フィンガープリント"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huella JA4"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 지문"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impressão digital JA4"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impressão digital JA4"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4-Fingerprint"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empreinte JA4"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بصمة JA4"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JA4 parmak izi"
+          }
+        }
+      }
+    },
+    "模式": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "模式"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "模式"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "モード"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوضع"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mod"
+          }
+        }
+      }
+    },
+    "区域": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Region"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "區域"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "區域"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リージョン"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Región"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지역"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Região"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Região"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Region"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Région"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المنطقة"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bölge"
+          }
+        }
+      }
+    },
+    "中国": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "China"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中國"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中國"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "中国"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "China"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중국"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "China"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "China"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "China"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chine"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصين"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çin"
+          }
+        }
+      }
+    },
+    "全球": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全球"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全球"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グローバル"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "글로벌"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mondial"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عالمي"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Küresel"
+          }
+        }
+      }
+    },
+    "任意主机名": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any hostname"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "任意主機名稱"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "任意主機名"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "任意のホスト名"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cualquier nombre de host"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 호스트 이름"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualquer nome de host"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qualquer nome de anfitrião"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beliebiger Hostname"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout nom d'hôte"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أي اسم مضيف"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herhangi bir ana bilgisayar adı"
+          }
+        }
+      }
+    },
+    "作为密钥一次性写入；同名将被覆盖，保存后不可读取。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Written as secrets in a single request; matching names are overwritten and values can't be read back."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以密鑰形式一次寫入；同名將被覆蓋，儲存後無法讀取。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以密鑰形式一次寫入；同名將被覆蓋，儲存後無法讀取。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シークレットとして一括で書き込みます。同名は上書きされ、保存後は読み取れません。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se escriben como secretos en una sola solicitud; los nombres duplicados se sobrescriben y no se pueden leer después."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시크릿으로 한 번에 기록됩니다. 같은 이름은 덮어쓰이며 저장 후에는 읽을 수 없습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravados como segredos em uma única solicitação; nomes iguais são sobrescritos e não podem ser lidos depois."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravados como segredos num único pedido; nomes iguais são substituídos e não podem ser lidos depois."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Werden in einer einzigen Anfrage als Secrets geschrieben; gleiche Namen werden überschrieben und sind danach nicht mehr lesbar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrits comme secrets en une seule requête ; les noms identiques sont écrasés et illisibles ensuite."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُكتب كأسرار في طلب واحد؛ يتم استبدال الأسماء المكررة ولا يمكن قراءتها بعد الحفظ."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tek istekte gizli bilgi olarak yazılır; aynı adlar üzerine yazılır ve kaydedildikten sonra okunamaz."
+          }
+        }
+      }
+    },
+    "托管（推荐）": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Managed (recommended)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "託管（建議）"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "託管（推薦）"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マネージド（推奨）"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Administrado (recomendado)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "관리형(권장)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerenciado (recomendado)"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerido (recomendado)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwaltet (empfohlen)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Géré (recommandé)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مُدار (موصى به)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yönetilen (önerilen)"
+          }
+        }
+      }
+    },
+    "非交互": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non-interactive"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "非互動"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "非互動"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "非対話型"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No interactivo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비대화형"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não interativo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não interativo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht interaktiv"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non interactif"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير تفاعلي"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Etkileşimsiz"
+          }
+        }
+      }
+    },
+    "隐形": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invisible"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隱形"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隱形"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "非表示"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invisible"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보이지 않음"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invisível"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invisível"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsichtbar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invisible"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير مرئي"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünmez"
+          }
+        }
+      }
+    },
+    "由 Cloudflare 判断是否要求访客勾选复选框": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare decides whether visitors must check a box"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "由 Cloudflare 判斷是否要求訪客勾選核取方塊"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "由 Cloudflare 判斷是否要求訪客勾選方格"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "チェックボックスの操作を求めるかどうかを Cloudflare が判断します"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare decide si los visitantes deben marcar una casilla"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방문자에게 체크박스를 요구할지 Cloudflare가 판단합니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Cloudflare decide se os visitantes precisam marcar uma caixa"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Cloudflare decide se os visitantes têm de marcar uma caixa"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare entscheidet, ob Besucher ein Kästchen anhaken müssen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloudflare décide si les visiteurs doivent cocher une case"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقرر Cloudflare ما إذا كان على الزوار تحديد مربع اختيار"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziyaretçilerin kutu işaretlemesi gerekip gerekmediğine Cloudflare karar verir"
+          }
+        }
+      }
+    },
+    "显示验证进度但不需要访客操作": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows verification progress without requiring any action"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示驗證進度但不需要訪客操作"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示驗證進度但不需要訪客操作"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "検証の進行状況を表示しますが、訪問者の操作は不要です"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra el progreso de la verificación sin requerir acción"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인 진행 상황을 표시하지만 방문자의 조작은 필요 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra o progresso da verificação sem exigir ação"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostra o progresso da verificação sem exigir ação"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeigt den Prüffortschritt an, ohne Aktionen zu verlangen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affiche la progression de la vérification sans action requise"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعرض تقدم التحقق دون الحاجة إلى أي إجراء"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doğrulama ilerlemesini gösterir, ziyaretçi işlemi gerekmez"
+          }
+        }
+      }
+    },
+    "完全不可见，静默完成验证": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completely invisible; verification happens silently"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完全不可見，靜默完成驗證"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完全不可見，靜默完成驗證"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完全に非表示で、検証はサイレントに行われます"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completamente invisible; la verificación ocurre en silencio"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완전히 보이지 않으며 확인이 조용히 진행됩니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completamente invisível; a verificação acontece em silêncio"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completamente invisível; a verificação decorre em silêncio"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Völlig unsichtbar; die Prüfung läuft im Hintergrund"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Totalement invisible ; la vérification se fait en silence"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير مرئي تمامًا؛ يتم التحقق بصمت"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamamen görünmez; doğrulama sessizce tamamlanır"
+          }
+        }
+      }
+    },
+    "没有 Turnstile 组件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Turnstile widgets"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有 Turnstile 元件"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有 Turnstile 組件"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile ウィジェットがありません"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay widgets de Turnstile"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 위젯이 없습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum widget do Turnstile"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum widget do Turnstile"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Turnstile-Widgets"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun widget Turnstile"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد عناصر Turnstile"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile öğesi yok"
+          }
+        }
+      }
+    },
+    "Turnstile 是 Cloudflare 的免费人机验证，替代传统验证码。新建组件后把 sitekey 嵌进你的网站即可。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile is Cloudflare's free CAPTCHA alternative. Create a widget, then embed its sitekey on your site."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 是 Cloudflare 的免費人機驗證，可取代傳統驗證碼。建立元件後把 sitekey 嵌入你的網站即可。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 是 Cloudflare 的免費人機驗證，可取代傳統驗證碼。新建組件後把 sitekey 嵌入你的網站即可。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile は Cloudflare の無料 CAPTCHA 代替です。ウィジェットを作成し、sitekey をサイトに埋め込むだけで使えます。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile es la alternativa gratuita de Cloudflare al CAPTCHA. Crea un widget e inserta su sitekey en tu sitio."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile은 기존 CAPTCHA를 대체하는 Cloudflare의 무료 사람 확인입니다. 위젯을 만든 뒤 sitekey를 사이트에 삽입하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Turnstile é a alternativa gratuita da Cloudflare ao CAPTCHA. Crie um widget e incorpore a sitekey no seu site."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Turnstile é a alternativa gratuita da Cloudflare ao CAPTCHA. Crie um widget e incorpore a sitekey no seu site."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile ist Cloudflares kostenlose CAPTCHA-Alternative. Widget erstellen und den Sitekey in die Website einbetten – fertig."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile est l'alternative CAPTCHA gratuite de Cloudflare. Créez un widget puis intégrez sa sitekey à votre site."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile هو بديل CAPTCHA المجاني من Cloudflare. أنشئ عنصرًا ثم ضمِّن sitekey في موقعك."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile, Cloudflare'ın ücretsiz CAPTCHA alternatifidir. Bir öğe oluşturup sitekey'i sitenize ekleyin."
+          }
+        }
+      }
+    },
+    "新建组件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Widget"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新增元件"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建組件"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェットを作成"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo widget"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 위젯"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo widget"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo widget"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neues Widget"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveau widget"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عنصر جديد"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni öğe"
+          }
+        }
+      }
+    },
+    "删除组件「%@」？": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete widget \"%@\"?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除元件「%@」？"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除組件「%@」？"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェット「%@」を削除しますか？"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Eliminar el widget \"%@\"?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위젯 '%@'을(를) 삭제하시겠습니까?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excluir o widget \"%@\"?"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar o widget \"%@\"?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget „%@“ löschen?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le widget « %@ » ?"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هل تريد حذف العنصر «%@»؟"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"%@\" öğesi silinsin mi?"
+          }
+        }
+      }
+    },
+    "嵌在网站上的该组件将立即失效，此操作不可撤销。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The widget embedded on your site will stop working immediately. This cannot be undone."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "嵌在網站上的該元件將立即失效，此操作無法復原。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "嵌在網站上的該組件將立即失效，此操作不可撤銷。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サイトに埋め込まれたウィジェットは直ちに無効になります。この操作は取り消せません。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El widget insertado en tu sitio dejará de funcionar de inmediato. Esta acción no se puede deshacer."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사이트에 삽입된 위젯이 즉시 작동을 멈춥니다. 이 작업은 취소할 수 없습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O widget incorporado no seu site deixará de funcionar imediatamente. Esta ação não pode ser desfeita."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O widget incorporado no seu site deixará de funcionar imediatamente. Esta ação não pode ser anulada."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das auf Ihrer Website eingebettete Widget funktioniert sofort nicht mehr. Dies kann nicht rückgängig gemacht werden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le widget intégré à votre site cessera immédiatement de fonctionner. Cette action est irréversible."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيتوقف العنصر المضمّن في موقعك عن العمل فورًا. لا يمكن التراجع عن هذا الإجراء."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitenize gömülü öğe hemen çalışmayı durdurur. Bu işlem geri alınamaz."
+          }
+        }
+      }
+    },
+    "当前授权未包含 Turnstile 编辑权限（challenge-widgets.write）。\n请在设置中重新授权以启用此功能。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your current authorization doesn't include Turnstile edit permission (challenge-widgets.write).\nPlease re-authorize in Settings to enable this feature."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前授權未包含 Turnstile 編輯權限（challenge-widgets.write）。\n請在設定中重新授權以啟用此功能。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前授權未包含 Turnstile 編輯權限（challenge-widgets.write）。\n請在設定中重新授權以啟用此功能。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在の認可には Turnstile の編集権限（challenge-widgets.write）が含まれていません。\n設定から再認可してこの機能を有効にしてください。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tu autorización actual no incluye el permiso de edición de Turnstile (challenge-widgets.write).\nVuelve a autorizar en Ajustes para habilitar esta función."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 인증에 Turnstile 편집 권한(challenge-widgets.write)이 포함되어 있지 않습니다.\n설정에서 다시 인증하여 이 기능을 활성화하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua autorização atual não inclui a permissão de edição do Turnstile (challenge-widgets.write).\nReautorize em Ajustes para ativar este recurso."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A sua autorização atual não inclui a permissão de edição do Turnstile (challenge-widgets.write).\nVolte a autorizar nas Definições para ativar esta funcionalidade."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ihre aktuelle Autorisierung enthält keine Turnstile-Bearbeitungsberechtigung (challenge-widgets.write).\nBitte autorisieren Sie in den Einstellungen erneut, um diese Funktion zu aktivieren."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre autorisation actuelle n'inclut pas la permission d'édition Turnstile (challenge-widgets.write).\nRéautorisez dans Réglages pour activer cette fonction."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يتضمن التفويض الحالي إذن تحرير Turnstile ‏(challenge-widgets.write).\nيرجى إعادة التفويض من الإعدادات لتفعيل هذه الميزة."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut yetkilendirme Turnstile düzenleme iznini (challenge-widgets.write) içermiyor.\nBu özelliği etkinleştirmek için Ayarlar'dan yeniden yetkilendirin."
+          }
+        }
+      }
+    },
+    "轮换密钥": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate Secret"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪替密鑰"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪換密鑰"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "シークレットをローテーション"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotar secreto"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시크릿 교체"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotacionar segredo"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rodar segredo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secret rotieren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renouveler le secret"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدوير السر"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gizli bilgiyi değiştir"
+          }
+        }
+      }
+    },
+    "轮换（旧密钥保留 2 小时）": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate (old secret valid 2 more hours)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪替（舊密鑰保留 2 小時）"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪換（舊密鑰保留 2 小時）"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローテーション（旧シークレットは 2 時間有効）"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotar (el secreto anterior sigue válido 2 horas)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "교체(이전 시크릿 2시간 유지)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotacionar (segredo antigo válido por 2 horas)"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rodar (segredo antigo válido por 2 horas)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotieren (altes Secret bleibt 2 Stunden gültig)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renouveler (ancien secret valable 2 h)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدوير (يبقى السر القديم صالحًا لساعتين)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değiştir (eski anahtar 2 saat geçerli)"
+          }
+        }
+      }
+    },
+    "立即作废旧密钥": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalidate Old Secret Now"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即作廢舊密鑰"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即作廢舊密鑰"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "旧シークレットを直ちに無効化"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalidar el secreto anterior ahora"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이전 시크릿 즉시 무효화"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalidar o segredo antigo agora"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalidar o segredo antigo agora"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altes Secret sofort ungültig machen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalider l'ancien secret maintenant"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إبطال السر القديم فورًا"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eski anahtarı hemen geçersiz kıl"
+          }
+        }
+      }
+    },
+    "轮换后服务端需改用新密钥调用 siteverify。选择宽限可让旧密钥再工作 2 小时，平滑过渡。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After rotating, your server must call siteverify with the new secret. The grace option keeps the old secret working for 2 more hours for a smooth transition."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪替後伺服器端需改用新密鑰呼叫 siteverify。選擇寬限可讓舊密鑰再運作 2 小時，平滑過渡。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輪換後伺服器端需改用新密鑰調用 siteverify。選擇寬限可讓舊密鑰再運作 2 小時，平滑過渡。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローテーション後、サーバー側は新しいシークレットで siteverify を呼び出す必要があります。猶予を選ぶと旧シークレットがさらに 2 時間有効になり、移行がスムーズです。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Después de rotar, tu servidor debe llamar a siteverify con el nuevo secreto. Con el periodo de gracia, el secreto anterior sigue funcionando 2 horas para una transición fluida."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "교체 후 서버는 새 시크릿으로 siteverify를 호출해야 합니다. 유예를 선택하면 이전 시크릿이 2시간 더 작동하여 부드럽게 전환할 수 있습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Após a rotação, seu servidor deve chamar o siteverify com o novo segredo. Com o período de carência, o segredo antigo continua funcionando por 2 horas para uma transição suave."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Após a rotação, o seu servidor deve chamar o siteverify com o novo segredo. Com o período de tolerância, o segredo antigo continua a funcionar por 2 horas para uma transição suave."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach der Rotation muss Ihr Server siteverify mit dem neuen Secret aufrufen. Mit Karenzzeit bleibt das alte Secret noch 2 Stunden gültig – für einen sanften Übergang."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après la rotation, votre serveur doit appeler siteverify avec le nouveau secret. Avec le délai de grâce, l'ancien secret reste valable 2 h pour une transition en douceur."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعد التدوير، يجب أن يستدعي خادمك siteverify بالسر الجديد. اختيار المهلة يُبقي السر القديم صالحًا لساعتين لضمان انتقال سلس."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değişimden sonra sunucunuz siteverify'ı yeni anahtarla çağırmalıdır. Geçiş süresi seçilirse eski anahtar 2 saat daha çalışır."
+          }
+        }
+      }
+    },
+    "集成密钥": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integration Keys"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整合金鑰"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "整合密鑰"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "統合キー"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claves de integración"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "통합 키"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaves de integração"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaves de integração"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Integrationsschlüssel"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clés d'intégration"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مفاتيح التكامل"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entegrasyon anahtarları"
+          }
+        }
+      }
+    },
+    "sitekey 嵌进网页组件，secret 用于服务端 siteverify 校验——secret 请勿泄露。点按可复制。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Embed the sitekey in the web widget; the secret is for server-side siteverify — never expose it. Tap to copy."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sitekey 嵌入網頁元件，secret 用於伺服器端 siteverify 驗證——切勿洩露 secret。點按即可複製。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sitekey 嵌入網頁組件，secret 用於伺服器端 siteverify 校驗——切勿洩露 secret。點按可複製。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sitekey はウェブウィジェットに埋め込み、secret はサーバー側の siteverify 検証に使います。secret は絶対に公開しないでください。タップでコピーできます。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inserta la sitekey en el widget web; el secreto es para la verificación siteverify del servidor — nunca lo expongas. Toca para copiar."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sitekey는 웹 위젯에 삽입하고 secret은 서버 측 siteverify 검증에 사용합니다. secret은 절대 노출하지 마세요. 탭하여 복사합니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incorpore a sitekey no widget web; o segredo é para a verificação siteverify no servidor — nunca o exponha. Toque para copiar."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incorpore a sitekey no widget web; o segredo destina-se à verificação siteverify no servidor — nunca o exponha. Toque para copiar."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Sitekey wird ins Web-Widget eingebettet, das Secret dient der serverseitigen siteverify-Prüfung – niemals offenlegen. Zum Kopieren tippen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intégrez la sitekey dans le widget web ; le secret sert à la vérification siteverify côté serveur — ne l'exposez jamais. Touchez pour copier."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ضمِّن sitekey في عنصر الويب؛ يُستخدم secret للتحقق عبر siteverify على الخادم — لا تكشفه أبدًا. انقر للنسخ."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sitekey web öğesine gömülür; secret sunucu tarafındaki siteverify doğrulaması içindir — asla paylaşmayın. Kopyalamak için dokunun."
+          }
+        }
+      }
+    },
+    "组件在所列域名及其子域生效；域名留空表示任意主机名均可使用。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The widget works on the listed domains and their subdomains; leave empty to allow any hostname."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元件在所列網域及其子網域生效；留空表示任何主機名稱皆可使用。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "組件在所列域名及其子域生效；留空表示任何主機名均可使用。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェットは記載したドメインとそのサブドメインで有効です。空欄の場合は任意のホスト名で使用できます。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El widget funciona en los dominios listados y sus subdominios; déjalo vacío para permitir cualquier nombre de host."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위젯은 나열된 도메인과 그 하위 도메인에서 작동합니다. 비워 두면 모든 호스트 이름이 허용됩니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O widget funciona nos domínios listados e em seus subdomínios; deixe vazio para permitir qualquer nome de host."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O widget funciona nos domínios listados e nos seus subdomínios; deixe vazio para permitir qualquer nome de anfitrião."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Widget funktioniert auf den gelisteten Domains und deren Subdomains; leer lassen, um jeden Hostnamen zu erlauben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le widget fonctionne sur les domaines listés et leurs sous-domaines ; laissez vide pour autoriser tout nom d'hôte."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعمل العنصر على النطاقات المدرجة ونطاقاتها الفرعية؛ اتركه فارغًا للسماح بأي اسم مضيف."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öğe, listelenen alan adlarında ve alt alan adlarında çalışır; boş bırakılırsa tüm ana bilgisayar adlarına izin verilir."
+          }
+        }
+      }
+    },
+    "删除组件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Widget"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除元件"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除組件"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェットを削除"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar widget"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위젯 삭제"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Excluir widget"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar widget"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget löschen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Supprimer le widget"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف العنصر"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öğeyi sil"
+          }
+        }
+      }
+    },
+    "如：官网登录页": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Login page"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如：官網登入頁"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如：官網登入頁"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例：ログインページ"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "p. ej., página de inicio de sesión"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예: 로그인 페이지"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex.: página de login"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex.: página de início de sessão"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. Login-Seite"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. : page de connexion"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مثال: صفحة تسجيل الدخول"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "örn. giriş sayfası"
+          }
+        }
+      }
+    },
+    "最多 10 个域名（当前 %lld 个）。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most 10 domains (currently %lld)."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最多 10 個網域（目前 %lld 個）。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最多 10 個域名（目前 %lld 個）。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドメインは最大 10 件です（現在 %lld 件）。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máximo 10 dominios (actualmente %lld)."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도메인은 최대 10개입니다(현재 %lld개)."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No máximo 10 domínios (atualmente %lld)."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No máximo 10 domínios (atualmente %lld)."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Höchstens 10 Domains (aktuell %lld)."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 domaines maximum (actuellement %lld)."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10 نطاقات كحد أقصى (حاليًا %lld)."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En fazla 10 alan adı (şu anda %lld)."
+          }
+        }
+      }
+    },
+    "每行一个主机名或 IP，子域自动生效；留空表示任意主机名均可使用。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One hostname or IP per line; subdomains are covered automatically. Leave empty to allow any hostname."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每行一個主機名稱或 IP，子網域自動生效；留空表示任何主機名稱皆可使用。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "每行一個主機名或 IP，子域自動生效；留空表示任何主機名均可使用。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 行に 1 つのホスト名または IP を入力します。サブドメインは自動的に対象になります。空欄の場合は任意のホスト名で使用できます。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un nombre de host o IP por línea; los subdominios se incluyen automáticamente. Déjalo vacío para permitir cualquier nombre de host."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "한 줄에 호스트 이름 또는 IP 하나씩 입력하세요. 하위 도메인은 자동으로 적용됩니다. 비워 두면 모든 호스트 이름이 허용됩니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um nome de host ou IP por linha; subdomínios são incluídos automaticamente. Deixe vazio para permitir qualquer nome de host."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um nome de anfitrião ou IP por linha; os subdomínios são incluídos automaticamente. Deixe vazio para permitir qualquer nome de anfitrião."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Hostname oder eine IP pro Zeile; Subdomains gelten automatisch. Leer lassen, um jeden Hostnamen zu erlauben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un nom d'hôte ou une IP par ligne ; les sous-domaines sont couverts automatiquement. Laissez vide pour autoriser tout nom d'hôte."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم مضيف أو عنوان IP واحد في كل سطر؛ تُشمل النطاقات الفرعية تلقائيًا. اتركه فارغًا للسماح بأي اسم مضيف."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Her satıra bir ana bilgisayar adı veya IP; alt alan adları otomatik geçerlidir. Boş bırakılırsa tüm ana bilgisayar adlarına izin verilir."
+          }
+        }
+      }
+    },
+    "对疑似机器人的请求发放高算力挑战，加大自动化攻击成本。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serves computationally expensive challenges to suspected bots, raising the cost of automated attacks."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "對疑似機器人的請求發出高算力挑戰，加大自動化攻擊成本。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "對疑似機械人的請求發出高算力挑戰，加大自動化攻擊成本。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボットと疑われるリクエストに高負荷のチャレンジを課し、自動化攻撃のコストを高めます。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envía desafíos de alto costo computacional a los bots sospechosos, encareciendo los ataques automatizados."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "봇으로 의심되는 요청에 고연산 챌린지를 부과하여 자동화 공격 비용을 높입니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplica desafios computacionalmente caros a bots suspeitos, aumentando o custo de ataques automatizados."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplica desafios computacionalmente dispendiosos a bots suspeitos, aumentando o custo de ataques automatizados."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stellt mutmaßlichen Bots rechenintensive Challenges, um automatisierte Angriffe zu verteuern."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impose des défis coûteux en calcul aux bots suspects, augmentant le coût des attaques automatisées."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفرض تحديات مكلفة حسابيًا على الطلبات المشتبه بأنها روبوتات، ما يرفع كلفة الهجمات الآلية."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şüpheli botlara yüksek işlem gücü gerektiren doğrulamalar uygulayarak otomatik saldırıların maliyetini artırır."
+          }
+        }
+      }
+    },
+    "创建后不可更改。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cannot be changed after creation."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "建立後無法更改。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "創建後不可更改。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作成後は変更できません。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede cambiar después de crearlo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "생성 후에는 변경할 수 없습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não pode ser alterado após a criação."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não pode ser alterado após a criação."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kann nach dem Erstellen nicht geändert werden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible à modifier après création."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن تغييره بعد الإنشاء."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oluşturulduktan sonra değiştirilemez."
+          }
+        }
+      }
+    },
+    "编辑组件": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Widget"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯元件"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯組件"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウィジェットを編集"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar widget"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위젯 편집"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar widget"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar widget"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget bearbeiten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier le widget"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحرير العنصر"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öğeyi düzenle"
+          }
+        }
+      }
+    },
+    "Turnstile 需要 Pro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile requires Pro"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 需要 Pro"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 需要 Pro"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile には Pro が必要です"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile requiere Pro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile은 Pro가 필요합니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Turnstile requer o Pro"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Turnstile requer o Pro"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile erfordert Pro"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile nécessite Pro"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتطلب Turnstile اشتراك Pro"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile için Pro gerekir"
+          }
+        }
+      }
+    },
+    "管理 Turnstile 人机验证组件（新建 / 编辑 / 密钥轮换）属于 Orange Cloud Pro。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Managing Turnstile widgets (create / edit / secret rotation) is part of Orange Cloud Pro."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "管理 Turnstile 人機驗證元件（新增 / 編輯 / 金鑰輪替）屬於 Orange Cloud Pro。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "管理 Turnstile 人機驗證組件（新建 / 編輯 / 密鑰輪換）屬於 Orange Cloud Pro。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile ウィジェットの管理（作成 / 編集 / シークレットのローテーション）は Orange Cloud Pro の機能です。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La gestión de widgets de Turnstile (crear / editar / rotar secretos) forma parte de Orange Cloud Pro."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile 위젯 관리(생성/편집/시크릿 교체)는 Orange Cloud Pro에 포함됩니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerenciar widgets do Turnstile (criar / editar / rotação de segredos) faz parte do Orange Cloud Pro."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerir widgets do Turnstile (criar / editar / rotação de segredos) faz parte do Orange Cloud Pro."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Verwaltung von Turnstile-Widgets (Erstellen / Bearbeiten / Secret-Rotation) ist Teil von Orange Cloud Pro."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La gestion des widgets Turnstile (création / édition / rotation du secret) fait partie d'Orange Cloud Pro."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إدارة عناصر Turnstile (إنشاء / تحرير / تدوير الأسرار) جزء من Orange Cloud Pro."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile öğelerini yönetme (oluşturma / düzenleme / anahtar değiştirme) Orange Cloud Pro kapsamındadır."
+          }
+        }
+      }
+    },
+    "管理人机验证组件与密钥轮换": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage human-verification widgets and rotate secrets"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "管理人機驗證元件與金鑰輪替"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "管理人機驗證組件與密鑰輪換"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人間確認ウィジェットの管理とシークレットのローテーション"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestiona widgets de verificación humana y rota secretos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사람 확인 위젯 관리 및 시크릿 교체"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerencie widgets de verificação humana e rotacione segredos"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gira widgets de verificação humana e rode segredos"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets zur Menschprüfung verwalten und Secrets rotieren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer les widgets de vérification humaine et la rotation des secrets"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إدارة عناصر التحقق البشري وتدوير الأسرار"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İnsan doğrulama öğelerini yönetin ve anahtarları değiştirin"
+          }
+        }
+      }
+    },
+    "把 R2 桶启用为 Iceberg 数据仓库，并用 R2 SQL 查询": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn R2 buckets into Iceberg data warehouses and query them with R2 SQL"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "把 R2 儲存桶啟用為 Iceberg 資料倉儲，並用 R2 SQL 查詢"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "把 R2 儲存桶啟用為 Iceberg 數據倉庫，並用 R2 SQL 查詢"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 バケットを Iceberg データウェアハウスとして有効化し、R2 SQL でクエリ"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convierte buckets R2 en almacenes de datos Iceberg y consúltalos con R2 SQL"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 버킷을 Iceberg 데이터 웨어하우스로 활성화하고 R2 SQL로 쿼리"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transforme buckets R2 em data warehouses Iceberg e consulte com R2 SQL"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transforme buckets R2 em armazéns de dados Iceberg e consulte com R2 SQL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2-Buckets als Iceberg-Data-Warehouse aktivieren und mit R2 SQL abfragen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez des buckets R2 comme entrepôts Iceberg et interrogez-les avec R2 SQL"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حوّل حاويات R2 إلى مستودعات بيانات Iceberg واستعلم عنها باستخدام R2 SQL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 kovalarını Iceberg veri ambarına dönüştürün ve R2 SQL ile sorgulayın"
+          }
+        }
+      }
+    },
+    "R2 SQL 查询被拒绝。请确认授权包含 R2 SQL / 数据目录 / R2 读权限；若仍失败，说明该接口暂不接受 App 的登录方式，请先用 Wrangler 查询。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL query was rejected. Make sure your authorization includes R2 SQL, Data Catalog, and R2 read permissions. If it still fails, this endpoint doesn't yet accept the app's sign-in method — use Wrangler for now."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 查詢被拒絕。請確認授權包含 R2 SQL / 資料目錄 / R2 讀取權限；若仍失敗，表示該介面暫不接受 App 的登入方式，請先用 Wrangler 查詢。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 查詢被拒絕。請確認授權包含 R2 SQL / 數據目錄 / R2 讀取權限；若仍失敗，表示該接口暫不接受 App 的登入方式，請先用 Wrangler 查詢。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL クエリが拒否されました。認可に R2 SQL / データカタログ / R2 の読み取り権限が含まれているか確認してください。それでも失敗する場合、このエンドポイントはまだアプリのサインイン方式に対応していません。当面は Wrangler をご利用ください。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta de R2 SQL fue rechazada. Asegúrate de que tu autorización incluya permisos de lectura de R2 SQL, Data Catalog y R2. Si sigue fallando, este endpoint aún no acepta el método de inicio de sesión de la app; usa Wrangler por ahora."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 쿼리가 거부되었습니다. 인증에 R2 SQL / 데이터 카탈로그 / R2 읽기 권한이 포함되어 있는지 확인하세요. 계속 실패하면 이 엔드포인트가 아직 앱의 로그인 방식을 지원하지 않는 것입니다. 당분간 Wrangler를 사용하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta R2 SQL foi rejeitada. Verifique se sua autorização inclui permissões de leitura de R2 SQL, Data Catalog e R2. Se ainda falhar, este endpoint ainda não aceita o método de login do app — use o Wrangler por enquanto."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta R2 SQL foi rejeitada. Verifique se a sua autorização inclui permissões de leitura de R2 SQL, Data Catalog e R2. Se continuar a falhar, este endpoint ainda não aceita o método de início de sessão da app — use o Wrangler por agora."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die R2-SQL-Abfrage wurde abgelehnt. Stellen Sie sicher, dass Ihre Autorisierung Leserechte für R2 SQL, Data Catalog und R2 enthält. Schlägt sie weiterhin fehl, akzeptiert dieser Endpunkt die Anmeldemethode der App noch nicht – nutzen Sie vorerst Wrangler."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La requête R2 SQL a été refusée. Vérifiez que votre autorisation inclut les permissions de lecture R2 SQL, Data Catalog et R2. Si l'échec persiste, ce point de terminaison n'accepte pas encore la méthode de connexion de l'app — utilisez Wrangler pour le moment."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رُفض استعلام R2 SQL. تأكد من أن التفويض يتضمن أذونات قراءة R2 SQL وData Catalog وR2. إذا استمر الفشل، فهذا يعني أن نقطة النهاية لا تقبل بعد طريقة تسجيل دخول التطبيق — استخدم Wrangler حاليًا."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL sorgusu reddedildi. Yetkilendirmenizin R2 SQL / Veri Kataloğu / R2 okuma izinlerini içerdiğinden emin olun. Yine de başarısız olursa bu uç nokta henüz uygulamanın oturum açma yöntemini kabul etmiyor demektir — şimdilik Wrangler kullanın."
+          }
+        }
+      }
+    },
+    "只读查询（SELECT / EXPLAIN）。按扫描数据量计费：每月前 10 GB 免费，超出 $0.0025/GB，单次查询至少计 10 MB——大表请先加 WHERE / LIMIT。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read-only queries (SELECT / EXPLAIN). Billed by data scanned: first 10 GB per month free, then $0.0025/GB, 10 MB minimum per query — add WHERE / LIMIT before querying large tables."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "唯讀查詢（SELECT / EXPLAIN）。按掃描資料量計費：每月前 10 GB 免費，超出 $0.0025/GB，單次查詢至少計 10 MB——大型資料表請先加 WHERE / LIMIT。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "只讀查詢（SELECT / EXPLAIN）。按掃描數據量計費：每月首 10 GB 免費，超出 $0.0025/GB，單次查詢至少計 10 MB——大表請先加 WHERE / LIMIT。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み取り専用クエリ（SELECT / EXPLAIN）。スキャンしたデータ量で課金：毎月 10 GB まで無料、以降 $0.0025/GB、1 クエリあたり最低 10 MB を計上——大きなテーブルには先に WHERE / LIMIT を付けてください。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas de solo lectura (SELECT / EXPLAIN). Se factura por datos escaneados: los primeros 10 GB al mes son gratis, luego $0.0025/GB, mínimo 10 MB por consulta — agrega WHERE / LIMIT antes de consultar tablas grandes."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽기 전용 쿼리(SELECT / EXPLAIN). 스캔한 데이터양으로 과금: 매월 처음 10 GB 무료, 이후 $0.0025/GB, 쿼리당 최소 10 MB — 큰 테이블은 먼저 WHERE / LIMIT을 추가하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas somente leitura (SELECT / EXPLAIN). Cobrança por dados verificados: os primeiros 10 GB por mês são gratuitos, depois $0.0025/GB, mínimo de 10 MB por consulta — adicione WHERE / LIMIT antes de consultar tabelas grandes."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas apenas de leitura (SELECT / EXPLAIN). Faturação por dados analisados: os primeiros 10 GB por mês são gratuitos, depois $0.0025/GB, mínimo de 10 MB por consulta — adicione WHERE / LIMIT antes de consultar tabelas grandes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur-Lese-Abfragen (SELECT / EXPLAIN). Abgerechnet nach gescannter Datenmenge: 10 GB pro Monat frei, danach $0,0025/GB, mindestens 10 MB pro Abfrage – bei großen Tabellen zuerst WHERE / LIMIT setzen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requêtes en lecture seule (SELECT / EXPLAIN). Facturation au volume scanné : 10 premiers GB par mois gratuits, puis 0,0025 $/GB, minimum 10 MB par requête — ajoutez WHERE / LIMIT avant d'interroger de grandes tables."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استعلامات للقراءة فقط (SELECT / EXPLAIN). تُحتسب التكلفة حسب حجم البيانات الممسوحة: أول 10 GB شهريًا مجانًا، ثم ‎$0.0025/GB، بحد أدنى 10 MB لكل استعلام — أضف WHERE / LIMIT قبل استعلام الجداول الكبيرة."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salt okunur sorgular (SELECT / EXPLAIN). Taranan veriye göre ücretlendirilir: ayda ilk 10 GB ücretsiz, sonrası $0,0025/GB, sorgu başına en az 10 MB — büyük tablolara önce WHERE / LIMIT ekleyin."
+          }
+        }
+      }
+    },
+    "%lld 行 · %lld 列": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld rows · %2$lld columns"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld 列 · %2$lld 欄"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld 行 · %2$lld 列"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld 行 · %2$lld 列"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld filas · %2$lld columnas"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld행 · %2$lld열"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld linhas · %2$lld colunas"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld linhas · %2$lld colunas"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld Zeilen · %2$lld Spalten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld lignes · %2$lld colonnes"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld صف · %2$lld عمود"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld satır · %2$lld sütun"
+          }
+        }
+      }
+    },
+    "R2 SQL 查询": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL Query"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 查詢"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 查詢"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL クエリ"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta R2 SQL"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL 쿼리"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta R2 SQL"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consulta R2 SQL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2-SQL-Abfrage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requête R2 SQL"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استعلام R2 SQL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL sorgusu"
+          }
+        }
+      }
+    },
+    "Turnstile": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turnstile"
+          }
+        }
+      }
+    },
+    "R2 SQL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "R2 SQL"
+          }
+        }
+      }
+    },
+    "Bot Fight Mode": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bot Fight Mode"
           }
         }
       }

@@ -393,6 +393,12 @@ nonisolated struct WorkerSecretInput: Codable, Sendable {
     }
 }
 
+/// 批量增删密钥（PATCH .../secrets-bulk，2026-06 新端点，单次 ≤100 项）。
+/// JSON Merge Patch 语义：值为密钥对象 → 新建/覆盖，值为 null → 删除，未提及 → 不动。
+nonisolated struct WorkerSecretsBulkPatch: Codable, Sendable {
+    let secrets: [String: WorkerSecretInput?]
+}
+
 // MARK: - Cron 触发器
 
 /// 单条 Cron 触发器（GET .../schedules）

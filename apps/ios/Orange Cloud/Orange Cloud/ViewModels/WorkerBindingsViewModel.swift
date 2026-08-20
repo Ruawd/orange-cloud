@@ -207,25 +207,38 @@ final class WorkerBindingsViewModel {
         }
     }
 
-    /// 批量导入密钥（secret_text）：逐个 PUT（端点不支持批量），同名覆盖。
-    /// 任一失败即停，报告已写入数量并刷新列表反映真实状态。
+    /// 批量导入密钥（secret_text）：走 secrets-bulk 端点单次 PATCH 原子生效，同名覆盖。
+    /// 超过 100 项自动分批（每批各自原子）。
     func bulkImportSecrets(_ pairs: [(name: String, value: String)]) async -> Bool {
         guard !isSaving, !pairs.isEmpty else { return false }
         isSaving = true
         error = nil
         defer { isSaving = false }
-        var done = 0
         do {
-            for pair in pairs {
-                try await service.putSecret(accountId: accountId, scriptName: scriptName, name: pair.name, text: pair.value)
-                done += 1
+            // secrets-bulk（2026-06 新端点）：单次 PATCH 原子生效，不再逐个 PUT（单次上限 100 项）
+            for chunk in pairs.chunked(into: 100) {
+                try await service.bulkPatchSecrets(
+                    accountId: accountId, scriptName: scriptName,
+                    upserts: chunk.map { (name: $0.name, text: $0.value) }
+                )
             }
             secrets = (try? await service.listSecrets(accountId: accountId, scriptName: scriptName)) ?? secrets
             return true
         } catch {
-            self.error = String(localized: "已导入 \(done)/\(pairs.count) 项后失败：\(error.localizedDescription)")
+            self.error = error.localizedDescription
             secrets = (try? await service.listSecrets(accountId: accountId, scriptName: scriptName)) ?? secrets
             return false
+        }
+    }
+}
+
+// MARK: - 分块工具（secrets-bulk 单次上限 100 项）
+
+private extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        guard size > 0 else { return [self] }
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0..<Swift.min($0 + size, count)])
         }
     }
 }

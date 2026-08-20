@@ -425,7 +425,7 @@ private struct WorkerBulkImportSheet: View {
                     .pickerStyle(.segmented)
                 } footer: {
                     Text(target == .secret
-                         ? String(localized: "作为密钥写入，逐个保存；同名将被覆盖，保存后不可读取。")
+                         ? String(localized: "作为密钥一次性写入；同名将被覆盖，保存后不可读取。")
                          : String(localized: "作为明文变量一次性写入；同名将被覆盖，不影响其它绑定。"))
                 }
 
