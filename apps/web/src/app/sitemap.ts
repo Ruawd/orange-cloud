@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { GUIDES, GUIDE_LOCALE } from "@/lib/guides/guides";
+import { GUIDE_LOCALES, guidePath, guidesFor } from "@/lib/guides/guides";
 
 const SITE_URL = "https://o-c.do";
 
@@ -20,14 +20,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
 		},
 	}));
 
-	// 指南板块只有英文版：不列 alternates，避免指向不存在的语言版本
-	const guides: MetadataRoute.Sitemap = [
-		{ url: urlFor(GUIDE_LOCALE, "/guides"), lastModified: new Date(GUIDES[0].updated) },
-		...GUIDES.map((guide) => ({
-			url: urlFor(GUIDE_LOCALE, `/guides/${guide.slug}`),
-			lastModified: new Date(guide.updated),
-		})),
-	];
+	// 指南板块只有英文与简体中文两套，且文章各写各的：
+	// 只有索引页互为 alternates，文章不列，避免指向不存在的语言版本
+	const guides: MetadataRoute.Sitemap = GUIDE_LOCALES.flatMap((locale) => {
+		const list = guidesFor(locale);
+		return [
+			{
+				url: `${SITE_URL}${guidePath(locale, "/guides")}`,
+				lastModified: new Date(list[0].updated),
+				alternates: {
+					languages: Object.fromEntries(
+						GUIDE_LOCALES.map((l) => [l, `${SITE_URL}${guidePath(l, "/guides")}`]),
+					),
+				},
+			},
+			...list.map((guide) => ({
+				url: `${SITE_URL}${guidePath(locale, `/guides/${guide.slug}`)}`,
+				lastModified: new Date(guide.updated),
+			})),
+		];
+	});
 
 	return [...localized, ...guides];
 }

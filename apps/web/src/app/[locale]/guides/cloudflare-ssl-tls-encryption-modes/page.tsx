@@ -50,6 +50,11 @@ const RELATED: RelatedLink[] = [
 		note: "When your proxied hostname routes into a SaaS provider’s Cloudflare zone, and which zone’s settings win.",
 	},
 	{
+		href: "/guides/why-is-cloudflare-not-caching-my-site",
+		label: "Why is Cloudflare not caching my site?",
+		note: "The origin scheme this setting picks is part of every cache key — what that means in practice.",
+	},
+	{
 		href: DOCS_MODES,
 		label: "Cloudflare docs: Encryption modes",
 		note: "The official reference for every mode, the Automatic SSL/TLS rollout, and the API values.",

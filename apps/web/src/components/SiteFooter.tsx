@@ -4,8 +4,9 @@ import { Link } from "@/i18n/navigation";
 /** 页脚：纯内容、不带天色——颜色全部取自所在 theme 上下文 */
 export default async function SiteFooter() {
 	const t = await getTranslations("footer");
-	// 指南板块目前只有英文版，只在英文页脚露出入口（也是 /guides 的抓取入口）
+	// 指南板块有英文与简体中文两套，只在这两种页脚露出入口（也是 /guides 的抓取入口）
 	const locale = await getLocale();
+	const guidesLabel = locale === "zh-Hans" ? "指南" : "Guides";
 
 	return (
 		<footer className="relative">
@@ -16,9 +17,9 @@ export default async function SiteFooter() {
 				<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 					<p className="text-[13px] t-secondary">{t("copyright")}</p>
 					<nav className="flex items-center gap-6 text-[13px]">
-						{locale === "en" && (
+						{(locale === "en" || locale === "zh-Hans") && (
 							<Link href="/guides" className="link-quiet">
-								Guides
+								{guidesLabel}
 							</Link>
 						)}
 						<Link href="/privacy" className="link-quiet">

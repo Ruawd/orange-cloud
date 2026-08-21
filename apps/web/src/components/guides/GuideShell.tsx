@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import HorizonArc from "@/components/HorizonArc";
 import Stars from "@/components/Stars";
 import { APP_STORE_URL } from "@/components/AppStoreBadge";
+import { GUIDE_LOCALE, type GuideLocale } from "@/lib/guides/guides";
 
 export type RelatedLink = {
 	href: string;
@@ -12,6 +13,30 @@ export type RelatedLink = {
 	note: string;
 	external?: boolean;
 };
+
+/** 外壳自身的固定文案：每个语言版本的指南各自独立成篇，不做逐句互译 */
+const SHELL_COPY = {
+	en: {
+		breadcrumb: "Guides",
+		updated: (date: string, readingTime: string) => `Updated ${date} · ${readingTime}`,
+		keepReading: "Keep reading",
+		appTitle: "Manage this from your phone",
+		appBody:
+			"Orange Cloud is a native iOS and Android client for Cloudflare. Sign in with Cloudflare OAuth and flip proxy status, edit DNS records, and read traffic analytics from anywhere.",
+		appCta: "Get Orange Cloud",
+		dateLocale: "en-US",
+	},
+	"zh-Hans": {
+		breadcrumb: "指南",
+		updated: (date: string, readingTime: string) => `更新于 ${date} · 阅读时间 ${readingTime}`,
+		keepReading: "延伸阅读",
+		appTitle: "在手机上管好 Cloudflare",
+		appBody:
+			"Orange Cloud 是 Cloudflare 的第三方 iOS / Android 客户端，用 Cloudflare 官方 OAuth 登录，随手切代理状态、改 DNS 记录、看隧道状态和流量分析。",
+		appCta: "下载 Orange Cloud",
+		dateLocale: "zh-CN",
+	},
+} as const;
 
 /**
  * 指南文章外壳：沿用首页「一天」的天色叙事——
@@ -24,6 +49,7 @@ export default function GuideShell({
 	updated,
 	readingTime,
 	related,
+	locale = GUIDE_LOCALE,
 	children,
 }: {
 	title: string;
@@ -31,9 +57,11 @@ export default function GuideShell({
 	updated: string;
 	readingTime: string;
 	related: RelatedLink[];
+	locale?: GuideLocale;
 	children: ReactNode;
 }) {
-	const updatedLabel = new Date(`${updated}T00:00:00Z`).toLocaleDateString("en-US", {
+	const copy = SHELL_COPY[locale];
+	const updatedLabel = new Date(`${updated}T00:00:00Z`).toLocaleDateString(copy.dateLocale, {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
@@ -51,7 +79,7 @@ export default function GuideShell({
 							<ol className="flex flex-wrap items-center gap-2 t-secondary">
 								<li>
 									<Link href="/guides" className="link-quiet underline underline-offset-2">
-										Guides
+										{copy.breadcrumb}
 									</Link>
 								</li>
 								<li aria-hidden="true">/</li>
@@ -62,9 +90,7 @@ export default function GuideShell({
 							{title}
 						</h1>
 						<p className="mt-4 text-[18px] leading-relaxed t-secondary">{lede}</p>
-						<p className="mt-5 text-[13px] t-tertiary">
-							Updated {updatedLabel} · {readingTime}
-						</p>
+						<p className="mt-5 text-[13px] t-tertiary">{copy.updated(updatedLabel, readingTime)}</p>
 						<HorizonArc className="mt-10" />
 					</div>
 				</section>
@@ -77,7 +103,7 @@ export default function GuideShell({
 				{/* —— 延伸阅读 · 黄昏 —— */}
 				<section className="sky-band band-dusk">
 					<div className="mx-auto w-full max-w-[760px] px-6 py-16">
-						<h2 className="f-display text-[24px] font-bold t-primary">Keep reading</h2>
+						<h2 className="f-display text-[24px] font-bold t-primary">{copy.keepReading}</h2>
 						<div className="mt-6 grid gap-3">
 							{related.map((item) =>
 								item.external ? (
@@ -124,13 +150,10 @@ export default function GuideShell({
 					<Stars />
 					<div className="relative mx-auto w-full max-w-[760px] px-6 pt-16">
 						<div className="glass r-island p-7 sm:p-8">
-							<h2 className="f-display text-[22px] font-bold t-primary">Manage this from your phone</h2>
-							<p className="mt-2.5 text-[15px] leading-relaxed t-secondary">
-								Orange Cloud is a native iOS and Android client for Cloudflare. Sign in with Cloudflare
-								OAuth and flip proxy status, edit DNS records, and read traffic analytics from anywhere.
-							</p>
+							<h2 className="f-display text-[22px] font-bold t-primary">{copy.appTitle}</h2>
+							<p className="mt-2.5 text-[15px] leading-relaxed t-secondary">{copy.appBody}</p>
 							<a href={APP_STORE_URL} className="cta-store mt-6 text-[15px]">
-								Get Orange Cloud
+								{copy.appCta}
 							</a>
 						</div>
 					</div>

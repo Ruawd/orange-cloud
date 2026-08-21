@@ -45,6 +45,16 @@ const RELATED: RelatedLink[] = [
 		note: "Once a record is proxied, this setting decides whether the Cloudflare-to-origin hop is encrypted at all.",
 	},
 	{
+		href: "/guides/why-is-cloudflare-not-caching-my-site",
+		label: "Why is Cloudflare not caching my site?",
+		note: "Proxying is what makes caching possible — here is why most pages still are not cached.",
+	},
+	{
+		href: "/guides/why-is-my-cloudflare-dns-change-not-working",
+		label: "Why isn\u2019t my Cloudflare DNS change working yet?",
+		note: "Flipping the cloud is a record change like any other \u2014 here is which cache decides how long it takes.",
+	},
+	{
 		href: "https://developers.cloudflare.com/dns/proxy-status/",
 		label: "Cloudflare docs: Proxy status",
 		note: "The official reference for proxied and DNS-only records, including limitations and use cases.",
