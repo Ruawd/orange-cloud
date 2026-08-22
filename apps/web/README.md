@@ -28,15 +28,19 @@ What's wired up:
 - **`public/llms.txt`** — Markdown overview of the product, key pages, pricing, and the GitHub repo for AI retrieval ([spec](https://llmstxt.org)).
 - **`sitemap.ts`** emits all pages with full hreflang alternates; `generateMetadata` covers canonical, hreflang, Open Graph, Twitter card, and `itunes` app association.
 - **JSON-LD** (`SoftwareApplication`) in the locale layout — only the Bing/Copilot index-enrichment path is known to consume it, so it stays minimal.
-- **IndexNow key** at `public/ae4368227a78d73327c42c34949e9075.txt`. After publishing new content, ping:
+- **IndexNow** — changed pages are pushed to Bing (and Yandex / Seznam / Naver / Yep, which share the protocol) automatically:
+  - the URL list is generated from [`src/lib/site/urls.ts`](src/lib/site/urls.ts), the same source `sitemap.ts` reads. Each entry carries an `updated` date — **bump it when you change a page**, that date is both the sitemap `lastmod` and the "has this changed?" test;
+  - the daily cron in [`custom-worker.ts`](custom-worker.ts) (UTC 08:00) diffs that list against the `indexnow_urls` ledger in D1 and submits only what changed, then records it. Nothing changed → no outbound request;
+  - submissions go to `bing.com/indexnow` first, falling back to `api.indexnow.org` then `yandex.com/indexnow` — the protocol shares a submission with every participating engine, so the first 2xx is enough. **The neutral `api.indexnow.org` endpoint 429s from Cloudflare Workers egress IPs** (measured 2026-08-21: 429 for a single URL with no `Retry-After`, while the identical body from a residential IP got 202) — that's why it isn't first;
+  - the key file [`public/ae4368227a78d73327c42c34949e9075.txt`](public/ae4368227a78d73327c42c34949e9075.txt) is how search engines verify the domain. Don't delete or rename it.
+
+  To push immediately after publishing (instead of waiting for the cron), with the admin password:
 
   ```bash
-  curl -X POST "https://api.indexnow.org/indexnow" -H "Content-Type: application/json" -d '{
-    "host": "o-c.do",
-    "key": "ae4368227a78d73327c42c34949e9075",
-    "urlList": ["https://o-c.do/"]
-  }'
+  curl -X POST "https://o-c.do/api/indexnow" -H "Authorization: Bearer $ADMIN_PASSWORD"
   ```
+
+  `GET /api/indexnow` previews what would be submitted without sending anything; add `?force=1` to either to ignore the ledger and resubmit everything.
 
 One-time manual steps (dashboard accounts required): verify the domain in [Google Search Console](https://search.google.com/search-console) and [Bing Webmaster Tools](https://www.bing.com/webmasters), submit `https://o-c.do/sitemap.xml` in both, and optionally list `llms.txt` at [directory.llmstxt.cloud](https://directory.llmstxt.cloud) / [llmstxt.site](https://llmstxt.site).
 

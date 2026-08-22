@@ -90,9 +90,31 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-08-21",
 		readingTime: "8 min read",
 	},
+	{
+		slug: "cloudflare-purge-cache-not-working",
+		h1: "Why Isn\u2019t My Cloudflare Cache Purge Working?",
+		title: "Cloudflare Purge Cache Not Working? What to Check",
+		description:
+			"A purge clears one exact cache key \u2014 nothing else. Custom cache keys, transformed URLs and the copy already in a browser all survive a purge by URL.",
+		blurb:
+			"Instant Purge really is instant, so a stale file means the purge matched nothing \u2014 or the copy you are looking at was never Cloudflare\u2019s to delete.",
+		updated: "2026-08-22",
+		readingTime: "7 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [
+	{
+		slug: "cloudflare-yuanzhan-ip-xielou",
+		h1: "套了 Cloudflare，源站真实 IP 还会泄露吗？",
+		title: "Cloudflare 下源站 IP 怎么泄露的，怎么堵",
+		description:
+			"会。橙云只挡住 A、AAAA、CNAME 上的 HTTP 流量，灰云子域、MX 的 _dc-mx 应答、SPF 里的 ip4:、历史解析与证书透明度日志都会把源站 IP 交出去。",
+		blurb:
+			"五条绕开代理的泄露路径、一条能自查的 dig 命令，以及为什么真正的防线不在 DNS 里，而在源站自己身上。",
+		updated: "2026-08-22",
+		readingTime: "约 10 分钟",
+	},
 	{
 		slug: "cloudflare-522-error",
 		h1: "Cloudflare 为什么会报 522 错误？",

@@ -58,6 +58,11 @@ const RELATED: RelatedLink[] = [
 		note: "The mode decides the origin scheme, and the origin scheme is part of every cache key.",
 	},
 	{
+		href: "/guides/cloudflare-purge-cache-not-working",
+		label: "Why isn\u2019t my Cloudflare cache purge working?",
+		note: "Once caching does work, the next question: why a purge can clear everything and change nothing.",
+	},
+	{
 		href: DOCS_UNCACHED,
 		label: "Cloudflare docs: Investigate uncached responses",
 		note: "The official step-by-step diagnostic for DYNAMIC, BYPASS, and repeated MISS.",

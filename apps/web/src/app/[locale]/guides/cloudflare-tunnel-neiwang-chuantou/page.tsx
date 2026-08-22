@@ -51,6 +51,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-yuanzhan-ip-xielou",
+		label: "套了 Cloudflare，源站真实 IP 还会泄露吗？",
+		note: "隧道之所以是最彻底的一档，是因为源站压根没有入站端口——地址泄露了也无处可打。",
+	},
+	{
 		href: "/guides/cloudflare-522-error",
 		label: "Cloudflare 为什么会报 522 错误？",
 		note: "隧道之外的另一种回源方式会遇到的问题：防火墙挡了回源 IP、跨境链路丢包，以及 19 秒的连接窗口。",

@@ -7,13 +7,17 @@
 // @ts-ignore .open-next/worker.js 在 `opennextjs-cloudflare build` 时生成
 import { default as handler } from "./.open-next/worker.js";
 import { captureRanks } from "./src/lib/ranks/capture";
+import { syncIndexNow } from "./src/lib/indexnow/sync";
 
 export default {
 	fetch: handler.fetch,
 
-	// 每天 UTC 08:00（wrangler.jsonc triggers.crons）抓 App Store 各地区榜单名次入 D1。
+	// 每天 UTC 08:00（wrangler.jsonc triggers.crons）：
+	//   ① 抓 App Store 各地区榜单名次入 D1；
+	//   ② 把有变更的页面推给 IndexNow（Bing 等），只推与台账版本不一致的 URL。
 	async scheduled(_controller, env, ctx) {
 		ctx.waitUntil(captureRanks(env.IAP_DB));
+		ctx.waitUntil(syncIndexNow(env.IAP_DB).catch((err) => console.error("[indexnow] sync failed:", err)));
 	},
 } satisfies ExportedHandler<CloudflareEnv>;
 

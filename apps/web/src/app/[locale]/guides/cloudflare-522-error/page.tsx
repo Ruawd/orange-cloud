@@ -55,6 +55,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-yuanzhan-ip-xielou",
+		label: "套了 Cloudflare，源站真实 IP 还会泄露吗？",
+		note: "把源站锁成「只放行 Cloudflare」正是 522 最常见的诱因之一；这篇讲清楚为什么值得冒这个险。",
+	},
+	{
 		href: "/guides/cloudflare-tunnel-neiwang-chuantou",
 		label: "没有公网 IP，怎么用 Cloudflare Tunnel 做内网穿透？",
 		note: "让源站主动向外建连，回源不再需要开放任何入站端口，也就没有防火墙挡回源 IP 这类问题。",

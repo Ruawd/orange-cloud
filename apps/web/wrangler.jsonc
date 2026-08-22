@@ -15,7 +15,11 @@
 	],
 	"assets": {
 		"binding": "ASSETS",
-		"directory": ".open-next/assets"
+		"directory": ".open-next/assets",
+		// 默认的 "auto-trailing-slash" 会把 /x.html 302/307 到 /x，
+		// 导致百度站长的验证文件（要求 .html 原样 200）拿不到内容。
+		// 本站静态资源里唯一的 .html 就是站长验证文件，关掉这层改写最省事。
+		"html_handling": "none"
 	},
 	"images": {
 		// Enable image optimization
