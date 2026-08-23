@@ -52,6 +52,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-huoqu-zhenshi-ip",
+		label: "开了 Cloudflare 之后，怎么在源站拿到访客真实 IP？",
+		note: "把源站收进 Cloudflare 之后的另一半功课：访客地址挪到了请求头里，取它之前要先划好信任边界。",
+	},
+	{
 		href: "/guides/cloudflare-522-error",
 		label: "Cloudflare 为什么会报 522 错误？",
 		note: "把源站锁到只放行 Cloudflare 之后最容易撞上的副作用：回源被自己的防火墙挡掉。",

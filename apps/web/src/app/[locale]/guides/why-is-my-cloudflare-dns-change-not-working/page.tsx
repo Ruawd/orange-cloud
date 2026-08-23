@@ -58,6 +58,11 @@ const RELATED: RelatedLink[] = [
 		note: "Why a proxied record never returns your origin IP — and why that changes what dig can tell you.",
 	},
 	{
+		href: "/guides/cloudflare-cname-flattening",
+		label: "What is CNAME flattening in Cloudflare?",
+		note: "A flattened CNAME whose target has no address returns an empty answer — which reads exactly like a change that never propagated.",
+	},
+	{
 		href: "/guides/why-is-cloudflare-not-caching-my-site",
 		label: "Why is Cloudflare not caching my site?",
 		note: "The other kind of stale answer: the one Cloudflare itself is serving from cache.",
