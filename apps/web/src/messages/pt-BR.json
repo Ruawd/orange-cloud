@@ -123,6 +123,13 @@
 		"sub": "O céu desta noite já espera por você no app.",
 		"requirement": "Requer iOS 17.0+ ou Android 9+ · iPhone, iPad e Android"
 	},
+	"sibling": {
+		"eyebrow": "Também da mesma pessoa",
+		"name": "Apolu",
+		"tagline": "Rankings da App Store em 175 países",
+		"body": "Acompanhe a posição de um app nas listas de gratuitos e pagos, receba uma notificação assim que ela muda e veja a receita lida direto do seu próprio App Store Connect, não uma estimativa de terceiros. Para iPhone, iPad e Mac.",
+		"cta": "Dar uma olhada"
+	},
 	"changelog": {
 		"title": "Histórico de versões",
 		"sub": "O Orange Cloud já está na App Store. Este é o histórico de versões; você também pode entrar no TestFlight para testar as próximas builds antes de todo mundo.",

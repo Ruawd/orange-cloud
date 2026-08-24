@@ -55,6 +55,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-ssl-jiami-moshi",
+		label: "Cloudflare 的 SSL/TLS 加密模式该选哪一个？",
+		note: "522 是 TCP 都没连上；连上了却握手失败是 525、证书没过校验是 526，那两个归加密模式管。",
+	},
+	{
 		href: "/guides/cloudflare-yuanzhan-ip-xielou",
 		label: "套了 Cloudflare，源站真实 IP 还会泄露吗？",
 		note: "把源站锁成「只放行 Cloudflare」正是 522 最常见的诱因之一；这篇讲清楚为什么值得冒这个险。",

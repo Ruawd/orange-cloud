@@ -16,6 +16,7 @@ import ChangelogTabs from "@/components/ChangelogTabs";
 import { decoratedReleases, localize } from "@orange-cloud/changelog";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getReleaseState, type ReleaseState } from "@/lib/livestate/store";
+import { apoluUrl } from "@/lib/sibling/apolu";
 
 const SHOT_FILES = [
 	"01_dashboard",
@@ -346,6 +347,44 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 							labelIOS="iOS"
 							labelAndroid="Android"
 						/>
+					</div>
+				</section>
+
+				{/* —— 同一个开发者：Apolu · 深夜 —— */}
+				<section className="sky-band band-night" aria-labelledby="sibling-heading">
+					<div className="mx-auto max-w-[820px] px-6 pb-4 pt-16">
+						<Reveal index={0}>
+							<a
+								href={apoluUrl(locale)}
+								target="_blank"
+								rel="noopener"
+								className="glass r-island sibling-card group flex flex-col items-center gap-5 p-7 text-center no-underline transition-colors duration-200 sm:flex-row sm:items-center sm:text-start"
+							>
+								<Image
+									src="/icons/apolu-180.png"
+									alt=""
+									width={180}
+									height={180}
+									unoptimized
+									className="h-16 w-16 shrink-0 rounded-[14px] shadow-[0_8px_22px_rgba(0,0,0,0.28)]"
+								/>
+								<div className="min-w-0">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] t-secondary">{t("sibling.eyebrow")}</p>
+									<h2 id="sibling-heading" className="f-display mt-1.5 text-[20px] font-semibold t-primary">
+										{t("sibling.name")}
+										<span className="t-secondary"> · </span>
+										<span className="font-normal t-secondary">{t("sibling.tagline")}</span>
+									</h2>
+									<p className="mt-2 text-[15px] leading-relaxed t-secondary">{t("sibling.body")}</p>
+									<p className="mt-3 text-[14px] font-semibold" style={{ color: "var(--oc-orange)" }}>
+										{t("sibling.cta")}
+										<span className="ms-1 inline-block transition-transform duration-200 rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" aria-hidden="true">
+											&rarr;
+										</span>
+									</p>
+								</div>
+							</a>
+						</Reveal>
 					</div>
 				</section>
 

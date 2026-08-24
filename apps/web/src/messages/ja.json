@@ -123,6 +123,13 @@
 		"sub": "今夜の空は、もうアプリの中で待っています。",
 		"requirement": "iOS 17.0+ または Android 9+ が必要 · iPhone / iPad / Android 対応"
 	},
+	"sibling": {
+		"eyebrow": "同じ開発者のもうひとつの App",
+		"name": "Apolu",
+		"tagline": "175 の国と地域の App Store ランキング",
+		"body": "App の無料・有料ランキングでの順位を追いかけ、動いた瞬間に通知。売上は第三者の推計ではなく、あなた自身の App Store Connect から直接読み込みます。iPhone・iPad・Mac に対応。",
+		"cta": "見てみる"
+	},
 	"changelog": {
 		"title": "リリース履歴",
 		"sub": "Orange Cloud は App Store で公開中です。これまでのリリース履歴をどうぞ。今後のビルドを試すには TestFlight にもご参加いただけます。",

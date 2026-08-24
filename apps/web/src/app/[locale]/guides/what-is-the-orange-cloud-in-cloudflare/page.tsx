@@ -17,7 +17,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 	},
 	{
 		q: "What’s the difference between the orange cloud and the grey cloud?",
-		a: "The orange cloud proxies traffic through Cloudflare; the gray cloud — spelled grey outside the US, and labelled DNS only in the dashboard — does not. A gray-clouded record returns your origin IP address, so visitors connect straight to your server, and no caching, WAF, or HTTP analytics apply to those requests.",
+		a: "It is the proxied vs DNS only choice. The orange cloud proxies traffic through Cloudflare; the grey cloud — spelled gray in Cloudflare’s own documentation, and labelled DNS only in the dashboard — does not. DNS only means the record returns your origin IP address, so visitors connect straight to your server, and no caching, WAF, or HTTP analytics apply to those requests.",
 	},
 	{
 		q: "Should the orange cloud be on or off?",
@@ -148,25 +148,25 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 			>
 				<div className="glass r-island note p-6 sm:p-7">
 					<p>
-						<strong>The orange cloud means a DNS record is proxied.</strong> Cloudflare answers queries for
-						that hostname with its own anycast IP addresses, and HTTP/HTTPS traffic passes through
-						Cloudflare on the way to your server. The gray cloud means DNS only: traffic goes straight to
-						your origin.
+						<strong>The orange cloud means a DNS record is proxied:</strong> Cloudflare answers with its
+						own anycast IP addresses, and HTTP traffic passes through Cloudflare. The grey cloud means
+						DNS only — queries return your origin IP, and visitors connect straight to your server.
 					</p>
 				</div>
 
 				<p>
 					In the Cloudflare dashboard, every A, AAAA, and CNAME record has a small cloud icon next to it.
 					Orange means <em>proxied</em>. Gray — spelled grey in much of the world, and often searched that
-					way — means <em>DNS only</em>. It looks like a cosmetic toggle and it
+					way — means <em>DNS only</em>. So the meaning of the orange cloud comes down to one question about
+					that record: <strong>proxied vs DNS only</strong>. It looks like a cosmetic toggle and it
 					is not: it decides whether Cloudflare is a CDN and firewall in front of your site, or merely the
 					place where your DNS records happen to live.
 				</p>
 
-				<h2 id="orange-vs-gray">Orange cloud vs gray cloud</h2>
+				<h2 id="orange-vs-gray">Orange cloud vs grey cloud: proxied vs DNS only</h2>
 				<p>
-					The difference starts one step earlier than most people expect — at the DNS answer itself, before
-					any HTTP request exists.
+					The difference between the orange cloud and the grey cloud starts one step earlier than most
+					people expect — at the DNS answer itself, before any HTTP request exists.
 				</p>
 				<div className="table-wrap">
 					<table>
@@ -315,7 +315,7 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					>
 						Cloudflare Spectrum
 					</a>
-					, which does handle arbitrary TCP and UDP.
+					, which proxies non-HTTP ports — all TCP and UDP ports on the Enterprise plan.
 				</p>
 				<p>
 					Note also that the alternate ports (<code>2052</code>, <code>2053</code>, <code>2082</code>,{" "}

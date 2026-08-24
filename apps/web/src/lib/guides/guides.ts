@@ -38,12 +38,12 @@ export const GUIDES: GuideMeta[] = [
 	{
 		slug: "what-is-the-orange-cloud-in-cloudflare",
 		h1: "What Does the Orange Cloud Mean in Cloudflare?",
-		title: "Cloudflare Orange Cloud: Proxied vs DNS Only, Explained",
+		title: "Proxied vs DNS Only: Cloudflare Orange vs Grey Cloud",
 		description:
-			"The orange cloud means a DNS record is proxied through Cloudflare. The gray cloud means DNS only. What changes, which records qualify, when to use each.",
+			"Proxied (orange cloud) routes HTTP traffic through Cloudflare; DNS only (grey cloud) sends visitors straight to your origin. What each changes, and when.",
 		blurb:
-			"Proxied vs DNS only: what the toggle actually changes, which record types and ports it covers, and how to read the errors it causes.",
-		updated: "2026-08-19",
+			"Proxied vs DNS only, in plain terms: what the orange and grey cloud each change, which record types and ports qualify, and how to read the errors the toggle causes.",
+		updated: "2026-08-24",
 		readingTime: "8 min read",
 	},
 	{
@@ -115,6 +115,28 @@ export const GUIDES: GuideMeta[] = [
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [
+	{
+		slug: "cloudflare-ssl-jiami-moshi",
+		h1: "Cloudflare 的 SSL/TLS 加密模式该选哪一个？",
+		title: "Cloudflare 加密模式：灵活、完全、严格怎么选",
+		description:
+			"加密模式管的只是 Cloudflare 到源站这一段：源站有公开受信任的证书就选完全（严格），只有自签证书选完全，两样都没有才退到灵活。",
+		blurb:
+			"四档模式的真实差别只在验不验证源站证书。灵活为什么会让回源那一段裸奔、525 与 526 各自卡在哪一步，以及源站只有自签证书时不必退回灵活的那条路。",
+		updated: "2026-08-24",
+		readingTime: "约 9 分钟",
+	},
+	{
+		slug: "cloudflare-xiaohuangyun",
+		h1: "Cloudflare 的小黄云到底是什么？什么时候该关掉？",
+		title: "Cloudflare 小黄云是什么：开还是关",
+		description:
+			"小黄云是 DNS 记录上的代理开关。开着，域名解析到 Cloudflare 的任播 IP，流量先过 Cloudflare 再回源站；关掉（灰云）就直接解析到源站真实 IP。",
+		blurb:
+			"橙云、橙色云朵、代理开关说的都是它。能开的只有 A / AAAA / CNAME 三种记录，端口也只覆盖固定那几个——先看清边界，再决定每条记录的开关。",
+		updated: "2026-08-24",
+		readingTime: "约 9 分钟",
+	},
 	{
 		slug: "cloudflare-huoqu-zhenshi-ip",
 		h1: "开了 Cloudflare 之后，怎么在源站拿到访客真实 IP？",

@@ -123,6 +123,13 @@
 		"sub": "오늘 밤의 하늘이 이미 앱에서 기다리고 있습니다.",
 		"requirement": "iOS 17.0+ 또는 Android 9+ 필요 · iPhone, iPad, Android 지원"
 	},
+	"sibling": {
+		"eyebrow": "같은 개발자의 다른 앱",
+		"name": "Apolu",
+		"tagline": "175개 국가의 App Store 순위",
+		"body": "앱의 무료·유료 차트 순위를 추적하고 변동이 생기는 순간 알림을 보냅니다. 수익은 제3자 추정치가 아니라 본인의 App Store Connect에서 직접 읽어 옵니다. iPhone, iPad, Mac 지원.",
+		"cta": "보러 가기"
+	},
 	"changelog": {
 		"title": "업데이트 기록",
 		"sub": "Orange Cloud가 App Store에 출시되었습니다. 아래는 버전 기록입니다. 다음 빌드를 먼저 써 보려면 TestFlight에도 참여할 수 있습니다.",

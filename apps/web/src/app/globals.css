@@ -104,6 +104,17 @@ body {
 		inset 0 1px 0 var(--glass-inset),
 		var(--glass-shadow);
 }
+/* 「同一个开发者」外链卡：hover 描边染橙 + 焦点可见。
+   写在这里而不是 Tailwind 工具类——`.glass` 是未分层 CSS，会盖掉 @layer utilities 里的
+   border-color 工具类；同为未分层且在其后，才改得动它。 */
+.sibling-card:hover {
+	border-color: rgba(244, 129, 32, 0.45);
+}
+.sibling-card:focus-visible {
+	outline: 2px solid var(--oc-orange);
+	outline-offset: 3px;
+}
+
 .r-island {
 	border-radius: var(--radius-island);
 }

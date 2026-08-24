@@ -52,6 +52,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-xiaohuangyun",
+		label: "Cloudflare 的小黄云到底是什么？什么时候该关掉？",
+		note: "泄露的前提是这条记录本来该被代理挡住。小黄云能挡什么、挡不住什么，先从开关本身说起。",
+	},
+	{
 		href: "/guides/cloudflare-huoqu-zhenshi-ip",
 		label: "开了 Cloudflare 之后，怎么在源站拿到访客真实 IP？",
 		note: "把源站收进 Cloudflare 之后的另一半功课：访客地址挪到了请求头里，取它之前要先划好信任边界。",

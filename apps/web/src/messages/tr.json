@@ -158,6 +158,13 @@
 		"sub": "Bu geceki gökyüzü uygulamada sizi bekliyor.",
 		"requirement": "iOS 17.0+ veya Android 9+ gerektirir · iPhone, iPad ve Android"
 	},
+	"sibling": {
+		"eyebrow": "Aynı geliştiricinin bir diğer uygulaması",
+		"name": "Apolu",
+		"tagline": "175 ülkede App Store sıralamaları",
+		"body": "Bir uygulamanın ücretsiz ve ücretli listelerdeki sırasını izleyin, sıra değiştiği anda bildirim alın ve geliri üçüncü taraf tahmini yerine doğrudan kendi App Store Connect hesabınızdan görün. iPhone, iPad ve Mac için.",
+		"cta": "Bir göz atın"
+	},
 	"changelog": {
 		"title": "Sürüm geçmişi",
 		"sub": "Orange Cloud artık App Store’da. İşte sürüm geçmişi — veya yaklaşan sürümlere erken erişim için TestFlight’a katılın.",
