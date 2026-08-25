@@ -56,6 +56,11 @@ const RELATED: RelatedLink[] = [
 		note: "隧道之所以是最彻底的一档，是因为源站压根没有入站端口——地址泄露了也无处可打。",
 	},
 	{
+		href: "/guides/cloudflare-mianfeiban-shipin-tucang",
+		label: "Cloudflare 免费版能拿来放视频、当图床吗？",
+		note: "把 NAS 挂出去之后最容易踩的那条线：条款怎么写的，100 MB 与 512 MB 各卡在哪一步。",
+	},
+	{
 		href: "/guides/cloudflare-522-error",
 		label: "Cloudflare 为什么会报 522 错误？",
 		note: "隧道之外的另一种回源方式会遇到的问题：防火墙挡了回源 IP、跨境链路丢包，以及 19 秒的连接窗口。",

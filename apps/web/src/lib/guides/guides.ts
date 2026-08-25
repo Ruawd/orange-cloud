@@ -116,6 +116,17 @@ export const GUIDES: GuideMeta[] = [
 
 export const GUIDES_ZH: GuideMeta[] = [
 	{
+		slug: "cloudflare-mianfeiban-shipin-tucang",
+		h1: "Cloudflare 免费版能拿来放视频、当图床吗？",
+		title: "Cloudflare 免费版能放视频、当图床吗",
+		description:
+			"图片一般没问题，视频不行。免费、Pro、Business 方案的 CDN 不得用来分发视频，或让大文件占到失衡的比例，官方给的正路是 Images、Stream 与 R2。",
+		blurb:
+			"默认缓存的扩展名表里就有 MP4，所以它当然跑得起来——但跑得起来不等于被允许。条款那一节到底写了什么、100 MB 与 512 MB 两道硬上限卡在哪，以及大文件真正该去的地方。",
+		updated: "2026-08-25",
+		readingTime: "约 9 分钟",
+	},
+	{
 		slug: "cloudflare-ssl-jiami-moshi",
 		h1: "Cloudflare 的 SSL/TLS 加密模式该选哪一个？",
 		title: "Cloudflare 加密模式：灵活、完全、严格怎么选",
