@@ -52,6 +52,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-cname-zhanping",
+		label: "Cloudflare 的 CNAME 展平（拉平）到底做了什么？",
+		note: "代理开关也决定了展平后返回什么：开着返回任播 IP，关着返回展平出来的真实 IP。",
+	},
+	{
 		href: "/guides/cloudflare-ssl-jiami-moshi",
 		label: "Cloudflare 的 SSL/TLS 加密模式该选哪一个？",
 		note: "小黄云一开，证书就在 Cloudflare 那一层终止了。回源那一段加不加密、验不验证，由加密模式决定。",

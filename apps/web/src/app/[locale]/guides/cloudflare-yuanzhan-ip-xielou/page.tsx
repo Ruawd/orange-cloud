@@ -52,6 +52,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-cname-zhanping",
+		label: "Cloudflare 的 CNAME 展平（拉平）到底做了什么？",
+		note: "顶点上的灰云 CNAME 会被展平成一条普通 A 记录，源站 IP 就这么摆到了台面上。",
+	},
+	{
 		href: "/guides/cloudflare-xiaohuangyun",
 		label: "Cloudflare 的小黄云到底是什么？什么时候该关掉？",
 		note: "泄露的前提是这条记录本来该被代理挡住。小黄云能挡什么、挡不住什么，先从开关本身说起。",

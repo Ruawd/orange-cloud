@@ -55,6 +55,11 @@ const RELATED: RelatedLink[] = [
 		note: "Flipping the cloud is a record change like any other \u2014 here is which cache decides how long it takes.",
 	},
 	{
+		href: "/guides/cloudflare-error-1000-dns-points-to-prohibited-ip",
+		label: "Cloudflare error 1000: DNS points to prohibited IP",
+		note: "What happens when a proxied record hands the proxy an address that is Cloudflare’s own.",
+	},
+	{
 		href: "https://developers.cloudflare.com/dns/proxy-status/",
 		label: "Cloudflare docs: Proxy status",
 		note: "The official reference for proxied and DNS-only records, including limitations and use cases.",

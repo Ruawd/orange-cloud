@@ -41,6 +41,11 @@ const RELATED: RelatedLink[] = [
 		note: "Flexible, Full, Full (strict): what each does to the origin connection, and which error each one produces.",
 	},
 	{
+		href: "/guides/cloudflare-error-1000-dns-points-to-prohibited-ip",
+		label: "Cloudflare error 1000: DNS points to prohibited IP",
+		note: "The failure mode when a SaaS platform on Cloudflare has not onboarded your hostname yet.",
+	},
+	{
 		href: DOCS_O2O,
 		label: "Cloudflare docs: How O2O works",
 		note: "The official reference for the routing behaviour, prerequisites, and the cf-connecting-o2o header.",
