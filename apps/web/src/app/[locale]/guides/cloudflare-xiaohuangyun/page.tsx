@@ -77,6 +77,11 @@ const RELATED: RelatedLink[] = [
 		note: "开了小黄云才会遇到的报错：边缘节点连不上源站，19 秒之后返回 522。",
 	},
 	{
+		href: "/guides/cloudflare-huancun-mingzhonglv",
+		label: "Cloudflare 到底缓存了什么？为什么命中率一直上不去",
+		note: "缓存和缓存规则只对代理流量生效——灰云记录的请求根本不经过 Cloudflare。",
+	},
+	{
 		href: DOCS_PROXY,
 		label: "Cloudflare 官方文档：代理状态",
 		note: "本文所有行为描述的原始出处，含固定 TTL、同名记录混用与 CNAME 链的规则。",

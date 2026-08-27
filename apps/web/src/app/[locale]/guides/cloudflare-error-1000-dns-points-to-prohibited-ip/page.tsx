@@ -65,6 +65,11 @@ const RELATED: RelatedLink[] = [
 		note: "What your root record actually resolves to, which is where a prohibited address most often hides.",
 	},
 	{
+		href: "/guides/cloudflare-error-522-connection-timed-out",
+		label: "Cloudflare error 522: connection timed out",
+		note: "The neighbouring failure: the origin address is fine, but nothing answers on it before Cloudflare gives up.",
+	},
+	{
 		href: DOCS_1000,
 		label: "Cloudflare docs: Error 1000",
 		note: "The official cause and resolution list this guide reorganises. Check it before changing anything.",
