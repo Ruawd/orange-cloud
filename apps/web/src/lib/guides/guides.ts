@@ -134,9 +134,42 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-08-27",
 		readingTime: "8 min read",
 	},
+	{
+		slug: "cloudflare-real-visitor-ip-cf-connecting-ip",
+		h1: "How Do You Get the Real Visitor IP Behind Cloudflare?",
+		title: "Cloudflare Real Visitor IP: CF-Connecting-IP Explained",
+		description:
+			"The visitor's real address arrives in the CF-Connecting-IP header. Read that instead of the connection source, and trust it only from Cloudflare's IPs.",
+		blurb:
+			"Your logs fill up with Cloudflare addresses because Cloudflare is the client now. Which header carries the real one, why X-Forwarded-For is the wrong one to read, and the trust boundary every guide leaves out.",
+		updated: "2026-08-28",
+		readingTime: "8 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [
+	{
+		slug: "goumai-yuming-jieru-cloudflare",
+		h1: "怎么买一个域名，再把它接到 Cloudflare 上？",
+		title: "新手怎么买域名并接入 Cloudflare",
+		description:
+			"域名要先在注册商那里花钱买下来才归你。在面板里添加一个域名只是建了一份配置，不会让它变成你的。两条路线：直接在 Cloudflare 买，或在腾讯云买完再改 NS。",
+		blurb:
+			"从零讲清域名、解析、服务器是三件事而不是一件。Cloudflare Registrar 与腾讯云两条购买路线的完整步骤、实名认证与备案各自卡在哪、买完接入的三步，以及新手最容易踩的六个坑。",
+		updated: "2026-08-28",
+		readingTime: "约 11 分钟",
+	},
+	{
+		slug: "cloudflare-dns-jiexi-bu-shengxiao",
+		h1: "改了 DNS 解析，为什么一直不生效？",
+		title: "Cloudflare 改了 DNS 为什么不生效",
+		description:
+			"先分清是哪一种「不生效」：域名的 NS 还没指到 Cloudflare，你改的记录压根不参与解析；已经指过来了，剩下的就只是 TTL 和沿途缓存在拖时间。",
+		blurb:
+			"改动没进解析链路，和进了但被缓存挡着，是两件完全不同的事。三种域名状态各自会返回什么、卡在 Pending 的四个原因、开着小黄云时 dig 为什么看不出变化，以及国内解析器那一层该怎么验。",
+		updated: "2026-08-28",
+		readingTime: "约 10 分钟",
+	},
 	{
 		slug: "cloudflare-huancun-mingzhonglv",
 		h1: "Cloudflare 到底缓存了什么？为什么命中率一直上不去",
