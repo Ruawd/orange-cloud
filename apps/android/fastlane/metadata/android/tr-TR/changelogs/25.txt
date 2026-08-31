@@ -1,0 +1,3 @@
+• Düzeltildi: alan adı ayarları sayfası içerik bir ekranı aştığında kaydırılamıyor, geliştirme modu, “Saldırı altındayım” modu ve tümünü temizle erişilemez kalıyordu
+• Düzeltildi: Cloudflare tek bir dönemi reddettiğinde hesap kullanımı tamamen “veri yok”a düşüyordu; erişebildiğiniz dönemler görünmeye devam ediyor
+• Düzeltildi: R2 klasörleri (önekleri) kova içinde gezinirken listelenmiyordu

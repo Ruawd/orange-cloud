@@ -1,5 +1,112 @@
 [
   {
+    "version": "2.1.1",
+    "date": "2026.08.30",
+    "channel": "Google Play",
+    "inApp": false,
+    "items": [
+      {
+        "icon": "wrench.and.screwdriver",
+        "title": {
+          "zh-Hans": "域名设置页可以滚动了",
+          "en": "Domain settings scrolls again",
+          "zh-Hant": "網域設定頁可以捲動了",
+          "zh-HK": "域名設定頁可以滾動了",
+          "ja": "ドメイン設定がスクロールできるように",
+          "es-MX": "La configuración del dominio vuelve a desplazarse",
+          "ko": "도메인 설정 화면이 다시 스크롤됩니다",
+          "pt-BR": "As configurações do domínio voltam a rolar",
+          "pt-PT": "As definições do domínio voltam a deslocar-se",
+          "de": "Domain-Einstellungen lassen sich wieder scrollen",
+          "fr": "Les paramètres du domaine défilent à nouveau",
+          "ar": "صفحة إعدادات النطاق تعود للتمرير",
+          "tr": "Alan adı ayarları yeniden kaydırılabiliyor"
+        },
+        "detail": {
+          "zh-Hans": "域名设置页内容超过一屏时滑不动，底部的开发模式、「我正受到攻击」模式和清空全部缓存够不着。现在整页可以正常上下滚动。",
+          "en": "The domain settings page would not scroll once its content ran past one screen, leaving Development mode, “I'm Under Attack” mode and Purge everything out of reach. The whole page scrolls normally again.",
+          "zh-Hant": "網域設定頁內容超過一個螢幕時捲不動，底部的開發模式、「我正受到攻擊」模式和清除全部快取碰不到。現在整頁可以正常上下捲動。",
+          "zh-HK": "域名設定頁內容超過一屏時滑不動，底部的開發模式、「我正受到攻擊」模式和清除全部緩存夠不着。現在整頁可以正常上下滾動。",
+          "ja": "ドメイン設定の内容が 1 画面に収まらないとスクロールできず、下部の開発モード・「I'm Under Attack」モード・すべてのキャッシュを削除に手が届きませんでした。ページ全体が元どおりスクロールします。",
+          "es-MX": "La página de configuración del dominio dejaba de desplazarse cuando el contenido superaba una pantalla y el modo de desarrollo, el modo “Estoy bajo ataque” y purgar todo quedaban fuera de alcance. Ahora la página se desplaza con normalidad.",
+          "ko": "도메인 설정 내용이 한 화면을 넘으면 스크롤되지 않아 아래쪽의 개발 모드, 「I'm Under Attack」 모드, 전체 캐시 비우기에 손이 닿지 않았습니다. 이제 페이지 전체가 정상적으로 스크롤됩니다.",
+          "pt-BR": "A página de configurações do domínio não rolava quando o conteúdo passava de uma tela, deixando o modo de desenvolvimento, o modo “Estou sob ataque” e limpar tudo fora de alcance. Agora a página inteira rola normalmente.",
+          "pt-PT": "A página de definições do domínio não se deslocava quando o conteúdo passava de um ecrã, deixando o modo de desenvolvimento, o modo “Estou sob ataque” e limpar tudo fora de alcance. Agora a página desloca-se normalmente.",
+          "de": "Die Domain-Einstellungen ließen sich nicht mehr scrollen, sobald der Inhalt über einen Bildschirm hinausging – Entwicklungsmodus, „Ich werde angegriffen“-Modus und Alles leeren blieben unerreichbar. Jetzt scrollt die ganze Seite wieder normal.",
+          "fr": "La page des paramètres du domaine ne défilait plus dès que son contenu dépassait un écran, rendant inaccessibles le mode développement, le mode « Je suis attaqué » et Tout purger. Toute la page défile de nouveau normalement.",
+          "ar": "لم تكن صفحة إعدادات النطاق تُمرَّر عندما يتجاوز محتواها الشاشة، فيتعذّر الوصول إلى وضع التطوير ووضع ”أنا تحت الهجوم“ ومسح الكل. الآن تُمرَّر الصفحة بالكامل كما ينبغي.",
+          "tr": "Alan adı ayarları sayfası içerik bir ekranı aştığında kaydırılamıyor, alttaki geliştirme modu, “Saldırı altındayım” modu ve tümünü temizle erişilemez kalıyordu. Artık sayfanın tamamı normal şekilde kaydırılıyor."
+        }
+      },
+      {
+        "icon": "chart.bar",
+        "title": {
+          "zh-Hans": "账号用量不再整块空白",
+          "en": "Account usage stops going blank",
+          "zh-Hant": "帳號用量不再整塊空白",
+          "zh-HK": "帳戶用量不再整塊空白",
+          "ja": "アカウント使用量が丸ごと空にならないように",
+          "es-MX": "El uso de la cuenta ya no queda en blanco",
+          "ko": "계정 사용량이 통째로 비지 않습니다",
+          "pt-BR": "O uso da conta não fica mais em branco",
+          "pt-PT": "A utilização da conta deixa de ficar em branco",
+          "de": "Kontonutzung bleibt nicht mehr leer",
+          "fr": "L'utilisation du compte ne se vide plus",
+          "ar": "استخدام الحساب لم يعد يفرغ بالكامل",
+          "tr": "Hesap kullanımı artık tümden boşalmıyor"
+        },
+        "detail": {
+          "zh-Hans": "免费账号常见「今日有数、本月无权限」，此前只要有一个时间窗被 Cloudflare 判为无权限，概览的用量就整块降级成「无账户级数据」。现在有权限的那部分照常显示，缺的那部分给一行说明。",
+          "en": "On free accounts Cloudflare often allows today's window but denies the monthly one. A single denied window used to collapse the whole usage block into “no account-level data”. Now the periods you can read keep showing, with one line explaining the rest.",
+          "zh-Hant": "免費帳號常見「今日有資料、本月無權限」，此前只要有一個時間範圍被 Cloudflare 判為無權限，總覽的用量就整塊降級成「無帳號層級資料」。現在有權限的部分照常顯示，缺的部分給一行說明。",
+          "zh-HK": "免費帳戶常見「今日有數、本月無權限」，此前只要有一個時間窗被 Cloudflare 判為無權限，概覽的用量就整塊降級成「無帳戶級數據」。現在有權限的部分照常顯示，缺的部分給一行說明。",
+          "ja": "無料アカウントでは「今日は取れるが今月は権限なし」がよくあります。これまでは 1 つの期間が拒否されただけで使用量ブロック全体が「アカウントレベルのデータなし」に落ちていました。今は読める期間をそのまま表示し、足りない分は 1 行で説明します。",
+          "es-MX": "En cuentas gratuitas Cloudflare suele permitir el periodo de hoy y denegar el mensual. Antes, un solo periodo denegado dejaba todo el bloque de uso en “sin datos de la cuenta”. Ahora se muestran los periodos accesibles y una línea explica el resto.",
+          "ko": "무료 계정에서는 오늘 데이터는 되고 이번 달은 권한이 없는 경우가 흔합니다. 예전에는 한 기간만 거부돼도 사용량 블록 전체가 ‘계정 수준 데이터 없음’으로 떨어졌습니다. 이제 읽을 수 있는 기간은 그대로 보이고, 나머지는 한 줄로 설명합니다.",
+          "pt-BR": "Em contas gratuitas a Cloudflare costuma liberar o período de hoje e negar o mensal. Antes, um único período negado derrubava todo o bloco de uso para “sem dados da conta”. Agora os períodos acessíveis continuam aparecendo, com uma linha explicando o resto.",
+          "pt-PT": "Em contas gratuitas a Cloudflare costuma permitir o período de hoje e negar o mensal. Antes, um único período negado deitava abaixo todo o bloco de utilização para “sem dados da conta”. Agora os períodos acessíveis continuam a aparecer, com uma linha a explicar o resto.",
+          "de": "Bei kostenlosen Konten erlaubt Cloudflare oft das heutige Zeitfenster und sperrt das monatliche. Bislang ließ ein einziges gesperrtes Fenster den ganzen Nutzungsblock auf „keine Daten auf Kontoebene“ fallen. Jetzt bleiben lesbare Zeiträume sichtbar, der Rest wird in einer Zeile erklärt.",
+          "fr": "Sur les comptes gratuits, Cloudflare autorise souvent la fenêtre du jour et refuse celle du mois. Auparavant, une seule fenêtre refusée faisait basculer tout le bloc d'utilisation sur « aucune donnée de compte ». Désormais les périodes accessibles restent affichées, et une ligne explique le reste.",
+          "ar": "في الحسابات المجانية تسمح Cloudflare غالبًا بنافذة اليوم وترفض الشهرية. سابقًا كانت نافذة مرفوضة واحدة تُسقط كتلة الاستخدام كلها إلى ”لا توجد بيانات على مستوى الحساب“. الآن تبقى الفترات المتاحة ظاهرة، ويشرح سطر واحد الباقي.",
+          "tr": "Ücretsiz hesaplarda Cloudflare çoğu zaman bugünün penceresine izin verip aylık olanı reddeder. Önceden reddedilen tek bir pencere, kullanım bloğunun tamamını “hesap düzeyinde veri yok”a düşürüyordu. Artık okuyabildiğiniz dönemler görünmeye devam ediyor, kalanı tek satır açıklıyor."
+        }
+      },
+      {
+        "icon": "folder",
+        "title": {
+          "zh-Hans": "R2 桶里的文件夹回来了",
+          "en": "Folders are back in R2 buckets",
+          "zh-Hant": "R2 儲存桶裡的資料夾回來了",
+          "zh-HK": "R2 存儲桶裡的文件夾回來了",
+          "ja": "R2 バケットのフォルダが戻りました",
+          "es-MX": "Vuelven las carpetas en los buckets de R2",
+          "ko": "R2 버킷의 폴더가 돌아왔습니다",
+          "pt-BR": "As pastas voltaram aos buckets do R2",
+          "pt-PT": "As pastas voltaram aos buckets do R2",
+          "de": "Ordner in R2-Buckets sind zurück",
+          "fr": "Les dossiers reviennent dans les buckets R2",
+          "ar": "عادت المجلدات إلى حاويات R2",
+          "tr": "R2 kovalarında klasörler geri döndü"
+        },
+        "detail": {
+          "zh-Hans": "浏览 R2 存储桶时一个文件夹都不显示——Cloudflare 返回前缀的字段名是 delimited，安卓侧读成了 delimited_prefixes，于是全部落空。现在按对象前缀正常分层。",
+          "en": "Browsing an R2 bucket listed no folders at all: Cloudflare returns the prefixes under a field named delimited, and the Android client was reading delimited_prefixes. Prefixes now group into folders as they should.",
+          "zh-Hant": "瀏覽 R2 儲存桶時一個資料夾都不顯示——Cloudflare 回傳前綴的欄位名是 delimited，Android 端讀成了 delimited_prefixes，於是全部落空。現在依物件前綴正常分層。",
+          "zh-HK": "瀏覽 R2 存儲桶時一個文件夾都不顯示——Cloudflare 返回前綴的字段名是 delimited，安卓端讀成了 delimited_prefixes，於是全部落空。現在按對象前綴正常分層。",
+          "ja": "R2 バケットを開いてもフォルダが 1 つも出ませんでした。Cloudflare がプレフィックスを返すフィールド名は delimited ですが、Android 側は delimited_prefixes を読んでいたためです。オブジェクトのプレフィックスで正しく階層化されます。",
+          "es-MX": "Al explorar un bucket de R2 no aparecía ninguna carpeta: Cloudflare devuelve los prefijos en un campo llamado delimited y el cliente de Android leía delimited_prefixes. Ahora los prefijos se agrupan en carpetas.",
+          "ko": "R2 버킷을 열어도 폴더가 하나도 보이지 않았습니다. Cloudflare는 프리픽스를 delimited 필드로 돌려주는데 안드로이드가 delimited_prefixes를 읽고 있었기 때문입니다. 이제 프리픽스대로 폴더가 만들어집니다.",
+          "pt-BR": "Navegar por um bucket do R2 não mostrava pasta alguma: a Cloudflare devolve os prefixos num campo chamado delimited e o cliente Android lia delimited_prefixes. Agora os prefixos viram pastas normalmente.",
+          "pt-PT": "Navegar num bucket do R2 não mostrava pasta alguma: a Cloudflare devolve os prefixos num campo chamado delimited e o cliente Android lia delimited_prefixes. Agora os prefixos passam a pastas normalmente.",
+          "de": "Beim Durchsuchen eines R2-Buckets erschien kein einziger Ordner: Cloudflare liefert die Präfixe im Feld delimited, der Android-Client las delimited_prefixes. Jetzt gruppieren sich Präfixe wieder zu Ordnern.",
+          "fr": "Parcourir un bucket R2 n'affichait aucun dossier : Cloudflare renvoie les préfixes dans un champ nommé delimited, tandis que le client Android lisait delimited_prefixes. Les préfixes se regroupent de nouveau en dossiers.",
+          "ar": "لم يكن تصفح حاوية R2 يعرض أي مجلد: تُعيد Cloudflare البادئات في حقل اسمه delimited بينما كان عميل أندرويد يقرأ delimited_prefixes. الآن تتجمّع البادئات في مجلدات كما ينبغي.",
+          "tr": "R2 kovasında gezinirken tek bir klasör görünmüyordu: Cloudflare önekleri delimited adlı alanda döndürüyor, Android istemcisi ise delimited_prefixes okuyordu. Artık önekler klasör olarak gruplanıyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.1.0",
     "date": "2026.08.19",
     "channel": "Google Play",

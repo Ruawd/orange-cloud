@@ -9,7 +9,9 @@ platform :android do
   # 从 build.gradle.kts 读 versionCode——不传二进制时 supply 无法自行推断
   # 版本说明该挂哪个版本，必须显式给。
   def play_version_code
-    File.read("../app/build.gradle.kts")[/versionCode\s*=\s*(\d+)/, 1]
+    # 必须显式 UTF-8：locale 非 UTF-8 时 Ruby 按 US-ASCII 读，遇到文件里的中文注释直接抛
+    # `invalid byte sequence in US-ASCII`（2026-08-30 发 2.1.1 时踩到，deploy 传完包才在回调这步炸）。
+    File.read("../app/build.gradle.kts", encoding: "UTF-8")[/versionCode\s*=\s*(\d+)/, 1]
   end
 
   desc "只推商店文案 + 图标/特征图/截图。不碰版本说明、不碰轨道、不传二进制（validate:true 可干跑）"
@@ -74,7 +76,7 @@ platform :android do
   # 需环境变量 PLAY_RELEASE_SECRET（与 Worker secret 同值）。
   private_lane :notify_website_release do
     version = ENV["PLAY_RELEASE_VERSION"] ||
-      File.read("../app/build.gradle.kts")[/versionName\s*=\s*"([^"]+)"/, 1]
+      File.read("../app/build.gradle.kts", encoding: "UTF-8")[/versionName\s*=\s*"([^"]+)"/, 1]
     secret = ENV["PLAY_RELEASE_SECRET"]
     if version.nil? || secret.nil? || secret.empty?
       UI.important("跳过官网回调：缺 versionName 或 PLAY_RELEASE_SECRET")

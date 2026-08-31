@@ -17,6 +17,9 @@ nonisolated enum AuthError: LocalizedError {
     case invalidCallback
     case stateMismatch
     case oauthError(String)
+    /// 授权页被回退 / 刷新后再回到回调，Hydra 判定 consent verifier 已被消费。
+    /// 一次性状态，重来即可，不是配置问题（Sentry APPLE-IOS-5）。
+    case consentExpired
     case tokenExchangeFailed(String)
     /// token 端点返回非 2xx。status 用于区分「刷新令牌确已失效」（400）与瞬时错误（5xx/429）。
     case tokenEndpointError(status: Int, body: String)
@@ -27,10 +30,19 @@ nonisolated enum AuthError: LocalizedError {
         case .invalidCallback:              return String(localized: "授权回调格式错误")
         case .stateMismatch:                return String(localized: "state 校验失败，请重试")
         case .oauthError(let message):      return message
+        case .consentExpired:               return String(localized: "授权页面已失效，请重新发起登录。")
         case .tokenExchangeFailed(let msg): return String(localized: "换取 Token 失败：\(msg)")
         case .tokenEndpointError(let status, let body):
             return String(localized: "换取 Token 失败：\(body.isEmpty ? "HTTP \(status)" : body)")
         case .notLoggedIn:                  return String(localized: "登录已过期，请重新登录")
+        }
+    }
+
+    /// 授权流里「重来一次就好」的一次性状态：计入本地日志，但不该占遥测的故障额度。
+    var isRetriableFlowState: Bool {
+        switch self {
+        case .consentExpired, .stateMismatch: return true
+        default:                              return false
         }
     }
 }
@@ -212,6 +224,10 @@ final class AuthManager {
         } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
             // 用户主动取消，不算错误
             AppLog.auth.notice("login canceled by user")
+        } catch let error as AuthError where error.isRetriableFlowState {
+            // 用户重来一次就好，不是故障：记 notice 不进遥测
+            AppLog.auth.notice("login aborted (retriable): \(error.localizedDescription)")
+            errorMessage = error.localizedDescription
         } catch {
             AppLog.auth.error("login failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
@@ -253,6 +269,9 @@ final class AuthManager {
             persist()
         } catch let error as ASWebAuthenticationSessionError where error.code == .canceledLogin {
             AppLog.auth.notice("reauthorize canceled by user")
+        } catch let error as AuthError where error.isRetriableFlowState {
+            AppLog.auth.notice("reauthorize aborted (retriable): \(error.localizedDescription)")
+            errorMessage = error.localizedDescription
         } catch {
             AppLog.auth.error("reauthorize failed: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
@@ -345,6 +364,11 @@ final class AuthManager {
                 var message = String(localized: "授权请求包含 Cloudflare 尚未对本 App 开放的权限，无法完成登录。请更新到最新版本后重试。")
                 if !description.isEmpty { message += "\n\(description)" }
                 throw AuthError.oauthError(message)
+            }
+            // Hydra 的一次性 consent verifier 被重复消费（授权途中后退 / 刷新过），
+            // 重新走一遍即可——别把英文原文甩给用户（Sentry APPLE-IOS-5 占登录失败大头）。
+            if description.contains("consent verifier has already been used") {
+                throw AuthError.consentExpired
             }
             throw AuthError.oauthError(description.isEmpty ? error : "\(error): \(description)")
         }

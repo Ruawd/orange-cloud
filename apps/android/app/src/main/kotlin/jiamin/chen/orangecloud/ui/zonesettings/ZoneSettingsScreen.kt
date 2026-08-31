@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Settings
@@ -19,6 +20,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
@@ -93,7 +95,7 @@ fun ZoneSettingsScreen(
                     refreshDescription = stringResource(R.string.common_refresh),
                 )
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     // 暂停只依赖 zone.write，缺 zone-settings.read 时本页也保留它
@@ -149,7 +151,7 @@ fun ZoneSettingsScreen(
                         )
                     }
                     if (state.missingScope) {
-                        Box(Modifier.weight(1f)) {
+                        Box(Modifier.fillMaxWidth().padding(vertical = 48.dp)) {
                             SkyEmptyState(
                                 Icons.Outlined.Settings,
                                 stringResource(R.string.scope_missing), onSky, stringResource(R.string.common_refresh),

@@ -62,7 +62,7 @@ const RELATED: RelatedLink[] = [
 	},
 	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
-		label: "What does the orange cloud mean in Cloudflare?",
+		label: "What does DNS only mean in Cloudflare?",
 		note: "Nothing is cached — and nothing can be purged — on a hostname that is set to DNS only.",
 	},
 	{

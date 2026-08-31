@@ -10,27 +10,40 @@ import SwiftData
 
 nonisolated enum CacheContainer {
 
-    static let shared: ModelContainer = {
-        let schema = Schema([
+    /// 容器可在启动自检后被就地替换（见 warmUp），故为 var。
+    /// 只在主线程、且在 SwiftUI 取用 `shared` 之前替换，替换后全程只读。
+    @MainActor private static var container: ModelContainer = makeContainer()
+
+    @MainActor static var shared: ModelContainer { container }
+
+    private static var schema: Schema {
+        Schema([
             CachedZone.self,
             CachedDNSRecord.self,
             CachedWorkerScript.self,
         ])
-        // cloudKitDatabase 必须显式 .none：App 带 iCloud entitlement 时 .automatic 会
-        // 强制开启 CloudKit 同步，而 CloudKit 不允许非可选属性和 @Attribute(.unique)。
-        // 缓存数据本就按账号实时拉取，无需跨设备同步。
-        let configuration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false,
-            cloudKitDatabase: .none
-        )
-        // 上一轮运行中 fetch 连续抛 ObjC 异常（见 CachePolicy.safeFetch）说明本机缓存库
-        // 大概率已损坏——容器活着时不能动店文件，标记留到此刻（容器创建前）清库重建。
-        if UserDefaults.standard.bool(forKey: rebuildFlagKey) {
-            AppLog.app.error("缓存库带损坏标记，启动前清库重建")
+    }
+
+    // cloudKitDatabase 必须显式 .none：App 带 iCloud entitlement 时 .automatic 会
+    // 强制开启 CloudKit 同步，而 CloudKit 不允许非可选属性和 @Attribute(.unique)。
+    // 缓存数据本就按账号实时拉取，无需跨设备同步。
+    private static var diskConfiguration: ModelConfiguration {
+        ModelConfiguration(schema: schema, isStoredInMemoryOnly: false, cloudKitDatabase: .none)
+    }
+
+    private static var memoryConfiguration: ModelConfiguration {
+        ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+    }
+
+    @MainActor
+    private static func makeContainer() -> ModelContainer {
+        let configuration = diskConfiguration
+        // 旧版本（≤2.1.0）会给下次启动留清库标记，此处照旧消费一次，避免老装机被搁浅。
+        if UserDefaults.standard.bool(forKey: legacyRebuildFlagKey) {
+            AppLog.app.notice("消费旧版清库标记，启动前清库重建")
             destroyStoreFiles(at: configuration.url)
-            UserDefaults.standard.removeObject(forKey: rebuildFlagKey)
-            UserDefaults.standard.removeObject(forKey: fetchExceptionCountKey)
+            UserDefaults.standard.removeObject(forKey: legacyRebuildFlagKey)
+            UserDefaults.standard.removeObject(forKey: legacyExceptionCountKey)
         }
         do {
             return try ModelContainer(for: schema, configurations: [configuration])
@@ -39,49 +52,82 @@ nonisolated enum CacheContainer {
             // 启动瞬间崩掉（旧写法在此 fatalError）。先清掉磁盘存储重建；仍失败则退到内存
             // 容器（本次不落盘），保证一定能启动。
             AppLog.app.error("ModelContainer 创建失败，尝试清库重建：\(error.localizedDescription)")
-            Self.destroyStoreFiles(at: configuration.url)
+            destroyStoreFiles(at: configuration.url)
             if let rebuilt = try? ModelContainer(for: schema, configurations: [configuration]) {
                 return rebuilt
             }
             AppLog.app.error("清库后仍失败，回退内存容器（缓存本次不落盘）")
-            let memory = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
-            return try! ModelContainer(for: schema, configurations: [memory])
+            return try! ModelContainer(for: schema, configurations: [memoryConfiguration])
         }
-    }()
+    }
 
-    /// 启动早期在主线程串行预热一次实体解析。Sentry APPLE-IOS-Y（1.8.2+27~1.8.3+30）：
-    /// iOS 17.x 冷启动后数秒内的首次 fetch 抛「could not locate an NSEntityDescription for
-    /// entity name 'CachedZone'」，疑为首次实体解析的并发竞态（@Query / Intents 查询 /
-    /// ViewModel fetch 同窗口首触）。在任何并发访问前做一次守卫下的空谓词 fetch 灌热实体
-    /// 描述；即便竞态假说不成立，异常也会被 SafeCache 兜住并计入店健康。
+    // MARK: - 启动自检与就地修复
+
+    /// 启动早期做一次实体解析自检，坏了就当场把容器换掉。
+    ///
+    /// Sentry APPLE-IOS-1（1.9.2~2.1.0，iOS 17.0 为主）：某些设备上 ModelContainer 创建
+    /// 「成功」了，但它的实体描述整个不可用——同一会话里 warmUp 的空谓词 fetch、syncZones、
+    /// syncWorkers、dnsRecordCount 回写全部抛
+    /// `could not locate an NSEntityDescription for entity name '…'`，次数一比一对应。
+    /// 坏的是模型注册而非 store 文件，所以旧的「标记 → 下次启动删库」既治不好，又让这批
+    /// 用户每次启动都丢一次缓存。改为当场重建，且**先不动磁盘数据**：
+    ///   ① 换一个新容器（多为本次进程的注册问题，磁盘数据是好的，用户缓存不丢）
+    ///   ② 仍坏才清库重建（这时才是 store 真损坏）
+    ///   ③ 再坏退内存容器（本次不落盘，但 App 全程可用）
+    /// 必须在 SwiftUI 取用 `shared` 之前调用（App.init 里），换容器才能同时惠及 @Query。
     @MainActor
     static func warmUp() {
-        _ = SafeCache.fetch(FetchDescriptor<CachedZone>(), context: shared.mainContext)
+        guard !SafeCache.probe(container) else { return }
+        AppLog.app.error("缓存库启动自检失败（实体描述不可用），就地重建容器")
+        repairContainer()
     }
 
-    // MARK: - 店健康记录（TF 崩溃点 D8tiH4pqdctLgx_nCLGnZ：单机纯谓词 fetch 也抛 NSException）
+    /// 运行中连续异常时的兜底修复（每进程至多一次）。启动自检已覆盖绝大多数情况，
+    /// 这里只处理「启动时是好的、跑着跑着坏掉」的残余场景；已被 SwiftUI 持有的 @Query
+    /// 仍绑在旧容器上，故只求让命令式读写恢复，不追求全量生效。
+    @MainActor
+    static func repairIfNeeded() {
+        guard !hasRepairedThisLaunch, !SafeCache.probe(container) else { return }
+        AppLog.app.error("缓存库运行中失效，尝试就地重建容器")
+        repairContainer()
+    }
 
-    private static let rebuildFlagKey = "ocCacheStoreNeedsRebuild"
-    private static let fetchExceptionCountKey = "ocCacheFetchExceptionCount"
-    /// 连续异常达到该数即标记下次启动清库（缓存可随时从 API 重拉，重建成本 ≈ 一次刷新）
-    private static let rebuildThreshold = 2
+    @MainActor private static var hasRepairedThisLaunch = false
 
-    /// fetch 抛 ObjC 异常时调用（CachePolicy.safeFetch）。计数持久化，跨启动累计。
-    static func noteFetchException() {
-        let count = UserDefaults.standard.integer(forKey: fetchExceptionCountKey) + 1
-        UserDefaults.standard.set(count, forKey: fetchExceptionCountKey)
-        if count >= rebuildThreshold {
-            UserDefaults.standard.set(true, forKey: rebuildFlagKey)
-            AppLog.app.error("缓存 fetch 连续 \(count) 次抛 ObjC 异常，已标记下次启动清库重建")
+    @MainActor
+    private static func repairContainer() {
+        hasRepairedThisLaunch = true
+        let configuration = diskConfiguration
+
+        if let rebuilt = try? ModelContainer(for: schema, configurations: [configuration]),
+           SafeCache.probe(rebuilt) {
+            container = rebuilt
+            AppLog.app.notice("缓存容器重建成功（磁盘数据保留）")
+            return
         }
+
+        destroyStoreFiles(at: configuration.url)
+        if let rebuilt = try? ModelContainer(for: schema, configurations: [configuration]),
+           SafeCache.probe(rebuilt) {
+            container = rebuilt
+            AppLog.app.notice("缓存清库重建成功")
+            return
+        }
+
+        if let memory = try? ModelContainer(for: schema, configurations: [memoryConfiguration]),
+           SafeCache.probe(memory) {
+            container = memory
+            AppLog.app.error("缓存退回内存容器（本次不落盘）")
+            return
+        }
+        // 三条路都不通：保持原容器，所有读写继续被 SafeCache 兜成「无缓存」，App 照常可用。
+        AppLog.app.error("缓存容器重建失败，本次运行按无缓存降级")
     }
 
-    /// fetch 正常完成时调用：清零连续异常计数（偶发异常不触发重建）。
-    static func noteFetchHealthy() {
-        if UserDefaults.standard.integer(forKey: fetchExceptionCountKey) != 0 {
-            UserDefaults.standard.removeObject(forKey: fetchExceptionCountKey)
-        }
-    }
+    // MARK: - 旧版遗留键（只读取清理，不再写入）
+
+    private static let legacyRebuildFlagKey = "ocCacheStoreNeedsRebuild"
+    private static let legacyExceptionCountKey = "ocCacheFetchExceptionCount"
 
     /// 删除磁盘上的 SwiftData 存储文件（含 -wal / -shm 旁文件），供损坏后清库重建。
     private static func destroyStoreFiles(at storeURL: URL) {

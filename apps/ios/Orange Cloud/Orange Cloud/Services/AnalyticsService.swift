@@ -342,8 +342,15 @@ struct AnalyticsService {
 
     /// 账号用量：Workers 调用（今日/周期）。R2 拆为独立查询（见 r2Usage），
     /// 账号无 R2 / 无 R2 数据集权限时不再拖垮 Workers 用量（issue #4）。
-    func accountUsage(accountId: String, periodStart: Date? = nil) async throws -> AccountUsage {
-        let data: AccountUsageData = try await client.graphQL(
+    ///
+    /// partialAuthz = 只有部分时间窗被 authz 挡（免费账号常见：今日有数、周期没有），
+    /// 此时返回的用量里缺的那部分是 0，调用方据此给出「部分数据不可用」的温和提示，
+    /// 而不是把整块用量降级成「此账号无账户级数据查询权限」。
+    func accountUsage(
+        accountId: String,
+        periodStart: Date? = nil
+    ) async throws -> (usage: AccountUsage, partialAuthz: Bool) {
+        let (data, partialAuthz): (AccountUsageData, Bool) = try await client.graphQLAllowingPartialAuthz(
             query: AccountUsageQuery.text,
             variables: Self.usageVariables(accountId: accountId, periodStart: periodStart)
         )
@@ -359,14 +366,17 @@ struct AnalyticsService {
         let todayRequests = (account.today ?? []).reduce(0) { $0 + ($1.sum?.requests ?? 0) }
         let quantiles = account.month?.first?.quantiles
 
-        return AccountUsage(
-            workersRequestsToday: todayRequests,
-            workersRequestsMonth: monthSum.requests,
-            workersErrorsMonth:   monthSum.errors,
-            cpuP50Us:             quantiles?.cpuTimeP50,
-            cpuP99Us:             quantiles?.cpuTimeP99,
-            cpuTimeMonthUs:       nil,
-            cpuTimeTodayUs:       nil
+        return (
+            AccountUsage(
+                workersRequestsToday: todayRequests,
+                workersRequestsMonth: monthSum.requests,
+                workersErrorsMonth:   monthSum.errors,
+                cpuP50Us:             quantiles?.cpuTimeP50,
+                cpuP99Us:             quantiles?.cpuTimeP99,
+                cpuTimeMonthUs:       nil,
+                cpuTimeTodayUs:       nil
+            ),
+            partialAuthz
         )
     }
 

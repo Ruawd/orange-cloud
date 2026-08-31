@@ -1386,6 +1386,7 @@
     <string name="usage_locked">É necessária a permissão de análise de tráfego para mostrar a utilização da conta</string>
     <string name="usage_unavailable_title">Os dados ao nível da conta não estão disponíveis para esta conta</string>
     <string name="usage_unavailable_body">A utilização de Workers / R2 / D1 / KV normalmente requer uma conta paga da Cloudflare; a análise de tráfego de domínios não é afetada.</string>
+    <string name="usage_partial_authz">Os dados de alguns períodos exigem uma conta paga da Cloudflare; os itens que mostram 0 não são falha de carregamento.</string>
     <string name="usage_failed">Falha ao carregar a utilização — toque para tentar novamente</string>
     <string name="usage_period_month">Este mês</string>
     <string name="usage_period_cycle">Ciclo</string>

@@ -291,12 +291,30 @@ class CfApiClient @Inject constructor(
     }
 
     /** GraphQL Analytics：信封 {data, errors}，GraphQL 错误时 HTTP 仍 200 */
-    suspend inline fun <reified D, reified V> graphQL(query: String, variables: V): D {
+    suspend inline fun <reified D, reified V> graphQL(query: String, variables: V): D =
+        graphQLAllowingPartialAuthz<D, V>(query, variables).first
+
+    /**
+     * 同 graphQL，但把「部分字段 authz、其余字段照常返回」这一情况回给调用方（second = true）。
+     *
+     * GraphQL 允许错误与数据同时出现——免费账号最典型：today 窗口有数据、month 窗口 authz。
+     * 此时 data 已经解出来了，整包丢掉等于把手上的数据扔了（概览用量会整块误降级成
+     * 「无账户级数据」）。故：authz 且 data 非空就返回部分数据，只有 data 为空才抛给调用方降级。
+     * 非 authz 的错误（查询写错、schema 不支持等）照旧抛出，不静默吞掉。
+     */
+    suspend inline fun <reified D, reified V> graphQLAllowingPartialAuthz(
+        query: String,
+        variables: V,
+    ): Pair<D, Boolean> {
         val payload = json.encodeToString(GraphQLRequest.serializer(serializer<V>()), GraphQLRequest(query, variables)).encodeToByteArray()
         val bytes = executeRaw("POST", "graphql", emptyList(), payload, JSON_MEDIA_TYPE)
         val env = json.decodeFromString(GraphQLResponse.serializer(serializer<D>()), bytes.decodeToString())
-        env.errors.firstOrNull()?.let { throw ApiError.Cloudflare(listOf(ApiError.CfError(0, it.message))) }
-        return env.data ?: throw ApiError.Decoding(IllegalStateException("GraphQL data missing"))
+        env.errors.firstOrNull()?.let { first ->
+            val data = env.data
+            if (env.errors.any { it.isAuthz } && data != null) return data to true
+            throw ApiError.Cloudflare(listOf(ApiError.CfError(0, first.message)))
+        }
+        return (env.data ?: throw ApiError.Decoding(IllegalStateException("GraphQL data missing"))) to false
     }
 
     // MARK: - 内部实现（@PublishedApi internal 供上方 inline 函数引用）

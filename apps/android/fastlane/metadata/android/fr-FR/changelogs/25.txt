@@ -1,0 +1,3 @@
+• Corrigé : la page des paramètres du domaine ne défilait plus dès que son contenu dépassait un écran, rendant inaccessibles le mode développement, le mode « Je suis attaqué » et Tout purger
+• Corrigé : l'utilisation du compte ne bascule plus entièrement sur « aucune donnée » quand Cloudflare refuse une seule période ; les périodes accessibles restent affichées
+• Corrigé : les dossiers (préfixes) n'apparaissaient pas lors de la navigation dans un bucket R2

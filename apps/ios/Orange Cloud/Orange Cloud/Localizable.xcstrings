@@ -75882,6 +75882,82 @@
         }
       }
     },
+    "授权页面已失效，请重新发起登录。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صفحة التفويض لم تعد صالحة. يرجى بدء تسجيل الدخول من جديد."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Autorisierungsseite ist nicht mehr gültig. Bitte starte die Anmeldung erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The authorization page is no longer valid. Please start signing in again."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La página de autorización ya no es válida. Vuelve a iniciar sesión."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La page d’autorisation n’est plus valide. Veuillez relancer la connexion."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "認証ページの有効期限が切れました。もう一度ログインしてください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인증 페이지가 만료되었습니다. 로그인을 다시 시작하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A página de autorização não é mais válida. Inicie o login novamente."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A página de autorização deixou de ser válida. Inicie a sessão novamente."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yetkilendirme sayfası geçerliliğini yitirdi. Lütfen oturum açmayı yeniden başlatın."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授權頁面已失效，請重新發起登入。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "授權頁面已失效，請重新發起登入。"
+          }
+        }
+      }
+    },
     "授权请求包含 Cloudflare 尚未对本 App 开放的权限，无法完成登录。请更新到最新版本后重试。": {
       "localizations": {
         "ar": {
@@ -138697,6 +138773,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "部分中斷"
+          }
+        }
+      }
+    },
+    "部分周期数据需付费版 Cloudflare 账号，显示为 0 的项非加载失败": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بعض بيانات الفترة تتطلب حساب Cloudflare مدفوعًا. العناصر التي تظهر 0 ليست أخطاء تحميل."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einige Zeitraumdaten erfordern ein kostenpflichtiges Cloudflare-Konto. Einträge mit 0 sind keine Ladefehler."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some period data requires a paid Cloudflare account. Items showing 0 aren’t load failures."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algunos datos del periodo requieren una cuenta de pago de Cloudflare. Los elementos que muestran 0 no son errores de carga."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Certaines données de la période nécessitent un compte Cloudflare payant. Les éléments affichant 0 ne sont pas des échecs de chargement."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一部の期間のデータには有料の Cloudflare アカウントが必要です。0 と表示される項目は読み込み失敗ではありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일부 주기 데이터에는 유료 Cloudflare 계정이 필요합니다. 0으로 표시된 항목은 불러오기 실패가 아닙니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alguns dados do período exigem uma conta paga da Cloudflare. Os itens que mostram 0 não são falhas de carregamento."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alguns dados do período requerem uma conta paga da Cloudflare. Os itens que mostram 0 não são falhas de carregamento."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bazı dönem verileri ücretli bir Cloudflare hesabı gerektirir. 0 görünen öğeler yükleme hatası değildir."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部分週期數據需付費版 Cloudflare 帳戶，顯示為 0 的項目並非載入失敗"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "部分週期資料需付費版 Cloudflare 帳號，顯示為 0 的項目並非載入失敗"
           }
         }
       }

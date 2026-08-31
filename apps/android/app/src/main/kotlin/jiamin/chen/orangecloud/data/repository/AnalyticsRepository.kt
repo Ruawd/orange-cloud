@@ -138,19 +138,30 @@ class AnalyticsRepository @Inject constructor(
         return D1UsageVariables(accountId, monthStart.format(day), today.format(day), today.format(day))
     }
 
-    /** Workers 账号用量（今日/周期请求、月度错误、单次 CPU 分位）。authz 错误由 api.graphQL 抛出交调用方降级。 */
-    suspend fun accountWorkersUsage(accountId: String, periodStart: Instant?): AccountUsage {
-        val data = api.graphQL<AccountUsageData, AccountUsageVariables>(
+    /**
+     * Workers 账号用量（今日/周期请求、月度错误、单次 CPU 分位）。整账号无账户级数据权限时
+     * （authz 且信封里连数据都没有）由 api.graphQL 抛出交调用方降级。
+     *
+     * partialAuthz = 只有部分时间窗被 authz 挡（免费账号常见：今日有数、周期没有），
+     * 返回的用量里缺的那部分是 0，调用方据此给温和提示而不是整块降级。
+     */
+    data class AccountWorkersUsage(val usage: AccountUsage, val partialAuthz: Boolean)
+
+    suspend fun accountWorkersUsage(accountId: String, periodStart: Instant?): AccountWorkersUsage {
+        val (data, partialAuthz) = api.graphQLAllowingPartialAuthz<AccountUsageData, AccountUsageVariables>(
             AccountUsageQueries.WORKERS, usageVariables(accountId, periodStart),
         )
         val node = data.viewer.accounts.firstOrNull() ?: error("no account")
         val q = node.month?.firstOrNull()?.quantiles
-        return AccountUsage(
-            workersRequestsToday = node.today.orEmpty().sumOf { it.sum?.requests ?: 0L },
-            workersRequestsMonth = node.month.orEmpty().sumOf { it.sum?.requests ?: 0L },
-            workersErrorsMonth = node.month.orEmpty().sumOf { it.sum?.errors ?: 0L },
-            cpuP50Us = q?.cpuTimeP50,
-            cpuP99Us = q?.cpuTimeP99,
+        return AccountWorkersUsage(
+            AccountUsage(
+                workersRequestsToday = node.today.orEmpty().sumOf { it.sum?.requests ?: 0L },
+                workersRequestsMonth = node.month.orEmpty().sumOf { it.sum?.requests ?: 0L },
+                workersErrorsMonth = node.month.orEmpty().sumOf { it.sum?.errors ?: 0L },
+                cpuP50Us = q?.cpuTimeP50,
+                cpuP99Us = q?.cpuTimeP99,
+            ),
+            partialAuthz,
         )
     }
 

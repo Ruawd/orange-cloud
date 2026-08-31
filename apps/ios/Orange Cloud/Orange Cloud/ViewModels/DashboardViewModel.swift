@@ -32,6 +32,9 @@ final class DashboardViewModel {
     private(set) var usageLoadFailed = false
     /// 账户级数据集未授权（免费账号常态）：UI 显示「无账户级数据权限」而非重试，且停发后续账户级查询
     private(set) var accountAnalyticsUnavailable = false
+    /// 账户级数据只有部分时间窗被 authz 挡（如今日有数、本周期没有）：用量照常显示，
+    /// 只在宫格上方加一条温和提示，说明缺的那部分显示为 0 不是加载失败
+    private(set) var accountAnalyticsPartial = false
 
     // MARK: - 资源清单（命令搜索 / 跨类型置顶 / 告警中心共用）
     // 域名与 Workers 直接读 SwiftData 缓存，这里只补拉「概览页原本不持有」的四类；
@@ -263,6 +266,7 @@ final class DashboardViewModel {
         // 下拉刷新（force）会重探，便于用户升级套餐后自动恢复。
         if !force, analyticsUnavailableForAccount == accountId {
             accountAnalyticsUnavailable = true
+            accountAnalyticsPartial = false
             return
         }
 
@@ -298,13 +302,19 @@ final class DashboardViewModel {
 
         // Workers 用量（账号级 GraphQL）。注意 HTTP 200 不代表 GraphQL 成功——Cloudflare 即使
         // 数据集报错也回 200，错误在响应体 errors 里（CFAPIClient.graphQL 会记 "graphQL error"）。
-        // Workers 是账户级 analytics 的代表：命中 authz = 整账号无账户级数据权限（CF 的 authz 是
-        // 账号级、各账户级数据集同进同退）→ 直接降级并停发 R2/D1/KV/CPU 等其余注定失败的查询。
+        // Workers 是账户级 analytics 的代表：authz 且信封里连数据都没有 = 整账号无账户级数据权限
+        // → 直接降级并停发 R2/D1/KV/CPU 等其余注定失败的查询。
+        // 但 authz 也可能只挡住部分时间窗（免费账号：今日有数、本周期没有），此时 CF 照常回已授权
+        // 字段，CFAPIClient 会把它连同 partialAuthz 一起给回来——那种情况不降级，照常显示并加提示。
         let workers: AccountUsage?
+        var partialAuthz = false
         do {
-            workers = try await analyticsService.accountUsage(accountId: accountId, periodStart: periodStart)
+            let result = try await analyticsService.accountUsage(accountId: accountId, periodStart: periodStart)
+            workers = result.usage
+            partialAuthz = result.partialAuthz
         } catch let error as APIError where error.isAccountNotAuthorized {
             accountAnalyticsUnavailable = true
+            accountAnalyticsPartial = false
             analyticsUnavailableForAccount = accountId
             self.usage = nil
             usageLoadFailed = false
@@ -317,6 +327,7 @@ final class DashboardViewModel {
 
         // 账户级有权限（或仅 Workers 本次临时失败）：清除不可用态
         accountAnalyticsUnavailable = false
+        accountAnalyticsPartial = partialAuthz
         analyticsUnavailableForAccount = nil
 
         var usage = workers ?? AccountUsage(

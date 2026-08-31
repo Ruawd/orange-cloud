@@ -44,7 +44,8 @@ enum BackgroundRefresh {
                 await run(task: refreshTask)
             }
             refreshTask.expirationHandler = {
-                AppLog.background.error("BGAppRefresh expired (system cut off)")
+                // 系统按预算收回后台时间是常态，不是故障：记 notice 不进遥测
+                AppLog.background.notice("BGAppRefresh expired (system cut off)")
                 work.cancel()
                 refreshTask.setTaskCompleted(success: false)
             }

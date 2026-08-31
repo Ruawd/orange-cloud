@@ -179,7 +179,7 @@ export default async function NotCachingGuide({ params }: { params: Promise<{ lo
 					is missing, the response came from your origin, whatever else the page appears to be doing. If the
 					headers are absent entirely, the hostname is probably not proxied at all — see{" "}
 					<Link href="/guides/what-is-the-orange-cloud-in-cloudflare">
-						what the orange cloud means in Cloudflare
+						proxied vs DNS only
 					</Link>{" "}
 					for that case, because a DNS-only record never reaches a cache in the first place.
 				</p>

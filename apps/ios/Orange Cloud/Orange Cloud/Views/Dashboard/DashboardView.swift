@@ -814,6 +814,13 @@ private struct DashboardHomeView: View {
                     .padding(.vertical, 16)
                     .glassIsland(cornerRadius: OCLayout.chipRadius)
             } else if let usage = viewModel.usage {
+                if viewModel.accountAnalyticsPartial {
+                    // 部分时间窗被 authz 挡（免费账号常见）：数据照常显示，
+                    // 只说明缺的那部分为 0 是权限所致，不是加载失败
+                    Label("部分周期数据需付费版 Cloudflare 账号，显示为 0 的项非加载失败", systemImage: "info.circle")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
                 usageGrid(usage)
             } else if viewModel.accountAnalyticsUnavailable {
                 accountAnalyticsUnavailableCard

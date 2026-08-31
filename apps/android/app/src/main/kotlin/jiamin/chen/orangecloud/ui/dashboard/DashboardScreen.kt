@@ -169,6 +169,7 @@ fun DashboardScreen(
                     loadFailed = state.usageLoadFailed,
                     hasScope = state.hasAccountAnalytics,
                     unavailable = state.accountAnalyticsUnavailable,
+                    partial = state.accountAnalyticsPartial,
                     onSky = onSky,
                     onRetry = { viewModel.loadUsage(force = true) },
                     onSetWorkersPaid = { viewModel.setUsageWorkersPaid(it) },

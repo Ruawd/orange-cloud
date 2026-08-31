@@ -1385,6 +1385,7 @@
     <string name="usage_locked">需要「流量分析」權限才能顯示帳戶用量</string>
     <string name="usage_unavailable_title">此帳戶暫無帳戶層級資料查詢權限</string>
     <string name="usage_unavailable_body">Workers / R2 / D1 / KV 用量通常需要付費版 Cloudflare 帳戶；域名流量分析不受影響。</string>
+    <string name="usage_partial_authz">部分週期數據需付費版 Cloudflare 帳戶，顯示為 0 的項目並非載入失敗</string>
     <string name="usage_failed">用量載入失敗，點此重試</string>
     <string name="usage_period_month">本月</string>
     <string name="usage_period_cycle">帳期</string>

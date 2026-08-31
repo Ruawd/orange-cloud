@@ -21,8 +21,6 @@ struct Orange_CloudApp: App {
     @AppStorage(AppAppearance.storageKey) private var appearanceRaw = AppAppearance.system.rawValue
     @AppStorage(AppMotion.storageKey) private var reduceAnimations = false
 
-    let sharedModelContainer = CacheContainer.shared
-
     init() {
         // 最先安装崩溃捕获，让启动期任意一步崩溃都能被记录、随下次反馈带出。
         CrashReporter.install()
@@ -78,7 +76,9 @@ struct Orange_CloudApp: App {
                     handleSpotlightTap(activity)
                 }
         }
-        .modelContainer(sharedModelContainer)
+        // 这里必须现取：App.init 的 warmUp 自检可能已把坏掉的容器换掉（见 CacheContainer），
+        // 提前存成属性会让 @Query 绑在旧容器上。
+        .modelContainer(CacheContainer.shared)
         .onChange(of: scenePhase) {
             AppLog.app.info("scenePhase -> \(String(describing: scenePhase))")
             if scenePhase == .background {

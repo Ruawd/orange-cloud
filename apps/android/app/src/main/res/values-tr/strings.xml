@@ -1346,6 +1346,7 @@
     <string name="usage_locked">Hesap kullanımını göstermek için trafik analizi izni gerekir</string>
     <string name="usage_unavailable_title">Bu hesap için hesap düzeyinde veri kullanılamıyor</string>
     <string name="usage_unavailable_body">Workers / R2 / D1 / KV kullanımı genellikle ücretli bir Cloudflare hesabı gerektirir; alan adı trafik analizi bundan etkilenmez.</string>
+    <string name="usage_partial_authz">Bazı dönemlerin verileri ücretli bir Cloudflare hesabı gerektirir; 0 görünen ögeler yükleme hatası değildir.</string>
     <string name="usage_failed">Kullanım yüklenemedi — yeniden denemek için dokunun</string>
     <string name="usage_period_month">Bu ay</string>
     <string name="usage_period_cycle">Dönem</string>

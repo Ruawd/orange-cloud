@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import GuideShell, { type RelatedLink } from "@/components/guides/GuideShell";
+import ProxyStatusPaths from "@/components/guides/ProxyStatusPaths";
 import { guideBySlug, GUIDE_LOCALE } from "@/lib/guides/guides";
 
 const SITE_URL = "https://o-c.do";
@@ -24,8 +25,8 @@ const FAQ: Array<{ q: string; a: string }> = [
 		a: "On for any A, AAAA, or CNAME record that serves your website or API over HTTP/HTTPS. Off for mail hostnames, domain-verification records, SSH and other non-HTTP services, and endpoints a third party has to reach at your real IP address.",
 	},
 	{
-		q: "Why can’t I turn on the orange cloud for my MX record?",
-		a: "Only A, AAAA, and CNAME records can be proxied. MX, TXT, NS, SRV, and every other type stay DNS only, because Cloudflare’s proxy handles HTTP and HTTPS traffic and has no anycast address to substitute for those record types.",
+		q: "What does DNS only mean in Cloudflare?",
+		a: "DNS only — the grey cloud — means Cloudflare publishes the record but does not proxy it. The query returns your origin IP address, visitors connect straight to your server, and caching, the WAF, Rules and Workers routes never see the request. MX, TXT, NS, SRV and every record type other than A, AAAA and CNAME is permanently DNS only.",
 	},
 	{
 		q: "Does the orange cloud hide my origin IP?",
@@ -151,7 +152,7 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 			<GuideShell
 				title={guide.h1}
-				lede="One toggle in the Cloudflare dashboard decides whether your traffic goes through Cloudflare at all. Here is exactly what it changes."
+				lede="Orange cloud or grey cloud, proxied or DNS only — one toggle in the Cloudflare dashboard decides whether your traffic goes through Cloudflare at all. Here is exactly what it changes."
 				updated={guide.updated}
 				readingTime={guide.readingTime}
 				related={RELATED}
@@ -178,13 +179,15 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					The difference between the orange cloud and the grey cloud starts one step earlier than most
 					people expect — at the DNS answer itself, before any HTTP request exists.
 				</p>
+				<ProxyStatusPaths />
+				<p>Everything else follows from those two answers:</p>
 				<div className="table-wrap">
 					<table>
 						<thead>
 							<tr>
 								<th scope="col">&nbsp;</th>
 								<th scope="col">Orange cloud (proxied)</th>
-								<th scope="col">Gray cloud (DNS only)</th>
+								<th scope="col">Grey cloud (DNS only)</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -237,18 +240,16 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					</table>
 				</div>
 				<p>
-					One consequence is worth spelling out: a gray-clouded record publishes your server’s real address,
-					which is what makes “I moved to Cloudflare and still got hit directly” possible. Cloudflare can
-					only protect requests it actually receives.
+					One consequence is worth spelling out: a grey-clouded record publishes your server’s real
+					address, which is what makes “I moved to Cloudflare and still got hit directly” possible.
 				</p>
 
 				<h2 id="which-records">Which records can be orange-clouded</h2>
 				<p>
-					Only <strong>A</strong>, <strong>AAAA</strong>, and <strong>CNAME</strong> records — the record
-					types that resolve a name to an address. MX, TXT, NS, SRV, CAA and the rest are always DNS only,
-					and the dashboard will not offer you a toggle for them. The reason is structural rather than
-					arbitrary: proxying works by handing out Cloudflare anycast addresses instead of yours, and there
-					is nothing to substitute in a TXT or MX record.
+					Only <strong>A</strong>, <strong>AAAA</strong>, and <strong>CNAME</strong> records — the ones
+					that resolve a name to an address. MX, TXT, NS, SRV, CAA and the rest are always DNS only, and
+					the dashboard offers no toggle for them: proxying works by handing out Cloudflare anycast
+					addresses instead of yours, and there is nothing to substitute in a TXT or MX record.
 				</p>
 				<p>Three behaviours that surprise people:</p>
 				<ul>
@@ -258,18 +259,21 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					</li>
 					<li>
 						<strong>Proxying is inherited along a CNAME chain.</strong> If a name anywhere in the chain is
-						proxied, the request is proxied.
+						proxied, the request is proxied — and a proxied CNAME is always{" "}
+						<Link href="/guides/cloudflare-cname-flattening">flattened</Link>, because the answer it
+						returns is a Cloudflare address rather than the target name.
 					</li>
 					<li>
 						<strong>Some CNAME targets are blocked from proxying on purpose.</strong> DKIM and validation
-						targets such as <code>dkim.amazonses.com</code>, <code>acm-validations.aws</code>, or
-						subdomains of <code>onmicrosoft.com</code> cannot be orange-clouded, because a proxied answer
-						would break the very check they exist for.
+						targets — <code>dkim.amazonses.com</code> and its subdomains, subdomains of{" "}
+						<code>acm-validations.aws</code> and <code>onmicrosoft.com</code>, <code>zmverify.zoho.com</code>{" "}
+						— cannot be orange-clouded, because a proxied answer would break the very check they exist
+						for.
 					</li>
 				</ul>
 				<p>
-					Pointing a proxied record at a hostname in a <em>different</em> Cloudflare account is also
-					refused — that is{" "}
+					Pointing a proxied record at a hostname in a <em>different</em> Cloudflare account is refused —
+					that is{" "}
 					<a
 						href="https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-1xxx-errors/error-1014/"
 						target="_blank"
@@ -284,8 +288,8 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 
 				<h2 id="ports">The proxy only covers certain HTTP and HTTPS ports</h2>
 				<p>
-					This is the single biggest trap for newcomers. The orange cloud is an HTTP/HTTPS reverse proxy,
-					not a general network tunnel. By default it handles these ports:
+					The orange cloud is an HTTP/HTTPS reverse proxy, not a general network tunnel. By default it
+					handles these ports:
 				</p>
 				<div className="table-wrap">
 					<table>
@@ -315,9 +319,9 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 				</div>
 				<p>
 					Everything outside that list — SSH on 22, RDP on 3389, SMTP on 25, a database port, a game
-					server, a dev server on 3000 — is not proxied. The hostname now resolves to Cloudflare, and
-					Cloudflare has no reason to forward a connection on those ports to your machine, so the
-					connection simply fails. Gray-cloud that hostname, or put it behind{" "}
+					server — is not proxied. The hostname now resolves to Cloudflare, which has no reason to
+					forward those ports to your machine, so the connection simply fails. Grey-cloud that hostname,
+					or put it behind{" "}
 					<a
 						href="https://developers.cloudflare.com/spectrum/"
 						target="_blank"
@@ -328,69 +332,67 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					, which proxies non-HTTP ports — all TCP and UDP ports on the Enterprise plan.
 				</p>
 				<p>
-					Note also that the alternate ports (<code>2052</code>, <code>2053</code>, <code>2082</code>,{" "}
-					<code>2083</code>, <code>2086</code>, <code>2087</code>, <code>2095</code>, <code>2096</code>,{" "}
-					<code>8880</code>, <code>8443</code>) are proxied but <em>not cached</em> by default. If you serve
-					a site on 8443 and wonder why the cache hit rate is zero, that is why.
+					The alternate ports (everything above except <code>80</code> and <code>443</code>) are proxied
+					but <em>not cached</em> by default. If you serve a site on 8443 and wonder why the cache hit
+					rate is zero, that is why.
 				</p>
 
-				<h2 id="when-gray">When the gray cloud is the right answer</h2>
-				<p>Reach for DNS only whenever the service on the other end is not plain HTTP/HTTPS to your own origin:</p>
+				<h2 id="when-gray">When DNS only (the grey cloud) is the right answer</h2>
+				<p>Reach for DNS only whenever the far end is not plain HTTP/HTTPS to your own origin:</p>
 				<ul>
 					<li>
 						<strong>Mail.</strong> MX records cannot be proxied at all, and a hostname used for mail
-						delivery (<code>mail.example.com</code>) should stay gray. Cloudflare does not proxy SMTP on
-						port 25, so proxying the mail host points senders at Cloudflare and delivery stops.
+						delivery (<code>mail.example.com</code>) should stay grey. Cloudflare does not proxy SMTP on
+						port 25, so proxying it points senders at Cloudflare and delivery stops.
 					</li>
 					<li>
 						<strong>Domain verification.</strong> Verification CNAMEs and TXT records must return the
-						exact value the third party expects; a proxied answer returns Cloudflare addresses and
-						verification fails.
+						exact value the third party expects; a proxied answer returns Cloudflare addresses instead
+						and verification fails.
 					</li>
 					<li>
-						<strong>Non-HTTP services.</strong> SSH, RDP, FTP, game servers, anything on a port outside
+						<strong>Non-HTTP services.</strong> SSH, RDP, FTP, game servers — anything on a port outside
 						the list above.
 					</li>
 					<li>
 						<strong>Sites hosted on a SaaS platform</strong> that terminates its own TLS — Wix,
-						Squarespace, Webflow and similar — unless that platform is explicitly integrated with
-						Cloudflare. Two proxies both terminating TLS and both redirecting to HTTPS is how you get
-						certificate errors and redirect loops.
+						Squarespace, Webflow — unless the platform is explicitly integrated with Cloudflare. Two
+						proxies both terminating TLS and both redirecting to HTTPS is how you get certificate
+						errors and redirect loops.
 					</li>
 					<li>
-						<strong>Endpoints validated by IP.</strong> If a partner allowlists your server’s address for
-						webhooks or API calls, proxying replaces it with Cloudflare’s.
+						<strong>Endpoints validated by IP.</strong> If a partner allowlists your server’s address,
+						proxying replaces it with Cloudflare’s.
 					</li>
 				</ul>
 				<p>
 					A rule of thumb: <em>if the hostname serves web traffic on a standard port and you control the
-					origin, orange-cloud it. Everything else stays gray.</em>
+					origin, orange-cloud it. Everything else stays grey.</em>
 				</p>
 
 				<h2 id="troubleshooting">When the toggle causes an error</h2>
 				<p>Most orange-cloud incidents look like one of these.</p>
 				<h3>SSH or a custom port stopped working right after you switched</h3>
 				<p>
-					Expected. That port is not proxied. Move the service to its own hostname and gray-cloud that
+					Expected. That port is not proxied. Move the service to its own hostname and grey-cloud that
 					hostname, keeping the web hostname orange.
 				</p>
 				<h3>Mail stopped being delivered</h3>
 				<p>
-					Check whether the hostname your MX record points to is proxied. Give mail its own DNS-only
-					hostname rather than sharing the web hostname. (Cloudflare does try to save you here: if an MX
-					record points at a proxied name, it dynamically prepends <code>_dc-mx</code> to the answer so mail
-					bypasses the proxy — a safety net, not a design to rely on.)
+					Check whether the hostname your MX record points to is proxied, and give mail its own DNS-only
+					hostname. (Cloudflare does try to save you: if an MX record points at a proxied name, it
+					prepends <code>_dc-mx</code> to the answer so mail bypasses the proxy — a safety net, not a
+					design to rely on.)
 				</p>
 				<h3>522, 521, or 524 errors appeared</h3>
 				<p>
-					These only exist because traffic is now proxied: Cloudflare is reaching your origin and not
-					getting a usable answer. A 521 means the origin refused the connection, 522 means it timed out —
-					both usually a firewall that does not allow{" "}
+					These exist only because traffic is now proxied: Cloudflare is reaching your origin and not
+					getting a usable answer. 521 means the origin refused the connection and 522 means it timed
+					out — usually a firewall that does not allow{" "}
 					<a href="https://www.cloudflare.com/ips/" target="_blank" rel="noopener noreferrer">
 						Cloudflare’s IP ranges
 					</a>
-					, or an origin that is down. A 524 means the origin accepted the connection but took longer than
-					the proxy read timeout to respond.
+					. 524 means the origin accepted the connection but exceeded the proxy read timeout.
 				</p>
 				<h3>Redirect loop or certificate error appeared</h3>
 				<p>
@@ -420,10 +422,31 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 				</p>
 				<h3>Your origin IP leaked anyway</h3>
 				<p>
-					Look for the other records in the same zone — <code>mail</code>, <code>ftp</code>, <code>cpanel</code>,
-					a forgotten staging subdomain — that still point at the same server. Also remember that while a
-					newly added domain is still pending activation (up to 24 hours), records behave as DNS only even
-					when marked proxied; rotating the origin IP after activation closes that window.
+					Look for other records in the same zone — <code>mail</code>, <code>ftp</code>,{" "}
+					<code>cpanel</code>, a forgotten staging subdomain — still pointing at the same server. And
+					while a newly added domain is pending activation (up to 24 hours), records behave as DNS only
+					even when marked proxied; rotate the origin IP after activation to close that window.
+				</p>
+				<h3>Client certificates (mTLS) stopped validating</h3>
+				<p>
+					On a proxied record TLS terminates at Cloudflare, which opens a second connection to your
+					origin — so the origin never sees the visitor’s client certificate. Validate client
+					certificates{" "}
+					<a
+						href="https://developers.cloudflare.com/ssl/client-certificates/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						at Cloudflare
+					</a>{" "}
+					instead, or have Cloudflare forward the certificate details to your origin in a header.
+				</p>
+				<h3>Windows authentication prompts in a loop</h3>
+				<p>
+					Integrated Windows Authentication, NTLM and Kerberos are incompatible with proxied records:
+					NTLM authenticates the TCP connection rather than the request, and Cloudflare does not
+					guarantee that consecutive requests reuse the same connection. That hostname needs to be DNS
+					only.
 				</p>
 				<h3>Your app now sees Cloudflare addresses as the visitor IP</h3>
 				<p>
@@ -431,16 +454,15 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 					<code>CF-Connecting-IP</code> header (or <code>X-Forwarded-For</code>) instead of the socket.
 				</p>
 
-				<h2 id="how-to-switch">How to switch it</h2>
+				<h2 id="how-to-switch">How to turn the orange cloud on or off</h2>
 				<p>
-					<strong>In the dashboard:</strong> open your domain, go to <strong>DNS → Records</strong>, select{" "}
-					<strong>Edit</strong> on the record, and click the cloud under <strong>Proxy status</strong>. It
-					takes effect at Cloudflare immediately, though resolvers may hold the previous answer for up to
-					five minutes.
+					<strong>In the dashboard:</strong> open your domain, go to <strong>DNS → Records</strong>,{" "}
+					<strong>Edit</strong> the record, and click the cloud under <strong>Proxy status</strong>. It
+					takes effect immediately, though resolvers may hold the previous answer for up to five
+					minutes.
 				</p>
 				<p>
-					<strong>Over the API:</strong> proxy status is the <code>proxied</code> boolean on the DNS record.
-					A partial update is enough:
+					<strong>Over the API:</strong> proxy status is the <code>proxied</code> boolean on the record:
 				</p>
 				<pre>
 					<code>{API_EXAMPLE}</code>
@@ -453,10 +475,10 @@ export default async function OrangeCloudGuide({ params }: { params: Promise<{ l
 
 				<h2 id="both-orange">What if both ends are orange?</h2>
 				<p>
-					If your proxied record points at a hostname that is itself proxied by Cloudflare — typically a
-					SaaS platform using Cloudflare for SaaS, such as a Shopify store on your own domain — the request
-					crosses two Cloudflare zones, and both sets of settings apply in a defined order. Cloudflare calls
-					this Orange-to-Orange, or O2O, and it has its own rules about which zone wins:{" "}
+					If your proxied record points at a hostname that is itself proxied — typically a SaaS platform
+					using Cloudflare for SaaS, such as a Shopify store on your own domain — the request crosses two
+					Cloudflare zones and both sets of settings apply, in order. Cloudflare calls this
+					Orange-to-Orange, or O2O:{" "}
 					<Link href="/guides/cloudflare-orange-to-orange">
 						Cloudflare Orange-to-Orange (O2O), explained
 					</Link>

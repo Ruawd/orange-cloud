@@ -49,6 +49,31 @@ nonisolated struct CFAPIResponseArray<T: Codable & Sendable>: Codable, Sendable 
 nonisolated struct CFAPIError: Codable, Sendable {
     let code:    Int
     let message: String
+    /// 2026-08-20 起 CF 在 4xx（尤其 403）的错误体里带上该端点所需角色/权限的文档地址。
+    /// 老端点与旧响应可能没有，故为可选。
+    let documentationURL: String?
+    /// 出错字段的 JSON Pointer（如 "/body/rules/0/action"），字段级校验失败时才有。
+    let source: CFAPIErrorSource?
+
+    enum CodingKeys: String, CodingKey {
+        case code, message, source
+        case documentationURL = "documentation_url"
+    }
+
+    /// 两个新字段一律宽容解码：它们只是排查用的附加信息，形态不合预期时也绝不能
+    /// 拖垮整条错误的解码——外层 `errors` 解不出会整体降级为空数组，把 code/message
+    /// 一起丢掉，错误信息反而不如加字段之前。
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        code    = try c.decode(Int.self, forKey: .code)
+        message = try c.decode(String.self, forKey: .message)
+        documentationURL = try? c.decodeIfPresent(String.self, forKey: .documentationURL)
+        source           = try? c.decodeIfPresent(CFAPIErrorSource.self, forKey: .source)
+    }
+}
+
+nonisolated struct CFAPIErrorSource: Codable, Sendable {
+    let pointer: String?
 }
 
 nonisolated struct CFAPIMessage: Codable, Sendable {
@@ -84,13 +109,17 @@ nonisolated struct EmptyResponse: Codable, Sendable {}
 extension CFAPIResponse {
     func toAPIError() -> APIError {
         let err = errors.first
-        return .cloudflareError(code: err?.code ?? 0, message: err?.message ?? String(localized: "未知错误"))
+        return .cloudflareError(code: err?.code ?? 0,
+                                message: err?.message ?? String(localized: "未知错误"),
+                                documentationURL: err?.documentationURL)
     }
 }
 
 extension CFAPIResponseArray {
     func toAPIError() -> APIError {
         let err = errors.first
-        return .cloudflareError(code: err?.code ?? 0, message: err?.message ?? String(localized: "未知错误"))
+        return .cloudflareError(code: err?.code ?? 0,
+                                message: err?.message ?? String(localized: "未知错误"),
+                                documentationURL: err?.documentationURL)
     }
 }

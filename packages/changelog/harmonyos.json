@@ -1,0 +1,64 @@
+[
+  {
+    "version": "1.0.0",
+    "date": "2026.08.30",
+    "channel": "AppGallery",
+    "items": [
+      {
+        "icon": "person.badge.key",
+        "title": {
+          "zh-Hans": "OAuth 一键登录",
+          "en": "One-tap OAuth sign-in"
+        },
+        "detail": {
+          "zh-Hans": "用 Cloudflare 官方授权登录，无需手动粘贴 API Token；一个 App 可同时登录多个身份与账号，随时切换。",
+          "en": "Sign in with Cloudflare's official authorization — no API tokens to paste. Keep several identities and accounts signed in and switch anytime."
+        }
+      },
+      {
+        "icon": "globe",
+        "title": {
+          "zh-Hans": "域名、DNS 与规则中心",
+          "en": "Domains, DNS and the rules hub"
+        },
+        "detail": {
+          "zh-Hans": "域名列表与详情、DNS 记录增删改查、WAF 与速率限制、缓存与 Transform、单条重定向与 Page Rules，都在手机上完成。",
+          "en": "Browse domains, manage DNS records, WAF and rate limiting, cache and transform rules, single redirects and Page Rules — all from your phone."
+        }
+      },
+      {
+        "icon": "bolt.fill",
+        "title": {
+          "zh-Hans": "开发者平台与实时日志",
+          "en": "Developer platform with live logs"
+        },
+        "detail": {
+          "zh-Hans": "Workers、Pages、Queues、Durable Objects、Hyperdrive、Workers AI 与 AI Gateway 收在一个 Tab；Worker 实时日志支持搜索、级别筛选与暂停。",
+          "en": "Workers, Pages, Queues, Durable Objects, Hyperdrive, Workers AI and AI Gateway share one tab, and Worker live logs support search, level filters and pause."
+        }
+      },
+      {
+        "icon": "externaldrive",
+        "title": {
+          "zh-Hans": "R2、D1 与 KV 随身管理",
+          "en": "R2, D1 and KV in your pocket"
+        },
+        "detail": {
+          "zh-Hans": "浏览 R2 存储桶与对象、跑 D1 SQL 查询并直接改行、读写 KV 键值；大表有截断与分页防线，不怕手机内存吃紧。",
+          "en": "Browse R2 buckets and objects, run D1 SQL and edit rows in place, read and write KV pairs — with truncation and paging guards so large tables stay safe on a phone."
+        }
+      },
+      {
+        "icon": "sun.horizon",
+        "title": {
+          "zh-Hans": "随时间走的晨昏界面与桌面卡片",
+          "en": "A daybreak interface and home-screen cards"
+        },
+        "detail": {
+          "zh-Hans": "整个 App 的天色随你所在时刻从清晨走到深夜；桌面服务卡片提供「天窗」与「山脊」两张，账号总览一眼可见。",
+          "en": "The whole app's sky follows your local time from dawn to night, and two home-screen cards — skylight and ridge — keep your account overview one glance away."
+        }
+      }
+    ]
+  }
+]

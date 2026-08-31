@@ -1,0 +1,3 @@
+• Fixed: the domain settings page would not scroll once its content ran past one screen, leaving Development mode, “I'm Under Attack” mode and Purge everything out of reach
+• Fixed: account usage no longer drops to “no data” when Cloudflare denies just one time window — the periods you can read keep showing
+• Fixed: folders (prefixes) were missing when browsing an R2 bucket

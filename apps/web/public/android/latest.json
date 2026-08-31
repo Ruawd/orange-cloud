@@ -1,7 +1,7 @@
 {
-  "versionCode": 24,
-  "versionName": "2.1.0",
+  "versionCode": 25,
+  "versionName": "2.1.1",
   "minVersionCode": 1,
   "url": "https://o-c.do/orange-cloud.apk",
-  "note": "本次更新：Turnstile 人机验证管理（新建 / 编辑 / 密钥轮换）、R2 SQL 查询控制台、Workers 密钥批量导入，缓存规则新增 JA3/JA4 字段并保护 Vary 配置。"
+  "note": "本次更新：修复域名设置页无法滚动；账号用量不再因单个时间窗无权限而整块空白；R2 存储桶里的文件夹恢复显示。"
 }

@@ -57,7 +57,7 @@ class StorageRepository @Inject constructor(
 
     /**
      * 对象列表一页。传 delimiter=/ 让服务端把子前缀折叠成「文件夹」，prefix 为当前所在文件夹；
-     * result_info.delimited_prefixes 即子文件夹前缀列表。
+     * result_info.delimited 即子文件夹前缀列表。
      */
     suspend fun listObjects(accountId: String, bucket: String, prefix: String, cursor: String?): R2ObjectPage {
         val query = buildList {

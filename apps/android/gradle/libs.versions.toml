@@ -1,10 +1,11 @@
-# 版本目录。版本号为 2026-06 最佳估计；本机未装工具链，首次 `gradle sync`
-# 可能需要按报错微调（尤其 AGP/Kotlin/Compose BOM 三者的兼容矩阵）。
+# 版本目录。AGP 9.x 起对工具链有硬约束：Gradle ≥ 9.5.0、JDK 17、build-tools 36，
+# 且 AGP 自带 KGP 运行时依赖（≥ 2.2.10）——升 AGP 时 Kotlin/KSP/Hilt 必须成套动。
 [versions]
-agp = "8.13.2"
-kotlin = "2.1.20"
-ksp = "2.1.20-2.0.0"
-hilt = "2.56.2"
+agp = "9.3.2"
+kotlin = "2.3.21"
+# KSP 自 2.3 起与 Kotlin 版本号解耦；≥ 2.3.6 才兼容 AGP 内置 Kotlin
+ksp = "2.3.11"
+hilt = "2.60.1"
 hiltNavigation = "1.2.0"
 
 coreKtx = "1.16.0"
@@ -90,7 +91,6 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

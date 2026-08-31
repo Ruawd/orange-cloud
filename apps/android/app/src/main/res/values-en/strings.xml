@@ -1409,6 +1409,7 @@
     <string name="usage_locked">Traffic analytics permission is required to show account usage</string>
     <string name="usage_unavailable_title">Account-level data isn\'t available for this account</string>
     <string name="usage_unavailable_body">Workers / R2 / D1 / KV usage usually needs a paid Cloudflare account; domain traffic analytics is unaffected.</string>
+    <string name="usage_partial_authz">Data for some periods requires a paid Cloudflare account — items showing 0 are not a loading failure.</string>
     <string name="usage_failed">Usage failed to load — tap to retry</string>
     <string name="usage_period_month">This month</string>
     <string name="usage_period_cycle">Cycle</string>

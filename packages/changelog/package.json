@@ -3,16 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "发布说明单一数据源：每平台一份 9 语 release，供 App codegen 与官网直读。",
+  "description": "发布说明单一数据源：每平台一份 release（iOS/Android 多语，鸿蒙 zh-Hans+en），供 App codegen 与官网直读。",
   "exports": {
     ".": "./index.ts",
     "./ios.json": "./ios.json",
-    "./android.json": "./android.json"
+    "./android.json": "./android.json",
+    "./harmonyos.json": "./harmonyos.json"
   },
   "scripts": {
     "gen:ios": "node scripts/gen-ios.mjs",
     "gen:android": "node scripts/gen-android.mjs",
-    "gen": "node scripts/gen-ios.mjs && node scripts/gen-android.mjs",
+    "gen:harmony": "node scripts/gen-harmony.mjs",
+    "gen": "node scripts/gen-ios.mjs && node scripts/gen-android.mjs && node scripts/gen-harmony.mjs",
     "check": "node scripts/check.mjs"
   }
 }

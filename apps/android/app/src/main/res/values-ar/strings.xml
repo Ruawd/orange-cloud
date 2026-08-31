@@ -1346,6 +1346,7 @@
     <string name="usage_locked">يلزم إذن تحليلات الحركة لعرض استخدام الحساب</string>
     <string name="usage_unavailable_title">بيانات مستوى الحساب غير متاحة لهذا الحساب</string>
     <string name="usage_unavailable_body">يتطلب استخدام Workers / R2 / D1 / KV عادةً حساب Cloudflare مدفوعًا؛ ولا يتأثر تحليل حركة النطاقات.</string>
+    <string name="usage_partial_authz">تتطلب بيانات بعض الفترات حساب Cloudflare مدفوعًا؛ العناصر التي تظهر بالقيمة 0 ليست فشلًا في التحميل.</string>
     <string name="usage_failed">تعذّر تحميل الاستخدام — انقر لإعادة المحاولة</string>
     <string name="usage_period_month">هذا الشهر</string>
     <string name="usage_period_cycle">الدورة</string>

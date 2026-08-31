@@ -29,7 +29,8 @@ enum CachePolicy {
     // 1.8.2(24) 改纯谓词后同一台设备仍在崩（build 24/27 日志砸在纯谓词 fetch 本身），
     // 说明该机缓存库已损坏——Swift 的 try? 接不住 CoreData 的 NSException，必须经
     // SafeCache 的 ObjC @try 垫片兜底：异常按「缓存不新鲜」处理（触发正常重拉），
-    // 连续异常由 CacheContainer 标记下次启动清库重建。
+    // 连续异常由 CacheContainer 就地重建容器（Sentry APPLE-IOS-1：坏的是整个容器的
+    // 实体注册，非本文件的 fetch 写法，故谓词照常可用）。
     // 单账号/单域名下的缓存行数很小，内存里取 max(updatedAt) 足够。
 
     /// 某账号缓存的域名是否仍在有效期内（用于冷启动免重拉）

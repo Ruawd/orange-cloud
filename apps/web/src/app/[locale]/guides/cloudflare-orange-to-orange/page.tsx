@@ -32,7 +32,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const RELATED: RelatedLink[] = [
 	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
-		label: "What does the orange cloud mean in Cloudflare?",
+		label: "What is the orange cloud in Cloudflare?",
 		note: "The prerequisite: proxied vs DNS only, which records qualify, and which ports the proxy covers.",
 	},
 	{

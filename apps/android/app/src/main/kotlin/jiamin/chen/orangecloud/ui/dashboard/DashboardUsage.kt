@@ -93,6 +93,7 @@ fun DashboardUsageSection(
     loadFailed: Boolean,
     hasScope: Boolean,
     unavailable: Boolean,
+    partial: Boolean,
     onSky: Color,
     onRetry: () -> Unit,
     onSetWorkersPaid: (Boolean) -> Unit,
@@ -117,7 +118,19 @@ fun DashboardUsageSection(
 
         when {
             !hasScope -> InfoCard(Icons.Outlined.Lock, stringResource(R.string.usage_locked), null)
-            usage != null -> UsageGrid(usage, plan)
+            usage != null -> {
+                // 部分时间窗被 authz 挡（免费账号常见）：数据照常显示，
+                // 只说明缺的那部分为 0 是权限所致，不是加载失败
+                if (partial) {
+                    Text(
+                        stringResource(R.string.usage_partial_authz),
+                        fontSize = 12.sp,
+                        color = cs.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
+                }
+                UsageGrid(usage, plan)
+            }
             unavailable -> InfoCard(
                 Icons.Outlined.QueryStats,
                 stringResource(R.string.usage_unavailable_title),

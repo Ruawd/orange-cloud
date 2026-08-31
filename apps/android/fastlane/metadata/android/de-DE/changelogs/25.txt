@@ -1,0 +1,3 @@
+• Behoben: Die Domain-Einstellungen ließen sich nicht scrollen, sobald der Inhalt über einen Bildschirm hinausging – Entwicklungsmodus, „Ich werde angegriffen“-Modus und Alles leeren blieben unerreichbar
+• Behoben: Die Kontonutzung fällt nicht mehr komplett auf „keine Daten“, wenn Cloudflare nur einen Zeitraum sperrt – lesbare Zeiträume bleiben sichtbar
+• Behoben: Ordner (Präfixe) fehlten beim Durchsuchen eines R2-Buckets

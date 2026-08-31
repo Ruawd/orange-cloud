@@ -41,7 +41,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const RELATED: RelatedLink[] = [
 	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
-		label: "What does the orange cloud mean in Cloudflare?",
+		label: "What is the orange cloud in Cloudflare?",
 		note: "The prerequisite: encryption modes only apply to records that are proxied in the first place.",
 	},
 	{
@@ -165,7 +165,7 @@ export default async function EncryptionModesGuide({ params }: { params: Promise
 					connects directly, so there is no second hop for the mode to govern. If that distinction is new,
 					start with{" "}
 					<Link href="/guides/what-is-the-orange-cloud-in-cloudflare">
-						what the orange cloud means in Cloudflare
+						what the orange cloud is and what proxying changes
 					</Link>
 					.
 				</p>

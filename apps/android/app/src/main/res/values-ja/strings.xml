@@ -1385,6 +1385,7 @@
     <string name="usage_locked">アカウントの使用量を表示するには「トラフィック分析」権限が必要です</string>
     <string name="usage_unavailable_title">このアカウントではアカウントレベルのデータを取得できません</string>
     <string name="usage_unavailable_body">Workers / R2 / D1 / KV の使用量は通常、有料版の Cloudflare アカウントが必要です。ドメインのトラフィック分析には影響しません。</string>
+    <string name="usage_partial_authz">一部期間のデータには有料の Cloudflare アカウントが必要です。0 と表示される項目は読み込み失敗ではありません。</string>
     <string name="usage_failed">使用量の読み込みに失敗しました。タップして再試行</string>
     <string name="usage_period_month">今月</string>
     <string name="usage_period_cycle">期間</string>

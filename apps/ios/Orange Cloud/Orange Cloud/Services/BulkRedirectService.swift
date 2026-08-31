@@ -116,9 +116,9 @@ struct BulkRedirectService {
             return ruleset
         } catch APIError.notFound {
             return nil
-        } catch let APIError.cloudflareError(code, message) {
+        } catch let APIError.cloudflareError(code, message, docURL) {
             if message.localizedCaseInsensitiveContains("could not find entrypoint") { return nil }
-            throw APIError.cloudflareError(code: code, message: message)
+            throw APIError.cloudflareError(code: code, message: message, documentationURL: docURL)
         }
     }
 

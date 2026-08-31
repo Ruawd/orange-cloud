@@ -11,7 +11,10 @@ nonisolated enum APIError: LocalizedError {
     case notFound                        // 404
     case rateLimited                     // 429
     case serverError(statusCode: Int)    // 5xx
-    case cloudflareError(code: Int, message: String)  // CF 业务错误
+    /// CF 业务错误。documentationURL 是 2026-08-20 起 CF 在 4xx 错误体里回的
+    /// `documentation_url`（该端点所需角色/权限的文档），老端点没有故可选、带默认值——
+    /// 二十多处构造点无需改动。
+    case cloudflareError(code: Int, message: String, documentationURL: String? = nil)
     case decodingError(Error)            // 解析失败
     case networkError(Error)             // 网络错误
     case accountNotAuthorized            // 账户级数据集未授权（GraphQL authz；免费账号常态，无法区分无权限/计划未开通）
@@ -23,11 +26,18 @@ nonisolated enum APIError: LocalizedError {
         case .notFound:                    return String(localized: "资源不存在")
         case .rateLimited:                 return String(localized: "请求太频繁，请稍后再试")
         case .serverError(let code):       return String(localized: "服务器错误（\(code)）")
-        case .cloudflareError(_, let msg): return msg
+        case .cloudflareError(_, let msg, _): return msg
         case .decodingError:               return String(localized: "数据解析失败")
         case .networkError(let e):         return String(localized: "网络错误：\(e.localizedDescription)")
         case .accountNotAuthorized:        return String(localized: "此账号暂无账户级数据查询权限")
         }
+    }
+
+    /// CF 给出的「该端点需要什么权限」文档地址（仅 4xx 且新端点有）。
+    var documentationURL: URL? {
+        guard case .cloudflareError(_, _, let raw) = self,
+              let raw, let url = URL(string: raw) else { return nil }
+        return url
     }
 
     /// 是否为账户级数据集未授权（用于 UI 降级到「免费账号无账户级数据」态）
@@ -41,7 +51,7 @@ nonisolated enum APIError: LocalizedError {
     var isPermissionDenied: Bool {
         switch self {
         case .forbidden:                    return true
-        case .cloudflareError(let code, _): return code == 10000
+        case .cloudflareError(let code, _, _): return code == 10000
         default:                            return false
         }
     }

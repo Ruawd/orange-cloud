@@ -1,0 +1,3 @@
+• Corregido: la página de configuración del dominio no se desplazaba cuando el contenido superaba una pantalla, dejando fuera de alcance el modo de desarrollo, el modo “Estoy bajo ataque” y purgar todo
+• Corregido: el uso de la cuenta ya no cae a “sin datos” cuando Cloudflare deniega solo un periodo; los periodos accesibles se siguen mostrando
+• Corregido: no se listaban las carpetas (prefijos) al explorar un bucket de R2

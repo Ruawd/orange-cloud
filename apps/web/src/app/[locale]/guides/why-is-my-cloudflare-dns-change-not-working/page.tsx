@@ -54,7 +54,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const RELATED: RelatedLink[] = [
 	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
-		label: "What does the orange cloud mean in Cloudflare?",
+		label: "Orange cloud vs grey cloud, explained",
 		note: "Why a proxied record never returns your origin IP — and why that changes what dig can tell you.",
 	},
 	{

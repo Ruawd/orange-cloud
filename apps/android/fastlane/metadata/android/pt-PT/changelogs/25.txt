@@ -1,0 +1,3 @@
+• Corrigido: a página de definições do domínio não se deslocava quando o conteúdo passava de um ecrã, deixando o modo de desenvolvimento, o modo “Estou sob ataque” e limpar tudo fora de alcance
+• Corrigido: a utilização da conta já não cai para “sem dados” quando a Cloudflare nega apenas um período; os períodos acessíveis continuam a aparecer
+• Corrigido: as pastas (prefixos) não apareciam ao navegar num bucket do R2

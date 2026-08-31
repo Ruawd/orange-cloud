@@ -1,8 +1,13 @@
 // 发布说明单一数据源（每平台一份）。App 端由 scripts/gen-*.mjs 生成 What's New，
-// 官网由本模块直接 import。新增一版只改 ios.json / android.json，再跑 `pnpm changelog:gen`。
+// 官网由本模块直接 import。新增一版只改 ios.json / android.json / harmonyos.json，
+// 再跑 `pnpm changelog:gen`。
+//
+// 注：鸿蒙 App 当前无 i18n（全 zh-Hans 硬编码），harmonyos.json 只维护 zh-Hans + en——
+// codegen 取 zh-Hans，en 供官网 / AppGallery 英文素材复用。
 
 import iosData from "./ios.json";
 import androidData from "./android.json";
+import harmonyosData from "./harmonyos.json";
 
 /** 9 语 canonical 码（BCP-47）。Android 资源目录码映射在 scripts/gen-android.mjs。 */
 export const LOCALES = [
@@ -41,11 +46,12 @@ export interface Release {
   items: ChangelogItem[];
 }
 
-export type Track = "ios" | "android";
+export type Track = "ios" | "android" | "harmonyos";
 
 export const ios: Release[] = iosData as Release[];
 export const android: Release[] = androidData as Release[];
-export const tracks: Record<Track, Release[]> = { ios, android };
+export const harmonyos: Release[] = harmonyosData as Release[];
+export const tracks: Record<Track, Release[]> = { ios, android, harmonyos };
 
 /** 数值分段比较：a 是否比 b 新（"1.3.0" > "1.2.1"，"1.0 (5)" > "1.0 (4)"）。 */
 export function isNewer(a: string, b: string): boolean {

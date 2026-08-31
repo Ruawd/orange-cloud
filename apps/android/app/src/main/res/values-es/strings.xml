@@ -1386,6 +1386,7 @@
     <string name="usage_locked">Se requiere el permiso de análisis de tráfico para mostrar el uso de la cuenta</string>
     <string name="usage_unavailable_title">Esta cuenta no tiene datos a nivel de cuenta disponibles</string>
     <string name="usage_unavailable_body">El uso de Workers / R2 / D1 / KV suele requerir una cuenta de Cloudflare de pago; el análisis de tráfico de dominios no se ve afectado.</string>
+    <string name="usage_partial_authz">Los datos de algunos periodos requieren una cuenta de pago de Cloudflare; los elementos que muestran 0 no son un error de carga.</string>
     <string name="usage_failed">No se pudo cargar el uso; toca para reintentar</string>
     <string name="usage_period_month">Este mes</string>
     <string name="usage_period_cycle">Ciclo</string>

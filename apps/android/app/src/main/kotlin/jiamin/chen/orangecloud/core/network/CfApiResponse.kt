@@ -33,8 +33,9 @@ data class ResultInfo(
     // 游标分页（R2 对象、KV keys 等）
     val cursor: String? = null,
     @SerialName("is_truncated") val isTruncated: Boolean? = null,
-    // R2 带 delimiter 列举时的「文件夹」前缀
-    @SerialName("delimited_prefixes") val delimitedPrefixes: List<String>? = null,
+    // R2 带 delimiter 列举时的「文件夹」前缀。实测 CF 返回的键就叫 delimited
+    // （不是 delimited_prefixes），与 iOS CFAPIResponse.ResultInfo.delimited 一致。
+    @SerialName("delimited") val delimitedPrefixes: List<String>? = null,
 )
 
 /** 列表端点的解码结果：数据 + 分页信息 */
@@ -52,4 +53,14 @@ data class GraphQLResponse<D>(
 )
 
 @Serializable
-data class GraphQLError(val message: String = "")
+data class GraphQLError(val message: String = "") {
+    /**
+     * 账户级数据集未授权。CF 的 GraphQL 不在 extensions 里给结构化码（安卓侧信封没解 extensions），
+     * 只能按文案识别——与 DashboardViewModel 早先的判定口径一致，收拢到这里供各处复用。
+     */
+    val isAuthz: Boolean
+        get() = message.lowercase().let { m ->
+            "authz" in m || "not authorized" in m || "unauthorized" in m ||
+                "permission" in m || "authentication" in m
+        }
+}

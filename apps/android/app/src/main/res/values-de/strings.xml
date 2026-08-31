@@ -1346,6 +1346,7 @@
     <string name="usage_locked">Für die Anzeige der Kontonutzung ist die Berechtigung „Traffic-Analyse“ erforderlich</string>
     <string name="usage_unavailable_title">Für dieses Konto sind keine Daten auf Kontoebene verfügbar</string>
     <string name="usage_unavailable_body">Die Nutzung von Workers / R2 / D1 / KV erfordert in der Regel ein kostenpflichtiges Cloudflare-Konto; die Domain-Traffic-Analyse ist nicht betroffen.</string>
+    <string name="usage_partial_authz">Daten einiger Zeiträume erfordern ein kostenpflichtiges Cloudflare-Konto. Mit 0 angezeigte Werte sind kein Ladefehler.</string>
     <string name="usage_failed">Nutzung konnte nicht geladen werden – zum Wiederholen tippen</string>
     <string name="usage_period_month">Diesen Monat</string>
     <string name="usage_period_cycle">Zeitraum</string>
