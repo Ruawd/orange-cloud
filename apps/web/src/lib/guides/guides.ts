@@ -145,9 +145,31 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-08-28",
 		readingTime: "8 min read",
 	},
+	{
+		slug: "cloudflare-error-521-web-server-is-down",
+		h1: "Why Am I Getting Cloudflare Error 521: Web Server Is Down?",
+		title: "Cloudflare Error 521: Web Server Is Down, Explained",
+		description:
+			"Error 521 means your origin refused Cloudflare's connection. Either the web server is not running, or it is not listening on the port your SSL mode needs.",
+		blurb:
+			"A refusal, not a timeout — which is why it appears instantly. The four causes, and the one that starts the moment you change an encryption mode.",
+		updated: "2026-09-01",
+		readingTime: "7 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [
+	{
+		slug: "cloudflare-pingbi-ai-paichong",
+		h1: "Cloudflare 怎么屏蔽 AI 爬虫？robots.txt 为什么挡不住？",
+		title: "Cloudflare 怎么屏蔽 AI 爬虫：9 月默认值有变",
+		description:
+			"robots.txt 只是表态，真正能拦住的是 AI Crawl Control 与 AI bot 策略，免费方案就能用，落地是一条 WAF 自定义规则。2026 年 9 月 15 日新域名默认值还要变。",
+		blurb:
+			"表态、强制执行、消耗，三层手段只有两层真的会拦人。两个入口各管什么、免费方案卡在识别精度而非功能、9 月 15 日混合用途爬虫的含义变化，以及国内站长要多想的三件事。",
+		updated: "2026-09-01",
+		readingTime: "约 10 分钟",
+	},
 	{
 		slug: "goumai-yuming-jieru-cloudflare",
 		h1: "怎么买一个域名，再把它接到 Cloudflare 上？",

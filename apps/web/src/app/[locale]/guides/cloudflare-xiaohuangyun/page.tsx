@@ -52,6 +52,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-pingbi-ai-paichong",
+		label: "Cloudflare 怎么屏蔽 AI 爬虫？robots.txt 为什么挡不住？",
+		note: "小黄云开着，才谈得上在边缘拦爬虫。灰云那一侧的请求直接落到源站，任何规则都碰不到。",
+	},
+	{
 		href: "/guides/cloudflare-cname-zhanping",
 		label: "Cloudflare 的 CNAME 展平（拉平）到底做了什么？",
 		note: "代理开关也决定了展平后返回什么：开着返回任播 IP，关着返回展平出来的真实 IP。",

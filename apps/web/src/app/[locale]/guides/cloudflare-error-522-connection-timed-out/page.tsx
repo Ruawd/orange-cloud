@@ -53,6 +53,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-error-521-web-server-is-down",
+		label: "Cloudflare error 521: web server is down",
+		note: "The refusal to this error's silence — same hop, same firewall, one word different in the rule.",
+	},
+	{
 		href: "/guides/cloudflare-error-1000-dns-points-to-prohibited-ip",
 		label: "Cloudflare error 1000: DNS points to prohibited IP",
 		note: "The other error that comes from the origin address in your DNS record — this one because the address is Cloudflare's own.",
@@ -183,8 +188,9 @@ export default async function Error522Guide({ params }: { params: Promise<{ loca
 				<h2 id="where">Where a 522 error happens</h2>
 				<Error522Path />
 				<p>
-					Cloudflare defines error 522 as timing out while contacting the origin web server, and error 521
-					as the origin <em>refusing</em> its connections. That difference is the most useful thing on this
+					Cloudflare defines error 522 as timing out while contacting the origin web server, and{" "}
+					<Link href="/guides/cloudflare-error-521-web-server-is-down">error 521</Link> as the origin{" "}
+					<em>refusing</em> its connections. That difference is the most useful thing on this
 					page. A firewall rule that rejects a packet sends something back, and Cloudflare reports 521; a
 					rule that drops it sends nothing, so Cloudflare keeps retrying until the clock runs out and
 					reports 522. Both are usually the same misconfiguration seen through different firewall policies.
