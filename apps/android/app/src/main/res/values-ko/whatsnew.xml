@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">트리거 규칙을 앱에서 관리</string>
+    <string name="whatsnew_2_1_2_0_detail">Snippet의 트리거 규칙은 보기만 가능해 수정하려면 웹 대시보드로 돌아가야 했습니다. 이제 앱에서 바로 추가·편집·사용/해제·삭제할 수 있고 규칙 순서도 그대로 유지됩니다.</string>
     <string name="whatsnew_2_1_0_0_title">Turnstile을 주머니 속에서 관리</string>
     <string name="whatsnew_2_1_0_0_detail">개요 화면에 Turnstile 입구가 생겼습니다. 전체 위젯을 둘러보고, 만들고, 도메인과 모드를 수정하고, 2시간 유예를 선택해 시크릿을 교체하고, sitekey와 secret을 탭 한 번으로 복사하세요.</string>
     <string name="whatsnew_2_1_0_1_title">R2 데이터 카탈로그를 SQL로 바로 조회</string>

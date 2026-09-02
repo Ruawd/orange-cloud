@@ -2,7 +2,7 @@
 //  SnippetDetailView.swift
 //  Orange Cloud
 //
-//  单个 Snippet：只读代码 + 触发规则（启停/增删）+ 删除 Snippet。
+//  单个 Snippet：只读代码 + 触发规则（启停/增删改）+ 删除 Snippet。
 //  写操作按 snippets.write 门控；规则改动经 ViewModel 整组回写。
 //
 
@@ -23,6 +23,7 @@ struct SnippetDetailView: View {
     @State private var showAddRule = false
     @State private var showDenied = false
     @State private var ruleToDelete: SnippetRule?
+    @State private var ruleToEdit: SnippetRule?
     @State private var showDeleteSnippet = false
 
     private var canWrite: Bool { auth.hasScope("snippets.write") }
@@ -68,6 +69,9 @@ struct SnippetDetailView: View {
                             onToggle: { enabled in
                                 Task { await viewModel.setRule(rule, enabled: enabled) }
                             },
+                            onEdit: {
+                                if canWrite { ruleToEdit = rule } else { showDenied = true }
+                            },
                             onDenied: { showDenied = true }
                         )
                         .swipeActions(edge: .trailing) {
@@ -76,6 +80,12 @@ struct SnippetDetailView: View {
                             } label: {
                                 Label("删除", systemImage: "trash")
                             }
+                            Button {
+                                if canWrite { ruleToEdit = rule } else { showDenied = true }
+                            } label: {
+                                Label("编辑", systemImage: "pencil")
+                            }
+                            .tint(.orange)
                         }
                     }
                 }
@@ -89,7 +99,7 @@ struct SnippetDetailView: View {
                     }
                 }
             } footer: {
-                Text("规则用 Cloudflare Rules 表达式匹配请求，满足时运行此 Snippet。")
+                Text("规则用 Cloudflare Rules 表达式匹配请求，满足时运行此 Snippet。点按规则可编辑。")
             }
             .glassRow()
 
@@ -122,6 +132,9 @@ struct SnippetDetailView: View {
         }
         .sheet(isPresented: $showAddRule) {
             SnippetRuleFormView(viewModel: viewModel, snippetName: snippet.snippetName)
+        }
+        .sheet(item: $ruleToEdit) { rule in
+            SnippetRuleFormView(viewModel: viewModel, snippetName: snippet.snippetName, existing: rule)
         }
         .confirmationDialog(
             "删除规则",
@@ -159,7 +172,7 @@ struct SnippetDetailView: View {
             Text("当前授权未包含 Snippets 编辑权限（snippets.write）。")
         }
         .alert("出错了", isPresented: .init(
-            get: { viewModel.error != nil && !showEditor && !showAddRule },
+            get: { viewModel.error != nil && !showEditor && !showAddRule && ruleToEdit == nil },
             set: { if !$0 { viewModel.error = nil } }
         )) {
             Button("好", role: .cancel) {}
@@ -183,59 +196,88 @@ private struct SnippetRuleRow: View {
     let canWrite: Bool
     let isToggling: Bool
     let onToggle: (Bool) -> Void
+    let onEdit: () -> Void
     let onDenied: () -> Void
 
     private var isEnabled: Bool { rule.enabled ?? true }
 
+    private var title: String {
+        rule.description.map { $0.isEmpty ? String(localized: "未命名规则") : $0 }
+            ?? String(localized: "未命名规则")
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(rule.description.map { $0.isEmpty ? String(localized: "未命名规则") : $0 }
-                     ?? String(localized: "未命名规则"))
-                    .font(.callout.weight(.semibold))
-                    .lineLimit(1)
-                Spacer()
-                if isToggling {
-                    ProgressView().controlSize(.small)
-                } else if canWrite {
-                    Toggle("", isOn: Binding(get: { isEnabled }, set: { onToggle($0) }))
-                        .labelsHidden()
-                        .accessibilityLabel("启用规则")
-                } else {
-                    Button {
-                        onDenied()
-                    } label: {
-                        Image(systemName: isEnabled ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(isEnabled ? Color.green : Color.secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(isEnabled ? "已启用" : "已停用")
-                    .accessibilityHint("需要写入权限才能修改")
+        // 文本区与开关是两个独立点击目标：点文本进编辑，开关只管启停
+        HStack(alignment: .top, spacing: 12) {
+            Button(action: onEdit) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(title)
+                        .font(.callout.weight(.semibold))
+                        .lineLimit(1)
+                    Text(rule.expression)
+                        .font(.caption.monospaced())
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        // Cloudflare Rules 表达式始终 LTR
+                        .environment(\.layoutDirection, .leftToRight)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
-            Text(rule.expression)
-                .font(.caption.monospaced())
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-                .truncationMode(.tail)
+            .buttonStyle(.plain)
+            .accessibilityHint(canWrite
+                               ? String(localized: "轻点两下编辑规则")
+                               : String(localized: "需要写入权限才能修改"))
+
+            if isToggling {
+                ProgressView().controlSize(.small)
+            } else if canWrite {
+                Toggle("", isOn: Binding(get: { isEnabled }, set: { onToggle($0) }))
+                    .labelsHidden()
+                    .accessibilityLabel("启用规则")
+            } else {
+                Button {
+                    onDenied()
+                } label: {
+                    Image(systemName: isEnabled ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(isEnabled ? Color.green : Color.secondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isEnabled
+                                    ? String(localized: "已启用")
+                                    : String(localized: "已停用"))
+                .accessibilityHint("需要写入权限才能修改")
+            }
         }
         .padding(.vertical, 4)
         .opacity(isEnabled ? 1 : 0.5)
     }
 }
 
-// MARK: - 添加规则表单
+// MARK: - 规则表单（新增 / 编辑共用）
 
 private struct SnippetRuleFormView: View {
 
     let viewModel: SnippetsViewModel
     let snippetName: String
+    /// nil = 新增；非 nil = 编辑这条已存在的规则
+    let existing: SnippetRule?
 
     @Environment(\.dismiss) private var dismiss
 
-    @State private var description = ""
-    @State private var expression = ""
-    @State private var enabled = true
+    @State private var description: String
+    @State private var expression: String
+    @State private var enabled: Bool
+
+    init(viewModel: SnippetsViewModel, snippetName: String, existing: SnippetRule? = nil) {
+        self.viewModel = viewModel
+        self.snippetName = snippetName
+        self.existing = existing
+        _description = State(initialValue: existing?.description ?? "")
+        _expression  = State(initialValue: existing?.expression ?? "")
+        _enabled     = State(initialValue: existing?.enabled ?? true)
+    }
 
     private var canSave: Bool {
         !expression.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !viewModel.isSaving
@@ -269,7 +311,9 @@ private struct SnippetRuleFormView: View {
                     }
                 }
             }
-            .navigationTitle("添加触发规则")
+            .navigationTitle(existing == nil
+                             ? String(localized: "添加触发规则")
+                             : String(localized: "编辑触发规则"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -295,12 +339,18 @@ private struct SnippetRuleFormView: View {
     private func save() async {
         viewModel.error = nil
         let trimmedDesc = description.trimmingCharacters(in: .whitespaces)
-        let ok = await viewModel.addRule(
-            snippetName: snippetName,
-            expression: expression.trimmingCharacters(in: .whitespacesAndNewlines),
-            description: trimmedDesc.isEmpty ? nil : trimmedDesc,
-            enabled: enabled
-        )
+        let desc = trimmedDesc.isEmpty ? nil : trimmedDesc
+        let expr = expression.trimmingCharacters(in: .whitespacesAndNewlines)
+        let ok: Bool
+        if let existing {
+            ok = await viewModel.updateRule(
+                existing, expression: expr, description: desc, enabled: enabled
+            )
+        } else {
+            ok = await viewModel.addRule(
+                snippetName: snippetName, expression: expr, description: desc, enabled: enabled
+            )
+        }
         if ok { dismiss() }
     }
 }

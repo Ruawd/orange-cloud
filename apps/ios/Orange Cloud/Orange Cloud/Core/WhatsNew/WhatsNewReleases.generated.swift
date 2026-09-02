@@ -10,6 +10,13 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "2.1.1", items: [
+            WhatsNewItem(
+                icon:   "square.and.pencil",
+                title:  String(localized: "触发规则可以编辑了", table: "WhatsNew"),
+                detail: String(localized: "Snippet 的触发规则以前只能新建、启停和删除，改一个字都得删掉重加。现在点按规则就能改表达式和描述，规则原来的顺序也不会因此变动。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "2.1.0", items: [
             WhatsNewItem(
                 icon:   "checkmark.shield",

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">Ahora administras las reglas de activación</string>
+    <string name="whatsnew_2_1_2_0_detail">Las reglas de activación de un snippet solo se podían ver: cualquier cambio obligaba a volver al panel web. Ahora puedes agregarlas, editarlas, activarlas y eliminarlas desde aquí, y cada cambio conserva el orden original de las reglas.</string>
     <string name="whatsnew_2_1_0_0_title">Gestiona Turnstile desde el bolsillo</string>
     <string name="whatsnew_2_1_0_0_detail">Nueva entrada de Turnstile en el resumen: explora todos los widgets, crea y edita dominios y modos, rota secretos con un periodo de gracia opcional de 2 horas y copia la sitekey o el secreto con un toque.</string>
     <string name="whatsnew_2_1_0_1_title">Consulta R2 Data Catalog con SQL</string>

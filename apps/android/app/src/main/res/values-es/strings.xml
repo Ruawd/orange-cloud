@@ -340,6 +340,19 @@
     <string name="snippets_code">Código JavaScript</string>
     <string name="snippets_readonly">Solo lectura: sin permiso de escritura en Snippets</string>
     <string name="snippets_rules">Disparadores (%1$d)</string>
+    <string name="snippets_rule_none">No hay reglas de activación; este snippet no se ejecutará.</string>
+    <string name="snippets_rule_add">Agregar regla de activación</string>
+    <string name="snippets_rule_edit">Editar regla de activación</string>
+    <string name="snippets_rule_desc">Descripción (opcional)</string>
+    <string name="snippets_rule_expr">Expresión</string>
+    <string name="snippets_rule_expr_hint">Lenguaje de Cloudflare Rules, por ejemplo: (http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">Activada</string>
+    <string name="snippets_rule_untitled">Regla sin nombre</string>
+    <string name="snippets_rule_gone">Esta regla ya no existe. Actualiza e inténtalo de nuevo.</string>
+    <string name="snippets_rule_saved">Regla actualizada</string>
+    <string name="snippets_rule_delete_title">¿Eliminar esta regla de activación?</string>
+    <string name="snippets_rule_delete_msg">Si eliminas «%1$s», la regla dejará de aplicarse de inmediato.</string>
+    <string name="snippets_rule_hint">Las reglas coinciden con las solicitudes mediante expresiones de Cloudflare Rules; este snippet se ejecuta cuando hay coincidencia. Toca una regla para editarla.</string>
 
     <string name="nav_dashboard">Resumen</string>
     <string name="dashboard_accounts">Cuentas</string>

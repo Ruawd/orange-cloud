@@ -339,6 +339,19 @@
     <string name="snippets_code">JavaScript 코드</string>
     <string name="snippets_readonly">읽기 전용: Snippets 쓰기 권한이 없습니다</string>
     <string name="snippets_rules">트리거 (%1$d개)</string>
+    <string name="snippets_rule_none">트리거 규칙이 없습니다. 이 Snippet은 실행되지 않습니다.</string>
+    <string name="snippets_rule_add">트리거 규칙 추가</string>
+    <string name="snippets_rule_edit">트리거 규칙 편집</string>
+    <string name="snippets_rule_desc">설명(선택 사항)</string>
+    <string name="snippets_rule_expr">표현식</string>
+    <string name="snippets_rule_expr_hint">Cloudflare Rules 언어, 예: (http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">사용</string>
+    <string name="snippets_rule_untitled">이름 없는 규칙</string>
+    <string name="snippets_rule_gone">이 규칙은 더 이상 존재하지 않습니다. 새로 고친 후 다시 시도하세요.</string>
+    <string name="snippets_rule_saved">규칙이 업데이트되었습니다</string>
+    <string name="snippets_rule_delete_title">이 트리거 규칙을 삭제할까요?</string>
+    <string name="snippets_rule_delete_msg">「%1$s」을(를) 삭제하면 규칙이 즉시 적용 중지됩니다.</string>
+    <string name="snippets_rule_hint">규칙은 Cloudflare Rules 표현식으로 요청을 일치시키며, 일치하면 이 Snippet이 실행됩니다. 규칙을 탭하면 편집할 수 있습니다.</string>
 
     <string name="nav_dashboard">개요</string>
     <string name="dashboard_accounts">계정</string>

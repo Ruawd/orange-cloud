@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">Gérez les règles de déclenchement dans l’app</string>
+    <string name="whatsnew_2_1_2_0_detail">Les règles de déclenchement d’un snippet étaient en lecture seule : toute modification imposait un détour par le tableau de bord web. Vous pouvez désormais les ajouter, les modifier, les activer et les supprimer ici, sans perdre leur ordre d’origine.</string>
     <string name="whatsnew_2_1_0_0_title">Gérez Turnstile depuis votre poche</string>
     <string name="whatsnew_2_1_0_0_detail">Nouvelle entrée Turnstile sur l\'aperçu : parcourez tous les widgets, créez et modifiez domaines et modes, renouvelez les secrets avec un délai de grâce optionnel de 2 h, et copiez la sitekey ou le secret d\'un geste.</string>
     <string name="whatsnew_2_1_0_1_title">Interrogez R2 Data Catalog en SQL</string>

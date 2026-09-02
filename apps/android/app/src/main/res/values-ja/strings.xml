@@ -339,6 +339,19 @@
     <string name="snippets_code">JavaScript コード</string>
     <string name="snippets_readonly">読み取り専用：Snippets 書き込み権限がありません</string>
     <string name="snippets_rules">トリガー（%1$d 件）</string>
+    <string name="snippets_rule_none">トリガールールが未設定です。このスニペットは実行されません。</string>
+    <string name="snippets_rule_add">トリガールールを追加</string>
+    <string name="snippets_rule_edit">トリガールールを編集</string>
+    <string name="snippets_rule_desc">説明（任意）</string>
+    <string name="snippets_rule_expr">式</string>
+    <string name="snippets_rule_expr_hint">Cloudflare Rules 言語。例：(http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">有効</string>
+    <string name="snippets_rule_untitled">名称未設定のルール</string>
+    <string name="snippets_rule_gone">このルールは既に存在しません。更新してからやり直してください。</string>
+    <string name="snippets_rule_saved">ルールを更新しました</string>
+    <string name="snippets_rule_delete_title">このトリガールールを削除しますか？</string>
+    <string name="snippets_rule_delete_msg">「%1$s」を削除すると、ルールは直ちに無効になります。</string>
+    <string name="snippets_rule_hint">ルールは Cloudflare Rules 式でリクエストを照合し、一致するとこのスニペットが実行されます。ルールをタップすると編集できます。</string>
 
     <string name="nav_dashboard">概要</string>
     <string name="dashboard_accounts">アカウント</string>

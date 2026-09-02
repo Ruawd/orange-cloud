@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">トリガールールをアプリから管理</string>
+    <string name="whatsnew_2_1_2_0_detail">Snippet のトリガールールはこれまで表示のみで、変更するには Web 側に戻る必要がありました。これからはアプリ内で追加・編集・有効/無効・削除ができ、並び順もそのまま保たれます。</string>
     <string name="whatsnew_2_1_0_0_title">Turnstile をポケットから管理</string>
     <string name="whatsnew_2_1_0_0_detail">概要画面に Turnstile の入口を追加。全ウィジェットの一覧、作成やドメイン・モードの変更、シークレットのローテーション（2 時間の猶予つきでスムーズに移行）、sitekey と secret のタップコピーに対応しました。</string>
     <string name="whatsnew_2_1_0_1_title">R2 データカタログを SQL で直接クエリ</string>

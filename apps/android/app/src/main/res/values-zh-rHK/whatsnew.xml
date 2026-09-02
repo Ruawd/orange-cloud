@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">觸發規則可以直接管理了</string>
+    <string name="whatsnew_2_1_2_0_detail">Snippet 的觸發規則以前只能看，要改就要返網頁端。現在可以直接新增、編輯、啟停和刪除，改動亦會保住規則原本的順序。</string>
     <string name="whatsnew_2_1_0_0_title">隨手管理 Turnstile 人機驗證</string>
     <string name="whatsnew_2_1_0_0_detail">概覽頁新增 Turnstile 入口：查看全部組件，新建、改域名與模式，密鑰一鍵輪換（可留 2 小時寬限平滑過渡），sitekey 和 secret 點按即複製。</string>
     <string name="whatsnew_2_1_0_1_title">R2 數據目錄，直接用 SQL 查</string>

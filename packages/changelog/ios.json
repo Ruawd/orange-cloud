@@ -1,5 +1,45 @@
 [
   {
+    "version": "2.1.1",
+    "date": "2026.09.02",
+    "channel": "App Store",
+    "items": [
+      {
+        "icon": "square.and.pencil",
+        "title": {
+          "zh-Hans": "触发规则可以编辑了",
+          "en": "Trigger rules are now editable",
+          "zh-Hant": "觸發規則可以編輯了",
+          "zh-HK": "觸發規則可以編輯了",
+          "ja": "トリガールールを編集できるように",
+          "es-MX": "Ahora puedes editar las reglas de activación",
+          "ko": "트리거 규칙을 편집할 수 있습니다",
+          "pt-BR": "Agora dá para editar as regras de acionamento",
+          "pt-PT": "Já é possível editar as regras de acionamento",
+          "de": "Trigger-Regeln lassen sich jetzt bearbeiten",
+          "fr": "Les règles de déclenchement sont modifiables",
+          "ar": "يمكن الآن تعديل قواعد التشغيل",
+          "tr": "Tetikleme kuralları artık düzenlenebiliyor"
+        },
+        "detail": {
+          "zh-Hans": "Snippet 的触发规则以前只能新建、启停和删除，改一个字都得删掉重加。现在点按规则就能改表达式和描述，规则原来的顺序也不会因此变动。",
+          "en": "A snippet’s trigger rules could only be added, toggled or deleted — changing a single character meant deleting the rule and creating it again. Now tap a rule to edit its expression and description, and it keeps its place in the order.",
+          "zh-Hant": "Snippet 的觸發規則以前只能新增、啟停和刪除，改一個字都得刪掉重加。現在點按規則就能修改運算式和描述，規則原本的順序也不會因此變動。",
+          "zh-HK": "Snippet 的觸發規則以前只能新增、啟停和刪除，改一個字都要刪掉重加。現在點按規則就能修改運算式和描述，規則原本的順序也不會因此變動。",
+          "ja": "Snippet のトリガールールはこれまで追加・有効/無効・削除しかできず、一文字直すにもルールを削除して作り直す必要がありました。これからはルールをタップして式と説明をそのまま編集でき、並び順も変わりません。",
+          "es-MX": "Las reglas de activación de un snippet solo se podían agregar, activar o eliminar: cambiar un carácter obligaba a borrarlas y volverlas a crear. Ahora toca una regla para editar su expresión y su descripción, y conserva su posición en el orden.",
+          "ko": "Snippet의 트리거 규칙은 지금까지 추가·사용/해제·삭제만 가능해 한 글자만 고쳐도 규칙을 지우고 다시 만들어야 했습니다. 이제 규칙을 탭해 표현식과 설명을 바로 수정할 수 있고 순서도 그대로 유지됩니다.",
+          "pt-BR": "As regras de acionamento de um snippet só podiam ser adicionadas, ativadas ou excluídas — mudar um caractere exigia apagar e recriar a regra. Agora toque em uma regra para editar a expressão e a descrição, e ela mantém a posição na ordem.",
+          "pt-PT": "As regras de acionamento de um snippet só podiam ser adicionadas, ativadas ou eliminadas — mudar um carácter obrigava a apagar e recriar a regra. Agora toque numa regra para editar a expressão e a descrição, mantendo a sua posição na ordem.",
+          "de": "Die Trigger-Regeln eines Snippets ließen sich bisher nur hinzufügen, aktivieren oder löschen – für ein einziges Zeichen musste die Regel gelöscht und neu angelegt werden. Jetzt tippst du eine Regel an und bearbeitest Ausdruck und Beschreibung direkt; ihre Position in der Reihenfolge bleibt erhalten.",
+          "fr": "Les règles de déclenchement d’un snippet ne pouvaient qu’être ajoutées, activées ou supprimées : changer un caractère obligeait à supprimer la règle puis à la recréer. Touchez désormais une règle pour modifier son expression et sa description, sans changer sa position dans l’ordre.",
+          "ar": "كانت قواعد تشغيل الـ Snippet تقبل الإضافة والتفعيل والحذف فقط، وتغيير حرف واحد يستلزم حذف القاعدة وإنشاءها من جديد. الآن انقر على القاعدة لتعديل التعبير والوصف، مع الحفاظ على ترتيبها كما هو.",
+          "tr": "Bir snippet’in tetikleme kuralları yalnızca eklenebiliyor, açılıp kapatılabiliyor veya silinebiliyordu; tek bir karakteri değiştirmek için kuralı silip yeniden oluşturmak gerekiyordu. Artık bir kurala dokunup ifadesini ve açıklamasını düzenleyebilirsiniz, sıradaki yeri de korunur."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.1.0",
     "date": "2026.08.19",
     "channel": "App Store",

@@ -339,6 +339,19 @@
     <string name="snippets_code">JavaScript 程式碼</string>
     <string name="snippets_readonly">唯讀：未授予 Snippets 寫入權限</string>
     <string name="snippets_rules">觸發規則（%1$d 條）</string>
+    <string name="snippets_rule_none">未設定觸發規則，此 Snippet 不會執行。</string>
+    <string name="snippets_rule_add">新增觸發規則</string>
+    <string name="snippets_rule_edit">編輯觸發規則</string>
+    <string name="snippets_rule_desc">描述（選填）</string>
+    <string name="snippets_rule_expr">運算式</string>
+    <string name="snippets_rule_expr_hint">Cloudflare Rules 語言，例如：(http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">啟用</string>
+    <string name="snippets_rule_untitled">未命名規則</string>
+    <string name="snippets_rule_gone">此規則已不存在，請重新整理後再試。</string>
+    <string name="snippets_rule_saved">規則已更新</string>
+    <string name="snippets_rule_delete_title">刪除這條觸發規則？</string>
+    <string name="snippets_rule_delete_msg">刪除「%1$s」後規則將立即停止生效。</string>
+    <string name="snippets_rule_hint">規則以 Cloudflare Rules 運算式比對請求，相符時執行此 Snippet。點按規則即可編輯。</string>
 
     <string name="nav_dashboard">總覽</string>
     <string name="dashboard_accounts">帳號</string>

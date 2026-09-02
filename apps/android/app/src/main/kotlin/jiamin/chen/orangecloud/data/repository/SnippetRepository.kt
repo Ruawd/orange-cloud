@@ -3,6 +3,8 @@ package jiamin.chen.orangecloud.data.repository
 import jiamin.chen.orangecloud.core.network.CfApiClient
 import jiamin.chen.orangecloud.data.model.Snippet
 import jiamin.chen.orangecloud.data.model.SnippetRule
+import jiamin.chen.orangecloud.data.model.SnippetRuleInput
+import jiamin.chen.orangecloud.data.model.SnippetRulesUpdate
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -13,7 +15,7 @@ import javax.inject.Singleton
 
 /**
  * Cloudflare Snippets（zone 级边缘 JS）。列表/正文（getRaw）/ 创建更新（multipart 文件）/ 删除。
- * 对应 iOS SnippetService 的 snippet CRUD（触发规则 putRules 整组回写留增量）。
+ * 对应 iOS SnippetService：snippet CRUD + 触发规则整组回写。
  * snippet 名受限于 [a-zA-Z0-9_]，可直接拼 path 无需编码。
  */
 @Singleton
@@ -53,4 +55,11 @@ class SnippetRepository @Inject constructor(
 
     suspend fun delete(zoneId: String, name: String) =
         api.delete("zones/$zoneId/snippets/$name")
+
+    /**
+     * 整组回写触发规则——必须传 zone 下「全部」规则，PUT 会整组替换（漏传即删除）。
+     * 写端点 result 形态不固定，只校验 success。
+     */
+    suspend fun putRules(zoneId: String, rules: List<SnippetRuleInput>) =
+        api.putChecked("zones/$zoneId/snippets/snippet_rules", SnippetRulesUpdate(rules))
 }

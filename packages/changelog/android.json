@@ -1,5 +1,45 @@
 [
   {
+    "version": "2.1.2",
+    "date": "2026.09.02",
+    "channel": "Google Play",
+    "items": [
+      {
+        "icon": "square.and.pencil",
+        "title": {
+          "zh-Hans": "触发规则可以直接管理了",
+          "en": "Trigger rules are now editable",
+          "zh-Hant": "觸發規則可以直接管理了",
+          "zh-HK": "觸發規則可以直接管理了",
+          "ja": "トリガールールをアプリから管理",
+          "es-MX": "Ahora administras las reglas de activación",
+          "ko": "트리거 규칙을 앱에서 관리",
+          "pt-BR": "Agora você gerencia as regras de acionamento",
+          "pt-PT": "Já pode gerir as regras de acionamento",
+          "de": "Trigger-Regeln jetzt in der App verwalten",
+          "fr": "Gérez les règles de déclenchement dans l’app",
+          "ar": "إدارة قواعد التشغيل من التطبيق",
+          "tr": "Tetikleme kuralları artık uygulamadan yönetiliyor"
+        },
+        "detail": {
+          "zh-Hans": "Snippet 的触发规则以前只能看，要改得回网页端。现在可以直接添加、编辑、启停和删除，改动也会保住规则原本的顺序。",
+          "en": "A snippet’s trigger rules were read-only — any change meant a detour through the web dashboard. You can now add, edit, toggle and delete them right here, and every change keeps the rules in their original order.",
+          "zh-Hant": "Snippet 的觸發規則以前只能看，要改得回網頁端。現在可以直接新增、編輯、啟停和刪除，改動也會保住規則原本的順序。",
+          "zh-HK": "Snippet 的觸發規則以前只能看，要改就要返網頁端。現在可以直接新增、編輯、啟停和刪除，改動亦會保住規則原本的順序。",
+          "ja": "Snippet のトリガールールはこれまで表示のみで、変更するには Web 側に戻る必要がありました。これからはアプリ内で追加・編集・有効/無効・削除ができ、並び順もそのまま保たれます。",
+          "es-MX": "Las reglas de activación de un snippet solo se podían ver: cualquier cambio obligaba a volver al panel web. Ahora puedes agregarlas, editarlas, activarlas y eliminarlas desde aquí, y cada cambio conserva el orden original de las reglas.",
+          "ko": "Snippet의 트리거 규칙은 보기만 가능해 수정하려면 웹 대시보드로 돌아가야 했습니다. 이제 앱에서 바로 추가·편집·사용/해제·삭제할 수 있고 규칙 순서도 그대로 유지됩니다.",
+          "pt-BR": "As regras de acionamento de um snippet eram somente leitura: qualquer mudança exigia voltar ao painel web. Agora dá para adicionar, editar, ativar e excluir por aqui, e cada alteração mantém a ordem original das regras.",
+          "pt-PT": "As regras de acionamento de um snippet eram apenas de leitura: qualquer alteração obrigava a voltar ao painel web. Agora pode adicioná-las, editá-las, ativá-las e eliminá-las aqui, mantendo a ordem original das regras.",
+          "de": "Die Trigger-Regeln eines Snippets waren nur lesbar – jede Änderung erforderte den Umweg über das Web-Dashboard. Jetzt kannst du sie direkt hinzufügen, bearbeiten, aktivieren und löschen; die ursprüngliche Reihenfolge bleibt dabei erhalten.",
+          "fr": "Les règles de déclenchement d’un snippet étaient en lecture seule : toute modification imposait un détour par le tableau de bord web. Vous pouvez désormais les ajouter, les modifier, les activer et les supprimer ici, sans perdre leur ordre d’origine.",
+          "ar": "كانت قواعد تشغيل الـ Snippet للعرض فقط، وأي تغيير يتطلب العودة إلى لوحة التحكم على الويب. الآن يمكنك إضافتها وتعديلها وتفعيلها وحذفها من هنا، مع الحفاظ على ترتيبها الأصلي.",
+          "tr": "Bir snippet’in tetikleme kuralları yalnızca görüntülenebiliyordu; her değişiklik için web paneline dönmek gerekiyordu. Artık buradan ekleyebilir, düzenleyebilir, açıp kapatabilir ve silebilirsiniz; kuralların özgün sırası da korunur."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.1.1",
     "date": "2026.08.30",
     "channel": "Google Play",

@@ -127,7 +127,45 @@ final class SnippetsViewModel {
         let new = SnippetRuleInput(
             snippetName: snippetName, expression: expression, description: description, enabled: enabled
         )
-        let inputs = rules.map { $0.toInput() } + [new]
+        let inputs = await freshRules().map { $0.toInput() } + [new]
+        do {
+            try await service.putRules(zoneId: zoneId, rules: inputs)
+            await reloadRules()
+            return true
+        } catch {
+            self.error = error.localizedDescription
+            return false
+        }
+    }
+
+    /// 编辑已存在的规则（表达式 / 描述 / 启停）。整组回写，只替换命中的那一条。
+    func updateRule(
+        _ rule: SnippetRule,
+        expression: String,
+        description: String?,
+        enabled: Bool
+    ) async -> Bool {
+        guard !isSaving else { return false }
+        isSaving = true
+        error = nil
+        defer { isSaving = false }
+
+        let latest = await freshRules()
+        // 规则在别处被删掉时，整组回写会把它「复活」——宁可让用户刷新重来
+        guard latest.contains(where: { $0.id == rule.id }) else {
+            rules = latest
+            self.error = String(localized: "该规则已不存在，请刷新后重试。")
+            return false
+        }
+        let inputs = latest.map { current -> SnippetRuleInput in
+            guard current.id == rule.id else { return current.toInput() }
+            return SnippetRuleInput(
+                snippetName: current.snippetName,
+                expression: expression,
+                description: description,
+                enabled: enabled
+            )
+        }
         do {
             try await service.putRules(zoneId: zoneId, rules: inputs)
             await reloadRules()
@@ -147,6 +185,12 @@ final class SnippetsViewModel {
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    /// 整组回写前取一次服务端最新全量：表单停留期间别处的改动不至于被这次 PUT 抹掉。
+    /// 取不到就退回本地缓存——宁可用旧的整组，也不能写出「半份」规则。
+    private func freshRules() async -> [SnippetRule] {
+        (try? await service.rules(zoneId: zoneId)) ?? rules
     }
 
     private func reloadSnippets() async {

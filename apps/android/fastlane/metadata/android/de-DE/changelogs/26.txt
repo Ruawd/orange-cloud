@@ -1,0 +1,1 @@
+• Trigger-Regeln von Snippets lassen sich jetzt in der App verwalten: hinzufügen, Ausdruck und Beschreibung bearbeiten, aktivieren und löschen – die ursprüngliche Reihenfolge bleibt erhalten

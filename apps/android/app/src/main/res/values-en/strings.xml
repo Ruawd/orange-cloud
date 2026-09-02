@@ -354,6 +354,19 @@
     <string name="snippets_code">JavaScript code</string>
     <string name="snippets_readonly">Read-only: Snippets write access not granted</string>
     <string name="snippets_rules">Triggers (%1$d)</string>
+    <string name="snippets_rule_none">No trigger rule configured — this snippet will not run.</string>
+    <string name="snippets_rule_add">Add Trigger Rule</string>
+    <string name="snippets_rule_edit">Edit Trigger Rule</string>
+    <string name="snippets_rule_desc">Description (optional)</string>
+    <string name="snippets_rule_expr">Expression</string>
+    <string name="snippets_rule_expr_hint">Cloudflare Rules language, e.g. (http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">Enabled</string>
+    <string name="snippets_rule_untitled">Untitled rule</string>
+    <string name="snippets_rule_gone">This rule no longer exists. Refresh and try again.</string>
+    <string name="snippets_rule_saved">Rule updated</string>
+    <string name="snippets_rule_delete_title">Delete this trigger rule?</string>
+    <string name="snippets_rule_delete_msg">Deleting “%1$s” stops it from taking effect immediately.</string>
+    <string name="snippets_rule_hint">Rules match requests with Cloudflare Rules expressions; this snippet runs on a match. Tap a rule to edit it.</string>
 
     <!-- Overview / network -->
     <string name="nav_dashboard">Overview</string>

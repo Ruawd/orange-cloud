@@ -339,6 +339,19 @@
     <string name="snippets_code">Código JavaScript</string>
     <string name="snippets_readonly">Somente leitura: sem permissão de gravação em Snippets</string>
     <string name="snippets_rules">Gatilhos (%1$d)</string>
+    <string name="snippets_rule_none">Nenhuma regra de acionamento configurada; este snippet não será executado.</string>
+    <string name="snippets_rule_add">Adicionar regra de acionamento</string>
+    <string name="snippets_rule_edit">Editar regra de acionamento</string>
+    <string name="snippets_rule_desc">Descrição (opcional)</string>
+    <string name="snippets_rule_expr">Expressão</string>
+    <string name="snippets_rule_expr_hint">Linguagem do Cloudflare Rules, por exemplo: (http.request.uri.path contains \"/api\")</string>
+    <string name="snippets_rule_enabled">Ativada</string>
+    <string name="snippets_rule_untitled">Regra sem nome</string>
+    <string name="snippets_rule_gone">Esta regra não existe mais. Atualize e tente novamente.</string>
+    <string name="snippets_rule_saved">Regra atualizada</string>
+    <string name="snippets_rule_delete_title">Excluir esta regra de acionamento?</string>
+    <string name="snippets_rule_delete_msg">Ao excluir “%1$s”, a regra deixa de valer imediatamente.</string>
+    <string name="snippets_rule_hint">As regras correspondem às solicitações com expressões do Cloudflare Rules; este snippet é executado quando há correspondência. Toque em uma regra para editá-la.</string>
 
     <string name="nav_dashboard">Visão geral</string>
     <string name="dashboard_accounts">Contas</string>

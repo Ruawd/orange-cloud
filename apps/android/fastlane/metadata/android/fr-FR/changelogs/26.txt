@@ -1,0 +1,1 @@
+• Les règles de déclenchement des snippets se gèrent désormais dans l’app : ajout, modification de l’expression et de la description, activation et suppression, sans perdre leur ordre d’origine

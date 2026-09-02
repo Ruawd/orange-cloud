@@ -1,0 +1,1 @@
+• Las reglas de activación de los snippets ya se administran en la app: agrega, edita la expresión y la descripción, actívalas y elimínalas; cada cambio conserva el orden original de las reglas

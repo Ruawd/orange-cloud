@@ -1,0 +1,1 @@
+• Snippet trigger rules are now editable in the app: add, change the expression or description, toggle and delete — every change keeps the rules in their original order

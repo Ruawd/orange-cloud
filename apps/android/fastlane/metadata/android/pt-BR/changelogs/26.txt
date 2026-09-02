@@ -1,0 +1,1 @@
+• As regras de acionamento dos snippets agora são editáveis no app: adicione, mude a expressão e a descrição, ative e exclua — cada alteração mantém a ordem original das regras

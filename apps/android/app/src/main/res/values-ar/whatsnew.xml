@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ⚠️ 自动生成 —— 请勿手改。改 packages/changelog/android.json 后运行 `pnpm changelog:gen`。 -->
 <resources>
+    <string name="whatsnew_2_1_2_0_title">إدارة قواعد التشغيل من التطبيق</string>
+    <string name="whatsnew_2_1_2_0_detail">كانت قواعد تشغيل الـ Snippet للعرض فقط، وأي تغيير يتطلب العودة إلى لوحة التحكم على الويب. الآن يمكنك إضافتها وتعديلها وتفعيلها وحذفها من هنا، مع الحفاظ على ترتيبها الأصلي.</string>
     <string name="whatsnew_2_1_0_0_title">أدر Turnstile من جيبك</string>
     <string name="whatsnew_2_1_0_0_detail">مدخل جديد لـ Turnstile في صفحة النظرة العامة: تصفح كل العناصر، أنشئ وعدّل النطاقات والأوضاع، ودوّر الأسرار مع مهلة اختيارية لساعتين، وانسخ sitekey أو secret بنقرة.</string>
     <string name="whatsnew_2_1_0_1_title">استعلم عن كتالوج بيانات R2 مباشرة بلغة SQL</string>

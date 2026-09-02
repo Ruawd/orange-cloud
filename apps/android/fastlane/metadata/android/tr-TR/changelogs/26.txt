@@ -1,0 +1,1 @@
+• Snippet tetikleme kuralları artık uygulamadan yönetiliyor: ekleme, ifade ve açıklama düzenleme, açıp kapatma ve silme — kuralların özgün sırası korunur

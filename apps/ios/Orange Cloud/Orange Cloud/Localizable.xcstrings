@@ -105929,6 +105929,310 @@
         }
       }
     },
+    "编辑触发规则": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل قاعدة التشغيل"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trigger-Regel bearbeiten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Trigger Rule"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar regla de activación"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier la règle de déclenchement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トリガールールを編集"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "트리거 규칙 편집"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar regra de acionamento"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar regra de acionamento"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tetikleme kuralını düzenle"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯觸發規則"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯觸發規則"
+          }
+        }
+      }
+    },
+    "该规则已不存在，请刷新后重试。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تعد هذه القاعدة موجودة. حدِّث ثم أعد المحاولة."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Regel existiert nicht mehr. Aktualisiere und versuche es erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This rule no longer exists. Refresh and try again."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta regla ya no existe. Actualiza e inténtalo de nuevo."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette règle n’existe plus. Actualisez, puis réessayez."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このルールは既に存在しません。更新してからやり直してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 규칙은 더 이상 존재하지 않습니다. 새로 고친 후 다시 시도하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta regra não existe mais. Atualize e tente novamente."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta regra já não existe. Atualize e tente novamente."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kural artık mevcut değil. Yenileyip tekrar deneyin."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此規則已不存在，請重新整理後再試。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此規則已不存在，請重新整理後再試。"
+          }
+        }
+      }
+    },
+    "轻点两下编辑规则": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انقر مرتين لتعديل القاعدة"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doppeltippen, um die Regel zu bearbeiten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Double-tap to edit the rule"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsa dos veces para editar la regla"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toucher deux fois pour modifier la règle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ダブルタップしてルールを編集"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두 번 탭하여 규칙 편집"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque duas vezes para editar a regra"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque duas vezes para editar a regra"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kuralı düzenlemek için iki kez dokunun"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點兩下以編輯規則"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點兩下以編輯規則"
+          }
+        }
+      }
+    },
+    "规则用 Cloudflare Rules 表达式匹配请求，满足时运行此 Snippet。点按规则可编辑。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تطابق القواعد الطلبات باستخدام تعبيرات Cloudflare Rules؛ ويُشغَّل هذا الـ Snippet عند التطابق. انقر على قاعدة لتعديلها."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regeln gleichen Anfragen mit Cloudflare-Rules-Ausdrücken ab; dieses Snippet wird bei einer Übereinstimmung ausgeführt. Tippe auf eine Regel, um sie zu bearbeiten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rules match requests with Cloudflare Rules expressions; this snippet runs on a match. Tap a rule to edit it."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las reglas coinciden con las solicitudes mediante expresiones de Cloudflare Rules; este snippet se ejecuta cuando hay coincidencia. Toca una regla para editarla."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les règles font correspondre les requêtes via des expressions Cloudflare Rules ; ce snippet s’exécute en cas de correspondance. Touchez une règle pour la modifier."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ルールは Cloudflare Rules 式でリクエストを照合し、一致するとこのスニペットが実行されます。ルールをタップすると編集できます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "규칙은 Cloudflare Rules 표현식으로 요청을 일치시키며, 일치하면 이 Snippet이 실행됩니다. 규칙을 탭하면 편집할 수 있습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As regras correspondem às solicitações com expressões do Cloudflare Rules; este snippet é executado quando há correspondência. Toque em uma regra para editá-la."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As regras correspondem aos pedidos com expressões do Cloudflare Rules; este snippet é executado quando há correspondência. Toque numa regra para a editar."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurallar, istekleri Cloudflare Rules ifadeleriyle eşleştirir; eşleşmede bu snippet çalışır. Düzenlemek için bir kurala dokunun."
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "規則以 Cloudflare Rules 運算式比對請求，符合時執行此 Snippet。點按規則即可編輯。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "規則以 Cloudflare Rules 運算式比對請求，相符時執行此 Snippet。點按規則即可編輯。"
+          }
+        }
+      }
+    },
     "添加触发规则": {
       "localizations": {
         "ar": {
