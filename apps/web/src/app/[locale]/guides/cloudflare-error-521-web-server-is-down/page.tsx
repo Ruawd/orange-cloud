@@ -57,6 +57,11 @@ const RELATED: RelatedLink[] = [
 		note: "The setting that decides whether Cloudflare knocks on port 80 or port 443 — and so whether your origin refuses it.",
 	},
 	{
+		href: "/guides/cloudflare-error-526-invalid-ssl-certificate",
+		label: "Cloudflare error 526: invalid SSL certificate",
+		note: "One step further along the same hop: the origin answered on 443, and the certificate it presented was rejected.",
+	},
+	{
 		href: "/guides/cloudflare-error-1000-dns-points-to-prohibited-ip",
 		label: "Cloudflare error 1000: DNS points to prohibited IP",
 		note: "The four-digit family: what happens when the address Cloudflare resolved is Cloudflare's own.",

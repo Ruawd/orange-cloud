@@ -156,6 +156,17 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-09-01",
 		readingTime: "7 min read",
 	},
+	{
+		slug: "cloudflare-error-526-invalid-ssl-certificate",
+		h1: "Why Am I Getting Cloudflare Error 526: Invalid SSL Certificate?",
+		title: "Cloudflare Error 526: Invalid SSL Certificate, Explained",
+		description:
+			"Error 526 means Cloudflare could not validate your origin\u2019s certificate while the encryption mode is Full (strict). Both conditions must be true.",
+		blurb:
+			"Two conditions have to hold at once \u2014 which is why 526 differs from 525, and why a site nobody touched starts failing the day an origin certificate quietly expires.",
+		updated: "2026-09-03",
+		readingTime: "8 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [

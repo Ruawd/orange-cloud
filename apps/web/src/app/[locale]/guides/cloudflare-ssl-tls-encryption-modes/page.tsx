@@ -40,6 +40,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-error-526-invalid-ssl-certificate",
+		label: "Cloudflare error 526: invalid SSL certificate",
+		note: "What Full (strict) does when the origin certificate does not check out \u2014 the error this setting exists to produce.",
+	},
+	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
 		label: "What is the orange cloud in Cloudflare?",
 		note: "The prerequisite: encryption modes only apply to records that are proxied in the first place.",
