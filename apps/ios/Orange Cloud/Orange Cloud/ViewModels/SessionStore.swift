@@ -18,6 +18,7 @@ final class SessionStore {
     let dnsService:        DNSService
     let workerService:     WorkerService
     let workerTailService: WorkerTailService
+    let workerLogsService: WorkerLogsService
     let analyticsService:  AnalyticsService
     let r2Service:         R2Service
     let d1Service:         D1Service
@@ -85,6 +86,7 @@ final class SessionStore {
         self.dnsService        = DNSService(client: client)
         self.workerService     = WorkerService(client: client)
         self.workerTailService = WorkerTailService(client: client)
+        self.workerLogsService = WorkerLogsService(client: client)
         self.analyticsService  = AnalyticsService(client: client)
         self.r2Service         = R2Service(client: client)
         self.d1Service         = D1Service(client: client)

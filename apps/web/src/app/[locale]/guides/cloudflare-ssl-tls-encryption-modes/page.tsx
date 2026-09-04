@@ -56,7 +56,7 @@ const RELATED: RelatedLink[] = [
 	},
 	{
 		href: "/guides/why-is-cloudflare-not-caching-my-site",
-		label: "Why is Cloudflare not caching my site?",
+		label: "cf-cache-status: DYNAMIC vs BYPASS vs MISS",
 		note: "The origin scheme this setting picks is part of every cache key — what that means in practice.",
 	},
 	{

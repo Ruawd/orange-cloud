@@ -59,13 +59,10 @@ struct SnippetEditorView: View {
                         HStack { Spacer(); ProgressView(); Spacer() }
                             .padding(.vertical, 8)
                     } else {
-                        TextEditor(text: $code)
-                            .font(.callout.monospaced())
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .frame(minHeight: 220)
-                            // JS 代码始终 LTR，避免在 RTL 语言下镜像
-                            .environment(\.layoutDirection, .leftToRight)
+                        // UITextView 承载：正文不进 SwiftUI 更新、长行不折行，
+                        // 压缩过的片段也不会把主线程拖住（内部已恒定 LTR）
+                        CodeEditor(text: $code)
+                            .frame(height: 240)
                     }
                 } header: {
                     Text("代码")

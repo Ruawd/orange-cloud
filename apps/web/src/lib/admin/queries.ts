@@ -3,9 +3,12 @@
 // 只算 Production：环境为 Sandbox（沙盒 / 审核测试）的行一律排除（查询层过滤，
 // webhook 仍全量入库）。金额跨币种用 money.ts 的近似汇率归一到 USD（再给 CNY 估算）。
 
+import { collectedOrderStateSql } from "../ledger/order-state";
 import { toUSD } from "./money";
 
 const NOT_SANDBOX = "COALESCE(environment, '') <> 'Sandbox'";
+// 营收只认「钱已到账」的行：Play 的宽限期 / 待付款订单虽有金额，但钱还没收到。
+const COLLECTED = collectedOrderStateSql();
 
 /** product_id -> 展示名 */
 export const PRODUCT_NAMES: Record<string, string> = {
@@ -54,6 +57,8 @@ export interface TxnRow {
 	price_millis: number | null;
 	/** 'apple' | 'play'（历史行默认 apple） */
 	platform: string | null;
+	/** Play 的 orders.get state；PENDING/CANCELED 表示钱没到账，不计营收 */
+	order_state: string | null;
 	revoked: boolean;
 }
 
@@ -115,7 +120,7 @@ function revenueQuery(db: D1Database, whereExtra: string, params: unknown[]) {
 	return db
 		.prepare(
 			`SELECT currency, sum(price_millis) AS s FROM transactions
-			 WHERE ${NOT_SANDBOX} AND ${whereExtra} GROUP BY currency`,
+			 WHERE ${NOT_SANDBOX} AND ${COLLECTED} AND ${whereExtra} GROUP BY currency`,
 		)
 		.bind(...params)
 		.all<CurSum>();
@@ -137,7 +142,8 @@ async function buildTrend(db: D1Database, range: Range, now: Date): Promise<Tren
 			db
 				.prepare(
 					`SELECT strftime('%Y-%m', purchase_date/1000, 'unixepoch') AS k, currency, sum(price_millis) AS s
-					 FROM transactions WHERE ${NOT_SANDBOX} AND purchase_date >= ? AND revocation_date IS NULL
+					 FROM transactions WHERE ${NOT_SANDBOX} AND ${COLLECTED}
+					   AND purchase_date >= ? AND revocation_date IS NULL
 					 GROUP BY k, currency`,
 				)
 				.bind(start)
@@ -174,7 +180,8 @@ async function buildTrend(db: D1Database, range: Range, now: Date): Promise<Tren
 		db
 			.prepare(
 				`SELECT date(purchase_date/1000, 'unixepoch') AS k, currency, sum(price_millis) AS s
-				 FROM transactions WHERE ${NOT_SANDBOX} AND purchase_date >= ? AND revocation_date IS NULL
+				 FROM transactions WHERE ${NOT_SANDBOX} AND ${COLLECTED}
+				   AND purchase_date >= ? AND revocation_date IS NULL
 				 GROUP BY k, currency`,
 			)
 			.bind(start)
@@ -239,7 +246,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		revenueQuery(db, "revocation_date >= ?", [monthStart]),
 		revenueQuery(db, "revocation_date IS NULL", []),
 		db
-			.prepare(`SELECT count(*) AS n FROM transactions WHERE ${NOT_SANDBOX} AND type = 'Non-Consumable' AND purchase_date >= ? AND revocation_date IS NULL`)
+			.prepare(`SELECT count(*) AS n FROM transactions WHERE ${NOT_SANDBOX} AND ${COLLECTED} AND type = 'Non-Consumable' AND purchase_date >= ? AND revocation_date IS NULL`)
 			.bind(monthStart)
 			.first<{ n: number }>(),
 		db
@@ -257,7 +264,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		db
 			.prepare(
 				`SELECT purchase_date, notification_type, product_id, transaction_id, currency, price_millis,
-				        platform, (revocation_date IS NOT NULL) AS revoked
+				        platform, order_state, (revocation_date IS NOT NULL) AS revoked
 				 FROM transactions WHERE ${NOT_SANDBOX}
 				 ORDER BY COALESCE(purchase_date, created_at) DESC LIMIT 14`,
 			)
@@ -313,6 +320,7 @@ export async function loadAdminStats(db: D1Database, range: Range = "day"): Prom
 		currency: r.currency,
 		price_millis: r.price_millis,
 		platform: r.platform ?? "apple",
+		order_state: r.order_state,
 		revoked: Boolean(r.revoked),
 	}));
 

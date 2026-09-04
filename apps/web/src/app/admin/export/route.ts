@@ -18,6 +18,7 @@ interface Row {
 	environment: string | null;
 	platform: string | null;
 	dev_revenue_millis: number | null;
+	order_state: string | null;
 }
 
 function cell(v: unknown): string {
@@ -34,18 +35,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
 	const { results } = await env.IAP_DB.prepare(
 		`SELECT purchase_date, notification_type, type, product_id, transaction_id, original_transaction_id,
-		        currency, price_millis, revocation_date, environment, platform, dev_revenue_millis
+		        currency, price_millis, revocation_date, environment, platform, dev_revenue_millis, order_state
 		 FROM transactions
 		 WHERE COALESCE(environment, '') <> 'Sandbox'
 		 ORDER BY COALESCE(purchase_date, created_at) DESC
 		 LIMIT 5000`,
 	).all<Row>();
 
-	// dev_revenue（开发者到手金额）目前只有 Play 侧有值，Apple 行留空。
+	// dev_revenue（开发者到手金额）与 order_state（Play 订单状态，PENDING/CANCELED
+	// 表示钱未到账、不计营收）目前只有 Play 侧有值，Apple 行留空。
 	const header = [
 		"purchase_date", "platform", "notification_type", "transaction_type", "product_id",
 		"transaction_id", "original_transaction_id", "currency", "price", "dev_revenue",
-		"refunded", "revocation_date",
+		"order_state", "refunded", "revocation_date",
 	];
 	const lines = [header.join(",")];
 	for (const r of results ?? []) {
@@ -55,6 +57,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 				r.transaction_id, r.original_transaction_id, r.currency,
 				r.price_millis == null ? "" : (r.price_millis / 1000).toFixed(2),
 				r.dev_revenue_millis == null ? "" : (r.dev_revenue_millis / 1000).toFixed(2),
+				r.order_state ?? "",
 				r.revocation_date ? "yes" : "no", iso(r.revocation_date),
 			]
 				.map(cell)

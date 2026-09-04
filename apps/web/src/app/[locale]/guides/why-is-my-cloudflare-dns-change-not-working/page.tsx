@@ -64,7 +64,7 @@ const RELATED: RelatedLink[] = [
 	},
 	{
 		href: "/guides/why-is-cloudflare-not-caching-my-site",
-		label: "Why is Cloudflare not caching my site?",
+		label: "Reading the cf-cache-status header",
 		note: "The other kind of stale answer: the one Cloudflare itself is serving from cache.",
 	},
 	{

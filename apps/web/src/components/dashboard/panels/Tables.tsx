@@ -4,7 +4,8 @@ import { TimeText } from "@/components/dashboard/prefs";
 import { Badge, Card, CardHead, EmptyState, PlatformBadge } from "@/components/dashboard/ui";
 import { formatMoney, formatRelativeFuture } from "@/lib/dashboard/format";
 import type { ExpiringRow, NotificationRow, Page, TransactionRow } from "@/lib/dashboard/queries";
-import { offerTypeLabel, productLabel, txTypeLabel } from "@/lib/dashboard/types";
+import { isCollectedOrderState } from "@/lib/ledger/order-state";
+import { offerTypeLabel, orderStateLabel, productLabel, txTypeLabel } from "@/lib/dashboard/types";
 import { NotificationRows } from "./NotificationRows";
 
 function MonoId({ id }: { id: string | null }) {
@@ -201,8 +202,11 @@ export function TransactionsTable({ data, query }: { data: Page<TransactionRow>;
 											<Td>
 												{t.revocation_date ? (
 													<Badge tone="negative">已退款</Badge>
-												) : (
+												) : isCollectedOrderState(t.order_state) ? (
 													<Badge tone="positive">正常</Badge>
+												) : (
+													// Play 宽限期 / 待付款：订单有金额但钱没到账，不计入营收
+													<Badge tone="muted">{orderStateLabel(t.order_state)}</Badge>
 												)}
 											</Td>
 										</tr>

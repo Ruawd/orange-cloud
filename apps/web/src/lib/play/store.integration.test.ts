@@ -68,6 +68,7 @@ interface RowInput {
 	linkedToken?: string | null;
 	isLifetime?: boolean;
 	expiresDate?: number | null;
+	orderState?: string | null;
 }
 
 function makeRows(i: RowInput): PlayLedgerRows {
@@ -97,6 +98,7 @@ function makeRows(i: RowInput): PlayLedgerRows {
 					priceMillis: i.priceMillis === undefined ? 19_990 : i.priceMillis,
 					devRevenueMillis: 16_990,
 					currency: "USD",
+					orderState: i.orderState === undefined ? "PROCESSED" : i.orderState,
 					storefront: "US",
 					offerIdentifier: null,
 					revocationDate: i.revocationDate ?? null,
@@ -224,4 +226,25 @@ describe("storeLedgerRows（真实 SQL）", () => {
 			["play", 1],
 		]);
 	});
+});
+
+// 宽限期恢复：同一个 orderId 先以 PENDING 落库（钱没到），扣款成功后必须被
+// 覆盖成 PROCESSED，否则这笔真收入会一直被营收口径排除在外。
+it("同一订单 PENDING -> PROCESSED 会被覆盖", async () => {
+	await storeLedgerRows(
+		db as never,
+		makeRows({ messageId: "g1", type: "SUBSCRIPTION_IN_GRACE_PERIOD", eventTime: 1000, orderId: "GPA.9", orderState: "PENDING", status: "grace" }),
+	);
+	expect(
+		(raw.prepare("SELECT order_state FROM transactions WHERE transaction_id = 'GPA.9'").get() as { order_state: string }).order_state,
+	).toBe("PENDING");
+
+	await storeLedgerRows(
+		db as never,
+		makeRows({ messageId: "g2", type: "SUBSCRIPTION_RECOVERED", eventTime: 2000, orderId: "GPA.9", orderState: "PROCESSED" }),
+	);
+	expect(
+		(raw.prepare("SELECT order_state FROM transactions WHERE transaction_id = 'GPA.9'").get() as { order_state: string }).order_state,
+	).toBe("PROCESSED");
+	expect(count("transactions")).toBe(1);
 });

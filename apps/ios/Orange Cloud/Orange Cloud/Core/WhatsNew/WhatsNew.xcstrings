@@ -2965,6 +2965,82 @@
         }
       }
     },
+    "以前只有「实时日志」，它只播放你盯着看的那几分钟里发生的请求，退出就没了。现在 Worker 详情多了「历史日志」，可以按 30 分钟到 3 天的范围往回查已经发生过的调用，能按级别筛选、按关键词搜索，点开还能看状态码、耗时和 Ray ID。前提是这个 Worker 已经开启了 Observability。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Until now there was only Live Logs, which replays the requests that happen while you are watching and keeps nothing once you leave. Worker details now also has Historical Logs: look back over a window from 30 minutes to 3 days, filter by level, search by keyword, and open any line for its status code, duration and Ray ID. The Worker needs Observability enabled."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以前只有「即時記錄」，它只播放你盯著看的那幾分鐘裡發生的請求，離開就沒了。現在 Worker 詳細資訊多了「歷史記錄」，可以按 30 分鐘到 3 天的範圍往回查已經發生過的呼叫，能按層級篩選、按關鍵字搜尋，點開還能看狀態碼、耗時和 Ray ID。前提是這個 Worker 已經開啟了 Observability。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "以前只有「即時日誌」，它只播放你盯著看的那幾分鐘裡發生的請求，離開就沒了。現在 Worker 詳細資料多了「歷史日誌」，可以按 30 分鐘到 3 天的範圍往回查已經發生過的調用，能按級別篩選、按關鍵字搜尋，點開還能看狀態碼、耗時和 Ray ID。前提是這個 Worker 已經開啟了 Observability。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これまでは「ライブログ」だけで、見ている数分のあいだに起きたリクエストを流すだけ、画面を離れれば何も残りませんでした。Worker の詳細に「履歴ログ」が加わり、30 分から 3 日までの範囲でさかのぼって呼び出しを調べられます。レベルで絞り込み、キーワードで検索でき、行を開けばステータスコード・所要時間・Ray ID も確認できます。対象の Worker で Observability が有効になっている必要があります。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hasta ahora solo existían los registros en vivo, que muestran las solicitudes ocurridas mientras miras y no guardan nada al salir. Los detalles del Worker ahora incluyen Registros históricos: consulta hacia atrás en ventanas de 30 minutos a 3 días, filtra por nivel, busca por palabra clave y abre cualquier línea para ver su código de estado, duración y Ray ID. El Worker debe tener Observability activado."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금까지는 실시간 로그뿐이라 보고 있는 동안 일어난 요청만 흘러가고, 화면을 벗어나면 아무것도 남지 않았습니다. 이제 Worker 상세에 기록 로그가 생겨 30분에서 3일까지 범위를 정해 지난 호출을 되짚어 볼 수 있습니다. 수준별로 거르고 키워드로 찾을 수 있으며, 줄을 열면 상태 코드와 소요 시간, Ray ID까지 확인됩니다. 해당 Worker에 Observability가 켜져 있어야 합니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Até agora só havia os logs ao vivo, que mostram as requisições enquanto você olha e não guardam nada depois que você sai. Os detalhes do Worker agora têm Logs históricos: volte em janelas de 30 minutos a 3 dias, filtre por nível, busque por palavra-chave e abra qualquer linha para ver código de status, duração e Ray ID. O Worker precisa estar com o Observability ativado."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Até agora só existiam os registos em direto, que mostram os pedidos enquanto está a ver e não guardam nada depois de sair. Os detalhes do Worker passam a ter Registos históricos: recue em janelas de 30 minutos a 3 dias, filtre por nível, pesquise por palavra-chave e abra qualquer linha para ver o código de estado, a duração e o Ray ID. O Worker tem de ter o Observability ativado."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bisher gab es nur die Live-Protokolle: Sie zeigen die Anfragen, die während des Zuschauens eintreffen, und behalten nichts, sobald du die Seite verlässt. Die Worker-Details haben jetzt zusätzlich Verlaufsprotokolle — blättere über Zeitfenster von 30 Minuten bis 3 Tagen zurück, filtere nach Stufe, suche nach Stichwort und öffne jede Zeile für Statuscode, Dauer und Ray-ID. Beim Worker muss Observability aktiviert sein."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jusqu’ici il n’y avait que les journaux en direct : ils diffusent les requêtes qui surviennent pendant que vous regardez et ne conservent rien une fois la page quittée. Les détails du Worker gagnent des Journaux historiques — remontez sur une fenêtre de 30 minutes à 3 jours, filtrez par niveau, cherchez par mot-clé et ouvrez une ligne pour son code de statut, sa durée et son ID Ray. Observability doit être activé sur le Worker."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حتى الآن كانت هناك السجلات المباشرة فقط، وهي تعرض الطلبات التي تحدث أثناء متابعتك ولا تحتفظ بشيء بعد مغادرة الصفحة. أصبحت تفاصيل الـ Worker تضم أيضًا السجلات السابقة: عُد إلى الوراء ضمن نطاق من 30 دقيقة إلى 3 أيام، وصفِّ حسب المستوى، وابحث بكلمة مفتاحية، وافتح أي سطر لمعرفة رمز الحالة والمدة ومعرّف Ray. يجب أن يكون Observability مفعَّلًا على الـ Worker."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şimdiye kadar yalnızca canlı günlükler vardı; siz bakarken gelen istekleri gösterir, sayfadan çıkınca hiçbir şey saklamazdı. Worker ayrıntılarına artık geçmiş günlükler de eklendi: 30 dakikadan 3 güne kadar bir aralıkta geriye bakın, düzeye göre süzün, anahtar sözcükle arayın ve herhangi bir satırı açarak durum kodunu, süreyi ve Ray kimliğini görün. Bunun için Worker üzerinde Observability açık olmalı."
+          }
+        }
+      }
+    },
     "以文件夹方式浏览对象，复制或移动文件，查看各存储桶用量，并管理公开访问域名与 CORS。": {
       "localizations": {
         "en": {
@@ -6005,6 +6081,82 @@
         }
       }
     },
+    "打开大脚本不再卡死": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large scripts no longer freeze the app"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開啟大型指令碼不再卡死"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開啟大型腳本不再卡死"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大きなスクリプトを開いても固まらない"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los scripts grandes ya no congelan la app"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "큰 스크립트를 열어도 멈추지 않습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scripts grandes não travam mais o app"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os scripts grandes já não bloqueiam a app"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Große Skripte legen die App nicht mehr lahm"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les gros scripts ne figent plus l’app"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النصوص البرمجية الكبيرة لم تعد تُجمِّد التطبيق"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Büyük betikler artık uygulamayı dondurmuyor"
+          }
+        }
+      }
+    },
     "把 Cloudflare 告警推到手机": {
       "localizations": {
         "en": {
@@ -7521,6 +7673,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "Oturum açmadan kullanabileceğiniz pratik ağ araçları: DNS sorgusu, SSL sertifikası incelemesi, HTTP başlıkları, WHOIS, IP konumu, CIDR hesaplayıcı ve Cloudflare trace — giriş ekranından doğrudan erişilebilir."
+          }
+        }
+      }
+    },
+    "日志可以往回翻了": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logs you can scroll back through"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記錄可以往回翻了"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日誌可以往回翻了"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ログをさかのぼって読めるように"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ahora puedes revisar registros anteriores"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 로그를 되짚어 볼 수 있습니다"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora dá para voltar nos logs"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já é possível recuar nos registos"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolle lassen sich jetzt zurückblättern"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les journaux se consultent enfin en arrière"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكنك الآن العودة إلى السجلات السابقة"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Günlüklerde artık geriye bakabilirsiniz"
           }
         }
       }
@@ -9421,6 +9649,82 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tek bir cümleden DNS kaydı oluşturun veya trafik analizinizin tek satırlık özetini alın; hepsi cihazda ve çevrimdışı, hiçbir şey iPhone’unuzdan çıkmaz. iOS 26 ve Apple Intelligence destekli bir cihaz gerektirir. Pro özelliği."
+          }
+        }
+      }
+    },
+    "用打包工具部署的 Worker，源码常常被压缩成很长的一两行，点「更新代码」会把整个界面卡死。编辑器换了实现，正常体量的脚本编辑起来更跟手；超大或压缩过的脚本转为只读，并给出「导入 .js 文件整体替换」这条路——现有的变量、密钥和绑定照旧保留。Snippets 的编辑器一并改善。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Worker deployed through a bundler usually ships as one or two very long minified lines, and tapping Update code used to freeze the whole screen. The editor has been rebuilt: normal scripts type smoothly, while oversized or minified ones become read-only and offer a single clear path — import an edited .js file and replace the script whole, with existing variables, secrets and bindings preserved. The Snippets editor gets the same treatment."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用封裝工具部署的 Worker，原始碼常常被壓縮成很長的一兩行，點「更新程式碼」會把整個介面卡死。編輯器換了實作，正常體量的指令碼編輯起來更跟手；超大或壓縮過的指令碼轉為唯讀，並給出「匯入 .js 檔案整份取代」這條路——現有的變數、密鑰和繫結照舊保留。Snippets 的編輯器一併改善。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用打包工具部署的 Worker，原始碼常常被壓縮成很長的一兩行，點「更新代碼」會把整個介面卡死。編輯器換了實作，正常體量的腳本編輯起來更順手；超大或壓縮過的腳本轉為唯讀，並給出「匯入 .js 檔案整份取代」這條路——現有的變數、密鑰和綁定照舊保留。Snippets 的編輯器一併改善。"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バンドラーでデプロイした Worker はソースが一〜二行の非常に長い圧縮コードになることが多く、「コードを更新」を押すと画面全体が固まっていました。エディタを作り直し、通常のサイズなら入力が軽快になりました。極端に大きいものや圧縮済みのものは読み取り専用にし、「.js ファイルを読み込んで全体を置き換え」という道筋を用意しています。既存の変数・シークレット・バインディングはそのまま保持されます。Snippets のエディタも同様に改善しました。"
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un Worker desplegado con un empaquetador suele quedar en una o dos líneas minificadas larguísimas, y tocar Actualizar código congelaba toda la pantalla. El editor se rehízo: los scripts normales se escriben con fluidez, y los enormes o minificados pasan a solo lectura con un camino claro — importar un archivo .js editado y reemplazar el script completo, conservando variables, secretos y vinculaciones. El editor de Snippets recibe la misma mejora."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "번들러로 배포한 Worker는 소스가 아주 긴 한두 줄로 압축되는 경우가 많아, 코드 업데이트를 누르면 화면 전체가 멈추곤 했습니다. 편집기를 새로 만들어 보통 크기의 스크립트는 입력이 매끄러워졌고, 지나치게 크거나 압축된 스크립트는 읽기 전용으로 바뀌며 수정한 .js 파일을 가져와 전체를 교체하는 길을 안내합니다. 기존 변수와 시크릿, 바인딩은 그대로 유지됩니다. Snippets 편집기도 같이 개선했습니다."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um Worker publicado por um bundler costuma virar uma ou duas linhas minificadas enormes, e tocar em Atualizar código travava a tela inteira. O editor foi refeito: scripts normais respondem bem, e os gigantes ou minificados passam a somente leitura com um caminho claro — importar um arquivo .js editado e substituir o script inteiro, preservando variáveis, segredos e vinculações. O editor de Snippets recebeu a mesma melhoria."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um Worker publicado por um bundler costuma ficar em uma ou duas linhas minificadas enormes, e tocar em Atualizar código bloqueava o ecrã inteiro. O editor foi refeito: os scripts normais respondem bem, e os gigantes ou minificados passam a apenas de leitura com um caminho claro — importar um ficheiro .js editado e substituir o script por completo, preservando variáveis, segredos e vinculações. O editor de Snippets recebeu a mesma melhoria."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein über einen Bundler veröffentlichter Worker besteht meist aus ein oder zwei sehr langen minifizierten Zeilen, und „Code aktualisieren“ ließ den ganzen Bildschirm einfrieren. Der Editor wurde neu gebaut: Skripte normaler Größe tippen sich flüssig, übergroße oder minifizierte werden schreibgeschützt und bieten einen klaren Weg — eine bearbeitete .js-Datei importieren und das Skript vollständig ersetzen, wobei Variablen, Secrets und Bindings erhalten bleiben. Der Snippets-Editor profitiert ebenso."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un Worker déployé via un bundler tient souvent en une ou deux lignes minifiées très longues, et toucher « Mettre à jour le code » figeait tout l’écran. L’éditeur a été refait : les scripts de taille normale se saisissent sans à-coups, tandis que les scripts trop gros ou minifiés passent en lecture seule et proposent une voie claire — importer un fichier .js modifié et remplacer le script entier, en conservant variables, secrets et liaisons. L’éditeur de Snippets en profite aussi."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غالبًا ما يصدر الـ Worker المنشور عبر أداة تجميع في سطر أو سطرين مصغَّرين بالغَي الطول، وكان الضغط على «تحديث الشيفرة» يُجمِّد الشاشة بالكامل. أُعيد بناء المحرِّر: النصوص ذات الحجم المعتاد صارت الكتابة فيها سلسة، أما الضخمة أو المصغَّرة فتتحول إلى القراءة فقط مع مسار واضح — استيراد ملف .js معدَّل واستبدال النص بالكامل مع الحفاظ على المتغيرات والأسرار والارتباطات. وينال محرِّر Snippets التحسين نفسه."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bir paketleyiciyle yayımlanan Worker genellikle bir iki çok uzun küçültülmüş satır hâlinde gelir ve «Kodu güncelle»ye dokunmak ekranın tamamını donduruyordu. Düzenleyici yeniden yazıldı: normal boyuttaki betiklerde yazım akıcı, aşırı büyük veya küçültülmüş olanlar ise salt okunur hâle gelip tek bir net yol sunuyor — düzenlenmiş bir .js dosyasını içe aktarıp betiğin tamamını değiştirmek; mevcut değişkenler, gizli anahtarlar ve bağlamalar korunur. Snippets düzenleyicisi de aynı iyileştirmeyi aldı."
           }
         }
       }

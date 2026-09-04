@@ -57,7 +57,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const RELATED: RelatedLink[] = [
 	{
 		href: "/guides/why-is-cloudflare-not-caching-my-site",
-		label: "Why is Cloudflare not caching my site?",
+		label: "What cf-cache-status DYNAMIC, BYPASS and MISS mean",
 		note: "The opposite problem, and the header that tells them apart: DYNAMIC, BYPASS and a MISS that never becomes a HIT.",
 	},
 	{

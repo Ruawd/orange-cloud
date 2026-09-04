@@ -128,6 +128,26 @@ export function subtypeLabel(subtype?: string | null): string | null {
 	return SUBTYPE_LABEL[subtype] ?? subtype;
 }
 
+/**
+ * Human labels for the Google Play order state (`orders.get` -> state).
+ * Apple rows have no order state; only the two "money never arrived" states
+ * need a label, since the dashboard shows them instead of a "正常" badge.
+ */
+export const ORDER_STATE_LABEL: Record<string, string> = {
+	PENDING: "待付款",
+	CANCELED: "已取消",
+	STATE_UNSPECIFIED: "状态未知",
+	PENDING_REFUND: "退款处理中",
+	PARTIALLY_REFUNDED: "部分退款",
+	REFUNDED: "已退款",
+	PROCESSED: "已到账",
+};
+
+export function orderStateLabel(state?: string | null): string {
+	if (!state) return "—";
+	return ORDER_STATE_LABEL[state] ?? state;
+}
+
 /** Human labels for transaction product types. */
 export const TX_TYPE_LABEL: Record<string, string> = {
 	"Non-Consumable": "买断",

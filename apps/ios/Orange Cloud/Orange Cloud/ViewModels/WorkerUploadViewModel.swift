@@ -23,7 +23,30 @@ final class WorkerUploadViewModel {
 
     // 原地编辑：读现有源码预填（/content/v2，OAuth 下可读）
     var isLoadingSource = false
-    var sourceUneditable = false   // 多模块打包产物：无法安全单文件替换（会丢其它模块）
+    /// 不能就地编辑的原因；nil = 可直接改
+    var sourceIssue: SourceIssue?
+
+    /// 源码为何不能在手机上就地编辑。
+    /// multiModule 是「不能替换」（单文件回写会丢其它模块）；
+    /// 另两个只是「不能就地改」——仍可导入改好的 .js 整体替换。
+    nonisolated enum SourceIssue: Equatable, Sendable {
+        /// 多模块打包产物：单文件替换会丢其它模块
+        case multiModule
+        /// 体积过大
+        case tooLarge(bytes: Int)
+        /// 压缩产物（存在超长行）：TextKit 断行是病态复杂度，进编辑器会钉死主线程
+        case minified(bytes: Int, longestLine: Int)
+
+        /// 是否还能用「导入文件整体替换」这条路
+        var allowsFileReplacement: Bool {
+            if case .multiModule = self { false } else { true }
+        }
+    }
+
+    /// 超过这个体积就不在手机上直接编辑（wrangler 打包产物动辄数百 KB 到数 MB）
+    nonisolated static let maxEditableSourceBytes = 256 * 1024
+    /// 单行超过这个长度即判定为压缩产物
+    nonisolated static let maxEditableLineLength = 5_000
 
     // 静态资源上传进度
     var uploadedAssets = 0
@@ -162,17 +185,46 @@ final class WorkerUploadViewModel {
     /// 单文件替换会丢失其它模块，故不允许原地编辑（引导用户走多模块整体替换）。
     func fetchSource(scriptName: String) async -> WorkerContent? {
         isLoadingSource = true
-        sourceUneditable = false
+        sourceIssue = nil
         error = nil
         defer { isLoadingSource = false }
         do {
             let content = try await service.content(accountId: accountId, scriptName: scriptName)
-            sourceUneditable = !content.isEditable
+            let issue = await Self.inspect(content)
+            sourceIssue = issue
+            if let issue {
+                AppLog.app.info("worker source not inline-editable: \(String(describing: issue))")
+            }
             return content
         } catch {
             self.error = error.localizedDescription
             return nil
         }
+    }
+
+    /// 判定源码能否就地编辑。扫描放 detached task：几 MB 的正文不占主线程。
+    nonisolated static func inspect(_ content: WorkerContent) async -> SourceIssue? {
+        guard content.isEditable, let module = content.mainModule else { return .multiModule }
+        return await Task.detached(priority: .userInitiated) {
+            let body = module.body
+            let bytes = body.utf8.count
+            if bytes > maxEditableSourceBytes { return SourceIssue.tooLarge(bytes: bytes) }
+            var longest = 0
+            var current = 0
+            for byte in body.utf8 {
+                if byte == 0x0A {           // \n
+                    if current > longest { longest = current }
+                    current = 0
+                } else {
+                    current += 1
+                }
+            }
+            if current > longest { longest = current }
+            if longest > maxEditableLineLength {
+                return SourceIssue.minified(bytes: bytes, longestLine: longest)
+            }
+            return nil
+        }.value
     }
 
     /// 更新现有脚本代码：保留绑定与兼容性日期（从 /settings 读取后 inherit 回写）

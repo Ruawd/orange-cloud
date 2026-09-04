@@ -35,7 +35,10 @@ struct WorkerService {
             "accounts/\(accountId)/workers/scripts/\(scriptName)/content/v2"
         )
         let contentType = response.value(forHTTPHeaderField: "Content-Type")
-        return WorkerContent.parse(data: data, contentType: contentType)
+        // 打包产物可达数 MB，multipart 切分不放主线程（本类型默认 MainActor 隔离）
+        return await Task.detached(priority: .userInitiated) {
+            WorkerContent.parse(data: data, contentType: contentType)
+        }.value
     }
 
     /// 脚本设置（绑定 + 兼容性日期/标志）

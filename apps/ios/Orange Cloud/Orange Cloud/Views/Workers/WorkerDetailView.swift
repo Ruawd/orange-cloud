@@ -141,6 +141,15 @@ struct WorkerDetailView: View {
                 ) {
                     WorkerTailView(accountId: script.accountId, scriptName: script.id, session: session)
                 }
+                // 历史日志与实时日志互补：tail 只播放连接期间的调用，这里查已落库的事件
+                ProGatedNavigationLink(
+                    label: String(localized: "历史日志"),
+                    systemImage: "clock.badge.checkmark",
+                    requiredScope: "workers-observability.read",
+                    feature: .workerTail
+                ) {
+                    WorkerLogsView(accountId: script.accountId, scriptName: script.id, session: session)
+                }
             }
             .glassRow()
         }

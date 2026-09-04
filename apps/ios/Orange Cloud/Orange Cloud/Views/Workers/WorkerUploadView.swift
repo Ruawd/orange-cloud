@@ -45,6 +45,8 @@ struct WorkerUploadView: View {
     @State private var isModule = true
     @State private var showCodeImporter = false
     @State private var didLoadSource = false   // 原地编辑：只预填一次
+    /// 源码只读时导入的替换文件（名称 + 字节数），用于回显「已选好要部署的文件」
+    @State private var replacementFile: (name: String, bytes: Int)?
 
     // 多模块
     @State private var modules: [WorkerUploadModule] = []
@@ -68,8 +70,11 @@ struct WorkerUploadView: View {
 
     private var canSubmit: Bool {
         guard nameValid, !viewModel.isUploading else { return false }
-        if case .replace = mode, viewModel.isLoadingSource || viewModel.sourceUneditable {
-            return false   // 原地编辑：源码未就绪 / 多模块不可替换时禁止部署
+        if case .replace = mode {
+            // 源码未就绪、或多模块产物（单文件回写会丢模块）时禁止部署。
+            // 超大 / 压缩产物只是不能就地改，导入文件后仍可整体替换。
+            if viewModel.isLoadingSource { return false }
+            if viewModel.sourceIssue?.allowsFileReplacement == false { return false }
         }
         switch effectiveKind {
         case .single:  return !code.isEmpty
@@ -191,17 +196,13 @@ struct WorkerUploadView: View {
                         ProgressView()
                         Text("正在读取源码…").font(.callout).foregroundStyle(.secondary)
                     }
-                } else if !isCreate && viewModel.sourceUneditable {
-                    Label("这是多模块打包 Worker，无法在此原地编辑（会丢失其它模块）。可在「新建」里用多模块方式整体替换。", systemImage: "exclamationmark.triangle")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                } else if !isCreate, let issue = viewModel.sourceIssue {
+                    readOnlySource(issue)
                 } else {
-                    TextEditor(text: $code)
-                        .font(.callout.monospaced())
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .frame(minHeight: 220)
-                        .disabled(viewModel.isUploading)
+                    // 用 UITextView 承载：正文不进 SwiftUI 更新、长行不折行，
+                    // 避免大脚本按键卡顿（TextEditor 在打包产物上会钉死主线程）
+                    CodeEditor(text: $code, isEnabled: !viewModel.isUploading)
+                        .frame(height: 260)
                     Button { showCodeImporter = true } label: {
                         Label("从 .js 文件导入", systemImage: "doc.badge.plus")
                     }
@@ -210,21 +211,62 @@ struct WorkerUploadView: View {
             } header: {
                 Text("代码")
             } footer: {
-                if !isCreate && !viewModel.sourceUneditable && !viewModel.isLoadingSource {
+                if !isCreate && viewModel.sourceIssue == nil && !viewModel.isLoadingSource {
                     Text("已载入当前线上源码，可直接修改后部署。现有变量 / 密钥 / 绑定会自动保留。")
                 }
             }
         }
     }
 
-    /// 原地编辑：进 sheet 时读取现有源码预填（仅 .replace 单文件模式，只做一次）
+    /// 源码不可就地编辑时的说明与出路
+    @ViewBuilder
+    private func readOnlySource(_ issue: WorkerUploadViewModel.SourceIssue) -> some View {
+        switch issue {
+        case .multiModule:
+            Label("这是多模块打包 Worker，无法在此原地编辑（会丢失其它模块）。可在「新建」里用多模块方式整体替换。",
+                  systemImage: "exclamationmark.triangle")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .tooLarge(let bytes):
+            Label("当前线上脚本 \(Int64(bytes).ocBytes)，超出手机端就地编辑的上限，已转为只读。可以导入改好的 .js 文件整体替换。",
+                  systemImage: "doc.text.magnifyingglass")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        case .minified(let bytes, _):
+            Label("当前线上脚本是压缩过的打包产物（\(Int64(bytes).ocBytes)，存在超长行），不适合在手机上就地编辑，已转为只读。可以导入改好的 .js 文件整体替换。",
+                  systemImage: "doc.text.magnifyingglass")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+
+        if issue.allowsFileReplacement {
+            if let replacementFile {
+                LabeledContent("待部署文件") {
+                    Text("\(replacementFile.name) · \(Int64(replacementFile.bytes).ocBytes)")
+                        .font(.caption.monospaced())
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                }
+            }
+            Button { showCodeImporter = true } label: {
+                Label(replacementFile == nil
+                      ? String(localized: "导入 .js 文件整体替换")
+                      : String(localized: "重新选择文件"),
+                      systemImage: "doc.badge.plus")
+            }
+            .disabled(viewModel.isUploading)
+        }
+    }
+
+    /// 原地编辑：进 sheet 时读取现有源码预填（仅 .replace 单文件模式，只做一次）。
+    /// 只有确认可就地编辑才把正文交给编辑器——超大 / 压缩产物进编辑器会钉死主线程。
     private func loadSourceIfNeeded() async {
         guard case .replace(let scriptName) = mode, !didLoadSource else { return }
         didLoadSource = true
-        if let content = await viewModel.fetchSource(scriptName: scriptName),
-           let main = content.mainModule {
+        guard let content = await viewModel.fetchSource(scriptName: scriptName) else { return }
+        isModule = content.isModule
+        if viewModel.sourceIssue == nil, let main = content.mainModule {
             code = main.body
-            isModule = content.isModule
         }
     }
 
@@ -328,7 +370,12 @@ struct WorkerUploadView: View {
     private func importCode(_ result: Result<[URL], Error>) {
         guard case .success(let urls) = result, let url = urls.first else { return }
         guard let text = readText(url) else { importError = String(localized: "无法以文本读取该文件"); return }
+        importError = nil
         code = text
+        // 只读态下正文不进编辑器，改在表单里回显文件名与体积
+        replacementFile = viewModel.sourceIssue == nil
+            ? nil
+            : (name: url.lastPathComponent, bytes: text.utf8.count)
         if isCreate, trimmedName.isEmpty {
             name = url.deletingPathExtension().lastPathComponent.lowercased()
         }

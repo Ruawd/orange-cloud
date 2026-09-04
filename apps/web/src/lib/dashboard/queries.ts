@@ -1,5 +1,10 @@
+import { collectedOrderStateSql } from "../ledger/order-state";
 import { getDb, queryAll, queryFirst } from "./db";
 import { ENVIRONMENT, PLATFORM_ORDER, PRODUCT_ORDER, type Filters } from "./types";
+
+// 营收只认「钱已到账」的交易：Play 的宽限期 / 待付款订单虽带金额，但钱还没收到
+// （口径见 lib/ledger/order-state.ts）。交易条数、图表等「事件计数」不受影响。
+const COLLECTED = collectedOrderStateSql();
 
 // ---------------------------------------------------------------------------
 // Filter helpers
@@ -106,6 +111,8 @@ export interface LinkedTxn {
 	expires_date: number | null;
 	revocation_date: number | null;
 	revocation_reason: number | null;
+	/** Play 的 orders.get state（Apple 行为 null）；PENDING/CANCELED = 钱未到账 */
+	order_state: string | null;
 }
 
 export interface NotificationRow {
@@ -140,6 +147,7 @@ interface NotificationJoinRow {
 	t_expires_date: number | null;
 	t_revocation_date: number | null;
 	t_revocation_reason: number | null;
+	t_order_state: string | null;
 }
 
 export interface TransactionRow {
@@ -157,6 +165,8 @@ export interface TransactionRow {
 	revocation_date: number | null;
 	notification_type: string | null;
 	platform: string | null;
+	/** Play 的 orders.get state（Apple 行为 null）；PENDING/CANCELED = 钱未到账 */
+	order_state: string | null;
 }
 
 export interface ExpiringRow {
@@ -285,7 +295,7 @@ async function getOverview(db: D1Database, f: Filters): Promise<Overview> {
 			db,
 			`SELECT currency, COUNT(*) count, SUM(price_millis) sum_millis
 			 FROM transactions
-			 WHERE revocation_date IS NULL${tx.sql}
+			 WHERE revocation_date IS NULL AND ${COLLECTED}${tx.sql}
 			 GROUP BY currency
 			 ORDER BY count DESC, currency ASC`,
 			tx.params,
@@ -307,9 +317,9 @@ async function getOverview(db: D1Database, f: Filters): Promise<Overview> {
 		}>(
 			db,
 			`SELECT platform, currency, COUNT(*) total,
-			        SUM(CASE WHEN revocation_date IS NULL THEN 1 ELSE 0 END) paid,
+			        SUM(CASE WHEN revocation_date IS NULL AND ${COLLECTED} THEN 1 ELSE 0 END) paid,
 			        SUM(CASE WHEN revocation_date IS NOT NULL THEN 1 ELSE 0 END) refunds,
-			        SUM(CASE WHEN revocation_date IS NULL THEN price_millis ELSE 0 END) sum_millis
+			        SUM(CASE WHEN revocation_date IS NULL AND ${COLLECTED} THEN price_millis ELSE 0 END) sum_millis
 			 FROM transactions WHERE 1 = 1${tx.sql}
 			 GROUP BY platform, currency`,
 			tx.params,
@@ -477,7 +487,7 @@ async function getNotificationsPage(
 		        t.offer_type AS t_offer_type, t.price_millis AS t_price_millis,
 		        t.currency AS t_currency, t.purchase_date AS t_purchase_date,
 		        t.expires_date AS t_expires_date, t.revocation_date AS t_revocation_date,
-		        t.revocation_reason AS t_revocation_reason
+		        t.revocation_reason AS t_revocation_reason, t.order_state AS t_order_state
 		 FROM notifications n
 		 LEFT JOIN transactions t ON t.transaction_id = n.transaction_id
 		 WHERE 1 = 1${filter.sql}
@@ -506,6 +516,7 @@ async function getNotificationsPage(
 					expires_date: r.t_expires_date,
 					revocation_date: r.t_revocation_date,
 					revocation_reason: r.t_revocation_reason,
+					order_state: r.t_order_state,
 				}
 			: null,
 	}));
@@ -535,7 +546,7 @@ async function getTransactionsPage(
 		db,
 		`SELECT transaction_id, original_transaction_id, product_id, type, offer_type,
 		        offer_identifier, storefront, price_millis, currency, environment, purchase_date,
-		        revocation_date, notification_type, platform
+		        revocation_date, notification_type, platform, order_state
 		 FROM transactions
 		 WHERE 1 = 1${sql}
 		 ORDER BY created_at DESC LIMIT ? OFFSET ?`,

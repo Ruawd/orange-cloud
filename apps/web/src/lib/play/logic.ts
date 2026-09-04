@@ -43,6 +43,8 @@ export interface PlayTransactionRow {
 	priceMillis: number | null;
 	devRevenueMillis: number | null;
 	currency: string | null;
+	/** orders.get 的 state：钱到底收到了没有（营收口径见 lib/ledger/order-state.ts）。 */
+	orderState: string | null;
 	storefront: string | null;
 	offerIdentifier: string | null;
 	revocationDate: number | null;
@@ -253,6 +255,7 @@ export function buildLedgerRows(
 					priceMillis,
 					devRevenueMillis,
 					currency,
+					orderState: order?.state ?? null,
 					storefront,
 					offerIdentifier: line?.offerDetails?.offerId ?? line?.offerDetails?.basePlanId ?? null,
 					revocationDate: isVoided ? eventTime : null,

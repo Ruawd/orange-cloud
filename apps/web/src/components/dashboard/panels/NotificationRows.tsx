@@ -10,11 +10,13 @@ import {
 	notificationLabel,
 	notificationTone,
 	offerTypeLabel,
+	orderStateLabel,
 	productLabel,
 	revocationReasonLabel,
 	subtypeLabel,
 	txTypeLabel,
 } from "@/lib/dashboard/types";
+import { isCollectedOrderState } from "@/lib/ledger/order-state";
 
 export function NotificationRows({ rows }: { rows: NotificationRow[] }) {
 	const [selected, setSelected] = useState<NotificationRow | null>(null);
@@ -97,6 +99,7 @@ function NotificationModal({
 	const n = notification;
 	const t = n.txn;
 	const refunded = t?.revocation_date != null;
+	const uncollected = t != null && !isCollectedOrderState(t.order_state);
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -144,6 +147,11 @@ function NotificationModal({
 										? ` · ${revocationReasonLabel(t.revocation_reason)}`
 										: ""}
 								</div>
+							) : uncollected ? (
+								// Play 宽限期 / 待付款：订单有金额但尚未扣款成功，不计入营收
+								<div className="mb-4 rounded-lg bg-foreground/[0.06] px-3 py-2 text-xs text-muted">
+									{orderStateLabel(t.order_state)} · 该订单尚未到账，不计入营收
+								</div>
 							) : null}
 							<dl className="grid grid-cols-2 gap-x-4 gap-y-3">
 								<Field label="产品">{productLabel(t.product_id)}</Field>
@@ -164,6 +172,8 @@ function NotificationModal({
 								<Field label="状态">
 									{refunded ? (
 										<span className="text-negative">已退款</span>
+									) : uncollected ? (
+										<span className="text-muted">{orderStateLabel(t.order_state)}</span>
 									) : (
 										<span className="text-positive">正常</span>
 									)}

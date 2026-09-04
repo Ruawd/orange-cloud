@@ -10,6 +10,18 @@ import Foundation
 
 nonisolated enum WhatsNewGenerated {
     static let releases: [WhatsNewRelease] = [
+        WhatsNewRelease(version: "2.1.2", items: [
+            WhatsNewItem(
+                icon:   "clock.badge.checkmark",
+                title:  String(localized: "日志可以往回翻了", table: "WhatsNew"),
+                detail: String(localized: "以前只有「实时日志」，它只播放你盯着看的那几分钟里发生的请求，退出就没了。现在 Worker 详情多了「历史日志」，可以按 30 分钟到 3 天的范围往回查已经发生过的调用，能按级别筛选、按关键词搜索，点开还能看状态码、耗时和 Ray ID。前提是这个 Worker 已经开启了 Observability。", table: "WhatsNew")
+            ),
+            WhatsNewItem(
+                icon:   "wrench.and.screwdriver",
+                title:  String(localized: "打开大脚本不再卡死", table: "WhatsNew"),
+                detail: String(localized: "用打包工具部署的 Worker，源码常常被压缩成很长的一两行，点「更新代码」会把整个界面卡死。编辑器换了实现，正常体量的脚本编辑起来更跟手；超大或压缩过的脚本转为只读，并给出「导入 .js 文件整体替换」这条路——现有的变量、密钥和绑定照旧保留。Snippets 的编辑器一并改善。", table: "WhatsNew")
+            )
+        ]),
         WhatsNewRelease(version: "2.1.1", items: [
             WhatsNewItem(
                 icon:   "square.and.pencil",

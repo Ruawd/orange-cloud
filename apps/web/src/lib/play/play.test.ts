@@ -7,6 +7,7 @@ import { buildLedgerRows, mapSubscriptionState, notificationTypeName } from "./l
 import { buildPlayBarkMessage } from "./notify";
 import { moneyToMillis, type DeveloperNotification, type PlayEnrichment } from "./types";
 import { isRetryableStatus, parseServiceAccount } from "./api";
+import { isCollectedOrderState } from "../ledger/order-state";
 
 const PACKAGE = "jiamin.chen.orangecloud";
 const AUDIENCE = "https://o-c.do/api/play/notifications";
@@ -257,6 +258,45 @@ describe("buildLedgerRows", () => {
 			isLifetime: false,
 		});
 		expect(rows.subscription?.expiresDate).toBe(Date.parse("2027-08-01T00:00:00Z"));
+	});
+
+	it("订阅首购：已扣款订单带上 PROCESSED 状态", () => {
+		const rows = buildLedgerRows(decodeEnvelopeOf(SUB_PURCHASE), SUB_ENRICHMENT);
+		expect(rows.transaction?.orderState).toBe("PROCESSED");
+		expect(isCollectedOrderState(rows.transaction?.orderState)).toBe(true);
+	});
+
+	// 续订失败进宽限期：latestOrderId 指向那笔尚未扣款成功的订单，orders.get 给
+	// state=PENDING、有 total、无 developerRevenue。金额照记，但必须带上 PENDING，
+	// 否则看板会把一笔没收到的钱算成收入（2026-09 线上真实事故）。
+	it("宽限期：待扣款订单记 PENDING，不算已到账", () => {
+		const grace: DeveloperNotification = {
+			packageName: PACKAGE,
+			eventTimeMillis: "1754006400000",
+			subscriptionNotification: { notificationType: 6, purchaseToken: "tok-abc" },
+		};
+		const rows = buildLedgerRows(decodeEnvelopeOf(grace), {
+			subscription: {
+				...SUB_ENRICHMENT.subscription,
+				subscriptionState: "SUBSCRIPTION_STATE_IN_GRACE_PERIOD",
+			},
+			order: {
+				orderId: "GPA.1111-2222-3333-44444",
+				state: "PENDING",
+				createTime: "2027-08-01T00:00:00Z",
+				total: { currencyCode: "HUF", units: "6319" },
+			},
+		});
+		expect(rows.notification.notificationType).toBe("SUBSCRIPTION_IN_GRACE_PERIOD");
+		expect(rows.transaction).toMatchObject({
+			orderState: "PENDING",
+			priceMillis: 6_319_000,
+			devRevenueMillis: null,
+			revocationDate: null,
+		});
+		expect(isCollectedOrderState(rows.transaction?.orderState)).toBe(false);
+		// 权益仍在宽限期内（用户没掉权益，只是钱没到）
+		expect(rows.subscription?.status).toBe("grace");
 	});
 
 	it("测试购买标成 Sandbox（看板会排除）", () => {

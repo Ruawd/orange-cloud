@@ -16,6 +16,7 @@ const DOCS_DEFAULTS = "https://developers.cloudflare.com/cache/concepts/default-
 const DOCS_RULES = "https://developers.cloudflare.com/cache/how-to/cache-rules/";
 const DOCS_KEYS = "https://developers.cloudflare.com/cache/how-to/cache-keys/";
 const DOCS_ORIGIN_CC = "https://developers.cloudflare.com/cache/concepts/cache-control/";
+const DOCS_CDNCC = "https://developers.cloudflare.com/cache/concepts/cdn-cache-control/";
 const DOCS_DEV_MODE = "https://developers.cloudflare.com/cache/reference/development-mode/";
 const DOCS_TRACE = "https://developers.cloudflare.com/rules/trace-request/";
 const DOCS_TIERED = "https://developers.cloudflare.com/cache/how-to/tiered-cache/";
@@ -26,23 +27,23 @@ const DOCS_BYPASS_CHANGE =
 const FAQ: Array<{ q: string; a: string }> = [
 	{
 		q: "What does cf-cache-status: DYNAMIC mean?",
-		a: "It means Cloudflare decided the request was not eligible for caching before it ever looked in the cache, so the request went straight to your origin. The usual reason is that the file extension is not one Cloudflare caches by default — HTML and JSON are not — and no Cache Rule says otherwise.",
+		a: "It means Cloudflare decided the request was not eligible for caching before it ever looked in the cache, so the request went straight to your origin. The usual reason is that the file extension is not one Cloudflare caches by default \u2014 HTML and JSON are not \u2014 and no Cache Rule says otherwise.",
 	},
 	{
-		q: "Why is Cloudflare not caching my HTML pages?",
-		a: "Because Cloudflare decides eligibility by file extension, and HTML is deliberately excluded from the default list. Pages are served from your origin until you add a Cache Rule that marks them eligible for cache and gives them an edge TTL.",
+		q: "What is the difference between DYNAMIC and BYPASS?",
+		a: "Timing. DYNAMIC is decided at request time, from the URL and your rules, before the cache is consulted at all. BYPASS is decided at response time: the request was eligible, but something your origin returned \u2014 a Set-Cookie header, a no-store directive, an oversized body \u2014 made the response unstorable. DYNAMIC is usually fixed in Cloudflare, BYPASS on your server.",
 	},
 	{
 		q: "What is the difference between BYPASS and MISS in Cloudflare?",
-		a: "BYPASS means Cloudflare refused to store the response — it was eligible at request time, but something in the response, such as a Set-Cookie header or an oversized body, made it uncacheable. MISS means the response was cacheable and simply was not in that data center's cache yet, so the next request should be a HIT.",
+		a: "BYPASS means Cloudflare refused to store the response. MISS means the response was cacheable and simply was not in that data center's cache yet, so the next request to the same location should be a HIT. A MISS that never becomes a HIT is a third problem, and it is almost always the cache key.",
+	},
+	{
+		q: "Why is Cloudflare not caching my site?",
+		a: "Most likely because nothing is broken. Cloudflare judges eligibility by file extension, and HTML is deliberately excluded from the default list, so pages are served from your origin and report DYNAMIC until you add a Cache Rule that marks them eligible for cache and gives them an edge TTL.",
 	},
 	{
 		q: "Why does Cloudflare keep returning MISS on every request?",
 		a: "Almost always because each request produces a different cache key. Query strings count toward the key by default, so tracking parameters, session IDs, or timestamps split one asset into thousands of entries that are never requested twice. Low-traffic assets can also be evicted between requests.",
-	},
-	{
-		q: "Does a Set-Cookie header stop Cloudflare from caching?",
-		a: "By default, yes — a response carrying Set-Cookie is not stored, and it reports BYPASS. You can override that by setting an explicit edge TTL in a Cache Rule that ignores origin cache-control, by having the origin send Cache-Control: private=“Set-Cookie”, or by stripping the header with a response header Transform Rule.",
 	},
 ];
 
@@ -144,40 +145,46 @@ export default async function NotCachingGuide({ params }: { params: Promise<{ lo
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 			<GuideShell
 				title={guide.h1}
-				lede="Putting a site behind a proxy does not make it a cached site. One response header tells you which decision was made, at which moment, and therefore which setting is worth changing."
+				lede="Putting a site behind a proxy does not make it a cached site. One response header names the decision Cloudflare made, at which moment it was made, and therefore which setting is worth changing."
 				updated={guide.updated}
 				readingTime={guide.readingTime}
 				related={RELATED}
 			>
 				<div className="glass r-island note p-6 sm:p-7">
 					<p>
-						Cloudflare caches by file extension, and HTML and JSON are not on the default list — so most
-						pages return <code>cf-cache-status: DYNAMIC</code> until a Cache Rule makes them eligible.{" "}
-						<code>BYPASS</code> means the origin response blocked caching instead.
+						<code>cf-cache-status</code> names the cache decision. <code>DYNAMIC</code> means the request
+						was never eligible — HTML and JSON are not cached by default. <code>BYPASS</code> means the
+						origin response blocked storage. <code>MISS</code> means it was cacheable but not stored yet.
 					</p>
 				</div>
 
 				<p>
-					The common assumption is that traffic routed through Cloudflare is cached traffic, and that a slow
-					page means the cache is broken. Neither is quite right. Static assets are cached by default, pages
-					are not, and there are several distinct ways a response can end up served from your server — each
-					with a different fix. Guessing between them is how people end up stacking rules that cancel each
-					other out.
+					Ask why Cloudflare is not caching your site and the honest answer is usually that it is working as
+					designed. The assumption underneath the question — that traffic routed through Cloudflare is cached
+					traffic — is the part that is wrong. Static assets are cached by default, pages are not, and there
+					are several distinct ways a response ends up served from your server, each with a different fix.
+					Guessing between them is how people stack rules that cancel each other out.
 				</p>
 
-				<h2 id="read-the-header">Read the header before you change any setting</h2>
+				<h2 id="read-the-header">Read the cf-cache-status header before changing any setting</h2>
 				<p>
-					Every proxied response carries a <code>cf-cache-status</code> header, and it names the decision
-					that was made. Fetch the URL and look at it before touching the dashboard:
+					Every proxied response carries this header, and it names the decision that was made. Tooling spells
+					it inconsistently — <code>CF-Cache-Status</code> in Cloudflare&rsquo;s own documentation,{" "}
+					<code>cf-cache-status</code> on the wire, plain cache status in most dashboards — but it is one
+					header carrying one value per response. Fetch the URL and read it before touching anything:
 				</p>
 				<pre>
 					<code>curl -sSI https://example.com/ | grep -iE &apos;^(cf-cache-status|age):&apos;</code>
 				</pre>
 				<p>
-					The <code>Age</code> header is a useful companion: it reports how many seconds the asset has been
-					sitting in cache, and it appears only on responses actually served from cache. If <code>Age</code>{" "}
-					is missing, the response came from your origin, whatever else the page appears to be doing. If the
-					headers are absent entirely, the hostname is probably not proxied at all — see{" "}
+					The <code>Age</code> header is a useful companion, with one caveat. Cloudflare sets it on{" "}
+					<code>HIT</code>, <code>STALE</code>, and <code>UPDATING</code> responses, reporting how many
+					seconds the asset has been in cache since it was admitted or last revalidated. It is absent on{" "}
+					<code>MISS</code>, <code>DYNAMIC</code>, <code>BYPASS</code>, and <code>NONE/UNKNOWN</code> — but
+					if your origin sends its own <code>Age</code> on an uncacheable response, Cloudflare passes that
+					value through unchanged. So <code>Age</code> corroborates <code>cf-cache-status</code>; it never
+					substitutes for it. If both headers are absent entirely, the hostname is probably not proxied at
+					all — see{" "}
 					<Link href="/guides/what-is-the-orange-cloud-in-cloudflare">
 						proxied vs DNS only
 					</Link>{" "}
@@ -246,15 +253,17 @@ export default async function NotCachingGuide({ params }: { params: Promise<{ lo
 				<p>
 					That last row catches people out. A Worker that answers without a subrequest, a blocked WAF
 					request, and a redirect rule all short-circuit ahead of the cache, so they are labelled{" "}
-					<code>NONE/UNKNOWN</code> rather than describing a cache outcome at all. The full reference lives
-					in the{" "}
+					<code>NONE/UNKNOWN</code> rather than describing a cache outcome at all. <code>REVALIDATED</code>{" "}
+					is also rarer than it used to be: with asynchronous stale-while-revalidate, a refresh that once
+					made the visitor wait now usually reports <code>UPDATING</code> or <code>HIT</code> instead. The
+					full reference lives in the{" "}
 					<a href={DOCS_STATUSES} target="_blank" rel="noopener noreferrer">
 						cache responses documentation
 					</a>
 					.
 				</p>
 
-				<h2 id="two-decisions">Two decisions, not one</h2>
+				<h2 id="two-decisions">DYNAMIC vs BYPASS: two decisions, not one</h2>
 				<CacheDecision />
 				<p>
 					<code>DYNAMIC</code> and <code>BYPASS</code> both mean &ldquo;not cached&rdquo;, and they are
@@ -346,6 +355,15 @@ export default async function NotCachingGuide({ params }: { params: Promise<{ lo
 								<td>Always bypasses, whatever else is configured</td>
 							</tr>
 							<tr>
+								<th scope="row">
+									<code>CDN-Cache-Control: no-store</code>
+								</th>
+								<td>
+									Read ahead of <code>Cache-Control</code>, so it wins even when{" "}
+									<code>Cache-Control</code> declares the response public and cacheable
+								</td>
+							</tr>
+							<tr>
 								<th scope="row">Body over the size limit</th>
 								<td>512 MB on Free, Pro, and Business; 5 GB by default on Enterprise</td>
 							</tr>
@@ -354,21 +372,28 @@ export default async function NotCachingGuide({ params }: { params: Promise<{ lo
 									Request had <code>Authorization</code>
 								</th>
 								<td>
-									Cacheable only if the response also carries <code>public</code>,{" "}
-									<code>s-maxage</code>, or <code>must-revalidate</code>
+									With origin cache-control enabled, cacheable only if the response also carries{" "}
+									<code>public</code>, <code>s-maxage</code>, or <code>must-revalidate</code>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<p>
-					Two of these are worth knowing precisely. First, whether <code>no-cache</code> blocks caching
-					depends on{" "}
+					Three of these are worth knowing precisely. First, the header Cloudflare actually obeys is not
+					always the one you set: it reads{" "}
+					<a href={DOCS_CDNCC} target="_blank" rel="noopener noreferrer">
+						<code>Cloudflare-CDN-Cache-Control</code>, then <code>CDN-Cache-Control</code>
+					</a>
+					, and only then <code>Cache-Control</code> — so an origin returning{" "}
+					<code>Cache-Control: public, max-age=3600</code> alongside <code>CDN-Cache-Control: no-store</code>{" "}
+					bypasses cache, and the <code>Cache-Control</code> header you keep re-checking is the wrong one to
+					look at. Second, whether <code>no-cache</code> blocks caching depends on{" "}
 					<a href={DOCS_ORIGIN_CC} target="_blank" rel="noopener noreferrer">
 						origin cache-control
 					</a>
 					, which is enabled by default on Free, Pro, and Business plans and disabled by default on
-					Enterprise — so identical origin headers behave differently on different plans. Second, since{" "}
+					Enterprise — so identical origin headers behave differently on different plans. Third, since{" "}
 					<a href={DOCS_BYPASS_CHANGE} target="_blank" rel="noopener noreferrer">
 						a change in May 2026
 					</a>
