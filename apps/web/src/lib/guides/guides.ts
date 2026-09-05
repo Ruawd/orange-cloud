@@ -167,6 +167,17 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-09-03",
 		readingTime: "8 min read",
 	},
+	{
+		slug: "cloudflare-error-524-a-timeout-occurred",
+		h1: "Why Am I Getting Cloudflare Error 524: A Timeout Occurred?",
+		title: "Cloudflare Error 524: A Timeout Occurred, Explained",
+		description:
+			"Error 524 means Cloudflare connected to your origin but got no HTTP response in time. The default limit is 125 seconds, not the 100 usually quoted.",
+		blurb:
+			"The connection succeeded \u2014 that is what makes 524 different from every other 52x code. The two clocks behind it, and what to do when your plan cannot raise either one.",
+		updated: "2026-09-05",
+		readingTime: "8 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [

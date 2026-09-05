@@ -53,6 +53,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-error-524-a-timeout-occurred",
+		label: "Cloudflare error 524: a timeout occurred",
+		note: "The next timer on the same connection: the origin picked up, then never answered within the read timeout.",
+	},
+	{
 		href: "/guides/cloudflare-error-521-web-server-is-down",
 		label: "Cloudflare error 521: web server is down",
 		note: "The refusal to this error's silence — same hop, same firewall, one word different in the rule.",
