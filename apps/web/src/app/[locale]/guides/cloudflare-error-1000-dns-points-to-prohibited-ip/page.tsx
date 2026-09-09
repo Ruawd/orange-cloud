@@ -50,6 +50,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-error-1020-access-denied",
+		label: "Cloudflare error 1020: access denied",
+		note: "The other Access Denied page — deliberate rather than misconfigured, which is what separates the two.",
+	},
+	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
 		label: "What does the orange cloud mean in Cloudflare?",
 		note: "The prerequisite: proxied vs DNS only, and why a proxied record needs a real origin address behind it.",

@@ -50,6 +50,11 @@ const FAQ: Array<{ q: string; a: string }> = [
 
 const RELATED: RelatedLink[] = [
 	{
+		href: "/guides/cloudflare-hide-origin-ip",
+		label: "Can someone still find my origin IP behind Cloudflare?",
+		note: "The reason this header can be trusted at all: an origin that only accepts Cloudflare is the other half of the job.",
+	},
+	{
 		href: "/guides/what-is-the-orange-cloud-in-cloudflare",
 		label: "What does the orange cloud mean in Cloudflare?",
 		note: "The proxy status on the record is what puts Cloudflare between the visitor and your server in the first place — and what makes this header appear.",

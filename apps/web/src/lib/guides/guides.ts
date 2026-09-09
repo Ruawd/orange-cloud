@@ -178,6 +178,39 @@ export const GUIDES: GuideMeta[] = [
 		updated: "2026-09-05",
 		readingTime: "8 min read",
 	},
+	{
+		slug: "cloudflare-error-1020-access-denied",
+		h1: "Why Am I Seeing Cloudflare Error 1020: Access Denied?",
+		title: "Cloudflare Error 1020: Access Denied, Explained",
+		description:
+			"Error 1020 means a security rule on that site blocked your request on purpose. It is a decision by the site owner, not an outage, and arrives as HTTP 403.",
+		blurb:
+			"Someone wrote a rule and you matched it. Which Cloudflare feature emits 1020 rather than 1015 or 1106, and the one log that names the rule that did it.",
+		updated: "2026-09-09",
+		readingTime: "8 min read",
+	},
+	{
+		slug: "cloudflare-hide-origin-ip",
+		h1: "Can Someone Still Find My Origin IP Behind Cloudflare?",
+		title: "Hide Your Origin IP Behind Cloudflare: What Works",
+		description:
+			"Proxying hides your origin address from DNS, but does not make it secret. Anyone who learns it can skip Cloudflare unless your origin refuses them.",
+		blurb:
+			"The orange cloud hides an address; it does not defend one. The five ways an origin IP gets out, and why only a rule at the origin itself actually closes the door.",
+		updated: "2026-09-09",
+		readingTime: "9 min read",
+	},
+	{
+		slug: "cloudflare-block-ai-crawlers",
+		h1: "How Do You Block AI Crawlers on Cloudflare?",
+		title: "Block AI Crawlers on Cloudflare: Defaults Change Sept 15",
+		description:
+			"robots.txt only states a preference. Enforcement comes from AI Crawl Control or the AI bot policies, and new-domain defaults change on September 15, 2026.",
+		blurb:
+			"Stating a preference, enforcing it, and wasting a crawler's time are three different tools. Which one actually stops a crawler, and what changes on September 15.",
+		updated: "2026-09-09",
+		readingTime: "9 min read",
+	},
 ];
 
 export const GUIDES_ZH: GuideMeta[] = [
