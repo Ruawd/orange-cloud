@@ -56,7 +56,7 @@ const FAQ: Array<{ q: string; a: string }> = [
 const RELATED: RelatedLink[] = [
   {
     href: "/guides/cloudflare-real-visitor-ip-cf-connecting-ip",
-    label: "How do you get the real visitor IP behind Cloudflare?",
+    label: "Why do my server logs show Cloudflare\u2019s IP, not the visitor\u2019s?",
     note: "The mirror image of this problem — and the header you must stop trusting once your origin only accepts Cloudflare.",
   },
   {

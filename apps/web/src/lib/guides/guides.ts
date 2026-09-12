@@ -136,14 +136,14 @@ export const GUIDES: GuideMeta[] = [
 	},
 	{
 		slug: "cloudflare-real-visitor-ip-cf-connecting-ip",
-		h1: "How Do You Get the Real Visitor IP Behind Cloudflare?",
-		title: "Cloudflare Real Visitor IP: CF-Connecting-IP Explained",
+		h1: "Why Do My Server Logs Show Cloudflare\u2019s IP, Not the Visitor\u2019s?",
+		title: "Server Logs Show Cloudflare IPs Instead of Visitors",
 		description:
-			"The visitor's real address arrives in the CF-Connecting-IP header. Read that instead of the connection source, and trust it only from Cloudflare's IPs.",
+			"Because Cloudflare is the client now. The visitor\u2019s address moves into the CF-Connecting-IP request header, and your server has to be told to read it.",
 		blurb:
-			"Your logs fill up with Cloudflare addresses because Cloudflare is the client now. Which header carries the real one, why X-Forwarded-For is the wrong one to read, and the trust boundary every guide leaves out.",
-		updated: "2026-08-28",
-		readingTime: "8 min read",
+			"Every entry is a Cloudflare address, so the rate limiter, the ban list and the geo rules all quietly stopped meaning anything \u2014 and a firewall that reacts on its own can take the site down.",
+		updated: "2026-09-12",
+		readingTime: "9 min read",
 	},
 	{
 		slug: "cloudflare-error-521-web-server-is-down",
