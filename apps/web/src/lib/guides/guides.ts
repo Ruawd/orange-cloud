@@ -201,6 +201,17 @@ export const GUIDES: GuideMeta[] = [
 		readingTime: "9 min read",
 	},
 	{
+		slug: "cloudflare-error-525-ssl-handshake-failed",
+		h1: "Why Am I Getting Cloudflare Error 525: SSL Handshake Failed?",
+		title: "Cloudflare Error 525: SSL Handshake Failed, Explained",
+		description:
+			"Error 525 means the TLS handshake between Cloudflare and your origin failed. It happens in Full as well as Full (strict), not just strict.",
+		blurb:
+			"The connection got as far as TLS and died there. Four things have to hold for the handshake to finish \u2014 and unlike a 526, relaxing the encryption mode fixes none of them.",
+		updated: "2026-09-14",
+		readingTime: "8 min read",
+	},
+	{
 		slug: "cloudflare-block-ai-crawlers",
 		h1: "How Do You Block AI Crawlers on Cloudflare?",
 		title: "Block AI Crawlers on Cloudflare: Defaults Change Sept 15",
