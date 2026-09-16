@@ -1,5 +1,46 @@
 [
   {
+    "version": "2.1.3",
+    "date": "2026.09.15",
+    "channel": "TestFlight β",
+    "inApp": false,
+    "items": [
+      {
+        "icon": "airplane.departure",
+        "title": {
+          "zh-Hans": "TestFlight 测试轨道收尾",
+          "en": "Winding down the TestFlight track",
+          "zh-Hant": "TestFlight 測試軌道收尾",
+          "zh-HK": "TestFlight 測試軌道收尾",
+          "ja": "TestFlight配信の終了に向けて",
+          "es-MX": "Cierre del canal de TestFlight",
+          "ko": "TestFlight 베타 배포 마무리",
+          "pt-BR": "Encerrando o canal do TestFlight",
+          "pt-PT": "A encerrar o canal do TestFlight",
+          "de": "Der TestFlight-Kanal wird geschlossen",
+          "fr": "Fermeture du canal TestFlight",
+          "ar": "إنهاء قناة الاختبار على TestFlight",
+          "tr": "TestFlight kanalı kapanıyor"
+        },
+        "detail": {
+          "zh-Hans": "这一版是给 TestFlight 测试版收尾用的：测试包里会提示测试轨道即将关闭、包何时过期，以及怎么换到 App Store 版本。App Store 用户没有可见变化。",
+          "en": "This release exists to wind down the TestFlight beta: builds installed from TestFlight now explain that the track is closing, when the build expires, and how to move to the App Store version. Nothing changes for App Store users.",
+          "zh-Hant": "這一版是給 TestFlight 測試版收尾用的：測試版裡會說明測試軌道即將關閉、測試包何時過期，以及如何換到 App Store 版本。App Store 使用者沒有可見變化。",
+          "zh-HK": "這一版是為 TestFlight 測試版收尾而設：測試版內會說明測試軌道即將關閉、測試包何時過期，以及如何轉用 App Store 版本。App Store 用戶沒有可見變化。",
+          "ja": "このバージョンはTestFlight版の提供終了に向けたものです。TestFlightからインストールしたビルドでは、配信終了の案内、ビルドの期限、App Store版への移行方法を表示します。App Store版の利用者に変更はありません。",
+          "es-MX": "Esta versión sirve para cerrar la beta de TestFlight: las versiones instaladas desde TestFlight ahora explican que el canal se cierra, cuándo caduca la versión y cómo pasar a la de App Store. Para quienes usan App Store no cambia nada.",
+          "ko": "이번 버전은 TestFlight 베타를 마무리하기 위한 것입니다. TestFlight로 설치한 빌드에서는 베타 배포 종료 안내와 빌드 만료 시점, App Store 버전으로 옮기는 방법을 보여줍니다. App Store 사용자에게는 달라지는 점이 없습니다.",
+          "pt-BR": "Esta versão serve para encerrar o beta do TestFlight: builds instalados pelo TestFlight passam a explicar que o canal será encerrado, quando o build expira e como migrar para a versão da App Store. Para quem usa a App Store, nada muda.",
+          "pt-PT": "Esta versão serve para encerrar a beta do TestFlight: as versões instaladas a partir do TestFlight passam a explicar que o canal vai fechar, quando a versão expira e como mudar para a da App Store. Para quem usa a App Store, nada muda.",
+          "de": "Diese Version dient dazu, die TestFlight-Beta auslaufen zu lassen: In TestFlight installierte Builds erklären jetzt, dass der Kanal schließt, wann der Build abläuft und wie man zur App-Store-Version wechselt. Für App-Store-Nutzer ändert sich nichts.",
+          "fr": "Cette version sert à clore la bêta TestFlight : les versions installées depuis TestFlight expliquent désormais que le canal ferme, quand la version expire et comment passer à celle de l'App Store. Rien ne change pour les utilisateurs de l'App Store.",
+          "ar": "جاء هذا الإصدار لإنهاء النسخة التجريبية على TestFlight: تعرض النسخ المثبَّتة عبر TestFlight الآن إشعارًا بإغلاق قناة الاختبار، وموعد انتهاء صلاحية النسخة، وطريقة الانتقال إلى إصدار App Store. ولا يتغيّر شيء لمستخدمي App Store.",
+          "tr": "Bu sürüm TestFlight betasını sonlandırmak için: TestFlight'tan kurulan sürümler artık kanalın kapandığını, sürümün ne zaman sona ereceğini ve App Store sürümüne nasıl geçileceğini anlatıyor. App Store kullanıcıları için değişen bir şey yok."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.1.2",
     "date": "2026.09.04",
     "channel": "App Store",

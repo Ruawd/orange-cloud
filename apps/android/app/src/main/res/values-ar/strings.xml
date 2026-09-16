@@ -570,6 +570,7 @@
     <string name="settings_privacy">سياسة الخصوصية</string>
     <string name="settings_terms">شروط الاستخدام</string>
     <string name="settings_about_footer">Orange Cloud · عميل Cloudflare من طرف ثالث</string>
+    <string name="settings_about_copyright">© 2026 Zhe Tech Co., Ltd.</string>
     <string name="identity_title">الحساب</string>
     <string name="identity_not_found">هذا الحساب لم يعد موجودًا</string>
     <string name="identity_oauth_badge">OAuth 2.0</string>

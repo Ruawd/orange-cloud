@@ -649,6 +649,7 @@
     <string name="settings_privacy">隐私政策</string>
     <string name="settings_terms">使用条款</string>
     <string name="settings_about_footer">Orange Cloud · 第三方 Cloudflare 客户端</string>
+    <string name="settings_about_copyright">© 2026 柘家科技有限公司</string>
 
     <!-- 账号详情 -->
     <string name="identity_title">账号</string>

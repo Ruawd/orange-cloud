@@ -81,6 +81,11 @@ const RELATED: RelatedLink[] = [
 		external: true,
 	},
 	{
+		href: "/guides/cloudflare-error-codes",
+		label: "Cloudflare error codes: 5xx vs 1xxx",
+		note: "Why a 1xxx number lives in the response body, and what the status line carries instead.",
+	},
+	{
 		href: "/contact",
 		label: "Something wrong on this page?",
 		note: "Corrections and questions are welcome — we read every message.",

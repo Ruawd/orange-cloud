@@ -473,6 +473,7 @@
     <string name="settings_privacy">Privacy Policy</string>
     <string name="settings_terms">Terms of Use</string>
     <string name="settings_about_footer">Orange Cloud · third-party Cloudflare client</string>
+    <string name="settings_about_copyright">© 2026 Zhe Tech Co., Ltd.</string>
 
     <!-- Account detail -->
     <string name="identity_title">Account</string>

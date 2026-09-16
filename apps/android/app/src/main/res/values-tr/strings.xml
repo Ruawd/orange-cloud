@@ -570,6 +570,7 @@
     <string name="settings_privacy">Gizlilik politikası</string>
     <string name="settings_terms">Kullanım koşulları</string>
     <string name="settings_about_footer">Orange Cloud · üçüncü taraf Cloudflare istemcisi</string>
+    <string name="settings_about_copyright">© 2026 Zhe Tech Co., Ltd.</string>
     <string name="identity_title">Hesap</string>
     <string name="identity_not_found">Bu hesap artık mevcut değil</string>
     <string name="identity_oauth_badge">OAuth 2.0</string>

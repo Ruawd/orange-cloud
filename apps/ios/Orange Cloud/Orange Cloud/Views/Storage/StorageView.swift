@@ -169,6 +169,8 @@ private struct StorageContent: View {
                     .frame(maxHeight: .infinity)
             }
         }
+        // 宽画布下收进可读宽度并居中（分段控件与列表一起收）
+        .ocReadableWidth()
         .task(id: kind) {
             await load()
         }

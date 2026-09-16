@@ -83,6 +83,11 @@ const RELATED: RelatedLink[] = [
     external: true,
   },
   {
+    href: "/guides/cloudflare-error-codes",
+    label: "Cloudflare error codes: 5xx vs 1xxx",
+    note: "Why your monitoring only ever saw a 403, and how the two families of codes differ.",
+  },
+  {
     href: "/contact",
     label: "Something wrong on this page?",
     note: "Corrections and questions are welcome — we read every message.",

@@ -212,6 +212,17 @@ export const GUIDES: GuideMeta[] = [
 		readingTime: "8 min read",
 	},
 	{
+		slug: "cloudflare-error-codes",
+		h1: "What Do Cloudflare\u2019s Error Codes Mean?",
+		title: "Cloudflare Error Codes: 5xx vs 1xxx, and Who Fixes What",
+		description:
+			"A 520\u2013527 code describes the hop from Cloudflare to your origin. A 1xxx code is Cloudflare\u2019s own decision, and is not an HTTP status code at all.",
+		blurb:
+			"The range tells you who has to fix it. Why a 1xxx number never reaches your monitoring, which four codes could come from either side, and how one Ray ID becomes one log line.",
+		updated: "2026-09-16",
+		readingTime: "8 min read",
+	},
+	{
 		slug: "cloudflare-block-ai-crawlers",
 		h1: "How Do You Block AI Crawlers on Cloudflare?",
 		title: "Block AI Crawlers on Cloudflare: Defaults Change Sept 15",

@@ -11,8 +11,23 @@ import Foundation
 actor CFAPIClient {
 
     private let baseURL = URL(string: "https://api.cloudflare.com/client/v4")!
-    private let session = URLSession.shared
+    private let session = CFAPIClient.makeSession()
     private let authManager: AuthManager
+
+    /// 平时就是 `URLSession.shared`。仅 DEBUG + ORANGE_MOCK=1 时换成带
+    /// `protocolClasses` 的独立 session——`URLSession.shared` **不查**
+    /// `URLProtocol.registerClass` 注册的拦截器，只有写进 configuration 的才生效，
+    /// 否则 mock 只塞了假 token、请求照样打到真 api.cloudflare.com（返回 cf=6003）。
+    private static func makeSession() -> URLSession {
+        #if DEBUG
+        if MockCloudflare.isRequested {
+            let config = URLSessionConfiguration.ephemeral
+            config.protocolClasses = [MockCFURLProtocol.self]
+            return URLSession(configuration: config)
+        }
+        #endif
+        return URLSession.shared
+    }
 
     init(authManager: AuthManager) {
         self.authManager = authManager
