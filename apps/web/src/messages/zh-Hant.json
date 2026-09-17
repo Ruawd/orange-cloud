@@ -142,7 +142,7 @@
 		"privacy": "隱私政策",
 		"terms": "使用條款",
 		"contact": "聯絡我們",
-		"copyright": "© 2026 柘家科技有限公司",
+		"copyright": "© 2026 <company>柘家科技有限公司</company>",
 		"disclaimer": "Orange Cloud 為獨立的第三方用戶端，與 Cloudflare, Inc. 並無隸屬、背書或贊助關係。Cloudflare 為 Cloudflare, Inc. 的商標。"
 	},
 	"contact": {

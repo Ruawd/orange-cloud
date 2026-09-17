@@ -168972,6 +168972,82 @@
           }
         }
       }
+    },
+    "该网址最近已扫描过，Cloudflare 暂不接受重复提交，请稍后再试。": {
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم فحص هذا الرابط مؤخرًا. لا يقبل Cloudflare إعادة الإرسال حاليًا. حاول لاحقًا."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese URL wurde kürzlich gescannt. Cloudflare nimmt derzeit keine erneute Einreichung an. Versuche es später erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This URL was scanned recently. Cloudflare won't accept a repeat submission yet. Try again later."
+          }
+        },
+        "es-MX": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta URL se escaneó recientemente. Cloudflare aún no acepta un envío repetido. Inténtalo más tarde."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette URL a été analysée récemment. Cloudflare n'accepte pas encore une nouvelle soumission. Réessayez plus tard."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このURLは最近スキャンされました。Cloudflareは現在、再送信を受け付けていません。しばらくしてから再試行してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 URL은 최근에 스캔되었습니다. Cloudflare가 아직 재제출을 받지 않습니다. 나중에 다시 시도하세요."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta URL foi verificada recentemente. A Cloudflare ainda não aceita um novo envio. Tente novamente mais tarde."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este URL foi analisado recentemente. A Cloudflare ainda não aceita um novo envio. Tente novamente mais tarde."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu URL kısa süre önce tarandı. Cloudflare şu an yeniden gönderimi kabul etmiyor. Daha sonra tekrar deneyin."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此網址最近已掃描過，Cloudflare 暫不接受重複提交，請稍後再試。"
+          }
+        },
+        "zh-HK": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此網址最近已掃描過，Cloudflare 暫不接受重複提交，請稍後再試。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

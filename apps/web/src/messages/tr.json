@@ -177,7 +177,7 @@
 		"privacy": "Gizlilik politikası",
 		"terms": "Hizmet koşulları",
 		"contact": "İletişim",
-		"copyright": "© 2026 Zhe Tech Co., Ltd.",
+		"copyright": "© 2026 <company>Zhe Tech Co., Ltd.</company>",
 		"disclaimer": "Orange Cloud bağımsız bir üçüncü taraf istemcidir; Cloudflare, Inc. ile bağlantılı, onun tarafından onaylanmış veya desteklenmiş değildir. Cloudflare, Cloudflare, Inc.’in ticari markasıdır."
 	},
 	"contact": {

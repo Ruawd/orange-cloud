@@ -700,10 +700,14 @@ actor CFAPIClient {
     /// - error：无业务码的 4xx（接口没说为什么，多半是我们请求构造错了）与全部 5xx。
     ///   这两类才是该在 Sentry 里看见的。
     private static func failureLevel(status: Int, path: String, data: Data) -> FailureLogLevel {
+        // URL Scanner v2 错误体不是 CF 标准信封（无 code），按路径判定：
+        // 结果轮询 404 = 扫描未完成（每次扫描都会来几次）、提交 409 = 主机名近期已扫过，都是预期态
+        if path.contains("/urlscanner/v2/") && (status == 404 || status == 409) { return .info }
         guard let code = cfErrorCode(data) else { return .error }
         switch (status, code) {
         case (403, 10042): return .info
         case (404, 10003): return .info
+        case (404, 10059): return .info   // R2 桶尚未配置 CORS，空态而非故障
         case (403, 10000) where path.hasSuffix("/subscriptions"): return .info
         default: return (400...499).contains(status) ? .notice : .error
         }

@@ -46,6 +46,14 @@
 			"name": "EMAIL"
 		}
 	],
+	// ISR 页面缓存（open-next.config.ts 的 r2IncrementalCache）。
+	// deploy 时 opennextjs-cloudflare 会把预渲染产物灌进这个桶。
+	"r2_buckets": [
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "orange-cloud-web-cache"
+		}
+	],
 	"services": [
 		{
 			// Self-reference service binding, the service name must match the worker name

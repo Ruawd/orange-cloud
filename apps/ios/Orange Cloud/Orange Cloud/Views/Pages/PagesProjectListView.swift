@@ -72,7 +72,7 @@ struct PagesProjectListView: View {
                     .glassRow()
                 }
                 .scrollContentBackground(.hidden)
-                .refreshable { await load() }
+                .refreshable { await detachedRefresh { await load() } }
             }
         }
         .background { SkyBackground() }

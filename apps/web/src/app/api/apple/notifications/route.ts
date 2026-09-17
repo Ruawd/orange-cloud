@@ -53,7 +53,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 		decoded.payload.data?.bundleId ??
 		decoded.payload.summary?.bundleId ??
 		decoded.transaction?.bundleId;
-	if (bundleId && bundleId !== EXPECTED_BUNDLE_ID) {
+	// 带交易的通知一定带 bundleId；缺失即视为伪造（TEST 等无交易通知可以没有）。
+	if ((bundleId && bundleId !== EXPECTED_BUNDLE_ID) || (!bundleId && decoded.transaction)) {
 		return NextResponse.json({ error: "unexpected bundleId" }, { status: 401 });
 	}
 

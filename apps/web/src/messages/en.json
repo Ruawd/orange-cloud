@@ -142,7 +142,7 @@
 		"privacy": "Privacy Policy",
 		"terms": "Terms of Service",
 		"contact": "Contact",
-		"copyright": "© 2026 Zhe Tech Co., Ltd.",
+		"copyright": "© 2026 <company>Zhe Tech Co., Ltd.</company>",
 		"disclaimer": "Orange Cloud is an independent third-party client and is not affiliated with, endorsed by, or sponsored by Cloudflare, Inc. Cloudflare is a trademark of Cloudflare, Inc."
 	},
 	"contact": {
