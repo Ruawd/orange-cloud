@@ -1,5 +1,79 @@
 [
   {
+    "version": "2.1.4",
+    "date": "2026.09.19",
+    "channel": "App Store",
+    "inApp": false,
+    "items": [
+      {
+        "icon": "creditcard",
+        "title": {
+          "zh-Hans": "付费页的试用说明更准确",
+          "en": "Accurate trial info on the paywall",
+          "zh-Hant": "付費頁的試用說明更準確",
+          "zh-HK": "付費頁的試用說明更準確",
+          "ja": "購入画面の無料トライアル表示を正確に",
+          "es-MX": "Información de prueba precisa en la pantalla de compra",
+          "ko": "결제 화면의 무료 체험 안내가 정확해졌습니다",
+          "pt-BR": "Informações de teste corretas na tela de compra",
+          "pt-PT": "Informações de avaliação corretas no ecrã de compra",
+          "de": "Korrekte Testphasen-Angaben im Kaufbildschirm",
+          "fr": "Infos d’essai exactes sur l’écran d’achat",
+          "ar": "معلومات تجربة دقيقة في شاشة الشراء",
+          "tr": "Satın alma ekranında doğru deneme bilgisi"
+        },
+        "detail": {
+          "zh-Hans": "已用过试用的账户不会再看到「免费试用」，避免误以为不扣费；试用时长与续订周期改为直接读取 App Store 配置。",
+          "en": "Accounts that already used the free trial no longer see a trial offer they can't get, so nobody is charged by surprise. Trial length and renewal period now come straight from the App Store.",
+          "zh-Hant": "已用過試用的帳號不會再看到「免費試用」，避免誤以為不會扣款；試用長度與續訂週期改為直接讀取 App Store 設定。",
+          "zh-HK": "已用過試用的帳戶不會再看到「免費試用」，避免誤以為不會扣款；試用長度與續訂週期改為直接讀取 App Store 設定。",
+          "ja": "すでに無料トライアルを利用したアカウントには、受けられないトライアルを表示しないようにしました。トライアル期間と更新周期は App Store の設定から直接取得します。",
+          "es-MX": "Las cuentas que ya usaron la prueba gratuita dejan de ver una oferta que no pueden obtener, para que nadie reciba un cargo inesperado. La duración de la prueba y el periodo de renovación se leen directamente de App Store.",
+          "ko": "이미 무료 체험을 사용한 계정에는 받을 수 없는 체험 안내를 더 이상 표시하지 않아 예상치 못한 결제를 막습니다. 체험 기간과 갱신 주기는 App Store 설정에서 바로 가져옵니다.",
+          "pt-BR": "Contas que já usaram o teste grátis não veem mais uma oferta que não podem receber, evitando cobranças inesperadas. A duração do teste e o período de renovação agora vêm direto da App Store.",
+          "pt-PT": "As contas que já usaram a avaliação gratuita deixam de ver uma oferta a que não têm direito, evitando cobranças inesperadas. A duração da avaliação e o período de renovação vêm agora diretamente da App Store.",
+          "de": "Konten, die die kostenlose Testphase schon genutzt haben, sehen kein Angebot mehr, das sie nicht bekommen – so gibt es keine überraschende Abbuchung. Testdauer und Verlängerungszeitraum kommen jetzt direkt aus dem App Store.",
+          "fr": "Les comptes ayant déjà profité de l’essai gratuit ne voient plus une offre à laquelle ils n’ont pas droit, pour éviter tout prélèvement surprise. La durée d’essai et la période de renouvellement proviennent désormais directement de l’App Store.",
+          "ar": "لم تعد الحسابات التي استخدمت التجربة المجانية ترى عرضًا لا يحق لها، تجنبًا لأي خصم مفاجئ. وتُقرأ مدة التجربة وفترة التجديد الآن مباشرة من App Store.",
+          "tr": "Ücretsiz denemeyi zaten kullanmış hesaplar artık alamayacakları bir deneme teklifi görmüyor, böylece sürpriz ücret olmuyor. Deneme süresi ve yenileme dönemi doğrudan App Store'dan okunuyor."
+        }
+      },
+      {
+        "icon": "wrench.and.screwdriver",
+        "title": {
+          "zh-Hans": "更稳",
+          "en": "Steadier",
+          "zh-Hant": "更穩定",
+          "zh-HK": "更穩定",
+          "ja": "安定性の向上",
+          "es-MX": "Más estable",
+          "ko": "안정성 향상",
+          "pt-BR": "Mais estável",
+          "pt-PT": "Mais estável",
+          "de": "Stabiler",
+          "fr": "Plus fiable",
+          "ar": "ثبات أكبر",
+          "tr": "Daha sağlam"
+        },
+        "detail": {
+          "zh-Hans": "Snippet 代码没加载成功时不再允许保存，避免覆盖线上代码；KV 与 R2 列表翻页不再出现重复或卡住；实时日志反复进出不再残留会话。",
+          "en": "Snippets can no longer be saved when their code failed to load, so live code is never overwritten. KV and R2 lists no longer duplicate entries or get stuck while paging, and leaving live logs early no longer leaves a session behind.",
+          "zh-Hant": "Snippet 程式碼未載入成功時不再允許儲存，避免覆蓋線上程式碼；KV 與 R2 列表翻頁不再重複或卡住；即時日誌反覆進出不再殘留工作階段。",
+          "zh-HK": "Snippet 程式碼未載入成功時不再允許儲存，避免覆蓋線上程式碼；KV 與 R2 列表翻頁不再重複或卡住；即時日誌反覆進出不再殘留工作階段。",
+          "ja": "コードを読み込めなかった Snippet は保存できないようにし、本番コードの上書きを防ぎます。KV と R2 の一覧でページ送り中の重複や停止がなくなり、ライブログをすぐ閉じてもセッションが残らなくなりました。",
+          "es-MX": "Los Snippets ya no se pueden guardar si su código no cargó, para no sobrescribir el código en producción. Las listas de KV y R2 ya no duplican elementos ni se atascan al paginar, y salir pronto de los registros en vivo ya no deja una sesión abierta.",
+          "ko": "코드를 불러오지 못한 Snippet은 저장할 수 없어 운영 코드가 덮어써지지 않습니다. KV와 R2 목록에서 페이지를 넘길 때 항목이 중복되거나 멈추지 않으며, 실시간 로그를 바로 나가도 세션이 남지 않습니다.",
+          "pt-BR": "Snippets não podem mais ser salvos quando o código não carregou, evitando sobrescrever o código em produção. As listas de KV e R2 não duplicam itens nem travam ao paginar, e sair cedo dos logs ao vivo não deixa mais uma sessão aberta.",
+          "pt-PT": "Os Snippets já não podem ser guardados quando o código não carregou, evitando substituir o código em produção. As listas de KV e R2 já não duplicam itens nem ficam presas ao paginar, e sair cedo dos registos em direto já não deixa uma sessão aberta.",
+          "de": "Snippets lassen sich nicht mehr speichern, wenn ihr Code nicht geladen wurde – Live-Code wird so nie überschrieben. KV- und R2-Listen zeigen beim Blättern keine Duplikate mehr und bleiben nicht hängen, und ein frühes Verlassen der Live-Logs hinterlässt keine Sitzung mehr.",
+          "fr": "Un Snippet dont le code n’a pas pu être chargé ne peut plus être enregistré, pour ne jamais écraser le code en production. Les listes KV et R2 ne dupliquent plus d’éléments et ne se bloquent plus en pagination, et quitter tôt les journaux en direct ne laisse plus de session ouverte.",
+          "ar": "لم يعد بالإمكان حفظ Snippet إذا تعذّر تحميل شيفرته، فلا تُستبدل الشيفرة المنشورة. ولم تعد قوائم KV وR2 تكرر العناصر أو تتوقف أثناء التصفح، ولم يعد الخروج المبكر من السجلات المباشرة يترك جلسة مفتوحة.",
+          "tr": "Kodu yüklenemeyen Snippet artık kaydedilemiyor, böylece canlı kodun üzerine yazılmıyor. KV ve R2 listeleri sayfalama sırasında öğeleri tekrarlamıyor veya takılmıyor; canlı günlüklerden erken çıkmak artık açık oturum bırakmıyor."
+        }
+      }
+    ]
+  },
+  {
     "version": "2.1.3",
     "date": "2026.09.16",
     "channel": "App Store",

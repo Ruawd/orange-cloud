@@ -142,6 +142,8 @@ final class R2ObjectListViewModel {
         guard let cursor = nextCursor, !isLoadingMore else { return }
         let generation = loadGeneration
         isLoadingMore = true
+        // 旧一代提前 return 也必须复位：否则翻页途中换目录，isLoadingMore 永远卡在 true，本页再也翻不动
+        defer { isLoadingMore = false }
         do {
             let page = try await service.listObjects(listOptions(cursor: cursor))
             guard generation == loadGeneration else { return }   // 期间已换目录 / 刷新：这页不属于当前列表
@@ -150,7 +152,6 @@ final class R2ObjectListViewModel {
             guard generation == loadGeneration, !error.isCancellation else { return }
             self.error = error.localizedDescription
         }
-        isLoadingMore = false
     }
 
     // MARK: - 文件夹导航
@@ -946,7 +947,12 @@ final class KVKeyListViewModel {
         await task.value
     }
 
+    /// 每次整页刷新递增；刷新期间还在飞的「加载更多」据此丢弃，
+    /// 否则旧游标的下一页会被追加到刷新后的第一页后面（键重复、游标错乱）。
+    private var loadGeneration = 0
+
     private func fetchKeys() async {
+        loadGeneration += 1
         isLoading = true
         error = nil
         do {
@@ -964,16 +970,19 @@ final class KVKeyListViewModel {
     }
 
     func loadMore() async {
-        guard let cursor = nextCursor, !isLoadingMore else { return }
+        guard let cursor = nextCursor, !isLoadingMore, !isLoading else { return }
+        let generation = loadGeneration
         isLoadingMore = true
+        defer { isLoadingMore = false }
         do {
             let page = try await service.listKeys(accountId: accountId, namespaceId: namespaceId, cursor: cursor)
+            guard generation == loadGeneration else { return }
             keys.append(contentsOf: page.keys)
             nextCursor = page.nextCursor
         } catch {
+            guard generation == loadGeneration, !error.isCancellation else { return }
             self.error = error.localizedDescription
         }
-        isLoadingMore = false
     }
 
     /// 删除成功返回 true 并从列表移除
