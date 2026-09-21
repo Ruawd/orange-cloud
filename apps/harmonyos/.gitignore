@@ -1,0 +1,29 @@
+/node_modules
+/oh_modules
+/local.properties
+/.idea
+**/build
+/.hvigor
+.cxx
+/.clangd
+/.clang-format
+/.clang-tidy
+**/.test
+/.appanalyzer
+
+.DS_Store
+*.hap
+*.app
+
+# 签名私钥与证书材料（p12 / csr / profile / DevEco material）——绝不入库
+/cert
+
+# 签名配置（含证书口令与本机绝对路径）——仓库公开，只提交 build-profile.example.json5
+/build-profile.json5
+
+# AGC 配置（含 client_secret、api_key 密文）
+/agconnect-services.json
+
+# 上架材料（商店文案 / 截图 / 图标 / 商品配置 / 审核备注）——自用，公开无意义，整目录不入库
+# （对齐 iOS：apps/ios/fastlane 同样不入库）
+/appgallery
