@@ -890,6 +890,25 @@ export struct WorkerBindingsPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.importSheetVisible, this.importSheet(), ocSheet(() => {
+          this.importSheetVisible = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.variableSheetVisible, this.variableSheet(), ocSheet(() => {
+          this.variableSheetVisible = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.secretSheetVisible, this.secretSheet(), ocSheet(() => {
+          this.secretSheetVisible = false;
+        }))
         if (this.vm.isLoading && !this.vm.loaded) {
           Column() {
             OCLoading({ text: '正在加载变量与密钥…' })
@@ -941,15 +960,6 @@ export struct WorkerBindingsPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: '变量与密钥' } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.secretSheetVisible, this.secretSheet(), ocSheet(() => {
-      this.secretSheetVisible = false;
-    }))
-    .bindSheet(this.variableSheetVisible, this.variableSheet(), ocSheet(() => {
-      this.variableSheetVisible = false;
-    }))
-    .bindSheet(this.importSheetVisible, this.importSheet(), ocSheet(() => {
-      this.importSheetVisible = false;
-    }))
     .bindSheet(this.bindSheetVisible, this.resourceSheet(), ocSheet(() => {
       this.bindSheetVisible = false;
     }))

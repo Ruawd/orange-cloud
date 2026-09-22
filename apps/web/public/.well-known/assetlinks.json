@@ -8,7 +8,22 @@
       "namespace": "android_app",
       "package_name": "jiamin.chen.orangecloud",
       "sha256_cert_fingerprints": [
-        "CA:1A:6E:03:00:BE:90:48:DF:A5:3A:34:CC:6B:00:C6:3C:7D:D1:B9:6C:25:59:E0:E1:67:04:4B:9F:A3:9D:9F"
+        "CA:1A:6E:03:00:BE:90:48:DF:A5:3A:34:CC:6B:00:C6:3C:7D:D1:B9:6C:25:59:E0:E1:67:04:4B:9F:A3:9D:9F",
+        "D9:D0:B4:44:33:F4:6D:CC:FF:94:68:CE:90:EC:12:D5:8A:FF:CB:EA:1E:D3:8A:D1:AE:85:C4:A9:93:2E:B5:C3",
+        "B5:CF:F3:93:A2:32:94:06:4D:FA:C0:7A:FC:26:57:D6:C2:1B:47:B3:07:25:D1:69:2D:1D:7D:61:F5:32:68:4A"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "jiamin.chen.orangecloud.direct",
+      "sha256_cert_fingerprints": [
+        "D4:CE:D5:DE:8A:44:27:C0:2A:45:75:60:A5:D8:49:E1:CE:B2:49:47:49:B4:F5:A6:68:A0:4F:C1:CE:62:0E:FB"
       ]
     }
   }

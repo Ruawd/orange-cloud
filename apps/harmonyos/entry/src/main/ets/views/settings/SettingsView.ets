@@ -1,6 +1,6 @@
 import { OC_TAB_BAR_CLEARANCE } from '../common/Effects';
 import { ocSnack } from '../common/Snack';
-// 设置 Tab：身份管理（切换/添加/详情）+ 偏好（外观/用量口径）+ 帮助与反馈 + 关于
+// 设置 Tab：身份管理（切换/添加/详情）+ 偏好（外观/用量口径）+ 客服与支持 + 关于
 //（对齐 iOS SettingsView 的分区结构）。
 import { ConfigurationConstant, Want } from '@kit.AbilityKit';
 import { deviceInfo, pasteboard } from '@kit.BasicServicesKit';
@@ -153,8 +153,17 @@ export struct SettingsView {
   /// 帮助与反馈：隐式 mailto 拉起邮件客户端（subject 带版本与设备信息），
   /// 无邮件客户端时回退复制邮箱地址到剪贴板 + toast。
   private sendFeedback(): void {
+    this.composeMail('反馈');
+  }
+
+  /// 客服咨询：同一邮箱、主题不同（购买/订阅类问题走这条，便于我们分流）
+  private contactService(): void {
+    this.composeMail('客服咨询');
+  }
+
+  private composeMail(topic: string): void {
     const device = `${deviceInfo.marketName} · ${deviceInfo.osFullName} · API ${deviceInfo.sdkApiVersion}`;
-    const subject = `Orange Cloud HarmonyOS ${APP_VERSION} 反馈（${device}）`;
+    const subject = `Orange Cloud HarmonyOS ${APP_VERSION} ${topic}（${device}）`;
     const uri = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(subject)}`;
     const want: Want = {
       action: 'ohos.want.action.sendToData',
@@ -162,6 +171,15 @@ export struct SettingsView {
     };
     GlobalContext.get().startAbility(want).catch(() => {
       this.copyFeedbackEmail();
+    });
+  }
+
+  /// 复制客服邮箱（主动复制入口，与「没有邮件应用」的兜底提示区分开）
+  private copyServiceEmail(): void {
+    const data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, FEEDBACK_EMAIL);
+    pasteboard.getSystemPasteboard().setData(data).then(() => {
+      ocSnack(this.getUIContext(), `已复制客服邮箱 ${FEEDBACK_EMAIL}`);
+    }).catch(() => {
     });
   }
 
@@ -424,16 +442,37 @@ export struct SettingsView {
           .width('100%')
 
           Column() {
-            SectionHeader({ title: '帮助与反馈' })
+            SectionHeader({ title: '客服与支持' })
             Column() {
               NavRow({
+                symbol: $r('sys.symbol.service'),
+                title: '联系客服',
+                subtitle: `客服邮箱 ${FEEDBACK_EMAIL}，工作日 9:00–18:00（北京时间），一般 1 个工作日内回复`,
+                onNav: () => {
+                  this.contactService();
+                },
+              })
+              NavRow({
+                symbol: $r('sys.symbol.square_on_square_fill'),
+                title: '复制客服邮箱',
+                subtitle: '没有邮件应用时，复制地址用其它方式联系我们',
+                onNav: () => {
+                  this.copyServiceEmail();
+                },
+              })
+              NavRow({
                 symbol: $r('sys.symbol.envelope'),
-                title: '发送反馈',
-                subtitle: `邮件联系 ${FEEDBACK_EMAIL}，主题自动附带版本与设备信息`,
+                title: '问题反馈',
+                subtitle: '邮件主题自动附带版本与设备信息，便于我们定位问题',
                 onNav: () => {
                   this.sendFeedback();
                 },
               })
+              Text('购买、订阅、退款与发票问题，均可通过上方客服邮箱联系我们。')
+                .fontSize(12)
+                .fontColor($r('sys.color.font_secondary'))
+                .width('100%')
+                .padding({ left: 16, right: 16, top: 4, bottom: 12 })
             }
             .backgroundColor($r('sys.color.comp_background_list_card'))
             .borderRadius(16)

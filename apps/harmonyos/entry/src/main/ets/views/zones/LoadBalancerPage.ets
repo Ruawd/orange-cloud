@@ -573,6 +573,13 @@ export struct LoadBalancerPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.BottomEnd }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.detailVisible, this.detailSheet(), ocSheet(() => {
+          this.detailVisible = false;
+        }))
         Column() {
           Column() {
             GlassIsland({ pad: 4 }) {
@@ -686,9 +693,6 @@ export struct LoadBalancerPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: `${this.zoneName} · 负载均衡` } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.detailVisible, this.detailSheet(), ocSheet(() => {
-      this.detailVisible = false;
-    }))
     .bindSheet(this.editorVisible, this.editorSheet(), ocSheet(() => {
       this.editorVisible = false;
     }))

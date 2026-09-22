@@ -875,6 +875,25 @@ export struct R2ObjectsPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.BottomEnd }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.detailVisible, this.detailSheet(), ocSheet(() => {
+          this.detailVisible = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.uploadVisible, this.uploadSheet(), ocSheet(() => {
+          this.uploadVisible = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.viewerVisible, this.viewerSheet(), ocSheet(() => {
+          this.viewerVisible = false;
+        }))
         if (this.vm.isLoading && this.vm.objects.length === 0 && this.vm.folders.length === 0) {
           Column() {
             OCLoading({ text: '正在加载对象…' })
@@ -994,15 +1013,6 @@ export struct R2ObjectsPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: this.bucket }, menu: { value: [{ content: { icon: $r('sys.symbol.gearshape'), label: '桶设置', action: () => { const param: IdNameParam = { id: this.bucket, name: this.bucket }; this.pathStack?.pushPathByName(Routes.R2_SETTINGS, param); } } }] } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.viewerVisible, this.viewerSheet(), ocSheet(() => {
-      this.viewerVisible = false;
-    }))
-    .bindSheet(this.uploadVisible, this.uploadSheet(), ocSheet(() => {
-      this.uploadVisible = false;
-    }))
-    .bindSheet(this.detailVisible, this.detailSheet(), ocSheet(() => {
-      this.detailVisible = false;
-    }))
     .bindSheet(this.transferVisible, this.transferSheet(), ocSheet(() => {
       this.transferVisible = false;
     }))

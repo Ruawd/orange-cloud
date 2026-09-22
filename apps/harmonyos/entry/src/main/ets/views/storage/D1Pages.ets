@@ -354,6 +354,19 @@ export struct D1DatabasesPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.BottomEnd }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.showCreate, this.createSheet(), ocSheet(() => {
+          this.showCreate = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.confirmVisible, this.confirmSheet(), ocSheetCompact(() => {
+          this.confirmVisible = false;
+        }))
         if (this.vm.isLoading && this.vm.databases.length === 0) {
           Column() {
             OCLoading({ text: '正在加载数据库…' })
@@ -433,12 +446,8 @@ export struct D1DatabasesPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: 'D1 数据库' } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.showCreate, this.createSheet(), ocSheet(() => {
-      this.showCreate = false;
-    }))
-    .bindSheet(this.confirmVisible, this.confirmSheet(), ocSheetCompact(() => {
-      this.confirmVisible = false;
-    }))
+
+
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack;
       this.vm.load().catch(() => {
@@ -1482,6 +1491,13 @@ export struct D1TablePage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.editVisible, this.editSheet(), ocSheet(() => {
+          this.editVisible = false;
+        }))
         if (this.vm.isLoading) {
           Column() {
             OCLoading({ text: '正在加载表数据…' })
@@ -1641,9 +1657,6 @@ export struct D1TablePage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: this.table } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.editVisible, this.editSheet(), ocSheet(() => {
-      this.editVisible = false;
-    }))
     .bindSheet(this.dropVisible, this.dropSheet(), ocSheetCompact(() => {
       this.dropVisible = false;
     }))

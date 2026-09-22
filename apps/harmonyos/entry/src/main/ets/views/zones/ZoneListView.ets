@@ -229,6 +229,13 @@ export struct ZoneListView {
 
   build() {
     Stack({ alignContent: Alignment.BottomEnd }) {
+      // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+      Stack() {}
+      .width(0)
+      .height(0)
+      .bindSheet(this.showNsResult, this.nsResultSheet(), ocSheet(() => {
+        this.showNsResult = false;
+      }))
       Column() {
         // 大标题 + 副标题（对照 iOS navigationTitle + oc-subtitle）
         Column({ space: 2 }) {
@@ -327,9 +334,6 @@ export struct ZoneListView {
     .width('100%')
     .height('100%')
     .backgroundColor(Color.Transparent)
-    .bindSheet(this.showNsResult, this.nsResultSheet(), ocSheet(() => {
-      this.showNsResult = false;
-    }))
     .bindSheet(this.showAddSheet, this.addZoneSheet(), ocSheet(() => {
       this.showAddSheet = false;
     }))

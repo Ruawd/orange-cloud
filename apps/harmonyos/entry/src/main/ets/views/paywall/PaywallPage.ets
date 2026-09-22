@@ -5,6 +5,8 @@ import { HdsNavDestination } from '@kit.UIDesignKit';
 // 付费墙（对齐 iOS Views/Paywall/PaywallView）：场景触发推入本页，也可从设置页常驻入口进。
 // 价格一律取自 queryProducts 的 Product.price，**不硬编码任何价格**；
 // 权益清单只写鸿蒙版真正实现了的能力（Live Activity / 系统「文件」挂载等 iOS 专属项不列）。
+import { Want } from '@kit.AbilityKit';
+import { pasteboard } from '@kit.BasicServicesKit';
 import { PaywallParam } from '../../models/Routes';
 import { entitlement, EntitlementStore, PurchaseOutcome } from '../../core/purchase/EntitlementStore';
 import { GlobalContext } from '../../core/system/GlobalContext';
@@ -29,6 +31,8 @@ const BENEFITS: Benefit[] = [
 
 const PRIVACY_URL = 'https://o-c.do/privacy';
 const TERMS_URL = 'https://o-c.do/terms';
+/// 客服邮箱：含内购的应用必须在应用内提供客服联系方式（华为审核指南 11.2）
+const SERVICE_EMAIL = 'support@zhe.ltd';
 
 @ComponentV2
 export struct PaywallPage {
@@ -96,6 +100,22 @@ export struct PaywallPage {
 
   private openLink(target: string): void {
     GlobalContext.get().openLink(target).catch(() => {
+    });
+  }
+
+  /// 联系客服：隐式 mailto 拉起邮件应用，没有邮件应用则复制地址（购买/订阅/退款问题的求助通道）
+  private contactService(): void {
+    const subject = 'Orange Cloud Pro 购买咨询（HarmonyOS）';
+    const want: Want = {
+      action: 'ohos.want.action.sendToData',
+      uri: `mailto:${SERVICE_EMAIL}?subject=${encodeURIComponent(subject)}`,
+    };
+    GlobalContext.get().startAbility(want).catch(() => {
+      const data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, SERVICE_EMAIL);
+      pasteboard.getSystemPasteboard().setData(data).then(() => {
+        this.toast(`未找到邮件应用，已复制客服邮箱 ${SERVICE_EMAIL}`);
+      }).catch(() => {
+      });
     });
   }
 
@@ -319,7 +339,20 @@ export struct PaywallPage {
                   .lineHeight(17)
                   .width('100%')
 
+                // 客服联系方式（华为审核指南 11.2：应用内含付费项目须提供客服联系方式）
+                Text(`购买、订阅、退款问题请联系客服：${SERVICE_EMAIL}\n工作日 9:00–18:00（北京时间），一般 1 个工作日内回复`)
+                  .fontSize(11)
+                  .fontColor($r('sys.color.font_tertiary'))
+                  .lineHeight(17)
+                  .width('100%')
+
                 Row({ space: 16 }) {
+                  Text('联系客服')
+                    .fontSize(12)
+                    .fontColor($r('app.color.oc_brand_text'))
+                    .onClick(() => {
+                      this.contactService();
+                    })
                   Text('隐私政策')
                     .fontSize(12)
                     .fontColor($r('app.color.oc_brand_text'))

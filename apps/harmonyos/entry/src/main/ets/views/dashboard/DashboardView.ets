@@ -1,5 +1,6 @@
 import { OC_TAB_BAR_CLEARANCE } from '../common/Effects';
 import { ocSnack } from '../common/Snack';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 // 总览 Tab：身份/账户切换 + 域名概况 + 账号级模块入口（对齐 Android DashboardScreen）。
 import { Account, Zone, DNSRecord } from '../../models/Models';
 import { tabBarScroll } from '../common/PlatformCompat';
@@ -13,7 +14,7 @@ import { StorageService } from '../../services/StorageService';
 import { DNSService } from '../../services/DNSService';
 import { WorkerScript } from '../../models/WorkerModels';
 import { R2Bucket, D1Database } from '../../models/StorageModels';
-import { UsageService, AccountAnalyticsUnauthorizedError } from '../../services/UsageService';
+import { UsageService, AccountAnalyticsUnauthorizedError, AccountUsageResult } from '../../services/UsageService';
 import { AccountUsage } from '../../models/UsageModels';
 import { Scopes } from '../../core/auth/Scopes';
 import { TrafficDataPoint } from '../../models/AnalyticsModels';
@@ -30,7 +31,8 @@ import { requirePro } from '../paywall/ProGate';
 import { ocSheet, ocSheetCompact } from '../common/Sheets';
 import { ReauthBanner } from '../common/ReauthBanner';
 import { ZoneAvatar, StatusDot, statusLabel } from '../common/ZoneComponents';
-import { pinnedZones, PinnedZonesStore, pinnedResources, PinnedResourcesStore } from '../../core/system/AppPrefs';
+import { AppPrefs, pinnedZones, PinnedZonesStore, pinnedResources, PinnedResourcesStore } from '../../core/system/AppPrefs';
+import { clampBillingDay, DEFAULT_USAGE_PLAN, UsagePlanPrefs } from '../../core/util/BillingCycle';
 import { KVNamespace } from '../../models/StorageModels';
 import { Tunnel } from '../../models/AccountModels';
 import { AccountModuleService } from '../../services/AccountModuleService';
@@ -71,6 +73,26 @@ interface UsageDetailRow {
   valueText: string;
   ratio: number;
 }
+
+/// 套餐分段选项
+interface PlanOption {
+  label: string;
+  paid: boolean;
+}
+
+const PLAN_OPTIONS: PlanOption[] = [
+  { label: 'Free', paid: false },
+  { label: 'Paid', paid: true },
+];
+
+/// 账单日选项（1–28，避开 29–31 在短月不存在的问题，与 iOS 一致）
+const BILLING_DAY_LABELS: string[] = (() => {
+  const days: string[] = [];
+  for (let d = 1; d <= 28; d++) {
+    days.push(d === 1 ? '1 日（自然月）' : `${d} 日`);
+  }
+  return days;
+})();
 
 const ACCOUNT_ENTRIES: DashEntry[] = [
   { symbol: $r('sys.symbol.wifi_router'), title: 'Tunnel', subtitle: 'Cloudflare Tunnel 连接状态', route: Routes.TUNNELS, proFeature: 'Cloudflare Tunnel' },
@@ -114,9 +136,14 @@ export struct DashboardView {
   @Local usage: AccountUsage | null = null;
   @Local usageUnavailable: boolean = false;
   @Local usageFailed: boolean = false;
+  /// 只有部分时间窗被 authz 挡（免费账号常态）：数据照常显示，只加一行说明
+  @Local usagePartial: boolean = false;
   /// 用量明细 sheet：点开的服务 key（'workers' | 'r2' | 'd1' | 'kv'）与显隐
   @Local usageSheetService: string = '';
   @Local usageSheetVisible: boolean = false;
+  /// 用量口径（Workers/R2 套餐 + 账单日，按账号存）：CF 未对 OAuth 开放订阅查询，只能手动设
+  @Local usagePlan: UsagePlanPrefs = DEFAULT_USAGE_PLAN;
+  @Local planSheetVisible: boolean = false;
   /// 跨类型置顶（Workers / R2 / D1 / KV / Tunnel；域名走 pinnedZones）
   @Local pinnedRes: PinnedResourcesStore = pinnedResources;
   /// 命令搜索：面板显隐与关键词
@@ -180,8 +207,14 @@ export struct DashboardView {
       this.namespaces = [];
       this.tunnels = [];
       this.loadInventory(accountId);
-      // 账号用量（账号级 GraphQL）——独立加载，不阻塞域名/请求汇总
-      this.loadUsage(accountId);
+      // 账号用量（账号级 GraphQL）——独立加载，不阻塞域名/请求汇总；
+      // 账期窗口取决于该账号的账单日，先读口径偏好再发查询
+      AppPrefs.getUsagePlan(accountId).then((plan: UsagePlanPrefs) => {
+        this.usagePlan = plan;
+        this.loadUsage(accountId);
+      }).catch(() => {
+        this.loadUsage(accountId);
+      });
       return this.zoneService.fetchZones(accountId).then((zones: Zone[]) => {
         this.zones = zones;
         this.zoneCount = zones.length;
@@ -404,15 +437,18 @@ export struct DashboardView {
     this.usage = null;
     this.usageUnavailable = false;
     this.usageFailed = false;
+    this.usagePartial = false;
     if (!authManager.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)) {
       return; // scope 门控由 build() 渲染锁定卡片
     }
-    this.usageService.loadAccountUsage(accountId).then((usage: AccountUsage) => {
-      this.usage = usage;
+    this.usageService.loadAccountUsage(accountId, this.usagePlan.billingDay).then((result: AccountUsageResult) => {
+      this.usage = result.usage;
+      this.usagePartial = result.partialAuthz;
     }).catch((err: Error) => {
       if (err instanceof AccountAnalyticsUnauthorizedError) {
         this.usageUnavailable = true;
       } else {
+        hilog.warn(0x0002, 'DashboardView', 'usage load failed: %{public}s', err.message);
         this.usageFailed = true;
       }
     });
@@ -544,40 +580,82 @@ export struct DashboardView {
     return best;
   }
 
+  /// 账期文案：账单日非 1 时说「账期」，自然月说「本月」（对齐 iOS monthlyLabel）
+  private periodLabel(): string {
+    return this.usagePlan.billingDay !== 1 ? '账期' : '本月';
+  }
+
+  /// Workers/D1/KV 的统计窗口文案：付费档看账期，免费档看今日
+  private workersWindowLabel(): string {
+    return this.usagePlan.workersPaid ? this.periodLabel() : '今日';
+  }
+
+  private planSummary(): string {
+    const w = this.usagePlan.workersPaid ? 'Paid' : 'Free';
+    const r2 = this.usagePlan.r2Paid ? 'Paid' : 'Free';
+    return `W ${w} · R2 ${r2}`;
+  }
+
+  private billingDayLabel(day: number): string {
+    return day === 1 ? '1 日（自然月）' : `${day} 日`;
+  }
+
   private workersTile(usage: AccountUsage): UsageTile {
+    const paid = this.usagePlan.workersPaid;
+    const label = this.workersWindowLabel();
+    const requests = paid ? usage.workersRequestsMonth : usage.workersRequestsToday;
+    const quota = paid ? 10000000 : 100000;
     const candidates: UsageMetric[] = [
       {
-        context: '请求 · 今日',
-        valueText: formatCount(usage.workersRequestsToday),
-        quotaText: `/ ${formatCount(100000)}`,
-        ratio: usage.workersRequestsToday / 100000,
+        context: `请求 · ${label}`,
+        valueText: formatCount(requests),
+        quotaText: `/ ${formatCount(quota)}`,
+        ratio: requests / quota,
       },
     ];
+    const cpuUs = paid ? usage.cpuTimeMonthUs : undefined;
+    if (cpuUs !== undefined) {
+      // 付费档 CPU 有月度额度（30M ms）；免费档只有单次 10ms 上限、无总量额度
+      const ms = Math.round(cpuUs / 1000);
+      candidates.push({
+        context: `CPU 耗时 · ${label}`,
+        valueText: `${formatCount(ms)} ms`,
+        quotaText: '/ 30M ms',
+        ratio: ms / 30000000,
+      });
+    }
     const top = this.topMetric(candidates);
     return { title: 'Workers', context: top.context, valueText: top.valueText, quotaText: top.quotaText, ratio: top.ratio };
   }
 
   private r2Tile(usage: AccountUsage): UsageTile {
+    const period = this.periodLabel();
     const candidates: UsageMetric[] = [
       {
-        context: 'A 类 · 本月',
+        context: `A 类 · ${period}`,
         valueText: formatCount(usage.r2ClassAMonth),
         quotaText: '/ 1M',
         ratio: usage.r2ClassAMonth / 1000000,
       },
       {
-        context: 'B 类 · 本月',
+        context: `B 类 · ${period}`,
         valueText: formatCount(usage.r2ClassBMonth),
         quotaText: '/ 10M',
         ratio: usage.r2ClassBMonth / 10000000,
       },
-      {
-        context: '存储',
-        valueText: formatBytes(usage.r2StorageBytes),
-        quotaText: '/ 10 GB',
-        ratio: usage.r2StorageBytes / 10000000000,
-      },
     ];
+    // 付费档存储按量计费、无免费额度条
+    candidates.push(this.usagePlan.r2Paid ? {
+      context: '存储',
+      valueText: formatBytes(usage.r2StorageBytes),
+      quotaText: '',
+      ratio: 0,
+    } : {
+      context: '存储',
+      valueText: formatBytes(usage.r2StorageBytes),
+      quotaText: '/ 10 GB',
+      ratio: usage.r2StorageBytes / 10000000000,
+    });
     const top = this.topMetric(candidates);
     return { title: 'R2', context: top.context, valueText: top.valueText, quotaText: top.quotaText, ratio: top.ratio };
   }
@@ -586,17 +664,23 @@ export struct DashboardView {
     const candidates: UsageMetric[] = [];
     const d1 = usage.d1Usage;
     if (d1 !== undefined) {
+      const paid = this.usagePlan.workersPaid;
+      const label = this.workersWindowLabel();
+      const reads = paid ? d1.rowsReadPeriod : d1.rowsReadToday;
+      const readQuota = paid ? 25000000000 : 5000000;
+      const writes = paid ? d1.rowsWrittenPeriod : d1.rowsWrittenToday;
+      const writeQuota = paid ? 50000000 : 100000;
       candidates.push({
-        context: '行读取 · 今日',
-        valueText: formatCount(d1.rowsReadToday),
-        quotaText: `/ ${formatCount(5000000)}`,
-        ratio: d1.rowsReadToday / 5000000,
+        context: `行读取 · ${label}`,
+        valueText: formatCount(reads),
+        quotaText: `/ ${formatCount(readQuota)}`,
+        ratio: reads / readQuota,
       });
       candidates.push({
-        context: '行写入 · 今日',
-        valueText: formatCount(d1.rowsWrittenToday),
-        quotaText: `/ ${formatCount(100000)}`,
-        ratio: d1.rowsWrittenToday / 100000,
+        context: `行写入 · ${label}`,
+        valueText: formatCount(writes),
+        quotaText: `/ ${formatCount(writeQuota)}`,
+        ratio: writes / writeQuota,
       });
     }
     if (candidates.length === 0) {
@@ -610,17 +694,23 @@ export struct DashboardView {
     const candidates: UsageMetric[] = [];
     const kv = usage.kvUsage;
     if (kv !== undefined) {
+      const paid = this.usagePlan.workersPaid;
+      const label = this.workersWindowLabel();
+      const reads = paid ? kv.readsPeriod : kv.readsToday;
+      const readQuota = paid ? 10000000 : 100000;
+      const writes = paid ? kv.writesPeriod : kv.writesToday;
+      const writeQuota = paid ? 1000000 : 1000;
       candidates.push({
-        context: '读取 · 今日',
-        valueText: formatCount(kv.readsToday),
-        quotaText: `/ ${formatCount(100000)}`,
-        ratio: kv.readsToday / 100000,
+        context: `读取 · ${label}`,
+        valueText: formatCount(reads),
+        quotaText: `/ ${formatCount(readQuota)}`,
+        ratio: reads / readQuota,
       });
       candidates.push({
-        context: '写入 · 今日',
-        valueText: formatCount(kv.writesToday),
-        quotaText: `/ ${formatCount(1000)}`,
-        ratio: kv.writesToday / 1000,
+        context: `写入 · ${label}`,
+        valueText: formatCount(writes),
+        quotaText: `/ ${formatCount(writeQuota)}`,
+        ratio: writes / writeQuota,
       });
     }
     const kvBytes = usage.kvStorageBytes;
@@ -687,31 +777,44 @@ export struct DashboardView {
       return [];
     }
     const rows: UsageDetailRow[] = [];
+    const paid = this.usagePlan.workersPaid;
+    const label = this.workersWindowLabel();
+    const period = this.periodLabel();
     if (this.usageSheetService === 'workers') {
-      rows.push(this.quotaRow('请求 · 今日', usage.workersRequestsToday, 100000));
-      const cpuUs = usage.cpuTimeTodayUs;
+      rows.push(this.quotaRow(`请求 · ${label}`,
+        paid ? usage.workersRequestsMonth : usage.workersRequestsToday, paid ? 10000000 : 100000));
+      const cpuUs = paid ? usage.cpuTimeMonthUs : usage.cpuTimeTodayUs;
       if (cpuUs !== undefined) {
-        // Free 档无 CPU 月度额度（单次 10ms 上限），只展示今日合计
-        rows.push(this.plainRow('CPU 耗时 · 今日', `${formatCount(Math.round(cpuUs / 1000))} ms`));
+        const ms = Math.round(cpuUs / 1000);
+        // 付费档 CPU 有账期额度 30M ms；免费档无总量额度（单次 10ms 上限），只列今日合计
+        rows.push(paid
+          ? this.quotaRow(`CPU 耗时 · ${label}`, ms, 30000000)
+          : this.plainRow(`CPU 耗时 · ${label}`, `${formatCount(ms)} ms`));
       }
     } else if (this.usageSheetService === 'r2') {
-      rows.push(this.bytesRow('存储', usage.r2StorageBytes, 10000000000, '10 GB'));
-      rows.push(this.quotaRow('A 类操作 · 本月', usage.r2ClassAMonth, 1000000));
-      rows.push(this.quotaRow('B 类操作 · 本月', usage.r2ClassBMonth, 10000000));
+      rows.push(this.usagePlan.r2Paid
+        ? this.plainRow('存储', formatBytes(usage.r2StorageBytes))
+        : this.bytesRow('存储', usage.r2StorageBytes, 10000000000, '10 GB'));
+      rows.push(this.quotaRow(`A 类操作 · ${period}`, usage.r2ClassAMonth, 1000000));
+      rows.push(this.quotaRow(`B 类操作 · ${period}`, usage.r2ClassBMonth, 10000000));
       if (usage.r2ObjectCount > 0) {
         rows.push(this.plainRow('对象数', formatCount(usage.r2ObjectCount)));
       }
     } else if (this.usageSheetService === 'd1') {
       const d1 = usage.d1Usage;
       if (d1 !== undefined) {
-        rows.push(this.quotaRow('行读取 · 今日', d1.rowsReadToday, 5000000));
-        rows.push(this.quotaRow('行写入 · 今日', d1.rowsWrittenToday, 100000));
+        rows.push(this.quotaRow(`行读取 · ${label}`,
+          paid ? d1.rowsReadPeriod : d1.rowsReadToday, paid ? 25000000000 : 5000000));
+        rows.push(this.quotaRow(`行写入 · ${label}`,
+          paid ? d1.rowsWrittenPeriod : d1.rowsWrittenToday, paid ? 50000000 : 100000));
       }
     } else if (this.usageSheetService === 'kv') {
       const kv = usage.kvUsage;
       if (kv !== undefined) {
-        rows.push(this.quotaRow('读取 · 今日', kv.readsToday, 100000));
-        rows.push(this.quotaRow('写入 · 今日', kv.writesToday, 1000));
+        rows.push(this.quotaRow(`读取 · ${label}`,
+          paid ? kv.readsPeriod : kv.readsToday, paid ? 10000000 : 100000));
+        rows.push(this.quotaRow(`写入 · ${label}`,
+          paid ? kv.writesPeriod : kv.writesToday, paid ? 1000000 : 1000));
       }
       const kvBytes = usage.kvStorageBytes;
       if (kvBytes !== undefined) {
@@ -766,7 +869,7 @@ export struct DashboardView {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .fontColor($r('sys.color.font_primary'))
-        Text('免费档额度口径')
+        Text(`${this.planSummary()} 额度口径 · 账单日 ${this.billingDayLabel(this.usagePlan.billingDay)}`)
           .fontSize(12)
           .fontColor($r('sys.color.font_secondary'))
       }
@@ -783,7 +886,9 @@ export struct DashboardView {
         .width('100%')
       }
 
-      Text('「今日」按 UTC 日界聚合，与 Cloudflare 免费额度重置时间一致')
+      Text(this.usagePlan.workersPaid
+        ? '付费档按账期聚合（账单日为周期起点）；额度为 Cloudflare 套餐内包含量，超出部分按量计费'
+        : '「今日」按 UTC 日界聚合，与 Cloudflare 免费额度重置时间一致')
         .fontSize(11)
         .fontColor($r('sys.color.font_tertiary'))
         .width('100%')
@@ -796,9 +901,16 @@ export struct DashboardView {
   @Builder
   usageTileCard(tile: UsageTile, serviceKey: string) {
     Column({ space: 4 }) {
-      Text(tile.title)
-        .fontSize(12)
-        .fontColor($r('sys.color.font_secondary'))
+      // 标题后带箭头：告诉用户这一格点得开（审核把「看着能点、点了没反应」记成功能异常）
+      Row({ space: 2 }) {
+        Text(tile.title)
+          .fontSize(12)
+          .fontColor($r('sys.color.font_secondary'))
+        Image($r('sys.media.ohos_ic_public_arrow_right'))
+          .width(10)
+          .height(10)
+          .fillColor($r('sys.color.font_tertiary'))
+      }
       Row({ space: 4 }) {
         Text(tile.valueText)
           .fontSize(22)
@@ -833,9 +945,11 @@ export struct DashboardView {
     })
   }
 
-  /// 中性提示卡（scope 锁定 / authz 不可用 / 加载失败共用形态）
+  /// 中性提示卡（scope 锁定 / authz 不可用 / 加载失败共用形态）。
+  /// 每种状态都必须可点按并给出可见反馈——卡片看着像按钮却点不动，
+  /// 会被当成功能异常（华为审核实测反馈「概览-用量：点击无响应」）。
   @Builder
-  usageNoticeCard(symbol: Resource, title: string, detail: string) {
+  usageNoticeCard(symbol: Resource, title: string, detail: string, hint: string, action: () => void) {
     Column({ space: 6 }) {
       SymbolGlyph(symbol)
         .fontSize(22)
@@ -851,22 +965,221 @@ export struct DashboardView {
           .fontColor($r('sys.color.font_secondary'))
           .textAlign(TextAlign.Center)
       }
+      Text(hint)
+        .fontSize(12)
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('app.color.oc_brand_text'))
+        .textAlign(TextAlign.Center)
     }
     .width('100%')
     .justifyContent(FlexAlign.Center)
     .padding({ top: 18, bottom: 18, left: 12, right: 12 })
+    .onClick(action)
+  }
+
+  /// 用量为何不可用的说明弹窗（点按提示卡的可见反馈）
+  private explainUsage(title: string, message: string): void {
+    this.getUIContext().showAlertDialog({
+      title: title,
+      message: message,
+      confirm: {
+        value: '知道了',
+        action: () => {
+        },
+      },
+    });
+  }
+
+  /// 用量口径条：CF 未对 OAuth 开放订阅查询，套餐与账单日只能手动设（对齐 iOS 的套餐菜单）
+  @Builder
+  usagePlanChip() {
+    Row({ space: 4 }) {
+      SymbolGlyph($r('sys.symbol.adjustment'))
+        .fontSize(14)
+        .fontColor([$r('app.color.oc_brand_text')])
+      Text(this.planSummary())
+        .fontSize(13)
+        .fontColor($r('app.color.oc_brand_text'))
+    }
+    .padding({ left: 10, right: 10, top: 5, bottom: 5 })
+    .backgroundColor($r('app.color.oc_brand_bg'))
+    .borderRadius(OCLayout.chipRadius)
+    .onClick(() => {
+      this.planSheetVisible = true;
+    })
+  }
+
+  /// 套餐与账单日设置（半模态）。选中态必须在 Builder 内部现读 this.usagePlan——
+  /// @Builder 的值参数是静态的，传进来不会重绘（同 SettingsView.segRow 的坑）。
+  @Builder
+  usagePlanSheet() {
+    Column({ space: 14 }) {
+      Column({ space: 2 }) {
+        Text('用量口径')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor($r('sys.color.font_primary'))
+        Text('Cloudflare 未对 OAuth 开放订阅查询，套餐与账单日需手动设置')
+          .fontSize(12)
+          .fontColor($r('sys.color.font_secondary'))
+      }
+      .alignItems(HorizontalAlign.Start)
+      .width('100%')
+      // 右侧留出关闭按钮的位置，标题/副标题不被压住
+      .padding({ right: 48 })
+      .margin({ top: 8 })
+
+      GlassIsland({ cornerRadius: OCLayout.chipRadius }) {
+        Column({ space: 14 }) {
+          this.planPickRow('Workers 套餐', '决定请求 / CPU / D1 / KV 的额度与统计窗口', 'workers')
+          Divider()
+            .strokeWidth(0.5)
+            .color($r('sys.color.comp_divider'))
+          this.planPickRow('R2 套餐', '付费档存储按量计费，不再对照 10 GB 免费额度', 'r2')
+        }
+        .width('100%')
+      }
+
+      Column({ space: 6 }) {
+        Row() {
+          Text('账单日（用量周期起点）')
+            .fontSize(15)
+            .fontColor($r('sys.color.font_primary'))
+          Blank()
+          Text(this.billingDayLabel(this.usagePlan.billingDay))
+            .fontSize(13)
+            .fontColor($r('app.color.oc_brand_text'))
+        }
+        .width('100%')
+        Text('付费额度按订阅锚定日重置（账单日 16 → 5/16–6/16），不是自然月')
+          .fontSize(12)
+          .fontColor($r('sys.color.font_secondary'))
+          .width('100%')
+        TextPicker({
+          range: BILLING_DAY_LABELS,
+          selected: clampBillingDay(this.usagePlan.billingDay) - 1,
+        })
+          .canLoop(false)
+          .width('100%')
+          .height(140)
+          .selectedTextStyle({ color: $r('app.color.oc_brand_text'), font: { size: 17, weight: FontWeight.Medium } })
+          .textStyle({ color: $r('sys.color.font_secondary'), font: { size: 15 } })
+          .disappearTextStyle({ color: $r('sys.color.font_tertiary'), font: { size: 13 } })
+          .onChange((_value: string | string[], index: number | number[]) => {
+            const idx: number = typeof index === 'number' ? index : (index as number[])[0];
+            this.updatePlan(this.usagePlan.workersPaid, this.usagePlan.r2Paid, idx + 1);
+          })
+      }
+      .width('100%')
+
+      Text('这里只影响 App 内的额度对照与统计窗口，不改变 Cloudflare 的实际计费。')
+        .fontSize(11)
+        .fontColor($r('sys.color.font_tertiary'))
+        .width('100%')
+    }
+    .padding({ left: OCLayout.pagePadding, right: OCLayout.pagePadding, bottom: 24 })
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  /// 套餐分段行（kind: 'workers' | 'r2'）
+  @Builder
+  planPickRow(title: string, detail: string, kind: string) {
+    Row({ space: 12 }) {
+      Column({ space: 2 }) {
+        Text(title)
+          .fontSize(15)
+          .fontColor($r('sys.color.font_primary'))
+        Text(detail)
+          .fontSize(12)
+          .fontColor($r('sys.color.font_secondary'))
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+      Row({ space: 4 }) {
+        ForEach(PLAN_OPTIONS, (opt: PlanOption) => {
+          Text(opt.label)
+            .fontSize(12)
+            .fontWeight(this.planSelected(kind) === opt.paid ? FontWeight.Medium : FontWeight.Normal)
+            .fontColor(this.planSelected(kind) === opt.paid
+              ? $r('app.color.oc_brand_text') : $r('sys.color.font_secondary'))
+            .padding({ left: 12, right: 12, top: 5, bottom: 5 })
+            .backgroundColor(this.planSelected(kind) === opt.paid
+              ? $r('app.color.oc_brand_bg') : $r('sys.color.comp_background_tertiary'))
+            .borderRadius(13)
+            .onClick(() => {
+              if (kind === 'workers') {
+                this.updatePlan(opt.paid, this.usagePlan.r2Paid, this.usagePlan.billingDay);
+              } else {
+                this.updatePlan(this.usagePlan.workersPaid, opt.paid, this.usagePlan.billingDay);
+              }
+            })
+        }, (opt: PlanOption) => opt.label)
+      }
+    }
+    .width('100%')
+  }
+
+  /// 分段当前值（Builder 内部现读，见上）
+  private planSelected(kind: string): boolean {
+    return kind === 'workers' ? this.usagePlan.workersPaid : this.usagePlan.r2Paid;
+  }
+
+  /// 改口径：落盘（按账号）；账单日变了要重发查询（账期窗口变了），套餐只影响展示
+  private updatePlan(workersPaid: boolean, r2Paid: boolean, billingDay: number): void {
+    const day = clampBillingDay(billingDay);
+    const windowChanged = day !== this.usagePlan.billingDay;
+    this.usagePlan = { workersPaid: workersPaid, r2Paid: r2Paid, billingDay: day };
+    const accountId = accountStore.selectedId;
+    AppPrefs.setUsagePlan(accountId, this.usagePlan).catch(() => {
+    });
+    if (windowChanged) {
+      this.loadUsage(accountId);
+    }
   }
 
   @Builder
   usageSection() {
     Column({ space: 10 }) {
-      SectionTitle({ title: '用量' })
+      Row() {
+        SectionTitle({ title: '用量' })
+          .layoutWeight(1)
+        if (authManager.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)) {
+          this.usagePlanChip()
+        }
+      }
+      .width('100%')
       if (!authManager.hasScope(Scopes.ACCOUNT_ANALYTICS_READ)) {
         GlassIsland({ cornerRadius: OCLayout.chipRadius, pad: 0 }) {
-          this.usageNoticeCard($r('sys.symbol.lock'), '需要「流量分析」权限才能展示账号用量', '')
+          this.usageNoticeCard(
+            $r('sys.symbol.lock'),
+            '需要「流量分析」权限才能展示账号用量',
+            '',
+            '点按了解如何补授权',
+            () => {
+              this.explainUsage(
+                '缺少「流量分析」权限',
+                '本次登录没有勾选「流量分析」权限，因此无法读取账号级用量。'
+                + '可在「设置 → 当前身份 → 退出」后重新登录，在 Cloudflare 授权页勾选「流量分析」。'
+                + '域名与 DNS 等其它功能不受影响。'
+              );
+            }
+          )
         }
       } else if (this.usage !== null) {
         Column({ space: OCLayout.islandGap }) {
+          // 部分时间窗被 authz 挡（免费账号常见）：数据照常显示，只说明显示为 0 的项是权限所致
+          if (this.usagePartial) {
+            Row({ space: 6 }) {
+              SymbolGlyph($r('sys.symbol.info_circle'))
+                .fontSize(14)
+                .fontColor([$r('sys.color.font_secondary')])
+              Text('部分周期数据需付费版 Cloudflare 账号，显示为 0 的项非加载失败')
+                .fontSize(12)
+                .fontColor($r('sys.color.font_secondary'))
+                .layoutWeight(1)
+            }
+            .width('100%')
+          }
           Row({ space: OCLayout.islandGap }) {
             this.usageTileCard(this.workersTile(this.usage), 'workers')
             this.usageTileCard(this.r2Tile(this.usage), 'r2')
@@ -890,16 +1203,41 @@ export struct DashboardView {
           this.usageNoticeCard(
             $r('sys.symbol.gauge_with_dots_needle_33percent'),
             '账号用量当前不可用（免费账号或权限受限）',
-            'Workers / R2 / D1 / KV 用量通常需付费版账号；域名流量分析不受影响。'
+            'Workers / R2 / D1 / KV 用量通常需付费版账号；域名流量分析不受影响。',
+            '点按了解详情',
+            () => {
+              this.explainUsage(
+                '账号用量不可用',
+                'Cloudflare 的账号级用量接口只对部分套餐开放：当前账号（或当前授权）读取时被拒绝，'
+                + '因此这里不展示 Workers / R2 / D1 / KV 用量。域名的流量分析、DNS、规则等功能都不受影响，'
+                + '可在域名详情页查看流量数据。'
+              );
+            }
           )
         }
       } else if (this.usageFailed) {
         GlassIsland({ cornerRadius: OCLayout.chipRadius, pad: 0 }) {
-          this.usageNoticeCard($r('sys.symbol.exclamationmark_triangle'), '用量加载失败，下拉刷新重试', '')
+          this.usageNoticeCard(
+            $r('sys.symbol.exclamationmark_triangle'),
+            '用量加载失败',
+            '',
+            '点按重新加载',
+            () => {
+              this.loadUsage(accountStore.selectedId);
+            }
+          )
         }
       } else {
         GlassIsland({ cornerRadius: OCLayout.chipRadius, pad: 0 }) {
-          this.usageNoticeCard($r('sys.symbol.arrow_clockwise'), '正在加载账号用量…', '')
+          this.usageNoticeCard(
+            $r('sys.symbol.arrow_clockwise'),
+            '正在加载账号用量…',
+            '',
+            '点按重新加载',
+            () => {
+              this.loadUsage(accountStore.selectedId);
+            }
+          )
         }
       }
     }
@@ -1423,7 +1761,18 @@ export struct DashboardView {
           .width('100%')
         }
       }
-      .padding(OCLayout.pagePadding)
+      // 悬浮页签栏叠在内容上：底部多留一段净空，否则最后一个入口被页签栏压住
+      .padding({
+        left: OCLayout.pagePadding,
+        right: OCLayout.pagePadding,
+        top: OCLayout.pagePadding,
+        bottom: OCLayout.pagePadding + OC_TAB_BAR_CLEARANCE,
+      })
+      // 口径设置半模态挂在内容 Column 上——页面里三个半模态各有独立宿主节点
+      //（同一节点链式挂多个 bindSheet 只有最后一个生效，真机实测）
+      .bindSheet(this.planSheetVisible, this.usagePlanSheet(), ocSheetCompact(() => {
+        this.planSheetVisible = false;
+      }))
       }
       .scrollBar(BarState.Off)
       .width('100%')
@@ -1431,6 +1780,11 @@ export struct DashboardView {
       .align(Alignment.Top)
       .onDidScroll((dx: number, dy: number) => { tabBarScroll.notifyScroll(dy); })
       .backgroundColor(Color.Transparent)
+      // 用量明细半模态挂在 Scroll 上、搜索面板挂在 Refresh 上：两个半模态分挂
+      // 不同宿主节点，避免同一节点上两个 bindSheet 相互影响
+      .bindSheet(this.usageSheetVisible, this.usageDetailSheet(), ocSheetCompact(() => {
+        this.usageSheetVisible = false;
+      }))
     }
     .onRefreshing(() => {
       // 加载逻辑保持在独立异步链路，手势回调只置状态，不同步 await
@@ -1444,10 +1798,6 @@ export struct DashboardView {
     .width('100%')
     .height('100%')
     .backgroundColor(Color.Transparent)
-    // 用量宫格点开的服务明细半模态（单档中高，锁定/降级卡不触发）
-    .bindSheet(this.usageSheetVisible, this.usageDetailSheet(), ocSheetCompact(() => {
-      this.usageSheetVisible = false;
-    }))
     // 命令搜索面板（大档半模态，结果列表要占满高度）
     .bindSheet(this.showSearch, this.searchSheet(), ocSheet(() => {
       this.showSearch = false;

@@ -581,6 +581,13 @@ export struct QueueDetailPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.showRename, this.renameSheet(), ocSheet(() => {
+          this.showRename = false;
+        }))
         if (this.vm.isLoading) {
           Column() {
             OCLoading({ text: '正在加载队列…' })
@@ -770,9 +777,6 @@ export struct QueueDetailPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: this.queueName !== '' ? this.queueName : 'Queue' } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.showRename, this.renameSheet(), ocSheet(() => {
-      this.showRename = false;
-    }))
     .bindSheet(this.showSettings, this.settingsSheet(), ocSheet(() => {
       this.showSettings = false;
     }))
@@ -2153,6 +2157,19 @@ export struct HyperdriveDetailPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.showRename, this.renameSheet(), ocSheet(() => {
+          this.showRename = false;
+        }))
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.showCaching, this.cachingSheet(), ocSheet(() => {
+          this.showCaching = false;
+        }))
         if (this.config !== null) {
           Scroll() {
             Column({ space: 16 }) {
@@ -2246,12 +2263,6 @@ export struct HyperdriveDetailPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: this.config?.name ?? 'Hyperdrive' } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.showCaching, this.cachingSheet(), ocSheet(() => {
-      this.showCaching = false;
-    }))
-    .bindSheet(this.showRename, this.renameSheet(), ocSheet(() => {
-      this.showRename = false;
-    }))
     .bindSheet(this.showOrigin, this.originSheet(), ocSheet(() => {
       this.showOrigin = false;
     }))

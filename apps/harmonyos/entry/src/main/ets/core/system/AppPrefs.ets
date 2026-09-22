@@ -3,6 +3,7 @@
 import { preferences } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
 import { GlobalContext } from './GlobalContext';
+import { clampBillingDay, DEFAULT_USAGE_PLAN, UsagePlanPrefs } from '../util/BillingCycle';
 
 const STORE_NAME = 'orange_cloud_prefs';
 
@@ -24,6 +25,8 @@ const KEY_LAST_SEEN_WHATSNEW = 'last_seen_whatsnew_version';
 /// 评分邀请：已登录启动计数 + 上次主动邀请的版本
 const KEY_RATING_LAUNCHES = 'rating_engaged_launches';
 const KEY_RATING_LAST_VERSION = 'rating_last_prompt_version';
+/// 用量口径（套餐 + 账单日）按账号隔离
+const USAGE_PLAN_PREFIX = 'usage_plan_';
 
 export class AppPrefs {
   private static store: preferences.Preferences | null = null;
@@ -134,6 +137,34 @@ export class AppPrefs {
 
   static async setRatingPromptVersion(version: string): Promise<void> {
     return AppPrefs.putString(KEY_RATING_LAST_VERSION, version);
+  }
+
+  /// 用量口径（Workers/R2 套餐 + 账单日）：CF 未对 OAuth 开放订阅查询，只能手动设，按账号存。
+  static async getUsagePlan(accountId: string): Promise<UsagePlanPrefs> {
+    if (accountId === '') {
+      return DEFAULT_USAGE_PLAN;
+    }
+    const raw = await AppPrefs.getString(USAGE_PLAN_PREFIX + accountId, '');
+    if (raw === '') {
+      return DEFAULT_USAGE_PLAN;
+    }
+    try {
+      const parsed = JSON.parse(raw) as UsagePlanPrefs;
+      return {
+        workersPaid: parsed.workersPaid === true,
+        r2Paid: parsed.r2Paid === true,
+        billingDay: clampBillingDay(parsed.billingDay ?? 1),
+      };
+    } catch (e) {
+      return DEFAULT_USAGE_PLAN;
+    }
+  }
+
+  static async setUsagePlan(accountId: string, plan: UsagePlanPrefs): Promise<void> {
+    if (accountId === '') {
+      return;
+    }
+    return AppPrefs.putString(USAGE_PLAN_PREFIX + accountId, JSON.stringify(plan));
   }
 
   /// 固定域名的存储 key（按账号隔离）

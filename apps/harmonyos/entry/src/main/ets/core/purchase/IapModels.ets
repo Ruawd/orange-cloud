@@ -39,7 +39,8 @@ interface PurchaseOrderPayload {
 }
 
 interface LastSubscriptionStatus {
-  status?: number;
+  /// **真机实测是字符串**（沙盒订阅组状态段返回 "1"），文档按数字写——两种都要接
+  status?: number | string;
   lastPurchaseOrder?: PurchaseOrderPayload;
 }
 
@@ -109,6 +110,25 @@ function statusEntries(payloadText: string): LastSubscriptionStatus[] {
   return out;
 }
 
+/// 状态码归一化：华为把它塞成字符串 "1"（真机沙盒实测），而 SUBSCRIPTION_ACTIVE 是数字 1。
+/// 不转一下，`status === SUBSCRIPTION_ACTIVE` 恒为 false——生效中的订阅会被判成「无权益」，
+/// 新装 / 换机后点「恢复购买」只会得到一句「未查询到购买记录」。
+function toStatusCode(raw: number | string | undefined): number {
+  if (typeof raw === 'number') {
+    return raw;
+  }
+  if (typeof raw === 'string') {
+    const trimmed = raw.trim();
+    if (trimmed !== '') {
+      const value = Number(trimmed);
+      if (Number.isFinite(value)) {
+        return value;
+      }
+    }
+  }
+  return SUBSCRIPTION_UNKNOWN;
+}
+
 function toParsed(order: PurchaseOrderPayload, status: number, isSubscription: boolean): ParsedPurchase | null {
   const productId = order.productId ?? '';
   if (productId === '') {
@@ -140,7 +160,7 @@ export function parsePurchaseData(purchaseData: string): ParsedPurchase[] {
           if (order === undefined) {
             continue;
           }
-          const parsed = toParsed(order, entry.status ?? SUBSCRIPTION_UNKNOWN, true);
+          const parsed = toParsed(order, toStatusCode(entry.status), true);
           if (parsed !== null) {
             results.push(parsed);
           }
@@ -164,7 +184,7 @@ export function parsePurchaseData(purchaseData: string): ParsedPurchase[] {
         for (const entry of statusEntries(text)) {
           const order = entry.lastPurchaseOrder;
           if (order !== undefined) {
-            const parsed = toParsed(order, entry.status ?? SUBSCRIPTION_UNKNOWN, true);
+            const parsed = toParsed(order, toStatusCode(entry.status), true);
             if (parsed !== null) {
               results.push(parsed);
             }
@@ -209,7 +229,7 @@ export function describePurchaseData(purchaseData: string): string {
       const entries = statusEntries(text);
       const codes: string[] = [];
       for (const entry of entries) {
-        codes.push(`${entry.status ?? SUBSCRIPTION_UNKNOWN}`);
+        codes.push(`${toStatusCode(entry.status)}`);
       }
       statusInfo = `topKeys=${Object.keys(JSON.parse(text) as Object).join(',')} n=${entries.length} status=[${codes.join(' ')}]`;
     }

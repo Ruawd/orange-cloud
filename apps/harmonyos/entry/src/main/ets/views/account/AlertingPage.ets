@@ -221,6 +221,13 @@ export struct AlertingPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.sheetVisible, this.webhookSheet(), ocSheet(() => {
+          this.sheetVisible = false;
+        }))
         if (this.vm.isLoading) {
           Column() {
             OCLoading({ text: '正在加载告警…' })
@@ -362,9 +369,6 @@ export struct AlertingPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: '通知告警' } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.sheetVisible, this.webhookSheet(), ocSheet(() => {
-      this.sheetVisible = false;
-    }))
     .bindSheet(this.policySheetVisible, this.policySheet(), ocSheet(() => {
       this.policySheetVisible = false;
     }))

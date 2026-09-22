@@ -66,21 +66,27 @@ export struct GuidesListPage {
 
   @Builder
   localeBar() {
-    Row({ space: 6 }) {
-      ForEach(this.vm.locales, (l: string) => {
-        Text(localeName(l))
-          .fontSize(13)
-          .fontWeight(this.vm.selectedLocale === l ? FontWeight.Medium : FontWeight.Normal)
-          .fontColor(this.vm.selectedLocale === l ? $r('app.color.oc_brand_text') : $r('sys.color.font_secondary'))
-          .padding({ left: 14, right: 14 })
-          .height(32)
-          .borderRadius(16)
-          .backgroundColor(this.vm.selectedLocale === l ? $r('app.color.oc_brand_bg') : $r('sys.color.comp_background_list_card'))
-          .onClick(() => {
-            this.vm.selectedLocale = l;
-          })
-      }, (l: string) => l)
+    // 语种来自远端 feed，条目数会随内容增长；横向可滚动，免得多出来的语言点不到
+    Scroll() {
+      Row({ space: 6 }) {
+        ForEach(this.vm.locales, (l: string) => {
+          Text(localeName(l))
+            .fontSize(13)
+            .fontWeight(this.vm.selectedLocale === l ? FontWeight.Medium : FontWeight.Normal)
+            .fontColor(this.vm.selectedLocale === l ? $r('app.color.oc_brand_text') : $r('sys.color.font_secondary'))
+            .padding({ left: 14, right: 14 })
+            .height(32)
+            .borderRadius(16)
+            .backgroundColor(this.vm.selectedLocale === l ? $r('app.color.oc_brand_bg') : $r('sys.color.comp_background_list_card'))
+            .onClick(() => {
+              this.vm.selectedLocale = l;
+            })
+        }, (l: string) => l)
+      }
     }
+    .scrollable(ScrollDirection.Horizontal)
+    .scrollBar(BarState.Off)
+    .align(Alignment.Start)
     .width('100%')
     .padding({ left: 16, right: 16, top: 8, bottom: 8 })
   }

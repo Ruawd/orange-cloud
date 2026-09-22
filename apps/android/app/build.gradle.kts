@@ -1,3 +1,4 @@
+import java.io.File
 import java.util.Properties
 
 plugins {
@@ -24,13 +25,36 @@ fun oauthClientId(default: String): String =
 fun buildProp(key: String, default: String = ""): String =
     localProps.getProperty(key) ?: providers.gradleProperty(key).orNull ?: default
 
-// 发布签名（upload key）。keystore.properties 与 .jks 均不入库（见 .gitignore）；
-// 缺文件时 release 退化为未签名，保证全新 clone / CI 仍可构建。
+// 发布签名。两个渠道**不是一把密钥**，原因见 ~/keys/SIGNING-INVENTORY.md §3.1：
+//
+//   direct → 官网直装包的【最终签名】。已对外分发，包名与签名永久绑死，**这一条永远不能换**。
+//            用个人主体那把（keystore.properties 指向 ~/keys/identities/personal/android/）。
+//   play   → Play 的【上传密钥】，随时可在 Play Console 申请重置。
+//            目前仍是同一把；等「重置上传密钥」批下来之后，把下面 productFlavors 里 play 那一行
+//            改成 signingConfigs.findByName("zhejia") 即可，用户完全无感（Play 分发用谷歌自己的密钥）。
+//
+// 口令文件都不入库；缺文件时 release 退化为未签名，保证全新 clone / CI 仍可构建。
+fun expandHome(path: String): File =
+    if (path.startsWith("~/")) File(System.getProperty("user.home"), path.removePrefix("~/"))
+    else File(path)
+
 val keystoreProps = Properties().apply {
     val f = rootProject.file("keystore.properties")
     if (f.exists()) f.inputStream().use { load(it) }
 }
 val hasReleaseKeystore = keystoreProps.getProperty("storeFile") != null
+
+/** 柘家科技统一发行密钥。Play 上传密钥重置批下来之后启用 */
+val zhejiaProps: Properties? = run {
+    val configured = (providers.gradleProperty("zhejiaSigningProperties").orNull
+        ?: System.getenv("ZHEJIA_SIGNING_PROPERTIES")
+        ?: "~/keys/identities/zhejia/android/zhejia-release.properties")
+    val f = expandHome(configured)
+    if (!f.isFile) return@run null
+    val props = Properties().apply { f.inputStream().use { load(it) } }
+    val store = props.getProperty("storeFile")?.let(::expandHome)
+    if (store == null || !store.isFile) null else props
+}
 
 android {
     namespace = "jiamin.chen.orangecloud"
@@ -100,21 +124,38 @@ android {
     signingConfigs {
         if (hasReleaseKeystore) {
             create("release") {
-                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storeFile = expandHome(keystoreProps.getProperty("storeFile"))
                 storePassword = keystoreProps.getProperty("storePassword")
                 keyAlias = keystoreProps.getProperty("keyAlias")
                 keyPassword = keystoreProps.getProperty("keyPassword")
             }
         }
+        zhejiaProps?.let { props ->
+            create("zhejia") {
+                storeFile = expandHome(props.getProperty("storeFile"))
+                storePassword = props.getProperty("storePassword")
+                keyAlias = props.getProperty("keyAlias")
+                keyPassword = props.getProperty("keyPassword")
+            }
+        }
     }
+
+    // 渠道与密钥的对应关系写在这里（signingConfigs 在上面才创建好，写在渠道块里取不到）。
+    // AGP 里 buildType 上的 signingConfig 优先级高于渠道，所以 buildTypes.release 不设。
+    //
+    // ⚠️ direct 是官网直装包的最终签名，**永远不要改**：换了签名老用户无法覆盖安装。
+    // play 是 Play 的上传密钥：等「重置上传密钥」批下来，把下面那一行换成 "zhejia" 即可。
+    productFlavors.getByName("play").signingConfig = signingConfigs.findByName("release")
+    productFlavors.getByName("oss").signingConfig = signingConfigs.findByName("release")
+    productFlavors.getByName("direct").signingConfig = signingConfigs.findByName("release")
 
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // 有 keystore.properties 时自动签名上传包；否则未签名（仅本地验证 R8）
-            signingConfig = signingConfigs.findByName("release")
+            // 签名按渠道给（见 productFlavors）：AGP 里 buildType 上的 signingConfig 优先级高于渠道，
+            // 在这里赋值会把所有渠道一起盖掉，所以这里不设。
         }
         debug {
             applicationIdSuffix = ".debug"

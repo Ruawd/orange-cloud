@@ -69,19 +69,26 @@ export struct RequestTracerPage {
             Column() {
               SectionHeader({ title: '模拟请求' })
               Column({ space: 10 }) {
-                Row({ space: 6 }) {
-                  ForEach(METHODS, (m: string) => {
-                    Text(m)
-                      .fontSize(12)
-                      .fontColor(this.vm.method === m ? $r('app.color.oc_brand_text') : $r('sys.color.font_secondary'))
-                      .padding({ left: 10, right: 10, top: 5, bottom: 5 })
-                      .backgroundColor(this.vm.method === m ? $r('app.color.oc_brand_bg') : $r('sys.color.background_secondary'))
-                      .borderRadius(12)
-                      .onClick(() => {
-                        this.vm.method = m;
-                      })
-                  }, (m: string) => m)
+                // 方法分类横向可滚动：六个方法在窄屏一行放不下，裸 Row 会把
+                // DELETE / HEAD 裁掉且点不到（真机审核实测反馈）
+                Scroll() {
+                  Row({ space: 6 }) {
+                    ForEach(METHODS, (m: string) => {
+                      Text(m)
+                        .fontSize(12)
+                        .fontColor(this.vm.method === m ? $r('app.color.oc_brand_text') : $r('sys.color.font_secondary'))
+                        .padding({ left: 10, right: 10, top: 5, bottom: 5 })
+                        .backgroundColor(this.vm.method === m ? $r('app.color.oc_brand_bg') : $r('sys.color.background_secondary'))
+                        .borderRadius(12)
+                        .onClick(() => {
+                          this.vm.method = m;
+                        })
+                    }, (m: string) => m)
+                  }
                 }
+                .scrollable(ScrollDirection.Horizontal)
+                .scrollBar(BarState.Off)
+                .align(Alignment.Start)
                 .width('100%')
 
                 TextInput({ placeholder: 'https://example.com/path', text: this.vm.url })

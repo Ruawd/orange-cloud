@@ -589,6 +589,13 @@ export struct PagesDomainsPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.addSheetVisible, this.addSheet(), ocSheetCompact(() => {
+          this.addSheetVisible = false;
+        }))
         if (this.vm.isLoading && !this.vm.loaded) {
           Column() {
             OCLoading({ text: '正在加载域名…' })
@@ -655,9 +662,6 @@ export struct PagesDomainsPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: '自定义域名' }, menu: { value: [{ content: { icon: $r('sys.symbol.plus'), label: '添加', action: () => { if (this.canWrite()) { this.fDomain = ''; this.addSheetVisible = true; } } } }] } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.addSheetVisible, this.addSheet(), ocSheetCompact(() => {
-      this.addSheetVisible = false;
-    }))
     .bindSheet(this.detailVisible, this.detailSheet(), ocSheetCompact(() => {
       this.detailVisible = false;
     }))

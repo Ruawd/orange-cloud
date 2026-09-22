@@ -410,6 +410,13 @@ export struct EmailRoutingPage {
     HdsNavDestination() {
       Stack({ alignContent: Alignment.TopStart }) {
         OCSkyBackground()
+        // 半模态各挂独立的 0 尺寸宿主节点：同一个节点上链多个 bindSheet 只有最后一个生效（真机实测）
+        Stack() {}
+        .width(0)
+        .height(0)
+        .bindSheet(this.ruleSheetVisible, this.addRuleSheet(), ocSheet(() => {
+          this.ruleSheetVisible = false;
+        }))
         if (this.vm.isLoading) {
           Column() {
             OCLoading({ text: '正在加载邮件路由…' })
@@ -680,9 +687,6 @@ export struct EmailRoutingPage {
     }
     .titleBar({ style: { systemMaterialEffect: systemMaterial() }, content: { title: { mainTitle: `${this.zoneName} · 邮件路由` } } })
     .backgroundColor($r('sys.color.background_secondary'))
-    .bindSheet(this.ruleSheetVisible, this.addRuleSheet(), ocSheet(() => {
-      this.ruleSheetVisible = false;
-    }))
     .bindSheet(this.addressSheetVisible, this.addAddressSheet(), ocSheet(() => {
       this.addressSheetVisible = false;
     }))

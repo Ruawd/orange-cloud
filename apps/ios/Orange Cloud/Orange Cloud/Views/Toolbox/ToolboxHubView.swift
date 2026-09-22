@@ -26,6 +26,15 @@ struct ToolboxHubView: View {
                 .glassRow()
 
                 Section {
+                    toolRow("book", .brown, "指南", "Cloudflare 排障与科普长文") {
+                        GuidesListView()
+                    }
+                } header: {
+                    Text("学习")
+                }
+                .glassRow()
+
+                Section {
                     toolRow("magnifyingglass", .blue, "DNS 查询", "A / AAAA / CNAME / MX / TXT…") {
                         DNSLookupToolView()
                     }

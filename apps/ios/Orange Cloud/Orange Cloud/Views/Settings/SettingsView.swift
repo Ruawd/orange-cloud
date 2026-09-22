@@ -200,6 +200,23 @@ struct SettingsView: View {
                 }
                 .glassRow()
 
+                // ── 指南（官网内容，免登录可用）──
+                Section {
+                    NavigationLink {
+                        GuidesListView()
+                    } label: {
+                        HStack(spacing: 12) {
+                            TintIcon(systemImage: "book", color: .brown)
+                            Text("指南")
+                        }
+                    }
+                } header: {
+                    Text("学习")
+                } footer: {
+                    Text("Cloudflare 排障与科普长文，来自 Orange Cloud 官网；设备语言不是原文语言时可用机内翻译阅读。")
+                }
+                .glassRow()
+
                 // ── 开发者工具箱（免登录可用）──
                 Section {
                     Button {

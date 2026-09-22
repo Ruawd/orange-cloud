@@ -101,6 +101,13 @@ export async function generateMetadata({
 		itunes: {
 			appId: "6779323783",
 		},
+		appLinks: {
+			ios: {
+				app_name: "Orange Cloud",
+				url: "https://apps.apple.com/app/id6779323783",
+				app_store_id: "6779323783"
+			}
+		},
 		keywords: t("keywords").split(",").map((keyword: string) => keyword.trim()),
 	};
 }
