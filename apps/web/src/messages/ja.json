@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "言語",
-		"support": "支援",
-		"download": "App Store",
-		"downloadComing": "審査中"
+		"support": "支援"
 	},
 	"badge": {
 		"line1": "App Storeで",

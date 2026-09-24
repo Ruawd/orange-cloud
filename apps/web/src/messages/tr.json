@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "Dil",
-		"support": "Destekle",
-		"download": "App Store",
-		"downloadComing": "İncelemede"
+		"support": "Destekle"
 	},
 	"badge": {
 		"line1": "İndir:",

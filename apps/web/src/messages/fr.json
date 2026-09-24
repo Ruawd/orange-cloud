@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "Langue",
-		"support": "Soutenir",
-		"download": "App Store",
-		"downloadComing": "En cours d’examen"
+		"support": "Soutenir"
 	},
 	"badge": {
 		"line1": "Télécharger sur l’",

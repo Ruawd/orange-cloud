@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "Idioma",
-		"support": "Apoiar",
-		"download": "App Store",
-		"downloadComing": "Em análise"
+		"support": "Apoiar"
 	},
 	"badge": {
 		"line1": "Transfira na",

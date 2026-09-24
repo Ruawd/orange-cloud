@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "Language",
-		"support": "Support",
-		"download": "App Store",
-		"downloadComing": "Under Review"
+		"support": "Support"
 	},
 	"badge": {
 		"line1": "Download on the",

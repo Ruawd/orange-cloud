@@ -2,7 +2,6 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import LocaleSwitcher from "./LocaleSwitcher";
-import { APP_STORE_URL, APP_STORE_COMING } from "./AppStoreBadge";
 
 export const GITHUB_URL = "https://github.com/chen2he/orange-cloud";
 export const KOFI_URL = "https://ko-fi.com/chen2he";
@@ -53,22 +52,6 @@ export default async function SiteHeader({
 							<path d="M18.5 3H6c-1.1 0-2 .9-2 2v5.71c0 3.83 2.95 7.18 6.78 7.29 3.96.12 7.22-3.06 7.22-7v-1h.5c1.93 0 3.5-1.57 3.5-3.5S20.43 3 18.5 3zM16 5v3H6V5h10zm2.5 3H18V5h.5c.83 0 1.5.67 1.5 1.5S19.33 8 18.5 8zM4 19h16v2H4z" />
 						</svg>
 					</a>
-					{APP_STORE_COMING ? (
-						<span
-							className="hidden cursor-not-allowed select-none rounded-full px-4 py-[7px] text-[13px] font-semibold text-white opacity-50 sm:block"
-							style={{ background: "var(--oc-orange)" }}
-						>
-							{t("downloadComing")}
-						</span>
-					) : (
-						<a
-							href={APP_STORE_URL}
-							className="hidden rounded-full px-4 py-[7px] text-[13px] font-semibold text-white no-underline sm:block"
-							style={{ background: "var(--oc-orange)" }}
-						>
-							{t("download")}
-						</a>
-					)}
 				</div>
 			</div>
 		</header>

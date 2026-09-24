@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "语言",
-		"support": "赞助",
-		"download": "App Store",
-		"downloadComing": "审核中"
+		"support": "赞助"
 	},
 	"badge": {
 		"line1": "在 App Store",

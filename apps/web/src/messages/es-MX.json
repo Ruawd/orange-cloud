@@ -10,9 +10,7 @@
 	},
 	"header": {
 		"language": "Idioma",
-		"support": "Apoyar",
-		"download": "App Store",
-		"downloadComing": "En revisión"
+		"support": "Apoyar"
 	},
 	"badge": {
 		"line1": "Descárgala en el",
