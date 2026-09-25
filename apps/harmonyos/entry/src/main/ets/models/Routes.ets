@@ -86,11 +86,17 @@ export class Routes {
   static readonly GUIDES = 'guides';
   static readonly GUIDE_ARTICLE = 'guideArticle';
   static readonly PAYWALL = 'paywall';
+  static readonly AGREEMENT = 'agreement';
 }
 
 /// 付费墙：feature = 触发闸门的场景名（空 = 从设置页常驻入口进来）
 export interface PaywallParam {
   feature: string;
+}
+
+/// 付费协议阅读页：kind 见 AgreementKind（会员服务说明 / 自动续费服务协议）
+export interface AgreementParam {
+  kind: string;
 }
 
 export interface ZoneRouteParam {

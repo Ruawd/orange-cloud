@@ -69,6 +69,7 @@ import { GuidesListPage } from '../views/guides/GuidesListPage';
 import { GuideArticlePage } from '../views/guides/GuideArticlePage';
 import { IdentityDetailPage } from '../views/settings/IdentityDetailPage';
 import { PaywallPage } from '../views/paywall/PaywallPage';
+import { AgreementPage } from '../views/paywall/AgreementPage';
 import { PrivacyConsentPage } from '../views/common/PrivacyConsentPage';
 import { AppPrefs } from '../core/system/AppPrefs';
 import { motionPrefs } from '../views/common/Daybreak';
@@ -278,6 +279,8 @@ struct Index {
       IdentityDetailPage()
     } else if (name === Routes.PAYWALL) {
       PaywallPage()
+    } else if (name === Routes.AGREEMENT) {
+      AgreementPage()
     } else {
       ComingSoonPage()
     }

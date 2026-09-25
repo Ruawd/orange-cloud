@@ -1228,20 +1228,54 @@ export struct DashboardView {
           )
         }
       } else {
-        GlassIsland({ cornerRadius: OCLayout.chipRadius, pad: 0 }) {
-          this.usageNoticeCard(
-            $r('sys.symbol.arrow_clockwise'),
-            '正在加载账号用量…',
-            '',
-            '点按重新加载',
-            () => {
-              this.loadUsage(accountStore.selectedId);
-            }
-          )
-        }
+        this.usageLoadingGrid()
       }
     }
     .width('100%')
+  }
+
+  /// 用量加载中：按最终宫格的形状占位（服务名 + 转圈），加载完原位换成真数据，不跳版。
+  /// 占位格不带箭头、不响应点按——它就是「还在加载」，不给一个看不懂的刷新按钮。
+  @Builder
+  usageLoadingGrid() {
+    Column({ space: OCLayout.islandGap }) {
+      Row({ space: OCLayout.islandGap }) {
+        this.usageLoadingTile('Workers')
+        this.usageLoadingTile('R2')
+      }
+      .width('100%')
+      Row({ space: OCLayout.islandGap }) {
+        this.usageLoadingTile('D1')
+        this.usageLoadingTile('KV')
+      }
+      .width('100%')
+    }
+    .width('100%')
+  }
+
+  @Builder
+  usageLoadingTile(title: string) {
+    Column({ space: 4 }) {
+      Text(title)
+        .fontSize(12)
+        .fontColor($r('sys.color.font_secondary'))
+      Row() {
+        LoadingProgress()
+          .width(22)
+          .height(22)
+          .color($r('sys.color.font_tertiary'))
+      }
+      .height(29)
+      Text('加载中')
+        .fontSize(11)
+        .fontColor($r('sys.color.font_tertiary'))
+    }
+    .alignItems(HorizontalAlign.Start)
+    .layoutWeight(1)
+    .padding(OCLayout.islandPadding)
+    .backgroundColor($r('sys.color.comp_background_list_card'))
+    .borderRadius(OCLayout.chipRadius)
+    .accessibilityText(`${title} 用量加载中`)
   }
 
   // MARK: - 域名卡区（对齐 iOS zonesSection：pin 优先，否则前 3 个）

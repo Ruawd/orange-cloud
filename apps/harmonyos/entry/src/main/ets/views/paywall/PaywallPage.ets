@@ -7,12 +7,13 @@ import { HdsNavDestination } from '@kit.UIDesignKit';
 // 权益清单只写鸿蒙版真正实现了的能力（Live Activity / 系统「文件」挂载等 iOS 专属项不列）。
 import { Want } from '@kit.AbilityKit';
 import { pasteboard } from '@kit.BasicServicesKit';
-import { PaywallParam } from '../../models/Routes';
+import { AgreementParam, PaywallParam, Routes } from '../../models/Routes';
 import { entitlement, EntitlementStore, PurchaseOutcome } from '../../core/purchase/EntitlementStore';
 import { GlobalContext } from '../../core/system/GlobalContext';
 import { BRAND_ORANGE, BRAND_ORANGE_BG } from '../common/Components';
 import { OCLayout, RevealBox } from '../common/Daybreak';
 import { OCSkyBackground } from '../common/OCSky';
+import { AgreementKind, CANCEL_STEPS, SERVICE_EMAIL } from './AgreementTexts';
 
 interface Benefit {
   symbol: Resource;
@@ -31,14 +32,16 @@ const BENEFITS: Benefit[] = [
 
 const PRIVACY_URL = 'https://o-c.do/privacy';
 const TERMS_URL = 'https://o-c.do/terms';
-/// 客服邮箱：含内购的应用必须在应用内提供客服联系方式（华为审核指南 11.2）
-const SERVICE_EMAIL = 'support@zhe.ltd';
 
 @ComponentV2
 export struct PaywallPage {
   @Local store: EntitlementStore = entitlement;
   /// 触发闸门的场景名（空 = 从设置页常驻入口进来）
   @Local feature: string = '';
+  /// 是否勾选同意《会员服务说明》《自动续费服务协议》——华为审核指南 6.3 要求不得默认同意，
+  /// 故每次进页都从未勾选开始，也不落盘
+  @Local agreed: boolean = false;
+  private pathStack: NavPathStack | null = null;
 
   aboutToAppear(): void {
     // 环境可能在上次启动时不可用（如当时未登录华为账号），进付费墙再试一次
@@ -63,7 +66,23 @@ export struct PaywallPage {
     // canceled：用户主动取消，不打扰
   }
 
+  /// 未勾选协议时拦下购买并提示（不替用户勾选）
+  private ensureAgreed(): boolean {
+    if (!this.agreed) {
+      this.toast('请先阅读并勾选同意《会员服务说明》与《自动续费服务协议》');
+    }
+    return this.agreed;
+  }
+
+  private openAgreement(kind: string): void {
+    const param: AgreementParam = { kind: kind };
+    this.pathStack?.pushPathByName(Routes.AGREEMENT, param);
+  }
+
   private buyYearly(): void {
+    if (!this.ensureAgreed()) {
+      return;
+    }
     this.store.purchaseYearly().then((outcome: PurchaseOutcome) => {
       this.handleOutcome(outcome);
     }).catch(() => {
@@ -72,6 +91,9 @@ export struct PaywallPage {
   }
 
   private buyLifetime(): void {
+    if (!this.ensureAgreed()) {
+      return;
+    }
     this.store.purchaseLifetime().then((outcome: PurchaseOutcome) => {
       this.handleOutcome(outcome);
     }).catch(() => {
@@ -188,9 +210,117 @@ export struct PaywallPage {
 
   /// 购买按钮：主推年度（实心橙），买断为次级（描边）。价格未取到时按钮仍可点，
   /// 由 IAP 收银台展示权威价格。
+  /// 开通前的关键信息：扣费金额与续费周期（审核指南 6.3 要求在购买页显著位置告知）
+  private renewalNotice(): string {
+    const price = this.store.yearlyPrice;
+    if (price !== '') {
+      return `Pro 年度：开通时扣取 ${price}（1 年），到期后按 ${price} / 年自动续费，可随时取消。Pro 终身为一次性买断，不自动续费。`;
+    }
+    return 'Pro 年度：按年自动续费，每期 1 年，金额以华为收银台展示为准，可随时取消。Pro 终身为一次性买断，不自动续费。';
+  }
+
+  @Builder
+  keyInfo() {
+    Row({ space: 8 }) {
+      SymbolGlyph($r('sys.symbol.info_circle'))
+        .fontSize(16)
+        .fontColor([$r('app.color.oc_brand_text')])
+      Text(this.renewalNotice())
+        .fontSize(13)
+        .lineHeight(20)
+        .fontColor($r('sys.color.font_primary'))
+        .layoutWeight(1)
+    }
+    .alignItems(VerticalAlign.Top)
+    .width('100%')
+    .padding(12)
+    .backgroundColor($r('sys.color.comp_background_list_card'))
+    .borderRadius(OCLayout.chipRadius)
+  }
+
+  /// 协议勾选：默认不勾，点文字本身切换勾选，点书名号打开对应协议
+  @Builder
+  agreementRow() {
+    Row({ space: 6 }) {
+      Checkbox({ name: 'paywallAgreement' })
+        .select(this.agreed)
+        .shape(CheckBoxShape.CIRCLE)
+        .selectedColor(BRAND_ORANGE)
+        .width(18)
+        .height(18)
+        .margin(0)
+        .onChange((value: boolean) => {
+          this.agreed = value;
+        })
+      Text() {
+        Span('我已阅读并同意')
+          .onClick(() => {
+            this.agreed = !this.agreed;
+          })
+        Span('《会员服务说明》')
+          .fontColor($r('app.color.oc_brand_text'))
+          .onClick(() => {
+            this.openAgreement(AgreementKind.MEMBERSHIP);
+          })
+        Span('《自动续费服务协议》')
+          .fontColor($r('app.color.oc_brand_text'))
+          .onClick(() => {
+            this.openAgreement(AgreementKind.AUTO_RENEW);
+          })
+      }
+      .fontSize(12)
+      .lineHeight(18)
+      .fontColor($r('sys.color.font_secondary'))
+      .layoutWeight(1)
+    }
+    .alignItems(VerticalAlign.Top)
+    .width('100%')
+  }
+
+  /// 取消自动续费的说明与入口（未开通时也展示：开通前就要让用户知道怎么退）
+  @Builder
+  cancelGuide() {
+    Column({ space: 8 }) {
+      Text('如何取消自动续费')
+        .fontSize(14)
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('sys.color.font_primary'))
+      ForEach(CANCEL_STEPS, (step: string, index: number) => {
+        Text(`${index + 1}. ${step}`)
+          .fontSize(12)
+          .lineHeight(18)
+          .fontColor($r('sys.color.font_secondary'))
+          .width('100%')
+      }, (step: string) => step)
+      Text('请在当前周期到期前至少 24 小时取消，取消后已付周期内权益保留至期满，之后不再扣费。')
+        .fontSize(12)
+        .lineHeight(18)
+        .fontColor($r('sys.color.font_secondary'))
+        .width('100%')
+      Button('前往管理订阅')
+        .width('100%')
+        .height(40)
+        .fontSize(14)
+        .fontColor($r('app.color.oc_brand_text'))
+        .backgroundColor($r('app.color.oc_brand_bg'))
+        .borderRadius(OCLayout.chipRadius)
+        .onClick(() => {
+          this.store.openManageSubscriptions().catch(() => {
+          });
+        })
+    }
+    .alignItems(HorizontalAlign.Start)
+    .width('100%')
+    .padding(14)
+    .backgroundColor($r('sys.color.comp_background_list_card'))
+    .borderRadius(OCLayout.islandRadius)
+  }
+
   @Builder
   purchaseButtons() {
     Column({ space: 10 }) {
+      this.keyInfo()
+
       Button({ type: ButtonType.Normal, stateEffect: true }) {
         Column({ space: 2 }) {
           Text(this.store.yearlyName !== '' ? this.store.yearlyName : 'Pro 年度')
@@ -231,6 +361,8 @@ export struct PaywallPage {
       .onClick(() => {
         this.buyLifetime();
       })
+
+      this.agreementRow()
 
       if (this.store.isPurchasing) {
         Row({ space: 8 }) {
@@ -320,7 +452,13 @@ export struct PaywallPage {
               }
             }
 
-            RevealBox({ idx: 3 }) {
+            if (!this.store.isPro || this.store.hasSubscription) {
+              RevealBox({ idx: 3 }) {
+                this.cancelGuide()
+              }
+            }
+
+            RevealBox({ idx: 4 }) {
               Column({ space: 12 }) {
                 Button('恢复购买')
                   .width('100%')
@@ -333,7 +471,7 @@ export struct PaywallPage {
                     this.restore();
                   })
 
-                Text('订阅按年自动续期，到期前可在「华为账号 → 我的订阅」中随时取消；终身版为一次性买断，不自动续期。免费版始终可用：单账号、域名与 DNS 全功能、24 小时流量分析。')
+                Text('免费版始终可用：单账号、域名与 DNS 全功能、24 小时流量分析。')
                   .fontSize(11)
                   .fontColor($r('sys.color.font_tertiary'))
                   .lineHeight(17)
@@ -345,6 +483,23 @@ export struct PaywallPage {
                   .fontColor($r('sys.color.font_tertiary'))
                   .lineHeight(17)
                   .width('100%')
+
+                Row({ space: 16 }) {
+                  Text('会员服务说明')
+                    .fontSize(12)
+                    .fontColor($r('app.color.oc_brand_text'))
+                    .onClick(() => {
+                      this.openAgreement(AgreementKind.MEMBERSHIP);
+                    })
+                  Text('自动续费服务协议')
+                    .fontSize(12)
+                    .fontColor($r('app.color.oc_brand_text'))
+                    .onClick(() => {
+                      this.openAgreement(AgreementKind.AUTO_RENEW);
+                    })
+                  Blank()
+                }
+                .width('100%')
 
                 Row({ space: 16 }) {
                   Text('联系客服')
@@ -395,6 +550,7 @@ export struct PaywallPage {
     .onReady((context: NavDestinationContext) => {
       const param = context.pathInfo.param as PaywallParam | undefined;
       this.feature = param?.feature ?? '';
+      this.pathStack = context.pathStack;
     })
   }
 }
